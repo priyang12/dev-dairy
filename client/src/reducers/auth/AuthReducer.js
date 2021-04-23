@@ -7,6 +7,7 @@ import {
   LOGIN_FAIL,
   LOGOUT,
   CLEAR_ERRORS,
+  SENDTOKEN,
 } from "../../actions/types";
 
 const initstate = {
@@ -49,6 +50,11 @@ export default (state = initstate, action) => {
         isAuth: null,
         error: action.payload,
         loading: false,
+      };
+    case SENDTOKEN:
+      return {
+        ...state,
+        error: action.payload,
       };
     case CLEAR_ERRORS:
       return {

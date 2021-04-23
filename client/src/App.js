@@ -3,7 +3,9 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Navbar from "./components/layouts/navbar";
 import Home from "./components/pages/home";
 import Login from "./components/auth/login";
-import Register from"./components/auth/register";
+import Register from "./components/auth/register";
+import Token from "./components/auth/checkToken";
+import Resetpassword from "./components/auth/Resetpassword";
 import EditProfile from "./components/profile/EditProfile";
 import CreateProfile from "./components/profile/CreateProfile";
 import Profile from "./components/profile/Profile";
@@ -12,7 +14,7 @@ import Feeds from "./components/posts/feeds";
 import Post from "./components/posts/post";
 import NotFound from "./components/layouts/NotFound";
 import PrivateRoute from "./components/Routing/PrivateRoute";
-import { LOGOUT } from "./actions/types"; 
+import { LOGOUT } from "./actions/types";
 //redux
 import { Provider } from "react-redux";
 import Store from "./store";
@@ -42,6 +44,8 @@ const App = () => {
             <Route exact path="/" component={Home} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
+            <Route exact path="/resetpassword" component={Resetpassword} />
+            <Route exact path="/token/:id" component={Token} />
             <PrivateRoute exact path="/profile/:id" component={Profile} />
             <PrivateRoute exact path="/editProfile" component={EditProfile} />
             <PrivateRoute

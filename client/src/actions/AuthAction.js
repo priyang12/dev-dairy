@@ -8,6 +8,7 @@ import {
   CLEAR_ERRORS,
   SET_LOADING,
   AUTH_ERROR,
+  SENDTOKEN,
 } from "./types";
 import axios from "axios";
 import setAuth from "../utils/setAuthToken";
@@ -75,6 +76,53 @@ export const login = (data) => async (dispatch) => {
       type: LOGIN_FAIL,
       payload: err.response.data.msg,
     });
+  }
+};
+
+// send Tokenfor resetPassword User
+export const sendToken = (email) => async (dispatch) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  try {
+    const res = await axios.post("/api/users/resetpassword", email, config);
+
+    dispatch({
+      type: SENDTOKEN,
+      payload: res.data.msg,
+    });
+    dispatch(loadUser());
+  } catch (err) {
+    dispatch({
+      type: LOGIN_FAIL,
+      payload: err.response.data.msg,
+    });
+  }
+};
+// resetPassword User
+export const resetPassword = (password) => async (dispatch) => {
+  if (localStorage.token) {
+    setAuth(localStorage.token);
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    try {
+      await axios.put("/api/users/resetpassword", password, config);
+
+      dispatch({
+        type: LOGIN_SUCCESS,
+      });
+    } catch (err) {
+      dispatch({
+        type: LOGIN_FAIL,
+        payload: err.response.data.msg,
+      });
+    }
   }
 };
 //logout user

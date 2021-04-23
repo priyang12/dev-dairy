@@ -5,7 +5,7 @@ a {
   color: ghostwhite;
 }
 a:hover {
-  color: ghostwhite;
+  color: black;
   text-decoration: none;
 }
 img {
@@ -13,6 +13,9 @@ img {
 }
 .fa {
   color: burlywood;
+}
+.black-text {
+  color: #212529;
 }
 .navbar {
   opacity: 0.8;

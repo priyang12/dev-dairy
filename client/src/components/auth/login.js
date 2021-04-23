@@ -98,8 +98,10 @@ const Login = ({ Auth: { error, isAuth }, login }) => {
                   </small>
                 )}
               </form>
-              <p className="my-1">
-                Don't have an account? <Link to="register.html">Sign Up</Link>
+              <p className="my-1 ">
+                <Link to="resetpassword" className="black-text">
+                  Forgot Password ?
+                </Link>
               </p>
             </div>
           </div>
