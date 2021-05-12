@@ -2,10 +2,11 @@ import React, { Fragment, useState } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { sendToken, resetPassword } from "../../actions/AuthAction";
+import Spinner from "../layouts/spinner";
 import PropTypes from "prop-types";
 
 const Resetpassword = ({
-  Auth: { error, isAuth },
+  Auth: { error, isAuth, loading },
   sendToken,
   resetPassword,
 }) => {
@@ -58,7 +59,9 @@ const Resetpassword = ({
   if (Redirectfeeds) return <Redirect to="/feeds" />;
   return (
     <Fragment>
-      {!isAuth ? (
+      {loading ? (
+        <Spinner />
+      ) : !isAuth ? (
         <>
           <div className="row">
             <div className="col-md-4 m-auto">

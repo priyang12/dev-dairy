@@ -10,7 +10,7 @@ const Profile = ({ match, loadProfile, Profile: { loading, profile } }) => {
 
   return (
     <Fragment>
-      {loading && !profile ? (
+      {loading ? (
         <Spinner />
       ) : (
         profile.user._id === match.params.id && (

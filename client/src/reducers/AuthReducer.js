@@ -8,7 +8,7 @@ import {
   LOGOUT,
   CLEAR_ERRORS,
   SENDTOKEN,
-} from "../../actions/types";
+} from "../actions/types";
 
 const initstate = {
   token: null,

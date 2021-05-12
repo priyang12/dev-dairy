@@ -9,7 +9,7 @@ import {
   GET_POST,
   DELETE_POST,
   SET_LOADING,
-} from "../../actions/types";
+} from "../actions/types";
 
 const init = {
   posts: null,

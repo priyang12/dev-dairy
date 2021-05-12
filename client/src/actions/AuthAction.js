@@ -93,7 +93,6 @@ export const sendToken = (email) => async (dispatch) => {
       type: SENDTOKEN,
       payload: res.data.msg,
     });
-    dispatch(loadUser());
   } catch (err) {
     dispatch({
       type: LOGIN_FAIL,

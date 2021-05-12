@@ -17,7 +17,7 @@ const Feeds = ({
 
   return (
     <Fragment>
-      {isAuth && posts ? (
+      {isAuth && !loading ? (
         <>
           <Send />
           <div className="feed">

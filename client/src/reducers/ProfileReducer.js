@@ -9,7 +9,7 @@ import {
   CLEAR_ERRORS,
   CLEAR_PROFILE,
   UPDATE_PROFILE,
-} from "../../actions/types";
+} from "../actions/types";
 
 const initstate = {
   profile: null,
@@ -36,11 +36,13 @@ export default (state = initstate, action) => {
       return {
         ...state,
         profile: action.payload,
+        loading: false,
       };
     case GET_PROFILES:
       return {
         ...state,
         profiles: action.payload,
+        loading: false,
       };
     case SET_LOADING:
       return {
