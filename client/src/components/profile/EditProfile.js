@@ -4,8 +4,9 @@ import PropTypes from "prop-types";
 import ProfileItems from "./ProfileItems";
 import AddExp from "./AddExperience";
 import AddEducation from "./AddEducation";
+import CropImage from "./cropimage";
 import Spinner from "../layouts/spinner";
-import { loadProfile } from "../../actions/ProfileAction";
+import { loadProfile, AddProfile } from "../../actions/ProfileAction";
 
 const init = {
   handle: "",
@@ -25,6 +26,7 @@ const EditProfile = ({
   loadProfile,
   Auth: { user, loading, isAuth },
   Profile: { profile },
+  AddProfile,
 }) => {
   const [Profile, setprofile] = useState(init);
   const [display, toggleDisplay] = useState(false);
@@ -71,7 +73,8 @@ const EditProfile = ({
     if (status === "" || skills === "") {
       setValid(true);
     } else {
-      console.log("sub");
+      AddProfile(Profile);
+      window.location.reload();
     }
   };
   // if (user && profile.handle === "") {
@@ -93,8 +96,24 @@ const EditProfile = ({
                   <small className="d-block pb-3" style={{ color: "red" }}>
                     * = required field
                   </small>
+                  <CropImage />
+                  <div className="profilepic">
+                    <img
+                      src={localStorage.avatar}
+                      alt="error"
+                      className="rounded-circle m-2"
+                    />
 
-                  {/* edit  */}
+                    <div className="picture ">
+                      <a
+                        href="#CropImageModal"
+                        data-toggle="modal"
+                        data-target="#CropImageModal"
+                      >
+                        <i className="fas fa-edit"></i>
+                      </a>
+                    </div>
+                  </div>
                   <form onSubmit={onsubmit}>
                     <div className="form-group ">
                       <div className="form-control form-control-lg .text-muted">
@@ -375,9 +394,12 @@ const EditProfile = ({
 EditProfile.propTypes = {
   Auth: PropTypes.object.isRequired,
   loadProfile: PropTypes.func.isRequired,
+  AddProfile: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => ({
   Auth: state.Auth,
   Profile: state.Profile,
 });
-export default connect(mapStateToProps, { loadProfile })(EditProfile);
+export default connect(mapStateToProps, { loadProfile, AddProfile })(
+  EditProfile
+);

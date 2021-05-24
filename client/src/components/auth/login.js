@@ -45,7 +45,7 @@ const Login = ({ Auth: { error, isAuth }, login }) => {
       {!isAuth ? (
         <>
           <div className="row">
-            <div className="col-md-8 m-auto">
+            <div className="col-md-4 m-auto ">
               <h1 className="display-4 text-center">Log in</h1>
               <p className="text-center lead">
                 Sign in to your DevConnector account
@@ -89,20 +89,20 @@ const Login = ({ Auth: { error, isAuth }, login }) => {
 
                 <input
                   type="submit"
-                  className="btn btn-info btn-block mt-4"
+                  className="btn btn-info mx-3"
                   value="Submit"
                 />
+                <span className="my-1 ">
+                  <Link to="resetpassword" className="black-text">
+                    / Forgot Password ?
+                  </Link>
+                </span>
                 {valid && (
                   <small className="form-text" style={{ color: "red" }}>
                     Please Enter Fields corrtctly
                   </small>
                 )}
               </form>
-              <p className="my-1 ">
-                <Link to="resetpassword" className="black-text">
-                  Forgot Password ?
-                </Link>
-              </p>
             </div>
           </div>
         </>

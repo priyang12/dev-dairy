@@ -2,13 +2,27 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const config = require("../../node_modules/config");
+const config = require("../../config/default.json");
 const auth = require("../../middleware/auth");
+const fs = require("fs");
+const multer = require("multer");
 const { body, validationResult } = require("express-validator");
-const gravatar = require("gravatar");
 const nodemailer = require("nodemailer");
+
 //Get user modal
 const User = require("../../models/user");
+
+// Temp Store Image TO server using multer
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "photos");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage }).single("file");
 
 // @route   GET api/getuser
 // @desc    Get login
@@ -49,15 +63,15 @@ router.post(
       if (user) {
         return res.status(400).json({ msg: "user already exists" });
       } else {
-        const avatar = null;
+        const user = new User();
+        user.name = name;
+        user.email = email;
+        user.password = password;
+        user.avatar.data = fs.readFileSync(
+          "C:/Users/wildFIre/Desktop/FullStack/social_media/photos/profile.png"
+        );
+        user.avatar.contentType = "content/jpg";
 
-        const user = new User({
-          name,
-          email,
-          password,
-          avatar,
-          gender,
-        });
         //hash the password
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(password, salt);
@@ -71,7 +85,7 @@ router.post(
 
         jwt.sign(
           payload,
-          config.get("jwtSecret"),
+          config.jwtSecret,
           {
             expiresIn: 360000,
           },
@@ -82,7 +96,7 @@ router.post(
         );
       }
     } catch (error) {
-      console.error(error.message);
+      console.error(error);
       res.status(400).send("server Error");
     }
   }
@@ -123,7 +137,7 @@ router.post(
       };
       jwt.sign(
         payload,
-        config.get("jwtSecret"),
+        config.jwtSecret,
         {
           expiresIn: 360000,
         },
@@ -162,7 +176,7 @@ router.post("/resetpassword", [body("email").isEmail()], async (req, res) => {
 
       jwt.sign(
         payload,
-        config.get("jwtSecret"),
+        config.jwtSecret,
         {
           expiresIn: 360000,
         },
@@ -225,4 +239,39 @@ router.put(
     }
   }
 );
+
+// @router POST api/users/upload
+// @desc Update Avatar
+// @access private
+router.post("/upload", auth, async (req, res) => {
+  const user_id = req.user.id;
+  let user = await User.findOne({ _id: user_id });
+  if (user) {
+    upload(req, res, function (err) {
+      if (err instanceof multer.MulterError) {
+        console.log(err);
+        return res.status(500).json(err);
+      } else if (err) {
+        console.log(err);
+        return res.status(500).json(err);
+      }
+      try {
+        user.avatar.data = fs.readFileSync(req.file.path);
+        user.avatar.contentType = req.file.mimetype;
+        user.save();
+        //Delete the File from the sever after Saving to the Databsse
+        fs.unlink(req.file.path, (err) => {
+          if (err) {
+            console.error(err);
+            return;
+          }
+        });
+        return res.status(200).send({ msg: "image has Been Uploaded" });
+      } catch (err) {
+        console.log(err);
+        return res.status(404).json({ msg: "Error While sending to Database" });
+      }
+    });
+  }
+});
 module.exports = router;

@@ -1,4 +1,4 @@
 {
-    "mongoURI" : "mongodb+srv://priyang:priyang12@cluster1.f9zvf.mongodb.net/social_media?retryWrites=true&w=majority",
-    "jwtSecret" : "secret"
+  "mongoURI": "mongodb+srv://priyang:thelostone@cluster1.f9zvf.mongodb.net/social_media?retryWrites=true&w=majority",
+  "jwtSecret": "secret"
 }

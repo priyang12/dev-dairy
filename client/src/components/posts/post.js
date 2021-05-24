@@ -2,19 +2,29 @@ import React, { Fragment, useEffect, useState } from "react";
 import CommentItems from "./commnetsItems";
 import Spinner from "../layouts/spinner";
 import { connect } from "react-redux";
+import arrayBufferToBase64 from "../../utils/bufferToimg";
 import { GetPost, PostComment } from "../../actions/PostAction";
 import PropTypes from "prop-types";
 
 const Post = ({ GetPost, PostComment, match, Post: { post, loading } }) => {
+  const [avatar, setavatar] = useState(null);
   useEffect(() => {
     GetPost(match.params.id);
   }, [GetPost, match.params.id]);
+  if (avatar === null) {
+    if (post !== null) {
+      const avatar = arrayBufferToBase64(post.user.avatar.data.data);
+      setavatar(avatar);
+    }
+  }
   const [text, settext] = useState("");
+
   const onsubmit = (e) => {
     e.preventDefault();
     PostComment({ text }, post._id);
     settext("");
   };
+
   return (
     <Fragment>
       {post !== null && !loading ? (
@@ -25,18 +35,17 @@ const Post = ({ GetPost, PostComment, match, Post: { post, loading } }) => {
                 <div className="card card-body mb-3">
                   <div className="row ">
                     <div className="col-1 mw-100">
-                      <a href="profile.html">
-                        <img
-                          className="rounded-circle d-none d-md-block"
-                          src={post.avatar}
-                          alt=""
-                        />
-                      </a>
+                      <img
+                        className="rounded-circle d-none d-md-block  "
+                        src={avatar}
+                        alt="error"
+                      />
+
                       <br />
                       <p className="text-center">{post.name}</p>
                     </div>
-                    <div className="col-3"></div>
-                    <div className="col-5">
+
+                    {/* <div className="col-5">
                       <a href="profile.html">
                         <img
                           className="rounded-circle d-none d-md-block"
@@ -44,9 +53,9 @@ const Post = ({ GetPost, PostComment, match, Post: { post, loading } }) => {
                           alt=""
                         />
                       </a>
-                    </div>
-                    <div className="col-5"></div>
-                    <div className="m-2 row">
+                    </div> */}
+
+                    <div className=" row m-2 ">
                       <p className="lead">{post.text}</p>
                     </div>
                   </div>

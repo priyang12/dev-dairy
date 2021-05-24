@@ -4,17 +4,15 @@ const Schema = mongoose.Schema;
 // Create Schema
 const PostSchema = new Schema({
   user: {
-    type: Schema.Types.ObjectId,
-    ref: "users",
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "user",
   },
   text: {
     type: String,
     required: true,
   },
   name: {
-    type: String,
-  },
-  avatar: {
     type: String,
   },
   likes: [

@@ -1,16 +1,21 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { loadProfile } from "../../actions/ProfileAction";
+
 import PropTypes from "prop-types";
 import Spinner from "../layouts/spinner";
 const Profile = ({ match, loadProfile, Profile: { loading, profile } }) => {
+  const [avatar, setavatar] = useState(null);
   useEffect(() => {
     loadProfile(match.params.id);
+    if (localStorage.avatar) {
+      setavatar(localStorage.avatar);
+    }
   }, [match.params.id, loadProfile]);
 
   return (
     <Fragment>
-      {loading ? (
+      {loading && profile === null ? (
         <Spinner />
       ) : (
         profile.user._id === match.params.id && (
@@ -19,13 +24,13 @@ const Profile = ({ match, loadProfile, Profile: { loading, profile } }) => {
               <div className="col-md-12">
                 <div className="row">
                   <div className="col-md-12">
-                    <div className="card card-body bg-info text-white mb-3">
+                    <div className="card card-body bg-secondary  text-white mb-3">
                       <div className="row">
-                        <div className="col-4 col-md-3 m-auto">
+                        <div className=" m-auto">
                           <img
                             className="rounded-circle"
-                            src={profile.user.avatar}
-                            alt=""
+                            src={avatar}
+                            alt="Error"
                           />
                         </div>
                       </div>

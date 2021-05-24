@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 // import post from "./post";
 
 const FeedsItems = ({
-  post: { text, likes, _id, name, avatar, user },
+  post: { text, likes, _id, name, user },
   AddLike,
   RemoveLike,
   DeletePost,
@@ -50,26 +50,71 @@ const FeedsItems = ({
     }
     setLike(!checkLike);
   };
+
   return (
     <Fragment>
       {checkDelete ? null : (
         <div className="posts">
           <div className="card card-body mb-3">
             <div className="row">
-              <div className="col-1 mw-100">
+              <div className="col-md-2">
                 <Link to={`/profile/${user}`}>
                   <img
                     className="rounded-circle d-none d-md-block"
-                    src={avatar}
-                    alt=""
+                    src={localStorage.avatar}
+                    alt="error"
+                    height="150"
                   />
-                  <p className="text-center" style={{ color: "black" }}>
-                    {name}
+                  <p className="text-center mb-1" style={{ color: "black" }}>
+                    {name.charAt(0).toUpperCase() + name.slice(1)}
                   </p>
                 </Link>
               </div>
+
               <div className="col-md-10">
-                <p className="lead">{text}</p>
+                <p className="lead ">{text}</p>
+                {user_id === user._id && (
+                  <div className="col">
+                    <div className="dropdown d-flex justify-content-end">
+                      <button
+                        className="btn btn-secondary dropdown-toggle"
+                        type="button"
+                        id="dropdownMenuButton"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                        style={{
+                          backgroundColor: "white",
+                          color: "black",
+                          border: "none",
+                        }}
+                      ></button>
+                      <div
+                        className="dropdown-menu"
+                        aria-labelledby="dropdownMenuButton"
+                      >
+                        <div className="col">
+                          <div className="ml-2">
+                            <div>
+                              <button
+                                type="button"
+                                className="btn btn-light"
+                                onClick={deletePost}
+                              >
+                                <span
+                                  className="hide-sm tex"
+                                  style={{ color: "#343a40" }}
+                                >
+                                  Delete the Post
+                                </span>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
                 <button
                   type="button"
                   className="btn btn-light mr-1"
@@ -93,46 +138,6 @@ const FeedsItems = ({
                   Comments
                 </Link>
               </div>
-              {user_id === user && (
-                <div className="dropdown">
-                  <button
-                    className="btn btn-secondary dropdown-toggle"
-                    type="button"
-                    id="dropdownMenuButton"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                    style={{
-                      backgroundColor: "white",
-                      color: "black",
-                      border: "none",
-                    }}
-                  ></button>
-                  <div
-                    className="dropdown-menu"
-                    aria-labelledby="dropdownMenuButton"
-                  >
-                    <div>
-                      <div className="ml-2">
-                        <div>
-                          <button
-                            type="button"
-                            className="btn btn-light"
-                            onClick={deletePost}
-                          >
-                            <span
-                              className="hide-sm tex"
-                              style={{ color: "#343a40" }}
-                            >
-                              Delete the Post
-                            </span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </div>

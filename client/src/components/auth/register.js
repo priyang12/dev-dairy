@@ -63,7 +63,7 @@ const Register = ({ Auth: { loading, error, isAuth }, register }) => {
   return (
     <div className="container">
       <div className="row">
-        <div className="col-md-8 m-auto">
+        <div className="col-md-5 m-auto">
           <h1 className="display-4 text-center">Register</h1>
           <p className="text-center lead">
             Sign up for your DevConnector account
@@ -143,11 +143,13 @@ const Register = ({ Auth: { loading, error, isAuth }, register }) => {
                 Please Enter All the Required Fields
               </small>
             ) : null}
-            <input
-              type="submit"
-              value="Submit"
-              className="btn btn-info btn-block mt-5"
-            />
+            <div className=" text-center">
+              <input
+                type="submit"
+                value="Submit"
+                className="btn btn-info px-5 py-2"
+              />
+            </div>
           </form>
         </div>
       </div>

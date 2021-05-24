@@ -9,12 +9,12 @@ import {
   CLEAR_ERRORS,
   CLEAR_PROFILE,
   UPDATE_PROFILE,
+  UPDATE_PROFILE_PIC,
 } from "./types";
 import axios from "axios";
 
 // Add Profile
 export const AddProfile = (data) => async (dispatch) => {
-  setLoading();
   try {
     const config = {
       headers: {
@@ -25,6 +25,25 @@ export const AddProfile = (data) => async (dispatch) => {
     const res = await axios.post("/api/profile", data, config);
     dispatch({
       type: ADD_PROFILE,
+      payload: res.data,
+    });
+  } catch (err) {
+    const errors = err.response.data.msg;
+    console.log(errors);
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: errors,
+    });
+  }
+};
+
+// Update Profile Picture
+export const UpdateProfilePic = (data) => async (dispatch) => {
+  try {
+    console.log(data);
+    const res = await axios.post("/api/users/upload", data);
+    dispatch({
+      type: UPDATE_PROFILE_PIC,
       payload: res.data,
     });
   } catch (err) {

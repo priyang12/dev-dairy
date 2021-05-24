@@ -47,7 +47,7 @@ const CreateProfile = ({ Profile: { isProfile }, AddProfile }) => {
   };
   const onsubmit = (e) => {
     e.preventDefault();
-    if (status === "" || skills === "") {
+    if (status === "" || skills === "" || handle === "") {
       notValid(true);
     } else {
       AddProfile(profile);

@@ -5,15 +5,19 @@ import { connect } from "react-redux";
 import Spinner from "../layouts/spinner";
 import { GetPosts } from "../../actions/PostAction";
 import PropTypes from "prop-types";
-
+import arrayBufferToBase64 from "../../utils/bufferToimg";
 const Feeds = ({
   Auth: { isAuth, loading, user },
   GetPosts,
   Post: { posts },
 }) => {
   useEffect(() => {
+    if (user && !localStorage.avatar) {
+      const avatar = arrayBufferToBase64(user.avatar.data.data);
+      localStorage.setItem("avatar", avatar);
+    }
     GetPosts();
-  }, [GetPosts]);
+  }, [GetPosts, user]);
 
   return (
     <Fragment>
@@ -34,8 +38,8 @@ const Feeds = ({
                   </a>
                 </div>
               </div>
-              <div className="col p-3 ">
-                {posts
+              <div className="col p-5 ">
+                {posts !== null && user !== null
                   ? posts.map((post) => (
                       <FeedItem key={post._id} post={post} user_id={user._id} />
                     ))

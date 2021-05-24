@@ -6,7 +6,7 @@ const router = express.Router();
 
 // Post model
 const Post = require("../../models/Post");
-//Get user modal
+// user modal
 const User = require("../../models/user");
 
 // @route    POST api/posts
@@ -24,17 +24,18 @@ router.post(
 
     try {
       const user = await User.findById(req.user.id).select("-password");
+      if (user) {
+        const newPost = new Post({
+          user: req.user.id,
+          name: user.name,
+          text: req.body.text,
+        }).populate("user", ["name", "avatar"]);
 
-      const newPost = new Post({
-        text: req.body.text,
-        name: user.name,
-        avatar: user.avatar,
-        user: req.user.id,
-      });
-
-      const post = await newPost.save();
-
-      res.json({ msg: "Posted" });
+        await newPost.save();
+        res.json({ msg: "Posted" });
+      } else {
+        res.status(500).send("Not Authorized");
+      }
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server Error");
@@ -47,7 +48,10 @@ router.post(
 // @access   Private
 router.get("/", auth, async (req, res) => {
   try {
-    const posts = await Post.find().sort({ date: -1 });
+    const posts = await Post.find()
+      .sort({ date: -1 })
+      .select("-comments")
+      .populate("user", ["name", "avatar"]);
     res.json(posts);
   } catch (err) {
     console.error(err.message);
@@ -60,7 +64,10 @@ router.get("/", auth, async (req, res) => {
 // @access   Private
 router.get("/:id", auth, checkObjectId("id"), async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
+    const post = await Post.findById(req.params.id).populate("user", [
+      "name",
+      "avatar",
+    ]);
 
     if (!post) {
       return res.status(404).json({ msg: "Post not found" });
@@ -161,15 +168,16 @@ router.post(
 
     try {
       const user = await User.findById(req.user.id).select("-password");
+
       const post = await Post.findById(req.params.id);
 
       const newComment = {
         text: req.body.text,
         name: user.name,
-        avatar: user.avatar,
         user: req.user.id,
+        avatar: user.avatar,
       };
-
+      // avatar: user.avatar["data"]["buffer"],
       post.comments.unshift(newComment);
 
       await post.save();

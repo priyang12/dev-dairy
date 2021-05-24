@@ -8,9 +8,7 @@ a:hover {
   color: black;
   text-decoration: none;
 }
-img {
-  width: 100%;
-}
+
 .fa {
   color: burlywood;
 }
@@ -29,11 +27,22 @@ img {
   margin-top: -24px;
   margin-bottom: -50px;
 }
-
+.profilepic {
+  position: relative;
+  width: fit-content;
+}
+.profilepic .picture {
+  position: absolute;
+  font-size: 30px;
+  top: 10%;
+  left: 70%;
+}
 .landing-inner {
   padding-top: 80px;
 }
-
+.bg {
+  background-color: #212529;
+}
 .dark-overlay {
   background-color: rgba(0, 0, 0, 0.7);
   position: absolute;
