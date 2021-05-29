@@ -58,7 +58,7 @@ const FeedsItems = ({
           <div className="card card-body mb-3">
             <div className="row">
               <div className="col-md-2">
-                <Link to={`/profile/${user}`}>
+                <Link to={`/profile/${user._id}`}>
                   <img
                     className="rounded-circle d-none d-md-block"
                     src={localStorage.avatar}

@@ -90,7 +90,7 @@ const Navbar = ({ Auth: { isAuth, user }, logout, clearProfile }) => {
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="mobile-nav">
-          <ul className="navbar-nav ml-5">
+          <ul className="navbar-nav ml-3">
             <li className="nav-item">
               <Link className="nav-link" to="/searchProfile">
                 {" "}

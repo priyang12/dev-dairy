@@ -63,7 +63,7 @@ const Register = ({ Auth: { loading, error, isAuth }, register }) => {
   return (
     <div className="container">
       <div className="row">
-        <div className="col-md-5 m-auto">
+        <div className="col-sm-5 m-auto">
           <h1 className="display-4 text-center">Register</h1>
           <p className="text-center lead">
             Sign up for your DevConnector account

@@ -38,7 +38,7 @@ const Feeds = ({
                   </a>
                 </div>
               </div>
-              <div className="col p-5 ">
+              <div className="col p-3">
                 {posts !== null && user !== null
                   ? posts.map((post) => (
                       <FeedItem key={post._id} post={post} user_id={user._id} />

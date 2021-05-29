@@ -1,24 +1,25 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { loadProfile } from "../../actions/ProfileAction";
-
+import arrayBufferToBase64 from "../../utils/bufferToimg";
 import PropTypes from "prop-types";
 import Spinner from "../layouts/spinner";
 const Profile = ({ match, loadProfile, Profile: { loading, profile } }) => {
   const [avatar, setavatar] = useState(null);
   useEffect(() => {
     loadProfile(match.params.id);
-    if (localStorage.avatar) {
-      setavatar(localStorage.avatar);
+    if (profile) {
+      const avatar = arrayBufferToBase64(profile.user.avatar.data.data);
+      setavatar(avatar);
     }
-  }, [match.params.id, loadProfile]);
+  }, [match.params.id, profile]);
 
   return (
     <Fragment>
-      {loading && profile === null ? (
+      {loading ? (
         <Spinner />
       ) : (
-        profile.user._id === match.params.id && (
+        profile !== null && (
           <div className="container">
             <div className="row">
               <div className="col-md-12">

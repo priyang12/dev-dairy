@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import arrayBufferToBase64 from "../../utils/bufferToimg";
 import { GetPost, PostComment } from "../../actions/PostAction";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 const Post = ({ GetPost, PostComment, match, Post: { post, loading } }) => {
   const [avatar, setavatar] = useState(null);
@@ -30,8 +31,8 @@ const Post = ({ GetPost, PostComment, match, Post: { post, loading } }) => {
       {post !== null && !loading ? (
         <div className="post">
           <div className="container">
-            <div className="row m-5">
-              <div className="col">
+            <div className="row m-2">
+              <div className="col-sm-12">
                 <div className="card card-body mb-3">
                   <div className="row ">
                     <div className="col-1 mw-100">
@@ -39,23 +40,19 @@ const Post = ({ GetPost, PostComment, match, Post: { post, loading } }) => {
                         className="rounded-circle d-none d-md-block  "
                         src={avatar}
                         alt="error"
+                        width="150"
                       />
-
-                      <br />
-                      <p className="text-center">{post.name}</p>
+                      <Link to={`/profile/${post.user._id}`}>
+                        <p
+                          className="text-center"
+                          style={{ color: "black", marginBottom: "0rem" }}
+                        >
+                          {post.name}
+                        </p>
+                      </Link>
                     </div>
-
-                    {/* <div className="col-5">
-                      <a href="profile.html">
-                        <img
-                          className="rounded-circle d-none d-md-block"
-                          src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200"
-                          alt=""
-                        />
-                      </a>
-                    </div> */}
-
-                    <div className=" row m-2 ">
+                    {/* <div className="col-md-1"></div> */}
+                    <div className=" col-md-9 ">
                       <p className="lead">{post.text}</p>
                     </div>
                   </div>

@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const config = require("../../config/default.json");
+const keys = require("../../config/keys");
 const auth = require("../../middleware/auth");
 const fs = require("fs");
 const multer = require("multer");
@@ -85,7 +85,7 @@ router.post(
 
         jwt.sign(
           payload,
-          config.jwtSecret,
+          keys.jwtSecret,
           {
             expiresIn: 360000,
           },
@@ -137,7 +137,7 @@ router.post(
       };
       jwt.sign(
         payload,
-        config.jwtSecret,
+        keys.jwtSecret,
         {
           expiresIn: 360000,
         },
@@ -176,7 +176,7 @@ router.post("/resetpassword", [body("email").isEmail()], async (req, res) => {
 
       jwt.sign(
         payload,
-        config.jwtSecret,
+        keys.jwtSecret,
         {
           expiresIn: 360000,
         },

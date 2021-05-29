@@ -22,7 +22,7 @@ const ProfilesItem = ({ profile }) => {
   return (
     <Fragment>
       <div
-        className="card card-body bg-light mb-3 p-5 mw-100"
+        className="card card-body bg-light mb-3 ml-4 p-5 mw-100"
         style={{ width: "80%" }}
       >
         <div className="row">

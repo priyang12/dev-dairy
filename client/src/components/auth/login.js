@@ -45,12 +45,12 @@ const Login = ({ Auth: { error, isAuth }, login }) => {
       {!isAuth ? (
         <>
           <div className="row">
-            <div className="col-md-4 m-auto ">
+            <div className="col-sm-4 m-auto ">
               <h1 className="display-4 text-center">Log in</h1>
               <p className="text-center lead">
                 Sign in to your DevConnector account
               </p>
-              <form onSubmit={onSubmit}>
+              <form onSubmit={onSubmit} className="mx-3">
                 <div className="form-group">
                   <input
                     type="email"
