@@ -183,19 +183,20 @@ router.post("/resetpassword", [body("email").isEmail()], async (req, res) => {
         async (error, token) => {
           if (error) throw error;
           //SEND MAIL
+          let mailer = keys.Email;
           let transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
             port: 465,
             secure: true,
             auth: {
-              user: "dk18gamer@gmail.com",
-              pass: "phonix099",
+              user: keys.Email,
+              pass: keys.Password,
             },
           });
 
           await transporter.sendMail({
-            from: "dk18gamer@gmail.com",
-            to: "patelpriyang95@gmail.com",
+            from: { mailer },
+            to: { email },
             subject: "Hello ✔",
             html: `<h1>For Reset the Password<h1><div>The token link is <a href="http://localhost:3000/token/${token}">click here</a>
             click on the link</div>`,
