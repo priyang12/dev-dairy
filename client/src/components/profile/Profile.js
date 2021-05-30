@@ -8,11 +8,13 @@ const Profile = ({ match, loadProfile, Profile: { loading, profile } }) => {
   const [avatar, setavatar] = useState(null);
   useEffect(() => {
     loadProfile(match.params.id);
+  }, [match.params.id, loadProfile]);
+  useEffect(() => {
     if (profile) {
       const avatar = arrayBufferToBase64(profile.user.avatar.data.data);
       setavatar(avatar);
     }
-  }, [match.params.id, profile]);
+  }, [profile]);
 
   return (
     <Fragment>

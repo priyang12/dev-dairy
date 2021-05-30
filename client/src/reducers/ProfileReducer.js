@@ -75,6 +75,7 @@ export default (state = initstate, action) => {
         error: null,
         loading: false,
       };
+
     default:
       return state;
   }

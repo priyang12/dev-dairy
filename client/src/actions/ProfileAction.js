@@ -40,7 +40,6 @@ export const AddProfile = (data) => async (dispatch) => {
 // Update Profile Picture
 export const UpdateProfilePic = (data) => async (dispatch) => {
   try {
-    console.log(data);
     const res = await axios.post("/api/users/upload", data);
     dispatch({
       type: UPDATE_PROFILE_PIC,
@@ -57,7 +56,6 @@ export const UpdateProfilePic = (data) => async (dispatch) => {
 };
 //Add education
 export const AddEducation = (data) => async (dispatch) => {
-  setLoading();
   try {
     const config = {
       headers: {
@@ -80,7 +78,6 @@ export const AddEducation = (data) => async (dispatch) => {
 };
 //Add Experience
 export const AddExperience = (data) => async (dispatch) => {
-  setLoading();
   try {
     const config = {
       headers: {
@@ -107,6 +104,7 @@ export const AddExperience = (data) => async (dispatch) => {
 //Get Profile
 export const loadProfile = (id) => async (dispatch) => {
   try {
+    dispatch(setLoading());
     const res = await axios.get(`/api/profile/user/id/${id}`);
     dispatch({
       type: LOAD_PROFILE,
@@ -125,6 +123,7 @@ export const loadProfile = (id) => async (dispatch) => {
 //Get all profiles
 export const GetProfiles = () => async (dispatch) => {
   try {
+    dispatch(setLoading());
     const res = await axios.get("/api/profile/all");
 
     dispatch({
@@ -141,7 +140,7 @@ export const GetProfiles = () => async (dispatch) => {
 
 //Delete Experience
 export const DeleteExperience = (id) => async (dispatch) => {
-  setLoading();
+  dispatch(setLoading());
   try {
     const res = await axios.delete(`/api/profile/experience/${id}`);
     dispatch({
@@ -159,7 +158,7 @@ export const DeleteExperience = (id) => async (dispatch) => {
 
 //Delete Education
 export const DeleteEducation = (id) => async (dispatch) => {
-  setLoading();
+  dispatch(setLoading());
   try {
     const res = await axios.delete(`/api/profile/education/${id}`);
     dispatch({
@@ -183,8 +182,6 @@ export const clearProfile = () => async (dispatch) =>
   dispatch({ type: CLEAR_PROFILE });
 //loading
 
-export const setLoading = () => {
-  return {
-    type: SET_LOADING,
-  };
+export const setLoading = () => async (dispatch) => {
+  dispatch({ type: SET_LOADING });
 };
