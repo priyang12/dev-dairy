@@ -1,27 +1,33 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import arrayBufferToBase64 from "../../utils/bufferToimg";
 import PropTypes from "prop-types";
 import { DeleteComment } from "../../actions/PostAction";
 
-const commnetsItems = ({
+const CommnetsItems = ({
   DeleteComment,
   auth,
   postId,
-  comment: { name, avatar, date, text, user, _id },
+  comment: { date, text, user, _id },
 }) => {
+  const [avatar, setavatar] = useState(null);
+  useEffect(() => {
+    if (user) {
+      const avatar = arrayBufferToBase64(user.avatar.data.data);
+      setavatar(avatar);
+    }
+  }, [user]);
   return (
     <Fragment>
       <div className="comments p-3 m-3">
         <div className="card card-body mb-3">
           <div className="row">
             <div className="col-md-2 mw-100">
-              <Link to={`/profile/${user}`}>
-                <p
-                  className="text-center"
-                  style={{ color: "black", marginBottom: "0rem" }}
-                >
-                  {name}
+              <Link to={`/profile/${user._id}`}>
+                <img src={avatar} alt="sd" width="100" />
+                <p style={{ color: "black", marginBottom: "0rem" }}>
+                  {user.name.toUpperCase()}
                 </p>
               </Link>
             </div>
@@ -29,7 +35,7 @@ const commnetsItems = ({
             <div className="col-md-12">
               <p className="lead">{text}</p>
               <p className="post-date">Posted on {date.slice(0, 10)}</p>
-              {!auth.loading && user === auth.user._id && (
+              {!auth.loading && user._id === auth.user._id && (
                 <button
                   onClick={() => DeleteComment(postId, _id)}
                   type="button"
@@ -46,7 +52,7 @@ const commnetsItems = ({
   );
 };
 
-commnetsItems.propTypes = {
+CommnetsItems.propTypes = {
   auth: PropTypes.object.isRequired,
   DeleteComment: PropTypes.func.isRequired,
 };
@@ -55,4 +61,4 @@ const mapStateToProps = (state) => ({
   auth: state.Auth,
 });
 
-export default connect(mapStateToProps, { DeleteComment })(commnetsItems);
+export default connect(mapStateToProps, { DeleteComment })(CommnetsItems);

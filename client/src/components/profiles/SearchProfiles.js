@@ -17,7 +17,7 @@ const SearchProfiles = ({
 
   return (
     <Fragment>
-      {loading && !isAuth ? (
+      {loading || !isAuth ? (
         <Spinner />
       ) : (
         <div className="container">

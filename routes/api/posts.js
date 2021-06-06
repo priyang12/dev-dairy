@@ -29,7 +29,7 @@ router.post(
           user: req.user.id,
           name: user.name,
           text: req.body.text,
-        }).populate("user", ["name", "avatar"]);
+        });
 
         await newPost.save();
         res.json({ msg: "Posted" });
@@ -64,10 +64,9 @@ router.get("/", auth, async (req, res) => {
 // @access   Private
 router.get("/:id", auth, checkObjectId("id"), async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id).populate("user", [
-      "name",
-      "avatar",
-    ]);
+    const post = await Post.findById(req.params.id)
+      .populate("user", ["name", "avatar"])
+      .populate("comments.user", ["name", "avatar"]);
 
     if (!post) {
       return res.status(404).json({ msg: "Post not found" });
@@ -167,15 +166,11 @@ router.post(
     }
 
     try {
-      const user = await User.findById(req.user.id).select("-password");
-
       const post = await Post.findById(req.params.id);
 
       const newComment = {
         text: req.body.text,
-        name: user.name,
         user: req.user.id,
-        avatar: user.avatar,
       };
       // avatar: user.avatar["data"]["buffer"],
       post.comments.unshift(newComment);
