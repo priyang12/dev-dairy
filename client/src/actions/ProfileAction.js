@@ -9,7 +9,6 @@ import {
   CLEAR_ERRORS,
   CLEAR_PROFILE,
   UPDATE_PROFILE,
-  UPDATE_PROFILE_PIC,
 } from "./types";
 import axios from "axios";
 
@@ -37,23 +36,6 @@ export const AddProfile = (data) => async (dispatch) => {
   }
 };
 
-// Update Profile Picture
-export const UpdateProfilePic = (data) => async (dispatch) => {
-  try {
-    const res = await axios.post("/api/users/upload", data);
-    dispatch({
-      type: UPDATE_PROFILE_PIC,
-      payload: res.data,
-    });
-  } catch (err) {
-    const errors = err.response.data.msg;
-    console.log(errors);
-    dispatch({
-      type: PROFILE_ERROR,
-      payload: errors,
-    });
-  }
-};
 //Add education
 export const AddEducation = (data) => async (dispatch) => {
   try {

@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const auth = require("../../middleware/auth");
+const auth = require("../middleware/auth");
 const { body, validationResult } = require("express-validator");
 
 //Get user modal
-const User = require("../../models/user");
+const User = require("../models/user");
 
 //Get profile modal
-const Profile = require("../../models/Profile");
+const Profile = require("../models/Profile");
 
 // @router GET api/profile
 // @desc Get user profile

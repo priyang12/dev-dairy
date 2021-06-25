@@ -8,6 +8,7 @@ import {
   LOGOUT,
   CLEAR_ERRORS,
   SENDTOKEN,
+  UPDATE_USER_PIC,
 } from "../actions/types";
 
 const initstate = {
@@ -51,6 +52,12 @@ export default (state = initstate, action) => {
         isAuth: null,
         error: action.payload,
         loading: false,
+      };
+    case UPDATE_USER_PIC:
+      return {
+        ...state,
+        loading: false,
+        error: null,
       };
     case SENDTOKEN:
       return {

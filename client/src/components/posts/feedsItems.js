@@ -61,7 +61,7 @@ const FeedsItems = ({
                 <Link to={`/profile/${user._id}`}>
                   <img
                     className="rounded-circle d-none d-md-block"
-                    src={localStorage.avatar}
+                    src={user.avatar}
                     alt="error"
                     height="150"
                   />

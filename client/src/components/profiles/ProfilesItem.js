@@ -1,9 +1,7 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
-import arrayBufferToBase64 from "../../utils/bufferToimg";
 
 const ProfilesItem = ({ profile }) => {
-  const [avatar, setavatar] = useState(null);
   const {
     company,
     handle,
@@ -13,12 +11,6 @@ const ProfilesItem = ({ profile }) => {
     githubusername,
     status,
   } = profile;
-  useEffect(() => {
-    if (user) {
-      const avatar = arrayBufferToBase64(user.avatar.data.data);
-      setavatar(avatar);
-    }
-  }, [user]);
   return (
     <Fragment>
       <div
@@ -27,7 +19,7 @@ const ProfilesItem = ({ profile }) => {
       >
         <div className="row">
           <div className="col-md-5">
-            <img className="rounded-circle w-75" src={avatar} alt="" />
+            <img className="rounded-circle w-75" src={user.avatar} alt="" />
           </div>
           <div className="col">
             <h3>{handle}</h3>

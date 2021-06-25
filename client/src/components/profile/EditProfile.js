@@ -21,6 +21,7 @@ const init = {
   twitter: "",
   facebook: "",
   linkedin: "",
+  avatar: "",
 };
 const EditProfile = ({
   loadProfile,
@@ -59,6 +60,7 @@ const EditProfile = ({
     youtube,
     facebook,
     linkedin,
+    avatar,
   } = Profile;
 
   const [valid, setValid] = useState(false);
@@ -99,7 +101,7 @@ const EditProfile = ({
                   <CropImage />
                   <div className="profilepic">
                     <img
-                      src={localStorage.avatar}
+                      src={avatar}
                       alt="error"
                       className="rounded-circle m-2"
                     />

@@ -1,7 +1,6 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import arrayBufferToBase64 from "../../utils/bufferToimg";
 import PropTypes from "prop-types";
 import { DeleteComment } from "../../actions/PostAction";
 
@@ -11,13 +10,6 @@ const CommnetsItems = ({
   postId,
   comment: { date, text, user, _id },
 }) => {
-  const [avatar, setavatar] = useState(null);
-  useEffect(() => {
-    if (user) {
-      const avatar = arrayBufferToBase64(user.avatar.data.data);
-      setavatar(avatar);
-    }
-  }, [user]);
   return (
     <Fragment>
       <div className="comments p-3 m-3">
@@ -25,7 +17,7 @@ const CommnetsItems = ({
           <div className="row">
             <div className="col-md-2 mw-100">
               <Link to={`/profile/${user._id}`}>
-                <img src={avatar} alt="sd" width="100" />
+                <img src={user.avatar} alt="sd" width="100" />
                 <p style={{ color: "black", marginBottom: "0rem" }}>
                   {user.name.toUpperCase()}
                 </p>

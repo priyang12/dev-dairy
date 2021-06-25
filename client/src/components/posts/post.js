@@ -2,22 +2,20 @@ import React, { Fragment, useEffect, useState } from "react";
 import CommentItems from "./commnetsItems";
 import Spinner from "../layouts/spinner";
 import { connect } from "react-redux";
-import arrayBufferToBase64 from "../../utils/bufferToimg";
 import { GetPost, PostComment } from "../../actions/PostAction";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
-const Post = ({ GetPost, PostComment, match, Post: { post, loading } }) => {
-  const [avatar, setavatar] = useState(null);
+const Post = ({
+  GetPost,
+  PostComment,
+  match,
+  Post: { post, loading, user },
+}) => {
   useEffect(() => {
     GetPost(match.params.id);
   }, [GetPost, match.params.id]);
-  if (avatar === null) {
-    if (post !== null) {
-      const avatar = arrayBufferToBase64(post.user.avatar.data.data);
-      setavatar(avatar);
-    }
-  }
+
   const [text, settext] = useState("");
 
   const onsubmit = (e) => {
@@ -38,7 +36,7 @@ const Post = ({ GetPost, PostComment, match, Post: { post, loading } }) => {
                     <div className="col-1 mw-100">
                       <img
                         className="rounded-circle d-none d-md-block  "
-                        src={avatar}
+                        src={user.avatar}
                         alt="error"
                         width="150"
                       />

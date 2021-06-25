@@ -1,7 +1,8 @@
 import React, { Fragment, useState } from "react";
 import { connect } from "react-redux";
 import AvatarEditor from "react-avatar-editor";
-import { UpdateProfilePic } from "../../actions/ProfileAction";
+import { UpdateProfilePic } from "../../actions/AuthAction";
+
 const CropImage = ({ UpdateProfilePic }) => {
   const [uploadFile, setFile] = useState(null);
   const [Editor, setEditor] = useState(null);
@@ -34,7 +35,6 @@ const CropImage = ({ UpdateProfilePic }) => {
     e.preventDefault();
     if (Editor) {
       const url = Editor.getImageScaledToCanvas().toDataURL();
-      localStorage.setItem("avatar", url);
       const CropImage = DataURLtoFile(url, uploadFile.name);
       const formData = new FormData();
       formData.append("file", CropImage);

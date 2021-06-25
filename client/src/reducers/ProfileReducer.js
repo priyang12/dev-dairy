@@ -9,7 +9,6 @@ import {
   CLEAR_ERRORS,
   CLEAR_PROFILE,
   UPDATE_PROFILE,
-  UPDATE_PROFILE_PIC,
 } from "../actions/types";
 
 const initstate = {
@@ -40,12 +39,7 @@ export default (state = initstate, action) => {
         loading: false,
         error: null,
       };
-    case UPDATE_PROFILE_PIC:
-      return {
-        ...state,
-        loading: false,
-        error: null,
-      };
+
     case GET_PROFILES:
       return {
         ...state,

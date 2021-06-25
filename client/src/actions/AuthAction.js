@@ -9,6 +9,7 @@ import {
   SET_LOADING,
   AUTH_ERROR,
   SENDTOKEN,
+  UPDATE_USER_PIC,
 } from "./types";
 import axios from "axios";
 import setAuth from "../utils/setAuthToken";
@@ -75,6 +76,24 @@ export const login = (data) => async (dispatch) => {
     dispatch({
       type: LOGIN_FAIL,
       payload: err.response.data.msg,
+    });
+  }
+};
+
+// Update Profile Picture
+export const UpdateProfilePic = (data) => async (dispatch) => {
+  try {
+    const res = await axios.post("/api/users/upload", data);
+    dispatch({
+      type: UPDATE_USER_PIC,
+      payload: res.data,
+    });
+  } catch (err) {
+    const errors = err.response.data.msg;
+    console.log(errors);
+    dispatch({
+      type: AUTH_ERROR,
+      payload: errors,
     });
   }
 };

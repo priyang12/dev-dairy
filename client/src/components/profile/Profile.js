@@ -1,21 +1,12 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect } from "react";
 import { connect } from "react-redux";
 import { loadProfile } from "../../actions/ProfileAction";
-import arrayBufferToBase64 from "../../utils/bufferToimg";
 import PropTypes from "prop-types";
 import Spinner from "../layouts/spinner";
 const Profile = ({ match, loadProfile, Profile: { loading, profile } }) => {
-  const [avatar, setavatar] = useState(null);
   useEffect(() => {
     loadProfile(match.params.id);
   }, [match.params.id, loadProfile]);
-  useEffect(() => {
-    if (profile) {
-      const avatar = arrayBufferToBase64(profile.user.avatar.data.data);
-      setavatar(avatar);
-    }
-  }, [profile]);
-
   return (
     <Fragment>
       {loading ? (
@@ -32,7 +23,7 @@ const Profile = ({ match, loadProfile, Profile: { loading, profile } }) => {
                         <div className=" m-auto">
                           <img
                             className="rounded-circle"
-                            src={avatar}
+                            src={profile.avatar}
                             alt="Error"
                           />
                         </div>

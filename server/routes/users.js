@@ -2,15 +2,15 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const keys = require("../../config/keys");
-const auth = require("../../middleware/auth");
+const keys = require("../config/keys");
+const auth = require("../middleware/auth");
 const fs = require("fs");
 const multer = require("multer");
 const { body, validationResult } = require("express-validator");
 const nodemailer = require("nodemailer");
 
 //Get user modal
-const User = require("../../models/user");
+const User = require("../models/user");
 
 // Temp Store Image TO server using multer
 const storage = multer.diskStorage({
@@ -67,11 +67,7 @@ router.post(
         user.name = name;
         user.email = email;
         user.password = password;
-        user.avatar.data = fs.readFileSync(
-          "C:/Users/wildFIre/Desktop/FullStack/social_media/photos/profile.png"
-        );
-        user.avatar.contentType = "content/jpg";
-
+        user.avatar = "/photos/profile.png";
         //hash the password
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(password, salt);
@@ -260,13 +256,6 @@ router.post("/upload", auth, async (req, res) => {
         user.avatar.data = fs.readFileSync(req.file.path);
         user.avatar.contentType = req.file.mimetype;
         user.save();
-        //Delete the File from the sever after Saving to the Databsse
-        fs.unlink(req.file.path, (err) => {
-          if (err) {
-            console.error(err);
-            return;
-          }
-        });
         return res.status(200).send({ msg: "image has Been Uploaded" });
       } catch (err) {
         console.log(err);

@@ -12,9 +12,9 @@ app.use(express.json({ extented: false }));
 app.get("/", (req, res) => res.send("Express is Conntected "));
 
 //define routes
-app.use("/api/users", require("./routes/api/users"));
-app.use("/api/posts", require("./routes/api/posts"));
-app.use("/api/profile", require("./routes/api/profile"));
+app.use("/api/users", require("./routes/users"));
+app.use("/api/posts", require("./routes/posts"));
+app.use("/api/profile", require("./routes/profile"));
 
 const PORT = process.env.PORT || 5000;
 
