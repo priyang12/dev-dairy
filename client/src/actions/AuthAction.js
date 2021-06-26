@@ -83,7 +83,7 @@ export const login = (data) => async (dispatch) => {
 // Update Profile Picture
 export const UpdateProfilePic = (data) => async (dispatch) => {
   try {
-    const res = await axios.post("/api/users/upload", data);
+    const res = await axios.post("/api/PhotoUpload/avatar", data);
     dispatch({
       type: UPDATE_USER_PIC,
       payload: res.data,

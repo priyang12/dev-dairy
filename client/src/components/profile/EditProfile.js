@@ -60,7 +60,6 @@ const EditProfile = ({
     youtube,
     facebook,
     linkedin,
-    avatar,
   } = Profile;
 
   const [valid, setValid] = useState(false);
@@ -101,7 +100,7 @@ const EditProfile = ({
                   <CropImage />
                   <div className="profilepic">
                     <img
-                      src={avatar}
+                      src={user.avatar}
                       alt="error"
                       className="rounded-circle m-2"
                     />

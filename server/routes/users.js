@@ -4,25 +4,11 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const keys = require("../config/keys");
 const auth = require("../middleware/auth");
-const fs = require("fs");
-const multer = require("multer");
 const { body, validationResult } = require("express-validator");
 const nodemailer = require("nodemailer");
 
 //Get user modal
 const User = require("../models/user");
-
-// Temp Store Image TO server using multer
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "photos");
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + "-" + file.originalname);
-  },
-});
-
-const upload = multer({ storage: storage }).single("file");
 
 // @route   GET api/getuser
 // @desc    Get login
@@ -237,31 +223,4 @@ router.put(
   }
 );
 
-// @router POST api/users/upload
-// @desc Update Avatar
-// @access private
-router.post("/upload", auth, async (req, res) => {
-  const user_id = req.user.id;
-  let user = await User.findOne({ _id: user_id });
-  if (user) {
-    upload(req, res, function (err) {
-      if (err instanceof multer.MulterError) {
-        console.log(err);
-        return res.status(500).json(err);
-      } else if (err) {
-        console.log(err);
-        return res.status(500).json(err);
-      }
-      try {
-        user.avatar.data = fs.readFileSync(req.file.path);
-        user.avatar.contentType = req.file.mimetype;
-        user.save();
-        return res.status(200).send({ msg: "image has Been Uploaded" });
-      } catch (err) {
-        console.log(err);
-        return res.status(404).json({ msg: "Error While sending to Database" });
-      }
-    });
-  }
-});
 module.exports = router;

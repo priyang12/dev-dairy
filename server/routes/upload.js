@@ -1,21 +1,23 @@
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
+const fs = require("fs");
 
 //Get user modal
-const User = require("../../models/user");
+const User = require("../models/user");
 
-const upload = multer({ storage: storage }).single("file");
+const auth = require("../middleware/auth");
 
 // Temp Store Image TO server using multer
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "/photos");
+    cb(null, "server/photos");
   },
   filename: function (req, file, cb) {
     cb(null, Date.now() + "-" + file.originalname);
   },
 });
+const upload = multer({ storage: storage }).single("file");
 
 // @router POST api/users/upload
 // @desc Update Avatar
@@ -26,15 +28,21 @@ router.post("/avatar", auth, async (req, res) => {
   if (user) {
     upload(req, res, function (err) {
       if (err instanceof multer.MulterError) {
-        console.log(err);
         return res.status(500).json(err);
       } else if (err) {
         console.log(err);
         return res.status(500).json(err);
       }
       try {
-        user.avatar = req.file.path;
+        const oldavatar = user.avatar;
+        user.avatar = `/Photos/${req.file.filename}`;
         user.save();
+        fs.unlink(`server${oldavatar}`, (err) => {
+          if (err) {
+            console.error(err);
+            return;
+          }
+        });
         return res.status(200).send({ msg: "image has Been Uploaded" });
       } catch (err) {
         console.log(err);
@@ -45,3 +53,5 @@ router.post("/avatar", auth, async (req, res) => {
     return res.status(404).json({ msg: "No User" });
   }
 });
+
+module.exports = router;

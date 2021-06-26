@@ -28,13 +28,17 @@ a:hover {
   margin-bottom: -50px;
 }
 .profilepic {
+  background-color: #212529;
+  margin: 2rem 0rem;
   position: relative;
   width: fit-content;
+  border-radius: 50%;
 }
 .profilepic .picture {
   position: absolute;
   font-size: 30px;
   top: 10%;
+
   left: 70%;
 }
 .landing-inner {

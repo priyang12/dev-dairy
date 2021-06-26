@@ -23,9 +23,9 @@ const Profile = ({ match, loadProfile, Profile: { loading, profile } }) => {
                         <div className=" m-auto">
                           <img
                             className="rounded-circle"
-                            src={profile.avatar}
+                            src={profile.user.avatar}
                             alt="Error"
-                          />
+                          ></img>
                         </div>
                       </div>
                       <div className="text-center">

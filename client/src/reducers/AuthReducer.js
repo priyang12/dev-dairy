@@ -17,6 +17,7 @@ const initstate = {
   isAuth: null,
   user: null,
   error: null,
+  alert: null,
 };
 
 // eslint-disable-next-line
@@ -56,6 +57,7 @@ export default (state = initstate, action) => {
     case UPDATE_USER_PIC:
       return {
         ...state,
+        alert: action.payload.msg,
         loading: false,
         error: null,
       };
