@@ -1,42 +1,28 @@
 const express = require("express");
-const connectDB = require("./config/db");
-const morgan = require("morgan");
-const path = require("path");
+const { notFound, errorHandler } = require("./middleware/Error");
+const connectFirebase = require("./config/firebase");
+const keys = require("./config/keys");
+const serviceAccount = require("../firebase.json");
 const app = express();
+const admin = require("firebase-admin");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: keys.FireStoreDb,
+});
+
+console.log(admin.app.length);
 
 require("dotenv").config();
-//connect Database
-connectDB();
-
-if (process.env.NODE_ENV === "development") {
-  app.use(morgan("dev"));
-}
 
 //init middleware
 app.use(express.json({ extented: false }));
 
 //define routes
-app.use("/api/users", require("./routes/users"));
-app.use("/api/posts", require("./routes/posts"));
-app.use("/api/profile", require("./routes/profile"));
-app.use("/api/PhotoUpload", require("./routes/upload"));
+app.use("/api/Users", require("./routes/UserRoute"));
 
-//static for Browser
-const _dirname = path.resolve();
-
-app.use("/Photos", express.static(path.join(__dirname, "/Photos")));
-
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(_dirname, "/client/build")));
-
-  app.get("*", (req, res) =>
-    res.sendFile(path.resolve(_dirname, "client", "build", "index.html"))
-  );
-} else {
-  app.get("/", (req, res) => {
-    res.send("API is running....");
-  });
-}
+app.use(notFound);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
