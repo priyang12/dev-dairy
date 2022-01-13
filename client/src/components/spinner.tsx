@@ -1,12 +1,12 @@
-import React, { Fragment } from "react";
-import spinner from "./spinner.gif";
+import { Fragment } from "react";
+
 // eslint-disable-next-line
 export default () => (
   <Fragment>
     <img
-      src={spinner}
+      src={require("../Assets/spinner.gif")}
       style={{ width: "200px", margin: "auto", display: "block" }}
-      alt="loading..."
+      alt='loading...'
     />
   </Fragment>
 );
