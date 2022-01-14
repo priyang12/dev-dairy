@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 const Navbar = () => {
   const { isAuth, user } = useSelector((state: any) => state.Auth);
-  console.log(user);
+
   // const dispatch = useDispatch();
 
   const onLogout = () => {
@@ -51,7 +51,7 @@ const Navbar = () => {
 
               <div className='dropdown-divider'></div>
               <li className='ml-3'>
-                <Link onClick={onLogout} to='/login'>
+                <Link onClick={onLogout} to='/Auth/login'>
                   <i className='fas fa-sign-out-alt' />{" "}
                   <span className='hide-sm'>Logout</span>
                 </Link>
@@ -65,12 +65,12 @@ const Navbar = () => {
   const UnAuthLinks = (
     <Fragment>
       <li className='nav-item'>
-        <Link className='nav-link' to='/login'>
+        <Link className='nav-link' to='/Auth/login'>
           Login
         </Link>
       </li>
       <li className='nav-item'>
-        <Link className='nav-link' to='/register'>
+        <Link className='nav-link' to='/Auth/register'>
           Register
         </Link>
       </li>

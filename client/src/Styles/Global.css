@@ -1,5 +1,4 @@
 body {
-  background: #333;
 }
 * {
   list-style-type: none;
@@ -23,7 +22,7 @@ a:hover {
 }
 .landing {
   position: relative;
-  background: url("./Assets/showcase.jpg") no-repeat;
+  /* background: url("./Assets/showcase.jpg") no-repeat; */
   background-size: cover;
   background-position: center;
   height: 100vh;

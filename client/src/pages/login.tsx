@@ -1,54 +1,70 @@
-import React, { useState, Fragment } from "react";
-import { connect, useSelector } from "react-redux";
+import { Fragment } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Link, Redirect } from "react-router-dom";
-import { login } from "../actions/AuthAction";
+import CustomForm, { FormField } from "../components/CustomForm";
 import Spinner from "../components/spinner";
-import PropTypes from "prop-types";
+
+import { LoginUserAction } from "../Features/AuthSlice";
+import { AuthState } from "../Features/interfaces";
+
+import { ValidateEmail, ValidatePassword } from "../utils/Validation";
 
 const Login = () => {
-  const { isAuth } = useSelector((state: any) => state.Auth);
+  const AuthState: AuthState = useSelector((state: any) => state.Auth);
+  const { loading, isAuth, error, user } = AuthState;
 
-  const onchange = (e: React.FormEvent<HTMLInputElement>) => {
-    let name = e.currentTarget.name;
-    let value = e.currentTarget.value;
-  };
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const dispatch = useDispatch();
+  const LoginFields: FormField[] = [
+    {
+      fieldType: "text",
+      fieldName: "email",
+      placeholder: "Email",
+    },
+    {
+      fieldType: "password",
+      fieldName: "password",
+    },
+  ];
+
+  const LoginUser = (FormValues: any, setErrors: any) => {
+    const EmailError = ValidateEmail(FormValues.email);
+    const PasswordError = ValidatePassword(FormValues.password);
+    setErrors({
+      email: EmailError,
+      password: PasswordError,
+    });
+    console.log(EmailError, PasswordError);
+    if (!EmailError || !PasswordError) {
+      // dispatch(LoginUserAction(FormValues));
+      console.log("Login Form");
+    }
   };
   if (isAuth) {
     return <Redirect to='/feeds' />;
   }
-
+  if (loading) return <Spinner />;
   return (
     <Fragment>
-      {!isAuth ? (
-        <>
-          <div className='row'>
-            <div className='col-sm-4 m-auto '>
-              <h1 className='display-4 text-center'>Log in</h1>
-              <span className='my-1 '>
-                <Link to='resetpassword' className='black-text'>
-                  / Forgot Password ?
-                </Link>
-              </span>
-              <p className='text-center lead'>
-                Sign in to your DevConnector account
-              </p>
-            </div>
-          </div>
-        </>
-      ) : (
-        <Spinner />
-      )}
+      <div className='row'>
+        <div className='col-sm-4 m-auto '>
+          <h1 className='display-4 text-center'>Log in</h1>
+          <CustomForm
+            SubmitForm={LoginUser}
+            FormFields={LoginFields}
+            FormSubmitValue='Log In'
+          />
+          <span className='my-1 '>
+            <Link to='ResetPassword' className='black-text'>
+              / Forgot Password ?
+            </Link>
+          </span>
+          <p className='text-center lead'>
+            Login in to your DevConnector account
+          </p>
+        </div>
+      </div>
     </Fragment>
   );
 };
 
-Login.propTypes = {
-  Auth: PropTypes.object.isRequired,
-  login: PropTypes.func.isRequired,
-};
-const mapStateToProps = (state) => ({
-  Auth: state.Auth,
-});
-export default connect(mapStateToProps, { login })(Login);
+export default Login;

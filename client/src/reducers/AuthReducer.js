@@ -11,24 +11,14 @@ import {
   UPDATE_USER_PIC,
 } from "../actions/types";
 
-const initstate = {
-  token: null,
-  loading: true,
-  isAuth: null,
-  user: null,
-  error: null,
-  alert: null,
-};
-
 // eslint-disable-next-line
 export default (state = initstate, action) => {
   switch (action.type) {
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
-      localStorage.setItem("token", action.payload.token);
       return {
         ...state,
-        ...action.payload,
+        user: action.payload,
         loading: false,
         isAuth: true,
         error: null,

@@ -1,16 +1,17 @@
-const FirebaseApp = require("../config/firebase");
+const Auth = require("firebase-admin/auth");
 
-module.exports = function (req, res, next) {
+module.exports = async function (req, res, next) {
   const token = req.header("x-auth-token");
   //check token
   if (!token) {
     return res.status(401).json({ msg: "no token, authorization denied" });
   }
   try {
-    const decoded = FirebaseApp.auth().verifyIdToken(token);
+    const decoded = await Auth.getAuth().verifyIdToken(token);
     if (decoded.exp < Date.now() / 1000) {
       return res.status(401).json({ msg: "token has expired" });
     }
+
     req.userId = decoded.uid;
     next();
   } catch (error) {

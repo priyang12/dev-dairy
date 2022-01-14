@@ -15,6 +15,19 @@ const GetAllUsers = asyncHandler(async (req, res) => {
   }
 });
 
+// @route   GET api/Users/me
+// @desc    Fetch User
+// @access  Private
+const GetUser = asyncHandler(async (req, res) => {
+  try {
+    const users = await admin.auth().getUser(req.userId);
+    if (users.length > 0) throw new Error("No users were found");
+    res.json(users);
+  } catch (error) {
+    res.status(500).send("server Error");
+  }
+});
+
 // @router POST api/Users/register
 // @desc Register User
 // @access public
@@ -97,4 +110,5 @@ module.exports = {
   registerUser,
   loginUser,
   GetAllUsers,
+  GetUser,
 };
