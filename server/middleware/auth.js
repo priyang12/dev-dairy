@@ -12,7 +12,7 @@ module.exports = async function (req, res, next) {
       return res.status(401).json({ msg: "token has expired" });
     }
 
-    req.userId = decoded.uid;
+    req.user = decoded;
     next();
   } catch (error) {
     res.status(401).json({ msg: "token is not valid" });

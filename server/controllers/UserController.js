@@ -20,7 +20,7 @@ const GetAllUsers = asyncHandler(async (req, res) => {
 // @access  Private
 const GetUser = asyncHandler(async (req, res) => {
   try {
-    const users = await admin.auth().getUser(req.userId);
+    const users = await admin.auth().getUser(req.user.uid);
     if (users.length > 0) throw new Error("No users were found");
     res.json(users);
   } catch (error) {
@@ -67,13 +67,6 @@ const loginUser = asyncHandler(async (req, res) => {
     //Check if user exists
     let user = await admin.auth().getUserByProviderUid(password);
     if (!user) throw new Error("User not found");
-
-    // //Check if password is correct
-    // const isMatch = await bcrypt.compare(password, user.password);
-    // if (!isMatch) throw new Error("Password is incorrect");
-
-    // //Create and assign token
-    // const token = await admin.auth().createCustomToken(user.uid);
     res.json({ user });
   } catch (error) {
     res.status(400).send("Server Error " + error.message);

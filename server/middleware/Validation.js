@@ -22,5 +22,11 @@ exports.validate = (method) => {
           .isInt({ min: 6 }),
       ];
     }
+    case "Post": {
+      return [
+        body("text", "Text is required").notEmpty(),
+        body("title", "Title is should me minimus 6 ").isInt({ min: 6 }),
+      ];
+    }
   }
 };
