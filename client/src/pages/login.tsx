@@ -4,14 +4,17 @@ import { Link, Redirect } from "react-router-dom";
 import CustomForm, { FormField } from "../components/CustomForm";
 import Spinner from "../components/spinner";
 
-import { LoginUserAction } from "../Features/AuthSlice";
-import { AuthState } from "../Features/interfaces";
+import { AlertState, AuthState } from "../actions/interfaces";
 
 import { ValidateEmail, ValidatePassword } from "../utils/Validation";
+import { LoginAction } from "../actions/AuthAction";
 
 const Login = () => {
   const AuthState: AuthState = useSelector((state: any) => state.Auth);
-  const { loading, isAuth, error, user } = AuthState;
+  const AlertState: AlertState = useSelector((state: any) => state.Alert);
+
+  const { isAuth } = AuthState;
+  const { loading } = AlertState;
 
   const dispatch = useDispatch();
   const LoginFields: FormField[] = [
@@ -35,8 +38,7 @@ const Login = () => {
     });
     console.log(EmailError, PasswordError);
     if (!EmailError || !PasswordError) {
-      // dispatch(LoginUserAction(FormValues));
-      console.log("Login Form");
+      dispatch(LoginAction(FormValues));
     }
   };
   if (isAuth) {

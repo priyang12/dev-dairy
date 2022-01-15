@@ -1,18 +1,25 @@
-import React, { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { logout } from "../actions/AuthAction";
-import { clearProfile } from "../actions/ProfileAction";
+import { loadUser, logout } from "../actions/AuthAction";
 import { useDispatch, useSelector } from "react-redux";
+import setAuthToken from "../utils/setAuthToken";
+import { AuthState } from "../actions/interfaces";
 
 const Navbar = () => {
-  const { isAuth, user } = useSelector((state: any) => state.Auth);
+  const { isAuth, user }: AuthState = useSelector((state: any) => state.Auth);
 
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (localStorage.AccessToken) {
+      setAuthToken(localStorage.AccessToken);
+    }
+    if (localStorage.AccessToken && !user) dispatch(loadUser());
+  }, [user, dispatch]);
 
   const onLogout = () => {
     localStorage.clear();
+    dispatch(logout());
     // logout(dispatch);
-    clearProfile();
   };
 
   const AuthLinks = (
@@ -28,7 +35,7 @@ const Navbar = () => {
             aria-expanded='false'
             style={{ color: "white" }}
           >
-            Hello {user && user.name}
+            Hello {user?.displayName}
           </button>
           <div
             className='dropdown-menu'
@@ -38,7 +45,7 @@ const Navbar = () => {
             <div>
               {user && (
                 <li className='ml-2'>
-                  <Link to={`/profile/${user._id}`}>
+                  <Link to={`/profile/${user.uid}`}>
                     <span className='hide-sm'>Profile</span>
                   </Link>
                 </li>

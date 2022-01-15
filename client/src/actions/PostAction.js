@@ -15,13 +15,8 @@ import axios from "axios";
 //Add Post
 export const AddPost = (data) => async (dispatch) => {
   try {
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    await axios.post("/api/posts", data, config);
-
+    const res = await axios.post("/api/posts", data);
+    console.log(res.data);
     dispatch({
       type: ADD_POST,
     });

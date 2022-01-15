@@ -1,5 +1,7 @@
 import { Fragment, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { loadUser } from "./actions/AuthAction";
 import Navbar from "./components/Navbar";
 import home from "./pages/home";
 import Login from "./pages/login";
@@ -7,12 +9,6 @@ import setAuthToken from "./utils/setAuthToken";
 // import { LOGOUT } from "./actions/types";
 
 const App = () => {
-  useEffect(() => {
-    // check for token in LS
-    if (localStorage.AccessToken) {
-      setAuthToken(localStorage.AccessToken);
-    }
-  }, []);
   return (
     <Router>
       <Navbar />

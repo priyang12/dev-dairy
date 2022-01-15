@@ -1,19 +1,15 @@
+//
+export const SET_LOADING = "SET_LOADING";
+export const STOP_LOADING = "STOP_LOADING";
+export const SET_ALERT = "SET_ALERT";
+export const CLEAR_ALERT = "CLEAR_ALERT";
+
 // Auth
-export const SET_CURRENT = "SET_CURRENT";
-export const CLEAR_CURRENT = "CLEAR_CURRENT";
+export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
 export const UPDATE_USER_PIC = "UPDATE_USER_PIC";
 export const USER_LOADED = "USER_LOADED";
-export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
-export const SENDTOKEN = "SENDTOKEN";
-export const REGISTER_FAIL = "REGISTER_FAIL";
-export const AUTH_ERROR = "AUTH_ERROR";
-export const LOGIN_FAIL = "LOGIN_FAIL";
 export const LOGOUT = "LOGOUT";
-
-//
-export const CLEAR_ERRORS = "CLEAR_ERRORS";
-export const SET_LOADING = "SET_LOADING";
 
 //Profile
 export const ADD_EDUCATION = "ADD_EDUCATION";
@@ -22,7 +18,6 @@ export const ADD_PROFILE = "ADD_PROFILE";
 export const GET_PROFILE = "GET_PROFILE";
 export const GET_PROFILES = "GET_PROFILES";
 export const UPDATE_PROFILE = "UPDATE_PROFILE";
-
 export const LOAD_PROFILE = "LOAD_PROFILE";
 export const PROFILE_ERROR = "PROFILE_ERROR";
 export const CLEAR_PROFILE = "CLEAR_PROFILE";

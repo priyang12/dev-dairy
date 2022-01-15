@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { FormField } from "../components/CustomForm";
-import { AuthState } from "../Features/interfaces";
+import { AuthState } from "../actions/interfaces";
 import CustomForm from "../components/CustomForm";
 import {
   ConfirmPassword,
