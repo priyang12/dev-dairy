@@ -1,4 +1,12 @@
-const home = () => {
+import { useSelector } from "react-redux";
+import { Redirect } from "react-router-dom";
+import { AuthState } from "../actions/interfaces";
+
+const LandingPage = () => {
+  const { isAuth, user }: AuthState = useSelector((state: any) => state.Auth);
+  if (isAuth && user) {
+    return <Redirect to='/feed' />;
+  }
   return (
     <div className='landing'>
       <div className='dark-overlay landing-inner text-light'>
@@ -14,4 +22,4 @@ const home = () => {
   );
 };
 
-export default home;
+export default LandingPage;

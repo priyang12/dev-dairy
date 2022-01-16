@@ -25,7 +25,7 @@ export const CLEAR_PROFILE = "CLEAR_PROFILE";
 //Post
 export const ADD_POST = "ADD_POST";
 export const ADD_LIKE = "ADD_LIKE";
-export const ADD_UNLIKE = "ADD_UNLIKE";
+export const REMOVE_UNLIKE = "REMOVE_UNLIKE";
 export const ADD_COMMENT = "ADD_COMMENT";
 export const POST_ERROR = "POST_ERROR";
 export const CLEAR_POST = "CLEAR_POST";

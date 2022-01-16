@@ -1,20 +1,25 @@
-import { Fragment, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { Fragment } from "react";
+import { FirebaseAuth } from "./Firebase";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { loadUser } from "./actions/AuthAction";
 import Navbar from "./components/Navbar";
-import home from "./pages/home";
+import LandingPage from "./pages/LandingPage";
 import Login from "./pages/login";
-import setAuthToken from "./utils/setAuthToken";
+
 // import { LOGOUT } from "./actions/types";
 
 const App = () => {
+  if (FirebaseAuth.currentUser) {
+    FirebaseAuth.currentUser.getIdToken(true).then(function (idToken) {
+      localStorage.setItem("AccessToken", idToken);
+    });
+    localStorage.setItem("user", JSON.stringify(FirebaseAuth.currentUser));
+  }
   return (
     <Router>
       <Navbar />
       <Fragment>
         <Switch>
-          <Route exact path='/' component={home} />
+          <Route exact path='/' component={LandingPage} />
           <Route exact path='/Auth/login' component={Login} />
         </Switch>
       </Fragment>

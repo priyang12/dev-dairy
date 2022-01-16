@@ -1,40 +1,64 @@
+import { Post, PostState } from "../actions/interfaces";
 import {
   ADD_POST,
   ADD_LIKE,
-  ADD_UNLIKE,
+  REMOVE_UNLIKE,
   ADD_COMMENT,
-  POST_ERROR,
   CLEAR_POST,
   GET_POSTS,
   GET_POST,
   DELETE_POST,
-  SET_LOADING,
 } from "../actions/types";
 
-const init = {
-  posts: null,
-  error: null,
-  loading: true,
+type ActionMap<M extends { [index: string]: any }> = {
+  [Key in keyof M]: M[Key] extends undefined
+    ? {
+        type: Key;
+      }
+    : {
+        type: Key;
+        payload: M[Key];
+      };
+};
+type PostPayload = {
+  [ADD_POST]: Post;
+  [ADD_LIKE]: null;
+  [REMOVE_UNLIKE]: null;
+  [ADD_COMMENT]: null;
+  [CLEAR_POST]: null;
+  [GET_POSTS]: Post[];
+  [GET_POST]: Post;
+  [DELETE_POST]: null;
+};
+
+export type PostActions = ActionMap<PostPayload>[keyof ActionMap<PostPayload>];
+
+const init: PostState = {
+  posts: [],
   post: null,
 };
 
 // eslint-disable-next-line
-export default (state = init, action) => {
+export default (state = init, action: PostActions) => {
   switch (action.type) {
-    case ADD_POST:
+    case GET_POSTS:
       return {
         ...state,
         loading: false,
+        posts: action.payload,
         error: null,
+      };
+    case ADD_POST:
+      return {
+        ...state,
+        posts: [action.payload, ...state.posts],
       };
     case ADD_LIKE:
       return {
         ...state,
         post: { ...state.post, likes: action.payload },
-        loading: false,
-        error: null,
       };
-    case ADD_UNLIKE:
+    case REMOVE_UNLIKE:
       return {
         ...state,
         post: { ...state.post, unlikes: action.payload },
@@ -48,14 +72,7 @@ export default (state = init, action) => {
         loading: false,
         error: null,
       };
-    case GET_POSTS:
-    case DELETE_POST:
-      return {
-        ...state,
-        loading: false,
-        posts: action.payload,
-        error: null,
-      };
+
     case GET_POST:
       return {
         ...state,
@@ -63,24 +80,12 @@ export default (state = init, action) => {
         loading: false,
         error: null,
       };
-
-    case POST_ERROR:
-      return {
-        ...state,
-        loading: false,
-        error: action.payload,
-      };
     case CLEAR_POST:
       return {
         ...state,
         posts: null,
         error: null,
         loading: false,
-      };
-    case SET_LOADING:
-      return {
-        ...state,
-        loading: true,
       };
     default:
       return {

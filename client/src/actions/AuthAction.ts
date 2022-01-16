@@ -1,12 +1,6 @@
-import {
-  REGISTER_SUCCESS,
-  USER_LOADED,
-  LOGIN_SUCCESS,
-  LOGOUT,
-  SET_LOADING,
-} from "./types";
+import { REGISTER_SUCCESS, USER_LOADED, LOGIN_SUCCESS, LOGOUT } from "./types";
 import axios from "axios";
-import setAuth from "../utils/setAuthToken";
+
 import { FirebaseAuth } from "../Firebase";
 import { Dispatch } from "react";
 import { setAlertAction, setLoadingAction } from "./AlertAction";
@@ -68,19 +62,16 @@ export const LoginAction = (data: any) => async (
     const AccessToken = await user.getIdToken(true);
     localStorage.setItem("RefreshToken", RefreshToken);
     localStorage.setItem("AccessToken", AccessToken);
-
     dispatch({
       type: LOGIN_SUCCESS,
       payload: user,
     });
-
-    // dispatch(loadUser());
   } catch (err: any) {
     let errorMessage = "Server Error";
     if (err.response) {
       errorMessage = err.response.data.message;
     }
-    dispatch(setAlertAction(errorMessage, true));
+    dispatch(setAlertAction(errorMessage, false));
   }
 };
 

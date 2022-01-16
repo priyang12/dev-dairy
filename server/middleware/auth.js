@@ -8,6 +8,7 @@ module.exports = async function (req, res, next) {
   }
   try {
     const decoded = await Auth.getAuth().verifyIdToken(token);
+
     if (decoded.exp < Date.now() / 1000) {
       return res.status(401).json({ msg: "token has expired" });
     }

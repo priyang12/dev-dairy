@@ -18,22 +18,7 @@ type ActionMap<M extends { [index: string]: any }> = {
         payload: M[Key];
       };
 };
-const data = {
-  displayName: "priyang",
-  email: "gk@gmail.com",
-  emailVerified: false,
-  isAnonymous: false,
-  phoneNumber: null,
-  photoURL: null,
-  providerData: Array(1),
-  providerId: "firebase",
-  refreshToken:
-    "AFxQ4_pLdv3Wp2VvUFpWM06l0MAOhuTpcgaQNiXAZAos1M5DevGqimzPYgUhQid_N5ZHi6sP6S-2JEtp5CMbCLI7QM9FbCqipYBxPWQbF_krLwHzWxeOlHzn5xvVWEUvZ3Ch4YMWc-Sb5WTgxPmrrrpDb67RjtirWjsNfJ6VbPdHD_CC1SFyDve8VxhiwbKBHBjcsUbqbAuJ",
-  tenantId: null,
-  uid: "3d5idu5RcuYWKkuuv5jVfrZHx8e2",
-};
-
-type TaskPayload = {
+type AuthPayload = {
   [REGISTER_SUCCESS]: UserInfo;
   [LOGIN_SUCCESS]: UserInfo;
   [USER_LOADED]: User;
@@ -41,12 +26,14 @@ type TaskPayload = {
   [UPDATE_USER_PIC]: string;
 };
 
-export type AuthActions = ActionMap<TaskPayload>[keyof ActionMap<TaskPayload>];
+export type AuthActions = ActionMap<AuthPayload>[keyof ActionMap<AuthPayload>];
+
+const UserData = JSON.parse(localStorage.getItem("user") || "");
 
 const initialState: AuthState = {
   token: null,
-  isAuth: null,
-  user: null,
+  isAuth: UserData ? true : false,
+  user: UserData || null,
 };
 
 // eslint-disable-next-line

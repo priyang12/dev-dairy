@@ -23,7 +23,6 @@ const NewPost = asyncHandler(async (req, res) => {
         text: req.body.text,
         title: req.body.title,
         likes: [],
-        dislikes: [],
         comments: [],
         date: Date.now(),
       });
