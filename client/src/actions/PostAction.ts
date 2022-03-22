@@ -2,38 +2,60 @@ import {
   ADD_POST,
   DELETE_POST,
   ADD_COMMENT,
-  POST_ERROR,
   CLEAR_POST,
   GET_POSTS,
   GET_POST,
-  SET_LOADING,
   ADD_LIKE,
   REMOVE_UNLIKE,
 } from "./types";
-// import axios from "axios";
+import { setLoadingAction, stopLoadingAction } from "./AlertAction";
 import { Dispatch } from "react";
-import { getDatabase, ref, onValue } from "firebase/database";
 import { PostActions } from "../reducers/PostReducer";
 import { AlertActions } from "../reducers/AlertReducer";
 import { setAlertAction } from "./AlertAction";
-
-const database = getDatabase();
-
+import axios from "axios";
+import { Post } from "./interfaces";
 //Get Posts
-export const GetPosts = () => async (
+export const GetPosts = () => (dispatch: Dispatch<any>) => {
+  const data = async () => {
+    const res = await axios.get("/api/posts");
+
+    // if (res.data.msg) dispatch(setAlertAction(res.data.msg, true));
+    return res.data;
+  };
+  dispatch(callApi(data, GET_POSTS));
+};
+
+const callApi = (AxiosCall: () => any, Type: any) => async (
   dispatch: Dispatch<PostActions | AlertActions>
 ) => {
   try {
-    const Posts = ref(database, "posts");
-    onValue(Posts, (snapshot) => {
-      const data = snapshot.val();
-      console.log(data);
-      if (data) {
-        dispatch({
-          type: GET_POSTS,
-          payload: data,
-        });
-      }
+    dispatch(setLoadingAction(1));
+    const data = await AxiosCall();
+
+    dispatch({
+      type: Type,
+      payload: data,
+    });
+  } catch (err: any) {
+    let errorMessage = "Server Error";
+    if (err?.response) errorMessage = err.response.data.message;
+    dispatch(setAlertAction(errorMessage, false));
+  } finally {
+    dispatch(stopLoadingAction(-1));
+  }
+};
+
+//Get Post
+export const GetPost = (id: string) => async (
+  dispatch: Dispatch<PostActions | AlertActions>
+) => {
+  try {
+    const res = await axios.get(`/api/posts/${id}`);
+
+    dispatch({
+      type: GET_POST,
+      payload: res.data,
     });
   } catch (err: any) {
     let errorMessage = "Server Error";
@@ -41,97 +63,78 @@ export const GetPosts = () => async (
     dispatch(setAlertAction(errorMessage, false));
   }
 };
-//Get Post
-// export const GetPost = (id) => async (dispatch) => {
-//   try {
-//     const res = await axios.get(`/api/posts/${id}`);
-
-//     dispatch({
-//       type: GET_POST,
-//       payload: res.data,
-//     });
-//   } catch (error) {
-//     console.log(error);
-//     dispatch({
-//       type: POST_ERROR,
-//       payload: error,
-//     });
-//   }
-// };
 
 // //Add Post
-// export const AddPost = (data: any) => async (dispatch: Dispatch<any>) => {
-//   try {
-//     const res = await axios.post("/api/posts", data);
-//     console.log(res.data);
-//     dispatch({
-//       type: ADD_POST,
-//     });
-//   } catch (error) {
-//     dispatch({
-//       type: POST_ERROR,
-//       payload: error,
-//     });
-//   }
-// };
+export const AddPost = (data: Post) => async (
+  dispatch: Dispatch<PostActions | AlertActions>
+) => {
+  try {
+    const res = await axios.post("/api/posts", data);
+
+    dispatch({
+      type: ADD_POST,
+      payload: res.data,
+    });
+  } catch (err: any) {
+    let errorMessage = "Server Error";
+    if (err?.response) errorMessage = err.response.data.message;
+    dispatch(setAlertAction(errorMessage, false));
+  }
+};
 
 // //Add like
-// export const AddLike = (id) => async (dispatch) => {
-//   try {
-//     const res = await axios.put(`/api/posts/like/${id}`);
-
-//     dispatch({
-//       type: ADD_LIKE,
-//       payload: res.data,
-//     });
-//   } catch (error) {
-//     dispatch({
-//       type: POST_ERROR,
-//       payload: error,
-//     });
-//   }
-// };
+export const AddLike = (id: string) => async (
+  dispatch: Dispatch<PostActions | AlertActions>
+) => {
+  try {
+    const res = await axios.put(`/api/posts/like/${id}`);
+    dispatch({
+      type: ADD_LIKE,
+      payload: res.data,
+    });
+  } catch (err: any) {
+    let errorMessage = "Server Error";
+    if (err?.response) errorMessage = err.response.data.message;
+    dispatch(setAlertAction(errorMessage, false));
+  }
+};
 // //remove like
-// export const RemoveLike = (id) => async (dispatch) => {
-//   try {
-//     const res = await axios.put(`/api/posts/unlike/${id}`);
+export const RemoveLike = (id: string) => async (
+  dispatch: Dispatch<PostActions | AlertActions>
+) => {
+  try {
+    const res = await axios.put(`/api/posts/unlike/${id}`);
 
-//     dispatch({
-//       type: ADD_UNLIKE,
-//       payload: res.data,
-//     });
-//   } catch (error) {
-//     dispatch({
-//       type: POST_ERROR,
-//       payload: error,
-//     });
-//   }
-// };
+    dispatch({
+      type: REMOVE_UNLIKE,
+      payload: res.data,
+    });
+  } catch (err: any) {
+    let errorMessage = "Server Error";
+    if (err?.response) errorMessage = err.response.data.message;
+    dispatch(setAlertAction(errorMessage, false));
+  }
+};
 
-// //post commnet
-// export const PostComment = (comment, id) => async (dispatch) => {
-//   try {
-//     const config = {
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//     };
-//     const res = await axios.post(`/api/posts/comment/${id}`, comment, config);
-
-//     dispatch({
-//       type: ADD_COMMENT,
-//       payload: res.data,
-//     });
-//   } catch (error) {
-//     dispatch({
-//       type: POST_ERROR,
-//       payload: error,
-//     });
-//   }
-// };
+// //post comment
+export const PostComment = (comment: any, id: string) => async (
+  dispatch: Dispatch<PostActions | AlertActions>
+) => {
+  try {
+    const res = await axios.post(`/api/posts/comment/${id}`, comment);
+    dispatch({
+      type: ADD_COMMENT,
+      payload: res.data,
+    });
+  } catch (err: any) {
+    let errorMessage = "Server Error";
+    if (err?.response) errorMessage = err.response.data.message;
+    dispatch(setAlertAction(errorMessage, false));
+  }
+};
 
 // //Delete Post
-// export const DeletePost = (id) => async (dispatch) => {
+// export const DeletePost = (id) => async (dispatch: Dispatch<PostActions | AlertActions>) => {
 //   try {
 //     const res = await axios.delete(`/api/posts/${id}`);
 
@@ -148,24 +151,25 @@ export const GetPosts = () => async (
 // };
 
 // //Delete comment
-// export const DeleteComment = (postId, comment_id) => async (dispatch) => {
-//   try {
-//     const res = await axios.delete(
-//       `/api/posts/comment/${postId}/${comment_id}`
-//     );
+export const DeleteComment = (postId: string, comment_id: string) => async (
+  dispatch: Dispatch<PostActions | AlertActions>
+) => {
+  try {
+    const res = await axios.delete(
+      `/api/posts/comment/${postId}/${comment_id}`
+    );
 
-//     dispatch({
-//       type: ADD_COMMENT,
-//       payload: res.data,
-//     });
-//   } catch (error) {
-//     dispatch({
-//       type: POST_ERROR,
-//       payload: error,
-//     });
-//   }
-// };
+    dispatch({
+      type: ADD_COMMENT,
+      payload: res.data,
+    });
+  } catch (err: any) {
+    let errorMessage = "Server Error";
+    if (err?.response) errorMessage = err.response.data.message;
+    dispatch(setAlertAction(errorMessage, false));
+  }
+};
 
 // //clear posts
-// export const clearPosts = () => async (dispatch) =>
+// export const clearPosts = () => async (dispatch: Dispatch<PostActions | AlertActions>) =>
 //   dispatch({ type: CLEAR_POST });

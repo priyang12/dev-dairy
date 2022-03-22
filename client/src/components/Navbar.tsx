@@ -7,12 +7,11 @@ import { AuthState } from "../actions/interfaces";
 
 const Navbar = () => {
   const { isAuth, user }: AuthState = useSelector((state: any) => state.Auth);
-
+  if (localStorage.AccessToken) {
+    setAuthToken(localStorage.AccessToken);
+  }
   const dispatch = useDispatch();
   useEffect(() => {
-    if (localStorage.AccessToken) {
-      setAuthToken(localStorage.AccessToken);
-    }
     if (localStorage.AccessToken && !user) dispatch(loadUser());
   }, [user, dispatch]);
 

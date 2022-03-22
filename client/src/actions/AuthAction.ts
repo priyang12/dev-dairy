@@ -1,7 +1,7 @@
 import { REGISTER_SUCCESS, USER_LOADED, LOGIN_SUCCESS, LOGOUT } from "./types";
 import axios from "axios";
 
-import { FirebaseAuth } from "../Firebase";
+import { FirebaseAuth } from "../FirebaseConfig";
 import { Dispatch } from "react";
 import { setAlertAction, setLoadingAction } from "./AlertAction";
 import { AuthActions } from "../reducers/AuthReducer";
@@ -53,15 +53,12 @@ export const LoginAction = (data: any) => async (
 ) => {
   try {
     dispatch(setLoadingAction(1));
-    const User: any = await FirebaseAuth.signInWithEmailAndPassword(
+    const response: any = await FirebaseAuth.signInWithEmailAndPassword(
       data.email,
       data.password
     );
-    const { user } = User;
-    const RefreshToken = await user.refreshToken;
-    const AccessToken = await user.getIdToken(true);
-    localStorage.setItem("RefreshToken", RefreshToken);
-    localStorage.setItem("AccessToken", AccessToken);
+    const { user } = response;
+    // const AccessToken = await user.getIdToken(true);
     dispatch({
       type: LOGIN_SUCCESS,
       payload: user,

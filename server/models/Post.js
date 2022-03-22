@@ -1,10 +1,9 @@
 class PostSchema {
-  constructor(user, text, likes, dislike, comments, date, title) {
+  constructor(user, text, title, likes, comments, date) {
     this.user = user;
     this.text = text;
     this.title = title;
     this.likes = likes;
-    this.dislike = dislike;
     this.comments = comments;
     this.date = date;
   }

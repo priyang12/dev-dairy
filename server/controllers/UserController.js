@@ -65,9 +65,10 @@ const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   try {
     //Check if user exists
-    let user = await admin.auth().getUserByProviderUid(password);
+    let user = await admin.auth().getUserByEmail(email);
+
     if (!user) throw new Error("User not found");
-    res.json({ user });
+    res.json(user);
   } catch (error) {
     res.status(400).send("Server Error " + error.message);
   }

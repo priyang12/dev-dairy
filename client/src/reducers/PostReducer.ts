@@ -36,6 +36,7 @@ export type PostActions = ActionMap<PostPayload>[keyof ActionMap<PostPayload>];
 const init: PostState = {
   posts: [],
   post: null,
+  comments: [],
 };
 
 // eslint-disable-next-line

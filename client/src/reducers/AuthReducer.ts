@@ -28,7 +28,7 @@ type AuthPayload = {
 
 export type AuthActions = ActionMap<AuthPayload>[keyof ActionMap<AuthPayload>];
 
-const UserData = JSON.parse(localStorage.getItem("user") || "");
+const UserData = JSON.parse(localStorage.getItem("user") || "{}");
 
 const initialState: AuthState = {
   token: null,
@@ -44,7 +44,6 @@ export default (state = initialState, action: AuthActions) => {
       return {
         ...state,
         user: action.payload,
-
         isAuth: true,
         error: null,
       };

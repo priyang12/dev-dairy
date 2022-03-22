@@ -36,7 +36,6 @@ const Login = () => {
       email: EmailError,
       password: PasswordError,
     });
-    console.log(EmailError, PasswordError);
     if (!EmailError || !PasswordError) {
       dispatch(LoginAction(FormValues));
     }

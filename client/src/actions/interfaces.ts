@@ -22,7 +22,19 @@ export interface Post {
   createdAt: string;
 }
 
+export interface Comment {
+  uid: string;
+  text: string;
+  user: {
+    uid: string;
+    name: string;
+    photoURL: string;
+  };
+  createdAt: string;
+}
+
 export interface PostState {
   posts: Post[];
   post: Post | null;
+  comments: Comment[];
 }
