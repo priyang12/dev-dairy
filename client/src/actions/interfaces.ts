@@ -1,9 +1,9 @@
-import { UserInfo } from "firebase/auth";
+import { User, UserInfo } from "firebase/auth";
 
 export interface AuthState {
   token: string | null;
   isAuth: boolean;
-  user: UserInfo | null;
+  user: User | null;
 }
 
 export interface AlertState {

@@ -1,24 +1,16 @@
 import { Fragment, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { loadUser, logout } from "../actions/AuthAction";
+import { logout } from "../actions/AuthAction";
 import { useDispatch, useSelector } from "react-redux";
-import setAuthToken from "../utils/setAuthToken";
 import { AuthState } from "../actions/interfaces";
 
 const Navbar = () => {
   const { isAuth, user }: AuthState = useSelector((state: any) => state.Auth);
-  if (localStorage.AccessToken) {
-    setAuthToken(localStorage.AccessToken);
-  }
   const dispatch = useDispatch();
-  useEffect(() => {
-    if (localStorage.AccessToken && !user) dispatch(loadUser());
-  }, [user, dispatch]);
-
   const onLogout = () => {
     localStorage.clear();
+    sessionStorage.removeItem("user");
     dispatch(logout());
-    // logout(dispatch);
   };
 
   const AuthLinks = (
@@ -34,7 +26,7 @@ const Navbar = () => {
             aria-expanded='false'
             style={{ color: "white" }}
           >
-            Hello {user?.displayName}
+            Hello {user?.displayName ? user.displayName : "Stranger"}
           </button>
           <div
             className='dropdown-menu'
@@ -85,7 +77,7 @@ const Navbar = () => {
   return (
     <div className='navbar sticky-top navbar-expand-sm navbar-dark bg-dark  mb-4'>
       <div className='container'>
-        <Link to='/feeds' className='.navbar-brand'>
+        <Link to={`/${user ? "feeds" : ""}`} className='.navbar-brand'>
           <h2>Dev Hub</h2>
         </Link>
         <button

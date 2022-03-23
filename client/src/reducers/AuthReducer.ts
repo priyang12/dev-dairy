@@ -28,12 +28,17 @@ type AuthPayload = {
 
 export type AuthActions = ActionMap<AuthPayload>[keyof ActionMap<AuthPayload>];
 
-const LocalData = localStorage.getItem("user");
-const UserData = LocalData ? JSON.parse(LocalData) : null;
+// Retrieve user data from session storage
+const getUser = (): User | null => {
+  const user = sessionStorage.getItem("user");
+  return user ? JSON.parse(user) : null;
+};
+const data = getUser();
+console.log(data);
 const initialState: AuthState = {
   token: null,
-  isAuth: UserData ? true : false,
-  user: UserData || null,
+  isAuth: data ? true : false,
+  user: data || null,
 };
 
 // eslint-disable-next-line

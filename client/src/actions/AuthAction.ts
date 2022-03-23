@@ -58,7 +58,6 @@ export const LoginAction = (data: any) => async (
       data.password
     );
     const { user } = response;
-    console.log(response);
     dispatch({
       type: LOGIN_SUCCESS,
       payload: user,
@@ -69,6 +68,8 @@ export const LoginAction = (data: any) => async (
       errorMessage = err.response.data.message;
     }
     dispatch(setAlertAction(errorMessage, false));
+  } finally {
+    dispatch(setLoadingAction(-1));
   }
 };
 

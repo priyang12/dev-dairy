@@ -11,10 +11,13 @@ import { useCookies } from "react-cookie";
 
 const App = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
-  console.log(FirebaseAuth);
+
   useEffect(() => {
-    if (FirebaseAuth.currentUser)
-      localStorage.setItem("user", JSON.stringify(FirebaseAuth.currentUser));
+    if (FirebaseAuth.currentUser) {
+      // Store Current User in session storage
+      sessionStorage.setItem("user", JSON.stringify(FirebaseAuth.currentUser));
+    }
+
     FirebaseAuth.onIdTokenChanged((user) => {
       if (user) {
         user.getIdToken(true).then(function (idToken) {
@@ -25,7 +28,7 @@ const App = () => {
       }
     });
   }, [setCookie, removeCookie]);
-  console.log(cookies.token);
+
   return (
     <Router>
       <Navbar />
