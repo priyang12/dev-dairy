@@ -5,25 +5,27 @@ import Navbar from "./components/Navbar";
 import LandingPage from "./pages/LandingPage";
 import Login from "./pages/login";
 import Feeds from "./pages/feeds";
+import { useCookies } from "react-cookie";
 
 // import { LOGOUT } from "./actions/types";
 
 const App = () => {
-  FirebaseAuth.onIdTokenChanged((user) => {
-    if (user) {
-      user.getIdToken(true).then(function (idToken) {
-        localStorage.setItem("AccessToken", idToken);
-      });
-    } else {
-      localStorage.removeItem("AccessToken");
-    }
-  });
+  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
+  console.log(FirebaseAuth);
   useEffect(() => {
-    console.log("logged in");
     if (FirebaseAuth.currentUser)
       localStorage.setItem("user", JSON.stringify(FirebaseAuth.currentUser));
-  }, []);
-
+    FirebaseAuth.onIdTokenChanged((user) => {
+      if (user) {
+        user.getIdToken(true).then(function (idToken) {
+          setCookie("token", idToken, { path: "/Auth" });
+        });
+      } else {
+        removeCookie("token", { path: "/Auth" });
+      }
+    });
+  }, [setCookie, removeCookie]);
+  console.log(cookies.token);
   return (
     <Router>
       <Navbar />
@@ -31,7 +33,6 @@ const App = () => {
         <Switch>
           <Route exact path='/' component={LandingPage} />
           <Route exact path='/Auth/login' component={Login} />
-          <Route exact path='/feeds' component={Feeds} />
         </Switch>
       </Fragment>
     </Router>

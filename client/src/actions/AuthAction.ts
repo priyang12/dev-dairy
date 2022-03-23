@@ -58,7 +58,7 @@ export const LoginAction = (data: any) => async (
       data.password
     );
     const { user } = response;
-    // const AccessToken = await user.getIdToken(true);
+    console.log(response);
     dispatch({
       type: LOGIN_SUCCESS,
       payload: user,
