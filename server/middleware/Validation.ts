@@ -1,6 +1,6 @@
-const { body } = require("express-validator");
+import { body } from "express-validator";
 
-exports.validate = (method) => {
+const validate: any = (method: string) => {
   switch (method) {
     case "RegisterUser": {
       return [
@@ -30,3 +30,5 @@ exports.validate = (method) => {
     }
   }
 };
+
+export default validate;

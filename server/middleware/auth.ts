@@ -1,19 +1,19 @@
-const Auth = require("firebase-admin/auth");
+import type { NextFunction, Request, Response } from "express";
+import { auth as getAuth } from "firebase-admin";
 
-module.exports = async function (req, res, next) {
+export default async (req: Request, res: Response, next: NextFunction) => {
   const token = req.header("x-auth-token");
   //check token
   if (!token) {
     return res.status(401).json({ msg: "no token, authorization denied" });
   }
   try {
-    const decoded = await Auth.getAuth().verifyIdToken(token);
+    const decoded = await getAuth().verifyIdToken(token);
 
     if (decoded.exp < Date.now() / 1000) {
       return res.status(401).json({ msg: "token has expired" });
     }
-
-    req.user = decoded;
+    req.user._id = decoded.uid;
     next();
   } catch (error) {
     res.status(401).json({ msg: "token is not valid" });
