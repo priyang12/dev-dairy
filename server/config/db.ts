@@ -1,10 +1,11 @@
-const mongoose = require("mongoose");
-const keys = require("./keys");
+import { connect } from "mongoose";
+import keys from "./keys";
+
 const db = keys.mongoURL;
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(db, {
+    await connect(db, {
       useNewUrlParser: true,
       useCreateIndex: true,
       useUnifiedTopology: true,
@@ -17,4 +18,4 @@ const connectDB = async () => {
   }
 };
 
-module.exports = connectDB;
+export default connectDB;
