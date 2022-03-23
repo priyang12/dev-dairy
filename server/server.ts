@@ -1,5 +1,5 @@
 import express, { Application } from "express";
-// const { notFound, errorHandler } = require("./middleware/Error");
+import { errorHandler, notFound } from "./middleware/Error";
 // const connectFirebase = require("./config/firebase");
 
 const app: Application = express();
@@ -12,13 +12,12 @@ dotenv.config();
 
 //init middleware
 app.use(express.json());
+app.use(notFound);
+app.use(errorHandler);
 
 //define routes
 // app.use("/api/Users", require("./routes/UserRoute"));
 app.use("/api/Posts", PostRoute);
-
-// app.use(notFound);
-// app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 

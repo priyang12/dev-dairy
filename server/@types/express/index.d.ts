@@ -6,6 +6,7 @@ declare global {
       user: {
         _id: string;
       };
+      orinialUrl: string;
     }
   }
 }
