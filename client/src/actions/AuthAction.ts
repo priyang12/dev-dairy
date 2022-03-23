@@ -92,8 +92,18 @@ export const LoginAction = (data: any) => async (
 // };
 
 //logout user
-export const logout = () => async (dispatch: Dispatch<AuthActions>) =>
-  dispatch({ type: LOGOUT, payload: null });
+export const logout = () => async (dispatch: Dispatch<AuthActions>) => {
+  try {
+    await FirebaseAuth.signOut();
+    dispatch({ type: LOGOUT, payload: null });
+  } catch (err: any) {
+    let errorMessage = "Server Error";
+    if (err.response) {
+      errorMessage = err.response.data.message;
+    }
+    dispatch(setAlertAction(errorMessage, false));
+  }
+};
 
 // export const cleanCurrent  = () =>{
 //     return{
