@@ -7,16 +7,16 @@
     "start": "node server/server.js",
     "server": "nodemon server/server.js",
     "client": "npm start --prefix client",
-    "clientInstall": "npm install --prefix client",
+    "build": "tsc -p ./server ",
+    "clientInstall": "npm install",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
-  "author": "gambino",
+  "author": "priyang",
   "license": "ISC",
   "dependencies": {
-    "@reach/dialog": "^0.16.2",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
-    "concurrently": "^5.3.0",
+    "concurrently": "^7.0.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-async-handler": "^1.2.0",
@@ -31,7 +31,9 @@
     "validator": "^13.5.2"
   },
   "devDependencies": {
+    "@types/express": "^4.17.13",
     "nodemon": "^2.0.6",
-    "prettier": "2.2.1"
+    "prettier": "2.2.1",
+    "typescript": "^4.6.2"
   }
 }
