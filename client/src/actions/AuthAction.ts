@@ -1,25 +1,27 @@
-import { REGISTER_SUCCESS, USER_LOADED, LOGIN_SUCCESS, LOGOUT } from "./types";
-import axios from "axios";
+import axios from 'axios';
+import type { Dispatch } from 'react';
+import {
+ REGISTER_SUCCESS, USER_LOADED, LOGIN_SUCCESS, LOGOUT,
+} from './types';
 
-import { FirebaseAuth } from "../FirebaseConfig";
-import { Dispatch } from "react";
-import { setAlertAction, setLoadingAction } from "./AlertAction";
-import { AuthActions } from "../reducers/AuthReducer";
-import { AlertActions } from "../reducers/AlertReducer";
+import { FirebaseAuth } from '../FirebaseConfig';
+import { setAlertAction, setLoadingAction } from './AlertAction';
+import type { AuthActions } from '../reducers/AuthReducer';
+import type { AlertActions } from '../reducers/AlertReducer';
 
-//Load user
+// Load user
 export const loadUser = () => async (
-  dispatch: Dispatch<AlertActions | AuthActions>
+  dispatch: Dispatch<AlertActions | AuthActions>,
 ) => {
   try {
     dispatch(setLoadingAction(1));
-    const res = await axios.get("/api/users/me");
+    const res = await axios.get('/api/users/me');
     dispatch({
       type: USER_LOADED,
       payload: res.data,
     });
   } catch (err: any) {
-    let errorMessage = "Server Error";
+    let errorMessage = 'Server Error';
     if (err.response) {
       errorMessage = err.response.data.message;
     }
@@ -29,7 +31,7 @@ export const loadUser = () => async (
   }
 };
 
-//register User
+// register User
 export const RegisterUserAction = (UserData: {
   name: string;
   email: string;
@@ -37,11 +39,11 @@ export const RegisterUserAction = (UserData: {
 }) => async (dispatch: Dispatch<AuthActions>) => {
   try {
     dispatch(setLoadingAction(1));
-    console.log("asdsad");
+    console.log('asdsad');
     // register firebase user and update display name
     const { user }: any = await FirebaseAuth.createUserWithEmailAndPassword(
       UserData.email,
-      UserData.password
+      UserData.password,
     );
     await user.updateProfile({
       displayName: UserData.name,
@@ -51,9 +53,9 @@ export const RegisterUserAction = (UserData: {
       type: REGISTER_SUCCESS,
       payload: user,
     });
-    dispatch(setAlertAction("User registered successfully", true));
+    dispatch(setAlertAction('User registered successfully', true));
   } catch (err: any) {
-    let errorMessage = "Server Error";
+    let errorMessage = 'Server Error';
     if (err.message) errorMessage = err.message;
     if (err.response) errorMessage = err.response.data.message;
     dispatch(setAlertAction(errorMessage, false));
@@ -63,13 +65,13 @@ export const RegisterUserAction = (UserData: {
 };
 // Login User
 export const LoginAction = (data: any) => async (
-  dispatch: Dispatch<AlertActions | AuthActions>
+  dispatch: Dispatch<AlertActions | AuthActions>,
 ) => {
   try {
     dispatch(setLoadingAction(1));
     const response: any = await FirebaseAuth.signInWithEmailAndPassword(
       data.email,
-      data.password
+      data.password,
     );
     const { user } = response;
     dispatch({
@@ -77,7 +79,7 @@ export const LoginAction = (data: any) => async (
       payload: user,
     });
   } catch (err: any) {
-    let errorMessage = "Server Error";
+    let errorMessage = 'Server Error';
     if (err.response) {
       errorMessage = err.response.data.message;
     }
@@ -105,13 +107,13 @@ export const LoginAction = (data: any) => async (
 //   }
 // };
 
-//logout user
+// logout user
 export const logout = () => async (dispatch: Dispatch<AuthActions>) => {
   try {
     await FirebaseAuth.signOut();
     dispatch({ type: LOGOUT, payload: null });
   } catch (err: any) {
-    let errorMessage = "Server Error";
+    let errorMessage = 'Server Error';
     if (err.response) {
       errorMessage = err.response.data.message;
     }

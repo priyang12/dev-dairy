@@ -1,10 +1,10 @@
 const authObjectMock = {
   createUserAndRetrieveDataWithEmailAndPassword: jest.fn(() =>
-    Promise.resolve(true)
+    Promise.resolve(true),
   ),
   sendPasswordResetEmail: jest.fn(() => Promise.resolve(true)),
   signInAndRetrieveDataWithEmailAndPassword: jest.fn(() =>
-    Promise.resolve(true)
+    Promise.resolve(true),
   ),
   fetchSignInMethodsForEmail: jest.fn(() => Promise.resolve(true)),
   signOut: jest.fn(() => {

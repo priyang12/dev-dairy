@@ -1,14 +1,18 @@
-import { Fragment, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Fragment, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 // import { AddLike, RemoveLike, DeletePost } from "../actions/PostAction";
-import { Post } from "../actions/interfaces";
+import type { Post } from '../actions/interfaces';
 
 type PropTypes = {
   post: Post;
 };
 
-const FeedsItems = ({ post: { likes, uid, text, title } }: PropTypes) => {
+function FeedsItems({
+ post: {
+ likes, uid, text, title,
+},
+}: PropTypes) {
   const { user } = useSelector((state: any) => state.auth);
 
   const [checkDelete, setDelete] = useState(false);
@@ -50,12 +54,12 @@ const FeedsItems = ({ post: { likes, uid, text, title } }: PropTypes) => {
   };
 
   return (
-    <Fragment>
+    <>
       {checkDelete ? null : (
-        <div className='posts'>
-          <div className='card card-body mb-3'>
-            <div className='row'>
-              <div className='col-md-2'>
+        <div className="posts">
+          <div className="card card-body mb-3">
+            <div className="row">
+              <div className="col-md-2">
                 {/* <Link to={`/profile/${user._id}`}>
                   <img
                     className='rounded-circle d-none d-md-block'
@@ -69,40 +73,40 @@ const FeedsItems = ({ post: { likes, uid, text, title } }: PropTypes) => {
                 </Link> */}
               </div>
 
-              <div className='col-md-10'>
-                <p className='lead '>{text}</p>
-                <p className='lead '>{title}</p>
+              <div className="col-md-10">
+                <p className="lead ">{text}</p>
+                <p className="lead ">{title}</p>
                 {uid === user.uid && (
-                  <div className='col'>
-                    <div className='dropdown d-flex justify-content-end'>
+                  <div className="col">
+                    <div className="dropdown d-flex justify-content-end">
                       <button
-                        className='btn btn-secondary dropdown-toggle'
-                        type='button'
-                        id='dropdownMenuButton'
-                        data-toggle='dropdown'
-                        aria-haspopup='true'
-                        aria-expanded='false'
+                        className="btn btn-secondary dropdown-toggle"
+                        type="button"
+                        id="dropdownMenuButton"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false"
                         style={{
-                          backgroundColor: "white",
-                          color: "black",
-                          border: "none",
+                          backgroundColor: 'white',
+                          color: 'black',
+                          border: 'none',
                         }}
-                      ></button>
+                      />
                       <div
-                        className='dropdown-menu'
-                        aria-labelledby='dropdownMenuButton'
+                        className="dropdown-menu"
+                        aria-labelledby="dropdownMenuButton"
                       >
-                        <div className='col'>
-                          <div className='ml-2'>
+                        <div className="col">
+                          <div className="ml-2">
                             <div>
                               <button
-                                type='button'
-                                className='btn btn-light'
+                                type="button"
+                                className="btn btn-light"
                                 onClick={deletePost}
                               >
                                 <span
-                                  className='hide-sm tex'
-                                  style={{ color: "#343a40" }}
+                                  className="hide-sm tex"
+                                  style={{ color: '#343a40' }}
                                 >
                                   Delete the Post
                                 </span>
@@ -115,26 +119,28 @@ const FeedsItems = ({ post: { likes, uid, text, title } }: PropTypes) => {
                   </div>
                 )}
                 <button
-                  type='button'
-                  className='btn btn-light mr-1'
+                  type="button"
+                  className="btn btn-light mr-1"
                   onClick={check}
                 >
-                  <span className='badge badge-light'>
+                  <span className="badge badge-light">
                     {checkLike ? (
                       <div>
-                        <i className='text-info fas fa-thumbs-up'></i>{" "}
+                        <i className="text-info fas fa-thumbs-up" />
+                        {' '}
                         {LikesNumber}
                       </div>
                     ) : (
                       <div>
-                        <i className='text-secondary fas fa-thumbs-up'></i>{" "}
+                        <i className="text-secondary fas fa-thumbs-up" />
+                        {' '}
                         {LikesNumber}
                       </div>
                     )}
                   </span>
                 </button>
 
-                <Link to={`/post/${uid}`} className='btn btn-info mr-1'>
+                <Link to={`/post/${uid}`} className="btn btn-info mr-1">
                   Comments
                 </Link>
               </div>
@@ -142,8 +148,8 @@ const FeedsItems = ({ post: { likes, uid, text, title } }: PropTypes) => {
           </div>
         </div>
       )}
-    </Fragment>
+    </>
   );
-};
+}
 
 export default FeedsItems;

@@ -1,12 +1,12 @@
-import { User, UserInfo } from "firebase/auth";
-import { AuthState } from "../actions/interfaces";
+import type { User, UserInfo } from 'firebase/auth';
+import type { AuthState } from '../actions/interfaces';
 import {
   REGISTER_SUCCESS,
   USER_LOADED,
   LOGIN_SUCCESS,
   LOGOUT,
   UPDATE_USER_PIC,
-} from "../actions/types";
+} from '../actions/types';
 
 type ActionMap<M extends { [index: string]: any }> = {
   [Key in keyof M]: M[Key] extends undefined
@@ -30,14 +30,14 @@ export type AuthActions = ActionMap<AuthPayload>[keyof ActionMap<AuthPayload>];
 
 // Retrieve user data from session storage
 const getUser = (): User | null => {
-  const user = sessionStorage.getItem("user");
+  const user = sessionStorage.getItem('user');
   return user ? JSON.parse(user) : null;
 };
 const data = getUser();
 console.log(data);
 const initialState: AuthState = {
   token: null,
-  isAuth: data ? true : false,
+  isAuth: !!data,
   user: data || null,
 };
 

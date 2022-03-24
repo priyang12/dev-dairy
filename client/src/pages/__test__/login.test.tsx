@@ -1,36 +1,36 @@
-import { screen, render } from "@testing-library/react";
-import "@testing-library/jest-dom";
-import userEvent from "@testing-library/user-event";
-import { Provider } from "react-redux";
-import store from "../../store";
+import { screen, render } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import userEvent from '@testing-library/user-event';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
+import store from '../../store';
 
-//Component: login
-import Login from "../login";
-import { BrowserRouter } from "react-router-dom";
+// Component: login
+import Login from '../login';
 
-//Test: login
-it("Login Form", () => {
+// Test: login
+it('Login Form', () => {
   render(
     <Provider store={store}>
       <BrowserRouter>
         <Login />
       </BrowserRouter>
-    </Provider>
+    </Provider>,
   );
-  //Test: login form
-  const email = screen.getByText("email");
-  const password = screen.getByText("password");
-  const submitBtn = screen.getByText("Log In");
+  // Test: login form
+  const email = screen.getByText('email');
+  const password = screen.getByText('password');
+  const submitBtn = screen.getByText('Log In');
   expect(email).toBeInTheDocument();
   expect(password).toBeInTheDocument();
   expect(submitBtn).toBeInTheDocument();
 
-  //Test: login form fields
-  userEvent.type(email, "PatelPriyang95@gmail.com");
-  userEvent.type(password, "12345678");
+  // Test: login form fields
+  userEvent.type(email, 'PatelPriyang95@gmail.com');
+  userEvent.type(password, '12345678');
 
   console.log(email.textContent);
 
-  //Test: login form submit
+  // Test: login form submit
   userEvent.click(submitBtn);
 });

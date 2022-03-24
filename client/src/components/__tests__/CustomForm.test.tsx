@@ -1,44 +1,45 @@
-import { screen, render } from "@testing-library/react";
-import "@testing-library/jest-dom";
+import { screen, render } from '@testing-library/react';
+import '@testing-library/jest-dom';
 
-//Component: CustomForm
-import CustomForm, { FormField } from "../CustomForm";
-import userEvent from "@testing-library/user-event";
+// Component: CustomForm
+import userEvent from '@testing-library/user-event';
+import type { FormField } from '../CustomForm';
+import CustomForm from '../CustomForm';
 import {
   ValidateEmail,
   ValidateName,
   ValidatePassword,
-} from "../../utils/Validation";
+} from '../../utils/Validation';
 
 const FormFields: FormField[] = [
   {
-    fieldType: "text",
-    fieldName: "name",
-    placeholder: "Enter a Username",
+    fieldType: 'text',
+    fieldName: 'name',
+    placeholder: 'Enter a Username',
   },
   {
-    fieldType: "text",
-    fieldName: "email",
-    placeholder: "Enter Your email",
+    fieldType: 'text',
+    fieldName: 'email',
+    placeholder: 'Enter Your email',
   },
   {
-    fieldType: "text",
-    fieldName: "password",
+    fieldType: 'text',
+    fieldName: 'password',
   },
 ];
 
-it("Render form", () => {
+it('Render form', () => {
   const SubmitForm = jest.fn();
-  const FormSubmitValue = "Submit";
+  const FormSubmitValue = 'Submit';
   render(
     <CustomForm
       SubmitForm={SubmitForm}
       FormFields={FormFields}
       FormSubmitValue={FormSubmitValue}
-    />
+    />,
   );
 
-  //Check Form Fields
+  // Check Form Fields
   FormFields.forEach((field) => {
     const input = screen.getByText(field.fieldName);
     expect(input).toBeInTheDocument();
@@ -49,16 +50,16 @@ it("Render form", () => {
 
   // Check Form Value Change
   const input = screen.getByPlaceholderText(/Enter a Username/);
-  userEvent.type(input, "Test");
-  expect(input).toHaveValue("Test");
+  userEvent.type(input, 'Test');
+  expect(input).toHaveValue('Test');
 
   // Check Submit Form
-  userEvent.click(screen.getByText("Submit"));
+  userEvent.click(screen.getByText('Submit'));
   expect(SubmitForm).toHaveBeenCalledTimes(1);
 });
 
-it("Check for Validation", () => {
-  const FormSubmitValue = "Submit";
+it('Check for Validation', () => {
+  const FormSubmitValue = 'Submit';
   const SubmitForm = (FormValues: any, setErrors: any): void => {
     const NameError = ValidateName(FormValues.name);
     const EmailError = ValidateEmail(FormValues.email);
@@ -74,16 +75,16 @@ it("Check for Validation", () => {
       SubmitForm={SubmitForm}
       FormFields={FormFields}
       FormSubmitValue={FormSubmitValue}
-    />
+    />,
   );
 
   // Check Form Value Change
   const input = screen.getByPlaceholderText(/Enter a Username/);
-  userEvent.type(input, "Tes");
-  expect(input).toHaveValue("Tes");
+  userEvent.type(input, 'Tes');
+  expect(input).toHaveValue('Tes');
 
   // Check Submit Form
-  userEvent.click(screen.getByText("Submit"));
+  userEvent.click(screen.getByText('Submit'));
 
   // Check for Error
   expect(screen.getByText(/Name must be between 4 and 10/)).toBeInTheDocument();

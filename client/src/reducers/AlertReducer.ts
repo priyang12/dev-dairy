@@ -1,10 +1,10 @@
-import { AlertState } from "../actions/interfaces";
+import type { AlertState } from '../actions/interfaces';
 import {
   SET_LOADING,
   STOP_LOADING,
   SET_ALERT,
   CLEAR_ALERT,
-} from "../actions/types";
+} from '../actions/types';
 
 type ActionMap<M extends { [index: string]: any }> = {
   [Key in keyof M]: M[Key] extends undefined

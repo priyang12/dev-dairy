@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "jsx": "react",
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -15,5 +16,12 @@
     "isolatedModules": true,
     "noEmit": true
   },
-  "include": ["src/**/*.tsx", "src/.tsx"]
+  "include": [
+    "src/*/*.tsx",
+    "src/.tsx",
+    "src/*/*.ts",
+    "src/.ts",
+    "src/**/*.d.ts",
+    "src/.d.ts"
+  ]
 }

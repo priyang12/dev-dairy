@@ -1,4 +1,5 @@
-import { Post, PostState } from "../actions/interfaces";
+import type { Post, PostState } from '../actions/interfaces';
+import type { DELETE_POST } from '../actions/types';
 import {
   ADD_POST,
   ADD_LIKE,
@@ -7,8 +8,7 @@ import {
   CLEAR_POST,
   GET_POSTS,
   GET_POST,
-  DELETE_POST,
-} from "../actions/types";
+} from '../actions/types';
 
 type ActionMap<M extends { [index: string]: any }> = {
   [Key in keyof M]: M[Key] extends undefined
