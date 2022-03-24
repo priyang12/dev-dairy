@@ -30,23 +30,37 @@ export const loadUser = () => async (
 };
 
 //register User
-// export const register = (data) => async (dispatch) => {
-//   try {
-//     const res = await axios.post("/api/users/register", data, config);
-//     dispatch({
-//       type: REGISTER_SUCCESS,
-//       payload: res.data,
-//     });
-//     dispatch(loadUser());
-//   } catch (err) {
-//     const errors = err.response.data.msg;
-//     console.log(errors);
-//     dispatch({
-//       type: REGISTER_FAIL,
-//       payload: errors,
-//     });
-//   }
-// };
+export const RegisterUserAction = (UserData: {
+  name: string;
+  email: string;
+  password: string;
+}) => async (dispatch: Dispatch<AuthActions>) => {
+  try {
+    dispatch(setLoadingAction(1));
+    console.log("asdsad");
+    // register firebase user and update display name
+    const { user }: any = await FirebaseAuth.createUserWithEmailAndPassword(
+      UserData.email,
+      UserData.password
+    );
+    await user.updateProfile({
+      displayName: UserData.name,
+    });
+    console.log(user);
+    dispatch({
+      type: REGISTER_SUCCESS,
+      payload: user,
+    });
+    dispatch(setAlertAction("User registered successfully", true));
+  } catch (err: any) {
+    let errorMessage = "Server Error";
+    if (err.message) errorMessage = err.message;
+    if (err.response) errorMessage = err.response.data.message;
+    dispatch(setAlertAction(errorMessage, false));
+  } finally {
+    dispatch(setLoadingAction(-1));
+  }
+};
 // Login User
 export const LoginAction = (data: any) => async (
   dispatch: Dispatch<AlertActions | AuthActions>

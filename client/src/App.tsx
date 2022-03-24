@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import LandingPage from "./pages/LandingPage";
 import Login from "./pages/login";
-import Feeds from "./pages/feeds";
+import Register from "./pages/Register";
 import { useCookies } from "react-cookie";
 
 // import { LOGOUT } from "./actions/types";
@@ -36,6 +36,7 @@ const App = () => {
         <Switch>
           <Route exact path='/' component={LandingPage} />
           <Route exact path='/Auth/login' component={Login} />
+          <Route exact path='/Auth/Register' component={Register} />
         </Switch>
       </Fragment>
     </Router>

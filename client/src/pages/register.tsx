@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { FormField } from "../components/CustomForm";
 import { AuthState } from "../actions/interfaces";
@@ -9,10 +9,12 @@ import {
   ValidateName,
   ValidatePassword,
 } from "../utils/Validation";
+import { RegisterUserAction } from "../actions/AuthAction";
 
 const Register = () => {
   const Auth: AuthState = useSelector((state: any) => state.Auth);
   const { isAuth } = Auth;
+  const dispatch = useDispatch();
   const RegisterFields: FormField[] = [
     {
       fieldType: "text",
@@ -20,9 +22,9 @@ const Register = () => {
       placeholder: "Pick a Cool Nickname",
     },
     {
-      fieldType: "text",
-      fieldName: "name",
-      placeholder: "Pick a Cool Nickname",
+      fieldType: "email",
+      fieldName: "email",
+      placeholder: "We never share your email",
     },
     {
       fieldType: "password",
@@ -51,6 +53,9 @@ const Register = () => {
     });
     if (!UsernameError && !EmailError && !PasswordError && !ConfirmError) {
       console.log(FormValues);
+      dispatch(RegisterUserAction(FormValues));
+    } else {
+      console.log(UsernameError, EmailError, PasswordError, ConfirmError);
     }
   };
   if (isAuth) {

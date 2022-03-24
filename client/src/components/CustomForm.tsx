@@ -31,6 +31,7 @@ const Form = ({ SubmitForm, FormFields, FormSubmitValue }: Props) => {
       <form onSubmit={check} className='mx-3'>
         {FormFields.map((field, index) => (
           <div className='form-group' key={index}>
+            <label htmlFor={field.fieldName}>{field.fieldName}</label>
             <input
               type={field.fieldType}
               className='form-control'
@@ -44,7 +45,6 @@ const Form = ({ SubmitForm, FormFields, FormSubmitValue }: Props) => {
                 ? ErrorsState[`${field.fieldName}`]
                 : ""}
             </div>
-            <label htmlFor={field.fieldName}>{field.fieldName}</label>
           </div>
         ))}
 
