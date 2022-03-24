@@ -21,7 +21,7 @@ type AlertPayload = {
   [SET_LOADING]: number;
   [STOP_LOADING]: number;
   [SET_ALERT]: { msg: string; result: string };
-  [CLEAR_ALERT]: void;
+  [CLEAR_ALERT]: any;
 };
 
 export type AlertActions = ActionMap<AlertPayload>[keyof ActionMap<AlertPayload>];

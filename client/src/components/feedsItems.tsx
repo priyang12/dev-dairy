@@ -8,11 +8,7 @@ type PropTypes = {
   post: Post;
 };
 
-function FeedsItems({
- post: {
- likes, uid, text, title,
-},
-}: PropTypes) {
+function FeedsItems({ post: { likes, uid, text, title } }: PropTypes) {
   const { user } = useSelector((state: any) => state.auth);
 
   const [checkDelete, setDelete] = useState(false);
@@ -126,14 +122,12 @@ function FeedsItems({
                   <span className="badge badge-light">
                     {checkLike ? (
                       <div>
-                        <i className="text-info fas fa-thumbs-up" />
-                        {' '}
+                        <i className="text-info fas fa-thumbs-up" />{' '}
                         {LikesNumber}
                       </div>
                     ) : (
                       <div>
-                        <i className="text-secondary fas fa-thumbs-up" />
-                        {' '}
+                        <i className="text-secondary fas fa-thumbs-up" />{' '}
                         {LikesNumber}
                       </div>
                     )}

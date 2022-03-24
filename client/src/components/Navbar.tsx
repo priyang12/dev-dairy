@@ -1,4 +1,3 @@
-import { Fragment, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../actions/AuthAction';
@@ -25,9 +24,7 @@ function Navbar() {
           aria-expanded="false"
           style={{ color: 'white' }}
         >
-          Hello
-          {' '}
-          {user?.displayName ? user.displayName : 'Stranger'}
+          Hello {user && user?.displayName ? user.displayName : 'Stranger'}
         </button>
         <div
           className="dropdown-menu"
@@ -36,12 +33,12 @@ function Navbar() {
         >
           <div>
             {user && (
-            <li className="ml-2">
-              <Link to={`/profile/${user.uid}`}>
-                <span className="hide-sm">Profile</span>
-              </Link>
-            </li>
-              )}
+              <li className="ml-2">
+                <Link to={`/profile/${user.uid}`}>
+                  <span className="hide-sm">Profile</span>
+                </Link>
+              </li>
+            )}
             <li className="ml-2">
               <Link to="/editProfile">
                 <span className="hide-sm">Edit Profile</span>
@@ -51,8 +48,7 @@ function Navbar() {
             <div className="dropdown-divider" />
             <li className="ml-3">
               <Link onClick={onLogout} to="/Auth/login">
-                <i className="fas fa-sign-out-alt" />
-                {' '}
+                <i className="fas fa-sign-out-alt" />{' '}
                 <span className="hide-sm">Logout</span>
               </Link>
             </li>

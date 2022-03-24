@@ -1,4 +1,6 @@
-import { useForm } from '../utils/hooks';
+/* eslint-disable operator-linebreak */
+import React from 'react';
+import useForm from '../Hooks/useForm';
 
 export interface FormField {
   fieldType: string;
@@ -17,9 +19,7 @@ function Form({ SubmitForm, FormFields, FormSubmitValue }: Props) {
     (acc, curr) => ({ ...acc, [curr.fieldName]: '' }),
     {},
   );
-  const {
- FormValues, HandleChange, ErrorsState, setErrors,
-} = useForm(
+  const { FormValues, ErrorsState, HandleChange, setErrors } = useForm(
     InitState,
   );
 
@@ -32,20 +32,20 @@ function Form({ SubmitForm, FormFields, FormSubmitValue }: Props) {
     <div>
       <form onSubmit={check} className="mx-3">
         {FormFields.map((field, index) => (
+          // eslint-disable-next-line react/no-array-index-key
           <div className="form-group" key={index}>
             <label htmlFor={field.fieldName}>{field.fieldName}</label>
             <input
               type={field.fieldType}
               className="form-control"
-              placeholder={field.placeholder || `Enter ${field.fieldName}`}
+              placeholder={field.placeholder ?? `Enter ${field.fieldName}`}
               name={field.fieldName}
               value={FormValues[`${field.fieldName}`]}
               onChange={HandleChange}
             />
             <div className="text-danger">
-              {ErrorsState[`${field.fieldName}`]
-                ? ErrorsState[`${field.fieldName}`]
-                : ''}
+              {Boolean(ErrorsState[field.fieldName]) &&
+                ErrorsState[`${field.fieldName}`]}
             </div>
           </div>
         ))}
