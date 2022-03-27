@@ -8,7 +8,7 @@ type PropTypes = {
   post: Post;
 };
 
-function FeedsItems({ post: { likes, uid, text, title } }: PropTypes) {
+function PostContainer({ post: { likes, uid, text, title } }: PropTypes) {
   const { user } = useSelector((state: any) => state.auth);
 
   const [checkDelete, setDelete] = useState(false);
@@ -146,4 +146,4 @@ function FeedsItems({ post: { likes, uid, text, title } }: PropTypes) {
   );
 }
 
-export default FeedsItems;
+export default PostContainer;

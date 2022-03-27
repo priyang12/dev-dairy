@@ -10,20 +10,41 @@ import {
   ADD_LIKE,
   REMOVE_UNLIKE,
 } from './types';
-import { setLoadingAction, stopLoadingAction, setAlertAction } from './AlertAction';
+import {
+  setLoadingAction,
+  stopLoadingAction,
+  setAlertAction,
+} from './AlertAction';
 import type { PostActions } from '../reducers/PostReducer';
 import type { AlertActions } from '../reducers/AlertReducer';
 import type { Post } from './interfaces';
-// Get Posts
-export const GetPosts = () => (dispatch: Dispatch<any>) => {
-  const data = async () => {
-    const res = await axios.get('/api/posts');
 
-    // if (res.data.msg) dispatch(setAlertAction(res.data.msg, true));
-    return res.data;
-  };
-  dispatch(callApi(data, GET_POSTS));
+// Get Posts
+export const getPostsAction = () => async (dispatch: Dispatch<PostActions>) => {
+  try {
+    dispatch(setLoadingAction(1));
+    const res: any = await axios.get('/api/post');
+    dispatch({
+      type: GET_POSTS,
+      payload: res.data,
+    });
+  } catch (error: any) {
+    let errorMessage = 'Server Error';
+    if (error?.response) errorMessage = error.response.data.message;
+    dispatch(setAlertAction(errorMessage, false));
+  } finally {
+    dispatch(stopLoadingAction(1));
+  }
 };
+// export const GetPosts = () => (dispatch: Dispatch<any>) => {
+//   const data = async () => {
+//     const res = await axios.get('/api/posts');
+
+//     // if (res.data.msg) dispatch(setAlertAction(res.data.msg, true));
+//     return res.data;
+//   };
+//   dispatch(callApi(data, GET_POSTS));
+// };
 
 const callApi = (AxiosCall: () => any, Type: any) => async (
   dispatch: Dispatch<PostActions | AlertActions>,
