@@ -14,10 +14,10 @@ export interface AlertState {
 }
 
 export interface Post {
-  uid: string;
+  _id: string;
   title: string;
   text: string;
-  user: string;
+  user: any;
   likes: [];
   comments: [];
   createdAt: string;
