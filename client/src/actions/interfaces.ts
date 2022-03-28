@@ -4,7 +4,7 @@ import { UserInfo } from 'firebase/auth';
 export interface AuthState {
   token: string | null;
   isAuth: boolean;
-  user: User | null;
+  user: User | any;
 }
 
 export interface AlertState {

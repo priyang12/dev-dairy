@@ -34,7 +34,6 @@ const getUser = (): User | null => {
   return user ? JSON.parse(user) : null;
 };
 const data = getUser();
-console.log(data);
 const initialState: AuthState = {
   token: null,
   isAuth: !!data,
@@ -69,7 +68,6 @@ export default (state = initialState, action: AuthActions) => {
       return {
         ...state,
         alert: action.payload,
-
         error: null,
       };
 

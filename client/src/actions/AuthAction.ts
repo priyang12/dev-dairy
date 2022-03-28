@@ -1,8 +1,6 @@
 import axios from 'axios';
 import type { Dispatch } from 'react';
-import {
- REGISTER_SUCCESS, USER_LOADED, LOGIN_SUCCESS, LOGOUT,
-} from './types';
+import { REGISTER_SUCCESS, USER_LOADED, LOGIN_SUCCESS, LOGOUT } from './types';
 
 import { FirebaseAuth } from '../FirebaseConfig';
 import { setAlertAction, setLoadingAction } from './AlertAction';
@@ -39,7 +37,6 @@ export const RegisterUserAction = (UserData: {
 }) => async (dispatch: Dispatch<AuthActions>) => {
   try {
     dispatch(setLoadingAction(1));
-    console.log('asdsad');
     // register firebase user and update display name
     const { user }: any = await FirebaseAuth.createUserWithEmailAndPassword(
       UserData.email,
