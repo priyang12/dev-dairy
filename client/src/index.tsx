@@ -4,7 +4,9 @@ import { Provider } from 'react-redux';
 import App from './App';
 import './Styles/Global.css';
 
-import Store from './store';
+import { createStoreWithMiddleware } from './store';
+
+const Store = createStoreWithMiddleware();
 
 if (process.env.NODE_ENV === 'development') {
   const { worker } = require('./mocks/browser');
