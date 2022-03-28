@@ -27,7 +27,7 @@ type AlertPayload = {
 export type AlertActions = ActionMap<AlertPayload>[keyof ActionMap<AlertPayload>];
 
 const initialState: AlertState = {
-  alert: null,
+  alert: '',
   result: false,
   loading: 0,
 };

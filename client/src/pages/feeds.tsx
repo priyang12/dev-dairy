@@ -6,8 +6,9 @@ import { getPostsAction } from '../actions/PostAction';
 import { Post } from '../actions/interfaces';
 
 function Feeds() {
-  const { loading } = useSelector((state: any) => state.Alert);
+  const { loading, alert } = useSelector((state: any) => state.Alert);
   const { posts } = useSelector((state: any) => state.Post);
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getPostsAction());

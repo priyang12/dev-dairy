@@ -1,56 +1,54 @@
 import { Fragment, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-// import { AddLike, RemoveLike, DeletePost } from "../actions/PostAction";
-import type { Post } from '../actions/interfaces';
+import { AddLike, deletePostAction, RemoveLike } from '../actions/PostAction';
+import type { AlertState, AuthState, Post } from '../actions/interfaces';
 
 type PropTypes = {
   post: Post;
 };
 
-function PostContainer({ post: { likes, _id, text, title } }: PropTypes) {
-  const { user } = useSelector((state: any) => state.Auth);
+function PostContainer({
+  post: { user: PostUser, likes, _id, text, title },
+}: PropTypes) {
+  const { user }: AuthState = useSelector((state: any) => state.Auth);
+  const dispatch = useDispatch();
 
   const [checkDelete, setDelete] = useState(false);
   const [checkLike, setLike] = useState(false);
   const [LikesNumber, setLikesNumber] = useState(0);
 
-  // useEffect(() => {
-  //   if (likes.length > 0) {
-  //     setLikesNumber(likes.length);
-  //     likes.map((like: any) => {
-  //       if (like.user === _id) {
-  //         setLike(true);
-  //       }
-  //       return true;
-  //     });
-  //   }
-  // }, [setLike, _id, likes]);
+  useEffect(() => {
+    if (likes?.length > 0) {
+      setLikesNumber(likes.length);
+      likes.map((like: any) => {
+        if (like.user === user._id) {
+          setLike(true);
+        }
+      });
+    }
+  }, [likes]);
 
   const addLike = () => {
-    // AddLike(uid);
+    dispatch(AddLike(_id));
+    setLikesNumber(LikesNumber + 1);
   };
   const removeLike = () => {
-    // RemoveLike(uid);
+    dispatch(RemoveLike(_id));
+    setLikesNumber(LikesNumber - 1);
   };
   const deletePost = () => {
-    // DeletePost(uid);
+    dispatch(deletePostAction(_id));
     setDelete(true);
   };
   const check = () => {
-    if (checkLike) {
-      removeLike();
-      setLikesNumber((LikesNumber) => LikesNumber - 1);
-    }
-    if (!checkLike) {
-      addLike();
-      setLikesNumber((LikesNumber) => LikesNumber + 1);
-    }
+    if (checkLike) removeLike();
+    else addLike();
     setLike(!checkLike);
   };
 
   return (
-    <>
+    <Fragment>
       {checkDelete ? null : (
         <div className="posts">
           <div className="card card-body mb-3">
@@ -70,9 +68,9 @@ function PostContainer({ post: { likes, _id, text, title } }: PropTypes) {
               </div>
 
               <div className="col-md-10">
-                <p className="lead ">{text}</p>
-                <p className="lead ">{title}</p>
-                {_id === user._id && (
+                <p className="lead">{text}</p>
+                <p className="lead">{title}</p>
+                {PostUser._id === user._id && (
                   <div className="col">
                     <div className="dropdown d-flex justify-content-end">
                       <button
@@ -118,16 +116,17 @@ function PostContainer({ post: { likes, _id, text, title } }: PropTypes) {
                   type="button"
                   className="btn btn-light mr-1"
                   onClick={check}
+                  data-testid={_id}
                 >
                   <span className="badge badge-light">
                     {checkLike ? (
                       <div>
-                        <i className="text-info fas fa-thumbs-up" />{' '}
+                        <i className="text-info fas fa-thumbs-up" />
                         {LikesNumber}
                       </div>
                     ) : (
                       <div>
-                        <i className="text-secondary fas fa-thumbs-up" />{' '}
+                        <i className="text-secondary fas fa-thumbs-up" />
                         {LikesNumber}
                       </div>
                     )}
@@ -142,7 +141,7 @@ function PostContainer({ post: { likes, _id, text, title } }: PropTypes) {
           </div>
         </div>
       )}
-    </>
+    </Fragment>
   );
 }
 

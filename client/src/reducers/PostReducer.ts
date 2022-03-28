@@ -1,5 +1,5 @@
 import type { Post, PostState } from '../actions/interfaces';
-import type { DELETE_POST } from '../actions/types';
+import { DELETE_POST } from '../actions/types';
 import {
   ADD_POST,
   ADD_LIKE,
@@ -28,7 +28,7 @@ type PostPayload = {
   [CLEAR_POST]: null;
   [GET_POSTS]: Post[];
   [GET_POST]: Post;
-  [DELETE_POST]: null;
+  [DELETE_POST]: string;
 };
 
 export type PostActions = ActionMap<PostPayload>[keyof ActionMap<PostPayload>];
@@ -53,6 +53,11 @@ export default (state = init, action: PostActions) => {
       return {
         ...state,
         posts: [action.payload, ...state.posts],
+      };
+    case DELETE_POST:
+      return {
+        ...state,
+        posts: state.posts.filter((post) => post._id !== action.payload),
       };
     case ADD_LIKE:
       return {

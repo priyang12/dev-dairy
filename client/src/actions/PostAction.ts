@@ -36,33 +36,25 @@ export const getPostsAction = () => async (dispatch: Dispatch<PostActions>) => {
     dispatch(stopLoadingAction(1));
   }
 };
-// export const GetPosts = () => (dispatch: Dispatch<any>) => {
-//   const data = async () => {
-//     const res = await axios.get('/api/posts');
 
-//     // if (res.data.msg) dispatch(setAlertAction(res.data.msg, true));
-//     return res.data;
-//   };
-//   dispatch(callApi(data, GET_POSTS));
-// };
-
-const callApi = (AxiosCall: () => any, Type: any) => async (
-  dispatch: Dispatch<PostActions | AlertActions>,
+// Delete Post
+export const deletePostAction = (id: string) => async (
+  dispatch: Dispatch<PostActions>,
 ) => {
   try {
     dispatch(setLoadingAction(1));
-    const data = await AxiosCall();
-
+    const res = await axios.delete(`/api/post/${id}`);
     dispatch({
-      type: Type,
-      payload: data,
+      type: DELETE_POST,
+      payload: id,
     });
-  } catch (err: any) {
+    dispatch(setAlertAction(res.data.message, false));
+  } catch (error: any) {
     let errorMessage = 'Server Error';
-    if (err?.response) errorMessage = err.response.data.message;
+    if (error?.response) errorMessage = error.response.data.message;
     dispatch(setAlertAction(errorMessage, false));
   } finally {
-    dispatch(stopLoadingAction(-1));
+    dispatch(stopLoadingAction(1));
   }
 };
 
@@ -86,7 +78,7 @@ export const GetPost = (id: string) => async (
 
 // //Add Post
 export const AddPost = (data: Post) => async (
-  dispatch: Dispatch<PostActions | AlertActions>,
+  dispatch: Dispatch<PostActions>,
 ) => {
   try {
     const res = await axios.post('/api/posts', data);
