@@ -8,24 +8,24 @@ type PropTypes = {
   post: Post;
 };
 
-function PostContainer({ post: { likes, uid, text, title } }: PropTypes) {
-  const { user } = useSelector((state: any) => state.auth);
+function PostContainer({ post: { likes, _id, text, title } }: PropTypes) {
+  const { user } = useSelector((state: any) => state.Auth);
 
   const [checkDelete, setDelete] = useState(false);
   const [checkLike, setLike] = useState(false);
   const [LikesNumber, setLikesNumber] = useState(0);
 
-  useEffect(() => {
-    if (likes.length > 0) {
-      setLikesNumber(likes.length);
-      likes.map((like: any) => {
-        if (like.user === uid) {
-          setLike(true);
-        }
-        return true;
-      });
-    }
-  }, [setLike, uid, likes]);
+  // useEffect(() => {
+  //   if (likes.length > 0) {
+  //     setLikesNumber(likes.length);
+  //     likes.map((like: any) => {
+  //       if (like.user === _id) {
+  //         setLike(true);
+  //       }
+  //       return true;
+  //     });
+  //   }
+  // }, [setLike, _id, likes]);
 
   const addLike = () => {
     // AddLike(uid);
@@ -72,7 +72,7 @@ function PostContainer({ post: { likes, uid, text, title } }: PropTypes) {
               <div className="col-md-10">
                 <p className="lead ">{text}</p>
                 <p className="lead ">{title}</p>
-                {uid === user.uid && (
+                {_id === user._id && (
                   <div className="col">
                     <div className="dropdown d-flex justify-content-end">
                       <button
@@ -134,7 +134,7 @@ function PostContainer({ post: { likes, uid, text, title } }: PropTypes) {
                   </span>
                 </button>
 
-                <Link to={`/post/${uid}`} className="btn btn-info mr-1">
+                <Link to={`/post/${_id}`} className="btn btn-info mr-1">
                   Comments
                 </Link>
               </div>

@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import PostContainer from '../components/PostContainer';
 import Spinner from '../components/spinner';
 import { getPostsAction } from '../actions/PostAction';
+import { Post } from '../actions/interfaces';
 
 function Feeds() {
   const { loading } = useSelector((state: any) => state.Alert);
@@ -11,7 +12,6 @@ function Feeds() {
   useEffect(() => {
     dispatch(getPostsAction());
   }, []);
-  console.log(posts);
   if (loading) return <Spinner />;
 
   return (
@@ -27,10 +27,10 @@ function Feeds() {
             </div>
           </div>
           <div className="col p-3">
-            {/* {posts &&
+            {posts &&
               posts.map((post: Post) => (
-                <PostContainer key={post.uid} post={post} />
-              ))} */}
+                <PostContainer key={post._id} post={post} />
+              ))}
           </div>
         </div>
       </div>
