@@ -1,24 +1,28 @@
 import express, { Application } from 'express';
 import { errorHandler, notFound } from './middleware/Error';
-// const connectFirebase = require("./config/firebase");
+import db from './config/db';
 
 const app: Application = express();
 
 import PostRoute from './routes/PostRoute';
 import UserRoute from './routes/UserRoute';
-// connectFirebase();
+
 import dotenv from 'dotenv';
 dotenv.config();
-// require("dotenv").config();
 
+db();
 //init middleware
 app.use(express.json());
-app.use(notFound);
-app.use(errorHandler);
 
 //define routes
+app.use('/api/test', (req, res) => {
+  res.send('Test');
+});
 app.use('/api/Users', UserRoute);
 app.use('/api/Posts', PostRoute);
+
+app.use(notFound);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 

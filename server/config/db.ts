@@ -1,7 +1,7 @@
-import { connect } from "mongoose";
-import keys from "./keys";
+import { connect } from 'mongoose';
+import keys from './keys';
 
-const db = keys.mongoURL;
+const db: any = keys.mongoURL;
 
 const connectDB = async () => {
   try {
@@ -11,8 +11,8 @@ const connectDB = async () => {
       useUnifiedTopology: true,
       useFindAndModify: false,
     });
-    console.log(" DB connected");
-  } catch (error) {
+    console.log(' DB connected');
+  } catch (error: any) {
     console.error(error.message);
     process.exit(1);
   }
