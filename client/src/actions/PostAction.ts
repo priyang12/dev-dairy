@@ -4,12 +4,8 @@ import {
   ADD_POST,
   DELETE_POST,
   ADD_COMMENT,
-  CLEAR_POST,
   GET_POSTS,
   GET_POST,
-  ADD_LIKE,
-  REMOVE_UNLIKE,
-  SET_ALERT,
 } from './types';
 import {
   setLoadingAction,
@@ -137,23 +133,6 @@ export const PostComment = (comment: any, id: string) => async (
   }
 };
 
-// //Delete Post
-// export const DeletePost = (id) => async (dispatch: Dispatch<PostActions | AlertActions>) => {
-//   try {
-//     const res = await axios.delete(`/api/posts/${id}`);
-
-//     dispatch({
-//       type: DELETE_POST,
-//       payload: res.data,
-//     });
-//   } catch (error) {
-//     dispatch({
-//       type: POST_ERROR,
-//       payload: error,
-//     });
-//   }
-// };
-
 // //Delete comment
 export const DeleteComment = (postId: string, comment_id: string) => async (
   dispatch: Dispatch<PostActions | AlertActions>,
@@ -173,7 +152,3 @@ export const DeleteComment = (postId: string, comment_id: string) => async (
     dispatch(setAlertAction(errorMessage, false));
   }
 };
-
-// //clear posts
-// export const clearPosts = () => async (dispatch: Dispatch<PostActions | AlertActions>) =>
-//   dispatch({ type: CLEAR_POST });

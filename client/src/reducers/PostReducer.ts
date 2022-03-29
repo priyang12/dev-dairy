@@ -2,8 +2,6 @@ import type { Post, PostState } from '../actions/interfaces';
 import { DELETE_POST } from '../actions/types';
 import {
   ADD_POST,
-  ADD_LIKE,
-  REMOVE_UNLIKE,
   ADD_COMMENT,
   CLEAR_POST,
   GET_POSTS,
@@ -22,8 +20,6 @@ type ActionMap<M extends { [index: string]: any }> = {
 };
 type PostPayload = {
   [ADD_POST]: Post;
-  [ADD_LIKE]: null;
-  [REMOVE_UNLIKE]: null;
   [ADD_COMMENT]: null;
   [CLEAR_POST]: null;
   [GET_POSTS]: Post[];
