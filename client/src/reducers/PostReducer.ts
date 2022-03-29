@@ -59,18 +59,6 @@ export default (state = init, action: PostActions) => {
         ...state,
         posts: state.posts.filter((post) => post._id !== action.payload),
       };
-    case ADD_LIKE:
-      return {
-        ...state,
-        post: { ...state.post, likes: action.payload },
-      };
-    case REMOVE_UNLIKE:
-      return {
-        ...state,
-        post: { ...state.post, unlikes: action.payload },
-        loading: false,
-        error: null,
-      };
     case ADD_COMMENT:
       return {
         ...state,

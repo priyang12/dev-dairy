@@ -18,8 +18,8 @@ export interface Post {
   title: string;
   text: string;
   user: any;
-  likes: [any] | [];
-  comments: [any] | [];
+  likes: any[];
+  comments: any[];
   createdAt: string;
 }
 

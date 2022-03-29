@@ -9,6 +9,7 @@ import {
   GET_POST,
   ADD_LIKE,
   REMOVE_UNLIKE,
+  SET_ALERT,
 } from './types';
 import {
   setLoadingAction,
@@ -42,7 +43,6 @@ export const deletePostAction = (id: string) => async (
   dispatch: Dispatch<PostActions>,
 ) => {
   try {
-    dispatch(setLoadingAction(1));
     const res = await axios.delete(`/api/post/${id}`);
     dispatch({
       type: DELETE_POST,
@@ -96,16 +96,13 @@ export const AddPost = (data: Post) => async (
 
 // //Add like
 export const AddLike = (id: string) => async (
-  dispatch: Dispatch<PostActions | AlertActions>,
+  dispatch: Dispatch<PostActions>,
 ) => {
   try {
-    const res = await axios.put(`/api/posts/like/${id}`);
-    dispatch({
-      type: ADD_LIKE,
-      payload: res.data,
-    });
+    await axios.put(`/api/post/like/${id}`);
   } catch (err: any) {
     let errorMessage = 'Server Error';
+    console.log(err);
     if (err?.response) errorMessage = err.response.data.message;
     dispatch(setAlertAction(errorMessage, false));
   }
@@ -115,12 +112,7 @@ export const RemoveLike = (id: string) => async (
   dispatch: Dispatch<PostActions | AlertActions>,
 ) => {
   try {
-    const res = await axios.put(`/api/posts/unlike/${id}`);
-
-    dispatch({
-      type: REMOVE_UNLIKE,
-      payload: res.data,
-    });
+    await axios.put(`/api/post/unlike/${id}`);
   } catch (err: any) {
     let errorMessage = 'Server Error';
     if (err?.response) errorMessage = err.response.data.message;

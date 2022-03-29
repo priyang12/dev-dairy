@@ -2,14 +2,14 @@ import { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { AddLike, deletePostAction, RemoveLike } from '../actions/PostAction';
-import type { AlertState, AuthState, Post } from '../actions/interfaces';
+import type { AuthState, Post } from '../actions/interfaces';
 
 type PropTypes = {
   post: Post;
 };
 
 function PostContainer({
-  post: { user: PostUser, likes, _id, text, title },
+  post: { user: PostUser, likes, _id, text, title, comments, createdAt },
 }: PropTypes) {
   const { user }: AuthState = useSelector((state: any) => state.Auth);
   const dispatch = useDispatch();
@@ -134,8 +134,12 @@ function PostContainer({
                 </button>
 
                 <Link to={`/post/${_id}`} className="btn btn-info mr-1">
+                  <span data-testid={_id + '-comment-count'}>
+                    {comments?.length}
+                  </span>
                   Comments
                 </Link>
+                <p className="text-muted">{createdAt.toString()}</p>
               </div>
             </div>
           </div>

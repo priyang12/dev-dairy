@@ -25,8 +25,32 @@ const NewPost: Post = {
   title: 'New Post',
   text: 'New Post Text',
   user: AuthStateMock.user,
-  comments: [],
-  likes: [],
+  comments: [
+    {
+      _id: faker.datatype.uuid(),
+      text: 'New Comment',
+      user: AuthStateMock.user,
+    },
+    {
+      _id: faker.datatype.uuid(),
+      text: 'New Comment',
+      user: faker.datatype.uuid(),
+    },
+  ],
+  likes: [
+    {
+      user: AuthStateMock.user._id,
+    },
+    {
+      user: faker.datatype.uuid(),
+    },
+    {
+      user: faker.datatype.uuid(),
+    },
+    {
+      user: faker.datatype.uuid(),
+    },
+  ],
   createdAt: new Date().toDateString(),
 };
 
@@ -43,6 +67,43 @@ it('render Posts', async () => {
     expect(screen.getByText(post.title)).toBeInTheDocument();
     expect(screen.getByText(post.text)).toBeInTheDocument();
   });
+});
+
+// Like Post and check if the post is liked
+it('like Comment Counts Liking and Removing Liking', async () => {
+  server.resetHandlers();
+  server.use(
+    rest.get('/api/post', (req, res, ctx) => {
+      return res(ctx.json([NewPost, ...MockedPosts]));
+    }),
+    rest.put('/api/post/like/:id', (req, res, ctx) =>
+      res(ctx.json({ message: 'Post Liked', result: true })),
+    ),
+    rest.put('/api/post/unlike/:id', (req, res, ctx) =>
+      res(ctx.json({ message: 'Post Like Removed', result: true })),
+    ),
+  );
+  render(
+    <BrowserRouter>
+      <Feeds />
+    </BrowserRouter>,
+    { preloadedState: { Auth: AuthStateMock } },
+  );
+  // Check Like on Load
+  await waitForElementToBeRemoved(screen.getByAltText('loading...'));
+  const LikeBtn = screen.getByTestId(NewPost._id);
+  expect(LikeBtn.textContent).toMatch(NewPost.likes.length.toString());
+  // click on dislike
+  userEvent.click(LikeBtn);
+  // check if the post is removed from liked
+  expect(LikeBtn.textContent).toMatch(JSON.stringify(NewPost.likes.length - 1));
+  userEvent.click(LikeBtn);
+  // check if the post is  liked
+  expect(LikeBtn.textContent).toMatch(NewPost.likes.length.toString());
+
+  // Check Comment Counts
+  const CommentCount = screen.getByTestId(`${NewPost._id}-comment-count`);
+  expect(CommentCount.textContent).toMatch(NewPost.comments.length.toString());
 });
 
 // Delete Post
@@ -69,8 +130,6 @@ it('delete post', async () => {
   expect(screen.getByText(NewPost.text)).toBeInTheDocument();
   //Click on the delete button
 
-  // console.log(screen.getByText(/Delete/i));
-
   userEvent.click(screen.getByText(/Delete/i));
 
   //Check if the post is deleted+
@@ -80,31 +139,12 @@ it('delete post', async () => {
   // expect(screen.getByText(/deleted/)).toBeInTheDocument();
 });
 
-// Like Post and check if the post is liked
-it('like post', async () => {
-  NewPost.likes = [
-    {
-      user: AuthStateMock.user._id,
-    },
-  ];
-  NewPost.likes.push(
-    {
-      user: faker.datatype.uuid(),
-    },
-    {
-      user: faker.datatype.uuid(),
-    },
-  );
+// Error Handling Posts
+it('Error Handling For Posts', async () => {
   server.resetHandlers();
   server.use(
-    rest.get('/api/post', (req, res, ctx) => {
-      return res(ctx.json([NewPost, ...MockedPosts]));
-    }),
-    rest.put('/api/posts/like/:id', (req, res, ctx) =>
-      res(ctx.json({ message: 'Post Liked', result: true })),
-    ),
-    rest.put('/api/posts/unlike/:id', (req, res, ctx) =>
-      res(ctx.json({ message: 'Post Unliked', result: true })),
+    rest.get('/api/post', (req, res, ctx) =>
+      res(ctx.status(500), ctx.json({ message: 'Internal Server Error' })),
     ),
   );
   render(
@@ -113,15 +153,55 @@ it('like post', async () => {
     </BrowserRouter>,
     { preloadedState: { Auth: AuthStateMock } },
   );
-  // Check Like on Load
   await waitForElementToBeRemoved(screen.getByAltText('loading...'));
-  const LikeBtn = screen.getByTestId(NewPost._id);
-  expect(LikeBtn.textContent).toMatch(/3/);
-  // click on dislike
-  userEvent.click(LikeBtn);
-  // check if the post is removed from liked
-  expect(LikeBtn.textContent).toMatch(/2/);
-  userEvent.click(LikeBtn);
-  // check if the post is  liked
-  expect(LikeBtn.textContent).toMatch(/3/);
+  expect(screen.getByText(/Internal Server Error/i)).toBeInTheDocument();
 });
+
+// // Error Handling
+// it('Error Handling For Like and Deleting Post', async () => {
+//   server.resetHandlers();
+//   server.use(
+//     rest.get('/api/post', (req, res, ctx) => {
+//       return res(ctx.json([NewPost, ...MockedPosts]));
+//     }),
+//     rest.delete('/api/post/:id', (req, res, ctx) =>
+//       res(ctx.status(500), ctx.json({ message: `Post is not Deleted` })),
+//     ),
+//     rest.put('/api/post/like/:id', (req, res, ctx) => {
+//       return res(ctx.json({ message: `Post is not Liked` }));
+//     }),
+//     // rest.put('/api/post/like/:id', (req, res, ctx) =>
+//     //   res(
+//     //     ctx.status(500),
+//     //     ctx.json({ message: 'Something Went Wrong While Liking' }),
+//     //   ),
+//     // ),
+//     rest.put('/api/post/unlike/:id', (req, res, ctx) =>
+//       res(
+//         ctx.status(500),
+//         ctx.json({ message: 'Something Went Wrong While DisLiking' }),
+//       ),
+//     ),
+//   );
+//   render(
+//     <BrowserRouter>
+//       <Feeds />
+//     </BrowserRouter>,
+//     { preloadedState: { Auth: AuthStateMock } },
+//   );
+//   await waitForElementToBeRemoved(screen.getByAltText('loading...'));
+//   const LikeBtn = screen.getByTestId(NewPost._id);
+//   expect(LikeBtn.textContent).toMatch(NewPost.likes.length.toString());
+//   // click on dislike
+//   userEvent.click(LikeBtn);
+
+//   // Check for Dislike Error
+//   // expect(
+//   //   screen.getByText(/Something Went Wrong While DisLiking/i),
+//   // ).toBeInTheDocument();
+//   // userEvent.click(LikeBtn);
+//   // check if the post is  liked
+//   // expect(
+//   //   screen.getByText(/Something Went Wrong While Liking/i),
+//   // ).toBeInTheDocument();
+// });

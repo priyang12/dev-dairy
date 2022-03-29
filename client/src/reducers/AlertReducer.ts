@@ -20,7 +20,7 @@ type ActionMap<M extends { [index: string]: any }> = {
 type AlertPayload = {
   [SET_LOADING]: number;
   [STOP_LOADING]: number;
-  [SET_ALERT]: { msg: string; result: string };
+  [SET_ALERT]: { msg: string; result: boolean };
   [CLEAR_ALERT]: any;
 };
 
@@ -49,7 +49,7 @@ export default (state = initialState, action: AlertActions) => {
       return {
         ...state,
         alert: action.payload.msg,
-        result: action.payload.result,
+        result: 'asdasdviasu',
       };
     case CLEAR_ALERT:
       return {

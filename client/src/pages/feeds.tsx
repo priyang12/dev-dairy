@@ -3,12 +3,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import PostContainer from '../components/PostContainer';
 import Spinner from '../components/spinner';
 import { getPostsAction } from '../actions/PostAction';
-import { Post } from '../actions/interfaces';
+import { AlertState, Post } from '../actions/interfaces';
 
 function Feeds() {
-  const { loading, alert } = useSelector((state: any) => state.Alert);
+  const { loading, alert, result }: AlertState = useSelector(
+    (state: any) => state.Alert,
+  );
   const { posts } = useSelector((state: any) => state.Post);
-
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getPostsAction());
@@ -17,6 +18,7 @@ function Feeds() {
 
   return (
     <Fragment>
+      {alert && <div className={`alert alert-${result}`}>{alert}</div>}
       {/* <Send /> */}
       <div className="feed">
         <div className="container">
