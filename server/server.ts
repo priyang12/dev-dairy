@@ -5,6 +5,7 @@ import { errorHandler, notFound } from './middleware/Error';
 const app: Application = express();
 
 import PostRoute from './routes/PostRoute';
+import UserRoute from './routes/UserRoute';
 // connectFirebase();
 import dotenv from 'dotenv';
 dotenv.config();
@@ -16,7 +17,7 @@ app.use(notFound);
 app.use(errorHandler);
 
 //define routes
-// app.use("/api/Users", require("./routes/UserRoute"));
+app.use('/api/Users', UserRoute);
 app.use('/api/Posts', PostRoute);
 
 const PORT = process.env.PORT || 5000;

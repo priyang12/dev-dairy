@@ -1,108 +1,73 @@
-const asyncHandler = require("express-async-handler");
-const admin = require("firebase-admin");
-const { validationResult } = require("express-validator");
+import asyncHandler from 'express-async-handler';
+import User from '../models/User';
+import admin from 'firebase-admin';
+import { validationResult } from 'express-validator';
 
-// @route   GET api/Users/AllUsers
-// @desc    Fetch All Userss
-// @access  Private
-const GetAllUsers = asyncHandler(async (req, res) => {
-  try {
-    const users = await db.getAllUsers();
-    if (users.length > 0) throw new Error("No users were found");
-    res.json(users);
-  } catch (error) {
-    res.status(500).send("server Error");
-  }
-});
+import type { Request, Response } from 'express';
 
 // @route   GET api/Users/me
 // @desc    Fetch User
 // @access  Private
-const GetUser = asyncHandler(async (req, res) => {
+export const GetUser = asyncHandler(async (req: any, res: Response) => {
   try {
-    const users = await admin.auth().getUser(req.user.uid);
-    if (users.length > 0) throw new Error("No users were found");
+    const users = await admin.auth().getUser(req.user._id);
+    if (!users) throw new Error('No users were found');
     res.json(users);
   } catch (error) {
-    res.status(500).send("server Error");
+    res.status(500).send('server Error');
   }
 });
 
 // @router POST api/Users/register
 // @desc Register User
 // @access public
-const registerUser = asyncHandler(async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    res.status(422).json({ errors: errors.array() });
-    return;
-  }
-  const { username, email, password } = req.body;
-  try {
+export const registerUser = asyncHandler(
+  async (req, res): Promise<any> => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(422).json({ errors: errors.array() });
+      return;
+    }
+    const { username, email, _id } = req.body;
+
     //create user
-    await admin.auth().createUser({
-      email: email,
-      emailVerified: false,
-      password: password,
-      displayName: username,
-      disabled: false,
+    const user = new User({
+      _id,
+      username,
+      email,
     });
-    res.json({ message: "User Created" });
-  } catch (error) {
-    console.error();
-    res.status(400).send("Server Error " + error.message);
-  }
-});
+    if (!user) throw new Error('User not found');
+    return res.json({ message: 'User Created' });
+  },
+);
 
 // @router POST api/users/login
 // @desc Login User
-// @access public
-const loginUser = asyncHandler(async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
-  }
-  const { email, password } = req.body;
-  try {
-    //Check if user exists
-    let user = await admin.auth().getUserByEmail(email);
+// @access Admin
+export const loginUser = asyncHandler(
+  async (req, res): Promise<any> => {
+    const { email } = req.body;
 
-    if (!user) throw new Error("User not found");
-    res.json(user);
-  } catch (error) {
-    res.status(400).send("Server Error " + error.message);
-  }
-});
+    let user = await User.findOne({ email });
+
+    if (!user) throw new Error('User not found');
+    return res.json(user);
+  },
+);
 
 // @router PUT api/users/update
 // @desc Update User Info
 // @access private
-const UpdateUser = asyncHandler(async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
-  }
-  const { email, password } = req.body;
-  try {
+export const UpdateUser = asyncHandler(
+  async (req, res): Promise<any> => {
+    const { email, ImageUrl } = req.body;
+
     //Check if user exists
-    let user = await admin.auth().getUserByProviderUid(email);
-    if (!user) throw new Error("User not found");
-
-    // //Check if password is correct
-    // const isMatch = await bcrypt.compare(password, user.password);
-    // if (!isMatch) throw new Error("Password is incorrect");
-
-    // //Create and assign token
-    // const token = await admin.auth().createCustomToken(user.uid);
-    res.json({ user });
-  } catch (error) {
-    res.status(400).send("Server Error " + error.message);
-  }
-});
-
-module.exports = {
-  registerUser,
-  loginUser,
-  GetAllUsers,
-  GetUser,
-};
+    let user = await User.findOne({ email });
+    if (!user) throw new Error('User not found');
+    // Update user
+    user.email = email;
+    user.ImageUrl = ImageUrl;
+    await user.save();
+  },
+);
