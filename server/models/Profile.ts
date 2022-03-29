@@ -1,10 +1,23 @@
-const mongoose = require("mongoose");
+import { Schema, model } from 'mongoose';
+import type { Model, Document } from 'mongoose';
 
-const ProfileSchema = new mongoose.Schema({
+interface IProfile extends Document {
+  user: string;
+  bio: string;
+  handle: string;
+  website: string;
+  company: string;
+  status: string;
+  skills: Array<string>;
+  location: string;
+  avatar: string;
+}
+
+const ProfileSchema = new Schema({
   user: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     required: true,
-    ref: "user",
+    ref: 'user',
   },
   handle: {
     type: String,
@@ -116,4 +129,6 @@ const ProfileSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("profile", ProfileSchema);
+const Profile: Model<IProfile> = model<IProfile>('Profile', ProfileSchema);
+
+export default Profile;
