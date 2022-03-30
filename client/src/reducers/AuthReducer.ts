@@ -5,7 +5,7 @@ import {
   USER_LOADED,
   LOGIN_SUCCESS,
   LOGOUT,
-  UPDATE_USER_PIC,
+  UPDATE_USER_PIC
 } from '../actions/types';
 
 type ActionMap<M extends { [index: string]: any }> = {
@@ -31,13 +31,13 @@ export type AuthActions = ActionMap<AuthPayload>[keyof ActionMap<AuthPayload>];
 // Retrieve user data from session storage
 const getUser = (): User | null => {
   const user = sessionStorage.getItem('user');
-  return user ? JSON.parse(user) : null;
+  return user != null ? JSON.parse(user) : null;
 };
 const data = getUser();
 const initialState: AuthState = {
   token: null,
   isAuth: !!data,
-  user: data || null,
+  user: data
 };
 
 // eslint-disable-next-line
@@ -49,26 +49,26 @@ export default (state = initialState, action: AuthActions) => {
         ...state,
         user: action.payload,
         isAuth: true,
-        error: null,
+        error: null
       };
     case USER_LOADED:
       return {
         ...state,
         user: action.payload,
-        isAuth: true,
+        isAuth: true
       };
     case LOGOUT:
       return {
         token: null,
         user: null,
         isAuth: null,
-        error: null,
+        error: null
       };
     case UPDATE_USER_PIC:
       return {
         ...state,
         alert: action.payload,
-        error: null,
+        error: null
       };
 
     default:

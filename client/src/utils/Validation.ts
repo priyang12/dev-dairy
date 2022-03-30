@@ -1,13 +1,16 @@
 export const ValidateName = (name: string) => {
-  if (name.length < 4 || name.length > 10) return 'Name must be between 4 and 10 characters';
+  if (name.length < 4 || name.length > 10)
+    return 'Name must be between 4 and 10 characters';
   return '';
 };
 
 export const ValidateEmail = (email: string) => {
   // eslint-disable-next-line
 
-  const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; //eslint-disable-line
-  if (!re.test(String(email).toLowerCase()) || email === '') return 'Please enter a valid email';
+  const re =
+    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; //eslint-disable-line
+  if (!re.test(String(email).toLowerCase()) || email === '')
+    return 'Please enter a valid email';
   return '';
 };
 

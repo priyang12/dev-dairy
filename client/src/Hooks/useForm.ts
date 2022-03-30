@@ -9,7 +9,7 @@ const useForm = (initialState: any) => {
     if (value === '') {
       setErrorsState({
         ...ErrorsState,
-        [name]: `${name.toUpperCase()} is required`,
+        [name]: `${name.toUpperCase()} is required`
       });
     } else setErrorsState({ ...ErrorsState, [name]: null });
 
@@ -31,7 +31,7 @@ const useForm = (initialState: any) => {
     HandleChange,
     SetState,
     ErrorsState,
-    setErrors,
+    setErrors
   };
 };
 export default useForm;

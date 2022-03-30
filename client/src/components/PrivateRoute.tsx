@@ -1,4 +1,4 @@
-/* eslint-disable */
+// @ts-nocheck
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
@@ -28,7 +28,7 @@ function PrivateRoute(props: PrivateRouteProps) {
           <Redirect
             to={{
               pathname: '/Auth',
-              state: { from: routeProps.location },
+              state: { from: routeProps.location }
             }}
           />
         )

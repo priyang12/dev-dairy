@@ -1,24 +1,25 @@
+/* eslint-disable no-underscore-dangle */
 import React from 'react';
-import { render, waitForElementToBeRemoved, screen } from '../../test-utils';
 import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
-import { server } from '../../mock/server';
-import Feeds from '../Feeds';
-
-// Mocked Data for testing
-import { MockedPosts } from '../../mock/MockPost';
-import { AuthState, Post } from '../../actions/interfaces';
 import faker from '@faker-js/faker';
 import { BrowserRouter } from 'react-router-dom';
+import { render, waitForElementToBeRemoved, screen } from '../../test-utils';
+import server from '../../mock/server';
+import Feeds from '../feeds';
+
+// Mocked Data for testing
+import MockedPosts from '../../mock/MockPost';
+import type { AuthState, Post } from '../../actions/interfaces';
 
 const AuthStateMock: AuthState = {
   user: {
     _id: '5f3f8f8f8f8f8f8f8f8f8f8',
     displayName: 'Test User',
-    email: faker.internet.email(),
+    email: faker.internet.email()
   },
   isAuth: true,
-  token: faker.datatype.uuid(),
+  token: faker.datatype.uuid()
 };
 const NewPost: Post = {
   _id: faker.datatype.uuid(),
@@ -29,29 +30,30 @@ const NewPost: Post = {
     {
       _id: faker.datatype.uuid(),
       text: 'New Comment',
-      user: AuthStateMock.user,
+      user: AuthStateMock.user
     },
     {
       _id: faker.datatype.uuid(),
       text: 'New Comment',
-      user: faker.datatype.uuid(),
-    },
+      user: faker.datatype.uuid()
+    }
   ],
   likes: [
     {
-      user: AuthStateMock.user._id,
+      // eslint-disable-next-line no-underscore-dangle
+      user: AuthStateMock.user._id
     },
     {
-      user: faker.datatype.uuid(),
+      user: faker.datatype.uuid()
     },
     {
-      user: faker.datatype.uuid(),
+      user: faker.datatype.uuid()
     },
     {
-      user: faker.datatype.uuid(),
-    },
+      user: faker.datatype.uuid()
+    }
   ],
-  createdAt: new Date().toDateString(),
+  createdAt: new Date().toDateString()
 };
 
 it('render Posts', async () => {
@@ -59,10 +61,10 @@ it('render Posts', async () => {
     <BrowserRouter>
       <Feeds />
     </BrowserRouter>,
-    { preloadedState: { Auth: AuthStateMock } },
+    { preloadedState: { Auth: AuthStateMock } }
   );
   await waitForElementToBeRemoved(screen.getByAltText('loading...'));
-  //compare the data
+  // compare the data
   MockedPosts.forEach((post) => {
     expect(screen.getByText(post.title)).toBeInTheDocument();
     expect(screen.getByText(post.text)).toBeInTheDocument();
@@ -73,21 +75,21 @@ it('render Posts', async () => {
 it('like Comment Counts Liking and Removing Liking', async () => {
   server.resetHandlers();
   server.use(
-    rest.get('/api/post', (req, res, ctx) => {
-      return res(ctx.json([NewPost, ...MockedPosts]));
-    }),
+    rest.get('/api/post', (req, res, ctx) =>
+      res(ctx.json([NewPost, ...MockedPosts]))
+    ),
     rest.put('/api/post/like/:id', (req, res, ctx) =>
-      res(ctx.json({ message: 'Post Liked', result: true })),
+      res(ctx.json({ message: 'Post Liked', result: true }))
     ),
     rest.put('/api/post/unlike/:id', (req, res, ctx) =>
-      res(ctx.json({ message: 'Post Like Removed', result: true })),
-    ),
+      res(ctx.json({ message: 'Post Like Removed', result: true }))
+    )
   );
   render(
     <BrowserRouter>
       <Feeds />
     </BrowserRouter>,
-    { preloadedState: { Auth: AuthStateMock } },
+    { preloadedState: { Auth: AuthStateMock } }
   );
   // Check Like on Load
   await waitForElementToBeRemoved(screen.getByAltText('loading...'));
@@ -110,29 +112,29 @@ it('like Comment Counts Liking and Removing Liking', async () => {
 it('delete post', async () => {
   server.resetHandlers();
   server.use(
-    rest.get('/api/post', (req, res, ctx) => {
-      return res(ctx.json([NewPost, ...MockedPosts]));
-    }),
-    rest.delete('/api/post/:id', (req, res, ctx) =>
-      res(ctx.json({ message: 'Post Deleted' })),
+    rest.get('/api/post', (req, res, ctx) =>
+      res(ctx.json([NewPost, ...MockedPosts]))
     ),
+    rest.delete('/api/post/:id', (req, res, ctx) =>
+      res(ctx.json({ message: 'Post Deleted' }))
+    )
   );
   render(
     <BrowserRouter>
       <Feeds />
     </BrowserRouter>,
-    { preloadedState: { Auth: AuthStateMock } },
+    { preloadedState: { Auth: AuthStateMock } }
   );
 
   await waitForElementToBeRemoved(screen.getByAltText('loading...'));
-  //Check if the post is there
+  // Check if the post is there
   expect(screen.getByText(NewPost.title)).toBeInTheDocument();
   expect(screen.getByText(NewPost.text)).toBeInTheDocument();
-  //Click on the delete button
+  // Click on the delete button
 
   userEvent.click(screen.getByText(/Delete/i));
 
-  //Check if the post is deleted+
+  // Check if the post is deleted+
   expect(screen.queryByText(NewPost.title)).not.toBeInTheDocument();
   expect(screen.queryByText(NewPost.text)).not.toBeInTheDocument();
   // check delete alert
@@ -144,14 +146,14 @@ it('Error Handling For Posts', async () => {
   server.resetHandlers();
   server.use(
     rest.get('/api/post', (req, res, ctx) =>
-      res(ctx.status(500), ctx.json({ message: 'Internal Server Error' })),
-    ),
+      res(ctx.status(500), ctx.json({ message: 'Internal Server Error' }))
+    )
   );
   render(
     <BrowserRouter>
       <Feeds />
     </BrowserRouter>,
-    { preloadedState: { Auth: AuthStateMock } },
+    { preloadedState: { Auth: AuthStateMock } }
   );
   await waitForElementToBeRemoved(screen.getByAltText('loading...'));
   expect(screen.getByText(/Internal Server Error/i)).toBeInTheDocument();

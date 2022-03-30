@@ -3,14 +3,16 @@
     "browser": true,
     "es2021": true
   },
+  "plugins": ["react", "@typescript-eslint", "prettier"],
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
     "airbnb",
     "airbnb-typescript",
     "airbnb/hooks",
-    "plugin:prettier/recommended"
+    "prettier"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -22,10 +24,9 @@
     "project": "./tsconfig.json"
   },
 
-  "plugins": ["react", "@typescript-eslint"],
   "rules": {
-    // General
     "no-console": "error",
+    "prettier/prettier": 0,
     "quotes": "off",
     // TypeScript
     "@typescript-eslint/consistent-type-imports": "warn",
@@ -39,7 +40,8 @@
     ],
     "no-duplicate-imports": "off",
     "@typescript-eslint/no-duplicate-imports": "error",
-    "@typescript-eslint/no-implicit-any-catch": "error",
+    "@typescript-eslint/no-implicit-any-catch": "off",
+    "@typescript-eslint/no-explicit-any": "off",
     "no-invalid-this": "off",
     "@typescript-eslint/no-invalid-this": "error",
     "@typescript-eslint/no-invalid-void-type": "error",
