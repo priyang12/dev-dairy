@@ -1,5 +1,5 @@
-import { Schema, model, ObjectId } from 'mongoose';
-import type { Model, Document } from 'mongoose';
+import { Schema, model, ObjectId } from "mongoose";
+import type { Model, Document } from "mongoose";
 
 interface IUser extends Document {
   _id: ObjectId;
@@ -10,13 +10,19 @@ interface IUser extends Document {
 
 // Create Schema
 const UserSchema = new Schema({
-  name: {
+  uid: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  username: {
     type: String,
     required: true,
   },
   email: {
     type: String,
     required: true,
+    unique: true,
   },
   ImageUrl: {
     type: String,
@@ -27,6 +33,6 @@ const UserSchema = new Schema({
     default: Date.now,
   },
 });
-const User: Model<IUser> = model<IUser>('User', UserSchema);
+const User: Model<IUser> = model<IUser>("User", UserSchema);
 
 export default User;

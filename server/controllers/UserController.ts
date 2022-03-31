@@ -1,21 +1,17 @@
-import asyncHandler from 'express-async-handler';
-import User from '../models/User';
-import admin from 'firebase-admin';
-import { validationResult } from 'express-validator';
+import asyncHandler from "express-async-handler";
+import User from "../models/User";
+import admin from "firebase-admin";
+import { validationResult } from "express-validator";
 
-import type { Request, Response } from 'express';
+import type { Request, Response } from "express";
 
 // @route   GET api/Users/me
 // @desc    Fetch User
 // @access  Private
 export const GetUser = asyncHandler(async (req: any, res: Response) => {
-  try {
-    const users = await admin.auth().getUser(req.user._id);
-    if (!users) throw new Error('No users were found');
-    res.json(users);
-  } catch (error) {
-    res.status(500).send('server Error');
-  }
+  const Token = await admin.auth().createCustomToken(req.body.uid);
+  if (!Token) throw new Error("No Uid Token were found");
+  res.json(Token);
 });
 
 // @router POST api/Users/register
@@ -28,17 +24,18 @@ export const registerUser = asyncHandler(
       res.status(422).json({ errors: errors.array() });
       return;
     }
-    const { username, email, _id } = req.body;
-
-    //create user
+    const { username, email, uid, ImageUrl } = req.body;
+    const userExists = await User.findOne({ email });
+    if (userExists) throw new Error("User already exists");
     const user = new User({
-      _id,
+      uid,
       username,
       email,
+      ImageUrl,
     });
-    if (!user) throw new Error('User not found');
-    return res.json({ message: 'User Created' });
-  },
+    user.save();
+    return res.status(201).json({ msg: "User created" });
+  }
 );
 
 // @router POST api/users/login
@@ -50,9 +47,9 @@ export const loginUser = asyncHandler(
 
     let user = await User.findOne({ email });
 
-    if (!user) throw new Error('User not found');
+    if (!user) throw new Error("User not found");
     return res.json(user);
-  },
+  }
 );
 
 // @router PUT api/users/update
@@ -64,10 +61,10 @@ export const UpdateUser = asyncHandler(
 
     //Check if user exists
     let user = await User.findOne({ email });
-    if (!user) throw new Error('User not found');
+    if (!user) throw new Error("User not found");
     // Update user
     user.email = email;
     user.ImageUrl = ImageUrl;
     await user.save();
-  },
+  }
 );

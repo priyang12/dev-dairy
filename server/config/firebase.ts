@@ -1,5 +1,6 @@
-const admin = require("firebase-admin");
-const keys = require("./keys");
+import admin from "firebase-admin";
+import keys from "./keys";
+
 const serviceAccount = require("../../firebase.json");
 
 const connectFirebase = async () => {
@@ -8,10 +9,10 @@ const connectFirebase = async () => {
       credential: admin.credential.cert(serviceAccount),
       databaseURL: keys.FireStoreDb,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error(error.message);
     process.exit(1);
   }
 };
 
-module.exports = connectFirebase;
+export default connectFirebase;
