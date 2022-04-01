@@ -16,5 +16,10 @@
     "isolatedModules": true,
     "noEmit": true
   },
-  "include": ["src/**/*.tsx", "src/**/*.ts", "src/**/*.d.ts"]
+  "include": [
+    "src/**/*.tsx",
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/serviceworker.js"
+  ]
 }

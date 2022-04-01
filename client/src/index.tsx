@@ -5,11 +5,12 @@ import App from './App';
 import './Styles/Global.css';
 import worker from './mock/browser';
 import { createStoreWithMiddleware } from './store';
+import * as serviceWorker from './serviceWorker';
 
 const Store = createStoreWithMiddleware();
 
 if (process.env.NODE_ENV === 'development') {
-  worker.start();
+  worker.start({ onUnhandledRequest: 'bypass' });
 }
 
 ReactDOM.render(
@@ -20,3 +21,4 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
+serviceWorker.unregister();
