@@ -7,6 +7,7 @@ import Login from './pages/login';
 import Register from './pages/register';
 
 import { FirebaseAuth } from './FirebaseConfig';
+import Feeds from './pages/feeds';
 // import { LOGOUT } from "./actions/types";
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/Auth/login" element={<Login />} />
         <Route path="/Auth/Register" element={<Register />} />
+        <Route path="/feeds" element={<Feeds />} />
       </Routes>
     </BrowserRouter>
   );
