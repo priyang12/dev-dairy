@@ -24,7 +24,7 @@ function Navbar() {
           aria-expanded="false"
           style={{ color: 'white' }}
         >
-          Hello {user && user?.displayName ? user.displayName : 'Stranger'}
+          Hello {user ? user.displayName : 'Stranger'}
         </button>
         <div
           className="dropdown-menu"

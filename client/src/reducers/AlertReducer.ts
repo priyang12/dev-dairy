@@ -50,7 +50,7 @@ export default (state = initialState, action: AlertActions) => {
       return {
         ...state,
         alert: action.payload.msg,
-        result: 'asdasdviasu'
+        result: action.payload.result
       };
     case CLEAR_ALERT:
       return {

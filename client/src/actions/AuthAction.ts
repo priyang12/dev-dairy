@@ -71,8 +71,11 @@ export const LoginAction =
       });
     } catch (err: any) {
       let errorMessage = 'Server error';
-      errorMessage = Boolean(err.response) && err.response.data.message;
-      dispatch(setAlertAction(errorMessage, false));
+      errorMessage = Boolean(err.response)
+        ? err.response.data.message
+        : err.code;
+
+      dispatch(setAlertAction(err.code, false));
     } finally {
       dispatch(setLoadingAction(-1));
     }
