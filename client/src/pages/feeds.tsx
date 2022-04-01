@@ -3,44 +3,42 @@ import { useSelector, useDispatch } from 'react-redux';
 import PostContainer from '../components/PostContainer';
 import Spinner from '../components/spinner';
 import { getPostsAction } from '../actions/PostAction';
-import { AlertState, Post } from '../actions/interfaces';
+import type { AlertState, Post } from '../actions/interfaces';
 
 function Feeds() {
-   const { loading } = useSelector((state: any) => state.Alert);
-   const { posts } = useSelector((state: any) => state.Post);
-   const dispatch = useDispatch();
-   useEffect(() => {
-      dispatch(getPostsAction());
-   }, []);
-   if (loading) return <Spinner />;
+  const { loading } = useSelector((state: any) => state.Alert);
+  const { posts } = useSelector((state: any) => state.Post);
+  const dispatch = useDispatch();
 
-   return (
-      <Fragment>
-         {/* <Send /> */}
-         <div className="feed">
-            <div className="container">
-               <div className="mx-5 px-5 ">
-                  <div className="card-header bg-info text-white">
-                     <a
-                        href="#SendModal"
-                        data-toggle="modal"
-                        data-target="#SendModal"
-                     >
-                        Say Something...
-                     </a>
-                  </div>
-               </div>
-               <div className="col p-3">
-                  {posts &&
-                     posts.map((post: Post) => (
-                        <PostContainer key={post._id} post={post} />
-                     ))}
-               </div>
+  useEffect(() => {
+    dispatch(getPostsAction());
+  }, [dispatch]);
+
+  if (loading) return <Spinner />;
+
+  return (
+    <>
+      {/* <Send /> */}
+      <div className="feed">
+        <div className="container">
+          <div className="mx-5 px-5 ">
+            <div className="card-header bg-info text-white">
+              <a href="#SendModal" data-toggle="modal" data-target="#SendModal">
+                Say Something...
+              </a>
             </div>
-         </div>
-         )
-      </Fragment>
-   );
+          </div>
+          <div className="col p-3">
+            {posts?.map((post: Post) => (
+              // eslint-disable-next-line no-underscore-dangle
+              <PostContainer key={post._id} post={post} />
+            ))}
+          </div>
+        </div>
+      </div>
+      )
+    </>
+  );
 }
 
 export default Feeds;

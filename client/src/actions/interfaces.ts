@@ -1,5 +1,4 @@
 import type { User } from 'firebase/auth';
-import { UserInfo } from 'firebase/auth';
 
 export interface AuthState {
   token: string | null;

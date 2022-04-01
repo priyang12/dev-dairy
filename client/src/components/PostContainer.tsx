@@ -9,7 +9,7 @@ type PropTypes = {
 };
 
 function PostContainer({
-  post: { user: PostUser, likes, _id, text, title, comments, createdAt },
+  post: { user: PostUser, likes, _id, text, title, comments, createdAt }
 }: PropTypes) {
   const { user }: AuthState = useSelector((state: any) => state.Auth);
   const dispatch = useDispatch();
@@ -83,7 +83,7 @@ function PostContainer({
                         style={{
                           backgroundColor: 'white',
                           color: 'black',
-                          border: 'none',
+                          border: 'none'
                         }}
                       />
                       <div
