@@ -1,9 +1,10 @@
-import { Fragment, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Grid, GridItem } from '@chakra-ui/react';
+import type { Post } from '../actions/interfaces';
+import { getPostsAction } from '../actions/PostAction';
 import PostContainer from '../components/PostContainer';
 import Spinner from '../components/spinner';
-import { getPostsAction } from '../actions/PostAction';
-import type { AlertState, Post } from '../actions/interfaces';
 
 function Feeds() {
   const { loading } = useSelector((state: any) => state.Alert);
@@ -28,12 +29,14 @@ function Feeds() {
               </a>
             </div>
           </div>
-          <div className="col p-3">
+          <Grid templateColumns="repeat(2, 1fr)" gap={6}>
             {posts?.map((post: Post) => (
               // eslint-disable-next-line no-underscore-dangle
-              <PostContainer key={post._id} post={post} />
+              <GridItem key={post._id}>
+                <PostContainer post={post} />
+              </GridItem>
             ))}
-          </div>
+          </Grid>
         </div>
       </div>
       )

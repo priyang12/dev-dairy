@@ -1,5 +1,13 @@
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import {
+  useColorMode,
+  Switch,
+  Flex,
+  Button,
+  IconButton
+} from '@chakra-ui/react';
+import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import { logout } from '../actions/AuthAction';
 import type { AuthState } from '../actions/interfaces';
 
