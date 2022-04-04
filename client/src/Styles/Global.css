@@ -1,5 +1,3 @@
-body {
-}
 * {
   list-style-type: none;
 }
@@ -10,65 +8,6 @@ a:hover {
   color: black;
   text-decoration: none;
 }
-
-.fa {
-  color: burlywood;
-}
-.black-text {
-  color: #212529;
-}
-.navbar {
-  opacity: 0.8;
-}
-.landing {
-  position: relative;
-  /* background: url("./Assets/showcase.jpg") no-repeat; */
-  background-size: cover;
-  background-position: center;
-  height: 100vh;
-  margin-top: -24px;
-  margin-bottom: -50px;
-}
-.profilepic {
-  background-color: #212529;
-  margin: 2rem 0rem;
-  position: relative;
-  width: fit-content;
-  border-radius: 50%;
-}
-.profilepic .picture {
-  position: absolute;
-  font-size: 30px;
-  top: 10%;
-
-  left: 70%;
-}
-.landing-inner {
-  padding-top: 80px;
-}
-.bg {
-  background-color: #212529;
-}
-.dark-overlay {
-  background-color: rgba(0, 0, 0, 0.7);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.card-form {
-  opacity: 0.9;
-}
-.icons a {
-  color: #fff;
-  margin: 0 0.3rem;
-}
-
-.icons a:hover {
-  color: #212529;
-}
-.dropdown-item :hover {
-  background-color: #212529;
+.top {
+  margin-top: 25vh;
 }

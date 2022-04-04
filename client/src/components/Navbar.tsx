@@ -1,19 +1,27 @@
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   useColorMode,
   Switch,
   Flex,
   Button,
-  IconButton
+  IconButton,
+  Box,
+  Link,
+  Heading
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
+import { motion } from 'framer-motion';
 import { logout } from '../actions/AuthAction';
 import type { AuthState } from '../actions/interfaces';
 
 function Navbar() {
   const { isAuth, user }: AuthState = useSelector((state: any) => state.Auth);
   const dispatch = useDispatch();
+  const { colorMode, toggleColorMode } = useColorMode();
+  const isDark = colorMode === 'dark';
+  const [display, changeDisplay] = useState(false);
   const onLogout = () => {
     localStorage.clear();
     sessionStorage.removeItem('user');
@@ -23,7 +31,7 @@ function Navbar() {
   const AuthLinks = (
     <div>
       <div className="dropdown">
-        <button
+        <Button
           className="btn btn-secondary dropdown-toggle"
           type="button"
           id="dropdownMenuButton"
@@ -33,7 +41,7 @@ function Navbar() {
           style={{ color: 'white' }}
         >
           Hello {user ? user.displayName : 'Stranger'}
-        </button>
+        </Button>
         <div
           className="dropdown-menu"
           aria-labelledby="dropdownMenuButton"
@@ -42,20 +50,20 @@ function Navbar() {
           <div>
             {user && (
               <li className="ml-2">
-                <Link to={`/profile/${user.uid}`}>
+                <Link as={RouterLink} to={`/profile/${user.uid}`}>
                   <span className="hide-sm">Profile</span>
                 </Link>
               </li>
             )}
             <li className="ml-2">
-              <Link to="/editProfile">
+              <Link as={RouterLink} to="/editProfile">
                 <span className="hide-sm">Edit Profile</span>
               </Link>
             </li>
 
             <div className="dropdown-divider" />
             <li className="ml-3">
-              <Link onClick={onLogout} to="/Auth/login">
+              <Link as={RouterLink} onClick={onLogout} to="/Auth/login">
                 <i className="fas fa-sign-out-alt" />{' '}
                 <span className="hide-sm">Logout</span>
               </Link>
@@ -66,47 +74,115 @@ function Navbar() {
     </div>
   );
   const UnAuthLinks = (
-    <>
-      <li className="nav-item">
-        <Link className="nav-link" to="/Auth/login">
-          Login
-        </Link>
-      </li>
-      <li className="nav-item">
-        <Link className="nav-link" to="/Auth/register">
-          Register
-        </Link>
-      </li>
-    </>
+    <Flex flexDir={['column', 'column', 'row']} width="80%">
+      <Link
+        as={RouterLink}
+        to="/Auth/login"
+        _hover={{ color: 'teal.600' }}
+        borderBottom="2px"
+        padding={2}
+      >
+        Login
+      </Link>
+
+      <Link
+        as={RouterLink}
+        to="/Auth/register"
+        _hover={{ color: 'teal.600' }}
+        borderBottom="2px"
+        padding={2}
+      >
+        Register
+      </Link>
+    </Flex>
   );
+
   return (
-    <div className="navbar sticky-top navbar-expand-sm navbar-dark bg-dark  mb-4">
-      <div className="container">
-        <Link to={`/${user ? 'feeds' : ''}`} className=".navbar-brand">
-          <h2>Dev Hub</h2>
-        </Link>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#mobile-nav"
-        >
-          <span className="navbar-toggler-icon" />
-        </button>
-        <div className="collapse navbar-collapse" id="mobile-nav">
-          <ul className="navbar-nav ml-3">
-            <li className="nav-item">
-              <Link className="nav-link" to="/searchProfile">
-                Developers
-              </Link>
-            </li>
-          </ul>
-          <ul className="navbar-nav ml-auto">
-            {!isAuth ? UnAuthLinks : AuthLinks}
-          </ul>
-        </div>
-      </div>
-    </div>
+    <Flex
+      zIndex={2020}
+      bgColor="blackAlpha.500"
+      as="nav"
+      width="100%"
+      position="fixed"
+      top="0"
+      right="0"
+      padding={['6vh', '8vh', '10vh', '10vh']}
+      height="10vh"
+      alignItems="center"
+      justifyContent="space-between"
+    >
+      <Link
+        as={RouterLink}
+        to="/"
+        _hover={{ color: 'teal.600' }}
+        className="nav-link"
+      >
+        <Flex alignItems="center">
+          <img
+            src="https://picsum.photos/seed/picsum/200"
+            alt="logo"
+            width="50px"
+            height="50px"
+          />
+          <Box ml={2}>
+            <Heading fontFamily="cursive">
+              <span className="logo-text">Logo</span>
+            </Heading>
+          </Box>
+        </Flex>
+      </Link>
+      <Flex align="center">
+        <Flex display={['none', 'none', 'flex', 'flex']} fontSize="2xl">
+          {user ? AuthLinks : UnAuthLinks}
+        </Flex>
+
+        <IconButton
+          aria-label="Open Menu"
+          size="lg"
+          bgColor={isDark ? 'blackAlpha.100' : 'blackAlpha.500'}
+          mr={2}
+          icon={<HamburgerIcon />}
+          onClick={() => changeDisplay(true)}
+          display={['flex', 'flex', 'none', 'none']}
+        />
+      </Flex>
+
+      <Flex
+        w="100vw"
+        as={motion.div}
+        animate={display ? 'show' : 'hidden'}
+        variants={{
+          hidden: { y: -1000, opacity: 0 },
+          show: { y: 1, opacity: 1 }
+        }}
+        bgColor={isDark ? 'black' : 'blackAlpha.500'}
+        zIndex={20}
+        pos="fixed"
+        top="0"
+        left="0"
+        padding="5vh"
+        overflowY="auto"
+        flexDir="column"
+        justifyContent={['flex-start', 'flex-start', 'center', 'center']}
+      >
+        <Flex justify="flex-end">
+          <IconButton
+            mt={2}
+            mr={2}
+            aria-label="Open Menu"
+            size="lg"
+            bgColor={isDark ? 'blackAlpha.100' : 'blackAlpha.500'}
+            icon={<CloseIcon />}
+            onClick={() => changeDisplay(false)}
+          />
+        </Flex>
+
+        <Flex flexDir="column" align="flex-start" fontSize={20}>
+          <Switch color="green" isChecked={isDark} onChange={toggleColorMode} />
+          {user ? AuthLinks : UnAuthLinks}
+        </Flex>
+      </Flex>
+    </Flex>
   );
 }
 
