@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "typeRoots": ["./@types", "./node_modules/@types"],
+    "module": "commonjs",
+    "allowJs": true,
+    "checkJs": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true
+  },
+
+  "include": ["./*.ts", "./@types/*", "../express"],
+  "exclude": ["node_modules", "dist", "__tests__", "coverage"]
+}

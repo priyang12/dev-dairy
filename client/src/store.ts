@@ -6,12 +6,14 @@ import RootReducers from './reducers';
 
 const middleware = [thunk];
 
-export const createStoreWithMiddleware = (initialState = {}): Store =>
-  createStore(
+
+export const createStoreWithMiddleware = (initialState = {}): Store => {
+  return createStore(
     RootReducers,
     initialState,
-    composeWithDevTools(applyMiddleware(...middleware))
+    composeWithDevTools(applyMiddleware(...middleware)),
   );
+};
 const store = createStoreWithMiddleware();
 export type RootState = ReturnType<typeof store.getState>;
 // const store: Store = createStore(

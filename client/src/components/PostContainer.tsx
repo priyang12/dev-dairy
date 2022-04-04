@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { AddLike, deletePostAction, RemoveLike } from '../actions/PostAction';
 import type { AuthState, Post } from '../actions/interfaces';
 
+
 type PropTypes = {
   post: Post;
 };
@@ -14,6 +15,7 @@ function PostContainer({
 }: PropTypes) {
   const { user }: AuthState = useSelector((state: any) => state.Auth);
   const dispatch = useDispatch();
+
   const [checkDelete, setDelete] = useState(false);
   const [checkLike, setLike] = useState(false);
   const [LikesNumber, setLikesNumber] = useState(0);

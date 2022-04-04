@@ -1,4 +1,6 @@
-require("dotenv").config();
+import dotenv from "dotenv";
+dotenv.config();
+
 const keys = {
   mongoURL: process.env.URI,
   jwtSecret: process.env.jwtSecret,
@@ -7,4 +9,4 @@ const keys = {
   FireStoreDb: process.env.FireStoreDb,
 };
 
-module.exports = keys;
+export default keys;

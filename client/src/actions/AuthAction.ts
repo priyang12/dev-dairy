@@ -55,6 +55,7 @@ export const RegisterUserAction =
       dispatch(setLoadingAction(-1));
     }
   };
+
 // Login User
 export const LoginAction =
   (data: any) => async (dispatch: Dispatch<AlertActions | AuthActions>) => {
