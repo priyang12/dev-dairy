@@ -1,5 +1,3 @@
-/* eslint-disable operator-linebreak */
-import React from 'react';
 import useForm from '../Hooks/useForm';
 
 export interface FormField {
@@ -17,11 +15,10 @@ type Props = {
 function Form({ SubmitForm, FormFields, FormSubmitValue }: Props) {
   const InitState = FormFields.reduce(
     (acc, curr) => ({ ...acc, [curr.fieldName]: '' }),
-    {},
+    {}
   );
-  const { FormValues, ErrorsState, HandleChange, setErrors } = useForm(
-    InitState,
-  );
+  const { FormValues, ErrorsState, HandleChange, setErrors } =
+    useForm(InitState);
 
   const check = (e: any) => {
     e.preventDefault();
