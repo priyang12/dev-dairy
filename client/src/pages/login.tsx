@@ -1,6 +1,14 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { Link as RouterLink, Navigate } from 'react-router-dom';
-import { Box, Flex, Heading, Link, Text } from '@chakra-ui/react';
+import {
+  Alert,
+  AlertIcon,
+  Box,
+  Flex,
+  Heading,
+  Link,
+  Text
+} from '@chakra-ui/react';
 import type { FormField } from '../components/CustomForm';
 import CustomForm from '../components/CustomForm';
 import { LoginAction } from '../actions/AuthAction';
@@ -10,21 +18,24 @@ import Spinner from '../components/spinner';
 
 function Login() {
   const AuthState: AuthState = useSelector((state: any) => state.Auth);
-  const AlertState: AlertState = useSelector((state: any) => state.Alert);
+  const { loading, alert }: AlertState = useSelector(
+    (state: any) => state.Alert
+  );
 
   const { isAuth } = AuthState;
-  const { loading } = AlertState;
 
   const dispatch = useDispatch();
   const LoginFields: FormField[] = [
     {
-      fieldType: 'text',
+      fieldType: 'email',
       fieldName: 'email',
-      placeholder: 'Email'
+      placeholder: 'Please enter valid Email',
+      isRequired: true
     },
     {
       fieldType: 'password',
-      fieldName: 'password'
+      fieldName: 'password',
+      isRequired: true
     }
   ];
 
@@ -35,6 +46,7 @@ function Login() {
       email: EmailError,
       password: PasswordError
     });
+
     if (!EmailError || !PasswordError) {
       dispatch(LoginAction(FormValues));
     }
@@ -42,7 +54,6 @@ function Login() {
   if (isAuth) {
     return <Navigate to="/feeds" />;
   }
-  if (loading) return <Spinner />;
   return (
     <Box m={['15', '100']}>
       <Flex
@@ -62,10 +73,17 @@ function Login() {
           justify="flex-end"
           width={['100%', '75%', '50%']}
         >
+          {alert && (
+            <Alert status="error" borderRadius={10} mb={5}>
+              <AlertIcon />
+              {alert}
+            </Alert>
+          )}
           <CustomForm
             SubmitForm={LoginUser}
             FormFields={LoginFields}
             FormSubmitValue="Log In"
+            loading={!!loading}
           />
 
           <Link
