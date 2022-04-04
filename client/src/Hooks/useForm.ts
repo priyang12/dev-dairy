@@ -1,19 +1,23 @@
 import { useState } from 'react';
-
+/* eslint-disable no-console */
 const useForm = (initialState: any) => {
   const [FormValues, setFormValues] = useState(initialState);
   const [ErrorsState, setErrorsState] = useState(initialState);
 
   const HandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+    const { id, value } = e.target;
+
     if (value === '') {
+      console.log('ErrorsState', ErrorsState);
       setErrorsState({
         ...ErrorsState,
-        [name]: `${name.toUpperCase()} is required`
+        [id]: `${id.toUpperCase()} is required`
       });
-    } else setErrorsState({ ...ErrorsState, [name]: null });
+    } else setErrorsState({ ...ErrorsState, [id]: null });
 
-    setFormValues({ ...FormValues, [name]: value });
+    console.log(value);
+
+    setFormValues({ ...FormValues, [id]: value });
   };
   const SetState = (NewState: any) => {
     setFormValues(NewState);
