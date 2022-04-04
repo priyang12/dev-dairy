@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useState } from 'react';
 import { AddPost } from '../actions/PostAction';
 
@@ -10,7 +11,7 @@ function Send() {
       text,
       title: 'New Post',
       user: '3d5idu5RcuYWKkuuv5jVfrZHx8e2',
-      date: Date.now(),
+      date: Date.now()
     };
     dispatch(AddPost(post));
     window.location.reload();

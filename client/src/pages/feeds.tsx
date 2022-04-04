@@ -1,23 +1,29 @@
-import { Fragment, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Grid, GridItem } from '@chakra-ui/react';
 import PostContainer from '../components/PostContainer';
 import Spinner from '../components/spinner';
 import { getPostsAction } from '../actions/PostAction';
-import { Post } from '../actions/interfaces';
+import type { AlertState, Post } from '../actions/interfaces';
 
 function Feeds() {
-  const { loading } = useSelector((state: any) => state.Alert);
+  const { loading, alert }: AlertState = useSelector(
+    (state: any) => state.Alert
+  );
   const { posts } = useSelector((state: any) => state.Post);
   const dispatch = useDispatch();
+    
   useEffect(() => {
     dispatch(getPostsAction());
-  }, []);
+  }, [dispatch]);
+
   if (loading) return <Spinner />;
 
   return (
     <Fragment>
       {/* <Send /> */}
       <div className="feed">
+        {alert}
         <div className="container">
           <div className="mx-5 px-5 ">
             <div className="card-header bg-info text-white">
@@ -26,12 +32,14 @@ function Feeds() {
               </a>
             </div>
           </div>
-          <div className="col p-3">
-            {posts &&
-              posts.map((post: Post) => (
-                <PostContainer key={post._id} post={post} />
-              ))}
-          </div>
+          <Grid templateColumns="repeat(2, 1fr)" gap={6}>
+            {posts?.map((post: Post) => (
+              // eslint-disable-next-line no-underscore-dangle
+              <GridItem key={post._id}>
+                <PostContainer post={post} />
+              </GridItem>
+            ))}
+          </Grid>
         </div>
       </div>
       )

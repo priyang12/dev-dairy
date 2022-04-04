@@ -1,27 +1,36 @@
-/* eslint-disable operator-linebreak */
-import React from 'react';
+/* eslint-disable no-console */
+import {
+  FormControl,
+  FormHelperText,
+  FormLabel,
+  Input,
+  FormErrorMessage,
+  Button
+} from '@chakra-ui/react';
 import useForm from '../Hooks/useForm';
 
 export interface FormField {
   fieldType: string;
   fieldName: string;
   placeholder?: string;
+  isRequired?: boolean;
 }
 
 type Props = {
   SubmitForm: (FormValues: any, setErrors: any) => void;
   FormFields: FormField[];
   FormSubmitValue: string;
+  loading: boolean;
 };
 
-function Form({ SubmitForm, FormFields, FormSubmitValue }: Props) {
+function Form({ SubmitForm, FormFields, FormSubmitValue, loading }: Props) {
+  console.log(loading);
   const InitState = FormFields.reduce(
     (acc, curr) => ({ ...acc, [curr.fieldName]: '' }),
-    {},
+    {}
   );
-  const { FormValues, ErrorsState, HandleChange, setErrors } = useForm(
-    InitState,
-  );
+  const { FormValues, ErrorsState, HandleChange, setErrors } =
+    useForm(InitState);
 
   const check = (e: any) => {
     e.preventDefault();
@@ -30,31 +39,43 @@ function Form({ SubmitForm, FormFields, FormSubmitValue }: Props) {
 
   return (
     <div>
-      <form onSubmit={check} className="mx-3">
+      <form onSubmit={check}>
         {FormFields.map((field, index) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <div className="form-group" key={index}>
-            <label htmlFor={field.fieldName}>{field.fieldName}</label>
-            <input
+          <FormControl
+            mb={5}
+            isInvalid={ErrorsState[field.fieldName]}
+            isRequired={field.isRequired}
+            key={field.fieldName}
+          >
+            <FormLabel htmlFor={field.fieldName} fontSize="2xl">
+              {field.fieldName[0].toUpperCase() + field.fieldName.slice(1)}
+            </FormLabel>
+            <Input
+              id={field.fieldName}
               type={field.fieldType}
-              className="form-control"
-              placeholder={field.placeholder ?? `Enter ${field.fieldName}`}
-              name={field.fieldName}
-              value={FormValues[`${field.fieldName}`]}
-              onChange={HandleChange}
+              onChange={(e: any) => {
+                HandleChange(e);
+              }}
             />
-            <div className="text-danger">
-              {Boolean(ErrorsState[field.fieldName]) &&
-                ErrorsState[`${field.fieldName}`]}
-            </div>
-          </div>
-        ))}
 
-        <input
+            {ErrorsState[field.fieldName] ? (
+              <FormErrorMessage>
+                {ErrorsState[`${field.fieldName}`]}
+              </FormErrorMessage>
+            ) : (
+              <FormHelperText>{field.placeholder}</FormHelperText>
+            )}
+          </FormControl>
+        ))}
+        <Button
+          isLoading={loading}
           type="submit"
-          className="btn btn-info mx-3"
-          value={FormSubmitValue}
-        />
+          loadingText="Just a moment ..."
+          colorScheme="blue"
+          variant="solid"
+        >
+          {FormSubmitValue}
+        </Button>
       </form>
     </div>
   );

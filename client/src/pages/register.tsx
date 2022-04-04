@@ -1,41 +1,43 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { Navigate as Redirect } from 'react-router-dom';
+import { Flex } from '@chakra-ui/react';
 import type { FormField } from '../components/CustomForm';
-import type { AuthState } from '../actions/interfaces';
+import type { AlertState, AuthState } from '../actions/interfaces';
 import CustomForm from '../components/CustomForm';
 import {
   ConfirmPassword,
   ValidateEmail,
   ValidateName,
-  ValidatePassword,
+  ValidatePassword
 } from '../utils/Validation';
 import { RegisterUserAction } from '../actions/AuthAction';
 
 function Register() {
   const Auth: AuthState = useSelector((state: any) => state.Auth);
+  const { loading }: AlertState = useSelector((state: any) => state.Alert);
   const { isAuth } = Auth;
   const dispatch = useDispatch();
   const RegisterFields: FormField[] = [
     {
       fieldType: 'text',
       fieldName: 'name',
-      placeholder: 'Pick a Cool Nickname',
+      placeholder: 'Pick a Cool Nickname'
     },
     {
       fieldType: 'email',
       fieldName: 'email',
-      placeholder: 'We never share your email',
+      placeholder: 'We never share your email'
     },
     {
       fieldType: 'password',
       fieldName: 'password',
-      placeholder: 'Enter a Strong Password with at least 6 characters',
+      placeholder: 'Enter a Strong Password with at least 6 characters'
     },
     {
       fieldType: 'password',
       fieldName: 'Confirm password',
-      placeholder: 'Confirm your Password',
-    },
+      placeholder: 'Confirm your Password'
+    }
   ];
   const RegisterUser = (FormValues: any, setErrors: any) => {
     const UsernameError = ValidateName(FormValues.name);
@@ -43,41 +45,38 @@ function Register() {
     const PasswordError = ValidatePassword(FormValues.password);
     const ConfirmError = ConfirmPassword(
       FormValues.password,
-      FormValues.password,
+      FormValues.password
     );
     setErrors({
       name: UsernameError,
       email: EmailError,
       password: PasswordError,
-      confirm: ConfirmError,
+      confirm: ConfirmError
     });
     if (!UsernameError && !EmailError && !PasswordError && !ConfirmError) {
-      console.log(FormValues);
       dispatch(RegisterUserAction(FormValues));
     } else {
-      console.log(UsernameError, EmailError, PasswordError, ConfirmError);
+      // Set Alert
     }
   };
   if (isAuth) {
     return <Redirect to="/createProfile" />;
   }
   return (
-    <div className="container">
-      <div className="row">
-        <div className="col-sm-5 m-auto">
-          <h1 className="display-4 text-center">Register</h1>
-          <p className="text-center lead">
-            Sign up for your DevConnector account
-          </p>
-
-          <CustomForm
-            FormFields={RegisterFields}
-            SubmitForm={RegisterUser}
-            FormSubmitValue="Register"
-          />
-        </div>
+    <Flex className="top" mx={50} justifyContent="space-around">
+      <CustomForm
+        FormFields={RegisterFields}
+        SubmitForm={RegisterUser}
+        FormSubmitValue="Register"
+        loading={!!loading}
+      />
+      <div>
+        <h1 className="display-4 text-center">Register</h1>
+        <p className="text-center lead">
+          Sign up for your DevConnector account
+        </p>
       </div>
-    </div>
+    </Flex>
   );
 }
 

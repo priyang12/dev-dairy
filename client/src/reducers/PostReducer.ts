@@ -1,13 +1,11 @@
 import type { Post, PostState } from '../actions/interfaces';
-import type { DELETE_POST } from '../actions/types';
 import {
   ADD_POST,
-  ADD_LIKE,
-  REMOVE_UNLIKE,
   ADD_COMMENT,
   CLEAR_POST,
   GET_POSTS,
   GET_POST,
+  DELETE_POST
 } from '../actions/types';
 
 type ActionMap<M extends { [index: string]: any }> = {
@@ -22,13 +20,11 @@ type ActionMap<M extends { [index: string]: any }> = {
 };
 type PostPayload = {
   [ADD_POST]: Post;
-  [ADD_LIKE]: null;
-  [REMOVE_UNLIKE]: null;
   [ADD_COMMENT]: null;
   [CLEAR_POST]: null;
   [GET_POSTS]: Post[];
   [GET_POST]: Post;
-  [DELETE_POST]: null;
+  [DELETE_POST]: string;
 };
 
 export type PostActions = ActionMap<PostPayload>[keyof ActionMap<PostPayload>];
@@ -36,7 +32,7 @@ export type PostActions = ActionMap<PostPayload>[keyof ActionMap<PostPayload>];
 const init: PostState = {
   posts: [],
   post: null,
-  comments: [],
+  comments: []
 };
 
 // eslint-disable-next-line
@@ -47,31 +43,25 @@ export default (state = init, action: PostActions) => {
         ...state,
         loading: false,
         posts: action.payload,
-        error: null,
+        error: null
       };
     case ADD_POST:
       return {
         ...state,
-        posts: [action.payload, ...state.posts],
+        posts: [action.payload, ...state.posts]
       };
-    case ADD_LIKE:
+    case DELETE_POST:
       return {
         ...state,
-        post: { ...state.post, likes: action.payload },
-      };
-    case REMOVE_UNLIKE:
-      return {
-        ...state,
-        post: { ...state.post, unlikes: action.payload },
-        loading: false,
-        error: null,
+        // eslint-disable-next-line
+        posts: state.posts.filter((post) => post._id !== action.payload)
       };
     case ADD_COMMENT:
       return {
         ...state,
         post: { ...state.post, comments: action.payload },
         loading: false,
-        error: null,
+        error: null
       };
 
     case GET_POST:
@@ -79,18 +69,18 @@ export default (state = init, action: PostActions) => {
         ...state,
         post: action.payload,
         loading: false,
-        error: null,
+        error: null
       };
     case CLEAR_POST:
       return {
         ...state,
         posts: null,
         error: null,
-        loading: false,
+        loading: false
       };
     default:
       return {
-        ...state,
+        ...state
       };
   }
 };

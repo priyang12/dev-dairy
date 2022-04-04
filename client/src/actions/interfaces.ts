@@ -1,5 +1,4 @@
 import type { User } from 'firebase/auth';
-import { UserInfo } from 'firebase/auth';
 
 export interface AuthState {
   token: string | null;
@@ -8,7 +7,7 @@ export interface AuthState {
 }
 
 export interface AlertState {
-  alert: string | null;
+  alert: string;
   loading: number;
   result: boolean;
 }
@@ -18,8 +17,8 @@ export interface Post {
   title: string;
   text: string;
   user: any;
-  likes: [];
-  comments: [];
+  likes: any[];
+  comments: any[];
   createdAt: string;
 }
 

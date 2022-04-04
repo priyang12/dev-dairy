@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import Navbar from './components/Navbar';
 import LandingPage from './pages/LandingPage';
 import Login from './pages/login';
-import Register from './pages/Register';
+import Register from './pages/register';
 
 import { FirebaseAuth } from './FirebaseConfig';
+import Feeds from './pages/feeds';
 // import { LOGOUT } from "./actions/types";
 
 function App() {
@@ -30,14 +31,15 @@ function App() {
   }, [setCookie, removeCookie]);
 
   return (
-    <Router>
+    <BrowserRouter>
       <Navbar />
-      <Switch>
-        <Route exact path="/" component={LandingPage} />
-        <Route exact path="/Auth/login" component={Login} />
-        <Route exact path="/Auth/Register" component={Register} />
-      </Switch>
-    </Router>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/Auth/login" element={<Login />} />
+        <Route path="/Auth/Register" element={<Register />} />
+        <Route path="/feeds" element={<Feeds />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

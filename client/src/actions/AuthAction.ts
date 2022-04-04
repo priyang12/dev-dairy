@@ -1,3 +1,4 @@
+/* eslint-disable */
 import axios from 'axios';
 import type { Dispatch } from 'react';
 import { REGISTER_SUCCESS, USER_LOADED, LOGIN_SUCCESS, LOGOUT } from './types';
@@ -8,83 +9,78 @@ import type { AuthActions } from '../reducers/AuthReducer';
 import type { AlertActions } from '../reducers/AlertReducer';
 
 // Load user
-export const loadUser = () => async (
-  dispatch: Dispatch<AlertActions | AuthActions>,
-) => {
-  try {
-    dispatch(setLoadingAction(1));
-    const res = await axios.get('/api/users/me');
-    dispatch({
-      type: USER_LOADED,
-      payload: res.data,
-    });
-  } catch (err: any) {
-    let errorMessage = 'Server Error';
-    if (err.response) {
-      errorMessage = err.response.data.message;
+export const loadUser =
+  () => async (dispatch: Dispatch<AlertActions | AuthActions>) => {
+    try {
+      dispatch(setLoadingAction(1));
+      const res = await axios.get('/api/users/me');
+      dispatch({
+        type: USER_LOADED,
+        payload: res.data
+      });
+    } catch (err: any) {
+      let errorMessage = 'Server error';
+      errorMessage = Boolean(err.response) && err.response.data.message;
+      dispatch(setAlertAction(errorMessage, false));
+    } finally {
+      dispatch(setLoadingAction(-1));
     }
-    dispatch(setAlertAction(errorMessage, false));
-  } finally {
-    dispatch(setLoadingAction(-1));
-  }
-};
+  };
 
 // register User
-export const RegisterUserAction = (UserData: {
-  name: string;
-  email: string;
-  password: string;
-}) => async (dispatch: Dispatch<AuthActions>) => {
-  try {
-    dispatch(setLoadingAction(1));
-    // register firebase user and update display name
-    const { user }: any = await FirebaseAuth.createUserWithEmailAndPassword(
-      UserData.email,
-      UserData.password,
-    );
-    await user.updateProfile({
-      displayName: UserData.name,
-    });
-    console.log(user);
-    dispatch({
-      type: REGISTER_SUCCESS,
-      payload: user,
-    });
-    dispatch(setAlertAction('User registered successfully', true));
-  } catch (err: any) {
-    let errorMessage = 'Server Error';
-    if (err.message) errorMessage = err.message;
-    if (err.response) errorMessage = err.response.data.message;
-    dispatch(setAlertAction(errorMessage, false));
-  } finally {
-    dispatch(setLoadingAction(-1));
-  }
-};
-// Login User
-export const LoginAction = (data: any) => async (
-  dispatch: Dispatch<AlertActions | AuthActions>,
-) => {
-  try {
-    dispatch(setLoadingAction(1));
-    const response: any = await FirebaseAuth.signInWithEmailAndPassword(
-      data.email,
-      data.password,
-    );
-    const { user } = response;
-    dispatch({
-      type: LOGIN_SUCCESS,
-      payload: user,
-    });
-  } catch (err: any) {
-    let errorMessage = 'Server Error';
-    if (err.response) {
-      errorMessage = err.response.data.message;
+export const RegisterUserAction =
+  (UserData: { name: string; email: string; password: string }) =>
+  async (dispatch: Dispatch<AuthActions>) => {
+    try {
+      dispatch(setLoadingAction(1));
+      // register firebase user and update display name
+      const { user }: any = await FirebaseAuth.createUserWithEmailAndPassword(
+        UserData.email,
+        UserData.password
+      );
+      await user.updateProfile({
+        displayName: UserData.name
+      });
+
+      dispatch({
+        type: REGISTER_SUCCESS,
+        payload: user
+      });
+      dispatch(setAlertAction('User registered successfully', true));
+    } catch (err: any) {
+      let errorMessage = 'Server error';
+      errorMessage = Boolean(err.response) && err.response.data.message;
+      dispatch(setAlertAction(errorMessage, false));
+    } finally {
+      dispatch(setLoadingAction(-1));
     }
-    dispatch(setAlertAction(errorMessage, false));
-  } finally {
-    dispatch(setLoadingAction(-1));
-  }
-};
+  };
+
+// Login User
+export const LoginAction =
+  (data: any) => async (dispatch: Dispatch<AlertActions | AuthActions>) => {
+    try {
+      dispatch(setLoadingAction(1));
+      const response: any = await FirebaseAuth.signInWithEmailAndPassword(
+        data.email,
+        data.password
+      );
+      const { user } = response;
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: user
+      });
+    } catch (err: any) {
+      let errorMessage = 'Server error';
+      errorMessage = Boolean(err.response)
+        ? err.response.data.message
+        : err.code;
+
+      dispatch(setAlertAction(err.code, false));
+    } finally {
+      dispatch(setLoadingAction(-1));
+    }
+  };
 
 // // Update Profile Picture
 // export const UpdateProfilePic = (data) => async (dispatch) => {
@@ -110,16 +106,8 @@ export const logout = () => async (dispatch: Dispatch<AuthActions>) => {
     await FirebaseAuth.signOut();
     dispatch({ type: LOGOUT, payload: null });
   } catch (err: any) {
-    let errorMessage = 'Server Error';
-    if (err.response) {
-      errorMessage = err.response.data.message;
-    }
+    let errorMessage = 'Server error';
+    errorMessage = Boolean(err.response) && err.response.data.message;
     dispatch(setAlertAction(errorMessage, false));
   }
 };
-
-// export const cleanCurrent  = () =>{
-//     return{
-//         type: CLEAR_CURRENT,
-//     }
-// }

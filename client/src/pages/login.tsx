@@ -1,33 +1,42 @@
-import { Fragment } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, Redirect } from 'react-router-dom';
+import { Link as RouterLink, Navigate } from 'react-router-dom';
+import {
+  Alert,
+  AlertIcon,
+  Box,
+  Flex,
+  Heading,
+  Link,
+  Text
+} from '@chakra-ui/react';
 import type { FormField } from '../components/CustomForm';
 import CustomForm from '../components/CustomForm';
-import Spinner from '../components/spinner';
-
-import type { AlertState, AuthState } from '../actions/interfaces';
-
-import { ValidateEmail, ValidatePassword } from '../utils/Validation';
 import { LoginAction } from '../actions/AuthAction';
+import type { AlertState, AuthState } from '../actions/interfaces';
+import { ValidateEmail, ValidatePassword } from '../utils/Validation';
+import Spinner from '../components/spinner';
 
 function Login() {
   const AuthState: AuthState = useSelector((state: any) => state.Auth);
-  const AlertState: AlertState = useSelector((state: any) => state.Alert);
+  const { loading, alert }: AlertState = useSelector(
+    (state: any) => state.Alert
+  );
 
   const { isAuth } = AuthState;
-  const { loading } = AlertState;
 
   const dispatch = useDispatch();
   const LoginFields: FormField[] = [
     {
-      fieldType: 'text',
+      fieldType: 'email',
       fieldName: 'email',
-      placeholder: 'Email',
+      placeholder: 'Please enter valid Email',
+      isRequired: true
     },
     {
       fieldType: 'password',
       fieldName: 'password',
-    },
+      isRequired: true
+    }
   ];
 
   const LoginUser = (FormValues: any, setErrors: any) => {
@@ -35,35 +44,62 @@ function Login() {
     const PasswordError = ValidatePassword(FormValues.password);
     setErrors({
       email: EmailError,
-      password: PasswordError,
+      password: PasswordError
     });
+
     if (!EmailError || !PasswordError) {
       dispatch(LoginAction(FormValues));
     }
   };
   if (isAuth) {
-    return <Redirect to="/feeds" />;
+    return <Navigate to="/feeds" />;
   }
-  if (loading) return <Spinner />;
   return (
-    <div className="row">
-      <div className="col-sm-4 m-auto ">
-        <h1 className="display-4 text-center">Log in</h1>
-        <CustomForm
-          SubmitForm={LoginUser}
-          FormFields={LoginFields}
-          FormSubmitValue="Log In"
-        />
-        <span className="my-1 ">
-          <Link to="ResetPassword" className="black-text">
+    <Box m={['15', '100']}>
+      <Flex
+        className="top"
+        justifyContent="space-between"
+        flexDir={['column', 'column', 'row']}
+      >
+        <Flex flexDir="column">
+          <Heading as="h1" fontSize="6xl" mb={5}>
+            Log in
+          </Heading>
+          <Text as="p">Login in to your DevConnector account</Text>
+        </Flex>
+
+        <Flex
+          flexDir="column"
+          justify="flex-end"
+          width={['100%', '75%', '50%']}
+        >
+          {alert && (
+            <Alert status="error" borderRadius={10} mb={5}>
+              <AlertIcon />
+              {alert}
+            </Alert>
+          )}
+          <CustomForm
+            SubmitForm={LoginUser}
+            FormFields={LoginFields}
+            FormSubmitValue="Log In"
+            loading={!!loading}
+          />
+
+          <Link
+            as={RouterLink}
+            to="ResetPassword"
+            className="black-text"
+            fontSize={30}
+            fontWeight={500}
+            alignSelf="flex-end"
+            _hover={{ color: 'teal.600' }}
+          >
             / Forgot Password ?
           </Link>
-        </span>
-        <p className="text-center lead">
-          Login in to your DevConnector account
-        </p>
-      </div>
-    </div>
+        </Flex>
+      </Flex>
+    </Box>
   );
 }
 
