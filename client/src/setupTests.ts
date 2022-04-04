@@ -7,7 +7,7 @@
 import '@testing-library/jest-dom';
 // test/setup-env.js
 // add this to your setupFilesAfterEnv config in jest so it's imported for every test file
-import { server } from './mock/server';
+import server from './mock/server';
 
 beforeAll(() => server.listen());
 // if you need to add a handler after calling setupServer for some specific test

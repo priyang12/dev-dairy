@@ -14,7 +14,7 @@ import type { AuthState, Post } from '../../actions/interfaces';
 
 const AuthStateMock: AuthState = {
   user: {
-    _id: '5f3f8f8f8f8f8f8f8f8f8f8',
+    uid: '5f3f8f8f8f8f8f8f8f8f8f8',
     displayName: 'Test User',
     email: faker.internet.email()
   },
@@ -25,7 +25,11 @@ const NewPost: Post = {
   _id: faker.datatype.uuid(),
   title: 'New Post',
   text: 'New Post Text',
-  user: AuthStateMock.user,
+  user: {
+    _id: AuthStateMock.user.uid,
+    avatar: faker.image.avatar(),
+    displayName: AuthStateMock.user.displayName
+  },
   comments: [
     {
       _id: faker.datatype.uuid(),

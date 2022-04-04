@@ -1,13 +1,15 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Grid, GridItem } from '@chakra-ui/react';
-import type { Post } from '../actions/interfaces';
+import type { AlertState, Post } from '../actions/interfaces';
 import { getPostsAction } from '../actions/PostAction';
 import PostContainer from '../components/PostContainer';
 import Spinner from '../components/spinner';
 
 function Feeds() {
-  const { loading } = useSelector((state: any) => state.Alert);
+  const { loading, alert }: AlertState = useSelector(
+    (state: any) => state.Alert
+  );
   const { posts } = useSelector((state: any) => state.Post);
   const dispatch = useDispatch();
 
@@ -21,6 +23,7 @@ function Feeds() {
     <>
       {/* <Send /> */}
       <div className="feed">
+        {alert}
         <div className="container">
           <div className="mx-5 px-5 ">
             <div className="card-header bg-info text-white">
