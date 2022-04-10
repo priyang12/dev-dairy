@@ -9,9 +9,20 @@ import {
   IconButton,
   Box,
   Link,
-  Heading
+  Heading,
+  Menu,
+  useDisclosure,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  useColorModePreference,
 } from '@chakra-ui/react';
-import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
+import {
+  HamburgerIcon,
+  CloseIcon,
+  ChevronUpIcon,
+  ChevronDownIcon,
+} from '@chakra-ui/icons';
 import { motion } from 'framer-motion';
 import { logout } from '../actions/AuthAction';
 import type { AuthState } from '../actions/interfaces';
@@ -19,8 +30,10 @@ import type { AuthState } from '../actions/interfaces';
 function Navbar() {
   const { isAuth, user }: AuthState = useSelector((state: any) => state.Auth);
   const dispatch = useDispatch();
-  const { colorMode, toggleColorMode } = useColorMode();
-  const isDark = colorMode === 'dark';
+  const ColorPreference = useColorModePreference();
+  const { toggleColorMode } = useColorMode();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const isDark = ColorPreference === 'dark';
   const [display, changeDisplay] = useState(false);
   const onLogout = () => {
     localStorage.clear();
@@ -30,47 +43,42 @@ function Navbar() {
 
   const AuthLinks = (
     <div>
-      <div className="dropdown">
-        <Button
-          className="btn btn-secondary dropdown-toggle"
-          type="button"
-          id="dropdownMenuButton"
-          data-toggle="dropdown"
-          aria-haspopup="true"
-          aria-expanded="false"
-          style={{ color: 'white' }}
+      <Menu isOpen={isOpen}>
+        <span>{user?.displayName}</span>
+        <MenuButton
+          mx={5}
+          py={[1, 2, 2]}
+          px={4}
+          borderRadius={5}
+          _hover={{ bg: isDark ? 'gray.700' : 'gray.100' }}
+          aria-label="Courses"
+          fontWeight="normal"
+          onClick={onOpen}
         >
-          Hello {user ? user.displayName : 'Stranger'}
-        </Button>
-        <div
-          className="dropdown-menu"
-          aria-labelledby="dropdownMenuButton"
-          style={{ backgroundColor: '#343a40' }}
-        >
-          <div>
-            {user && (
-              <li className="ml-2">
-                <Link as={RouterLink} to={`/profile/${user.uid}`}>
-                  <span className="hide-sm">Profile</span>
-                </Link>
-              </li>
-            )}
-            <li className="ml-2">
-              <Link as={RouterLink} to="/editProfile">
-                <span className="hide-sm">Edit Profile</span>
-              </Link>
-            </li>
+          <span>{isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}</span>
+        </MenuButton>
+        <MenuList onMouseEnter={onOpen} onMouseLeave={onClose}>
+          <MenuItem>
+            <Link as={RouterLink} to={`/profile/${user?.uid}`}>
+              <span className="hide-sm">Profile</span>
+            </Link>
+          </MenuItem>
 
-            <div className="dropdown-divider" />
-            <li className="ml-3">
-              <Link as={RouterLink} onClick={onLogout} to="/Auth/login">
-                <i className="fas fa-sign-out-alt" />{' '}
-                <span className="hide-sm">Logout</span>
-              </Link>
-            </li>
-          </div>
-        </div>
-      </div>
+          <MenuItem>
+            <Link as={RouterLink} to="/editProfile">
+              <span className="hide-sm">Edit Profile</span>
+            </Link>
+          </MenuItem>
+
+          <div className="dropdown-divider" />
+          <MenuItem>
+            <Link as={RouterLink} onClick={onLogout} to="/Auth/login">
+              <i className="fas fa-sign-out-alt" />{' '}
+              <span className="hide-sm">Logout</span>
+            </Link>
+          </MenuItem>
+        </MenuList>
+      </Menu>
     </div>
   );
   const UnAuthLinks = (
@@ -100,7 +108,7 @@ function Navbar() {
   return (
     <Flex
       zIndex={2020}
-      bgColor="blackAlpha.500"
+      bgColor={isDark ? 'gray.700' : 'gray.200'}
       as="nav"
       width="100%"
       position="fixed"
@@ -153,9 +161,9 @@ function Navbar() {
         animate={display ? 'show' : 'hidden'}
         variants={{
           hidden: { y: -1000, opacity: 0 },
-          show: { y: 1, opacity: 1 }
+          show: { y: 1, opacity: 1 },
         }}
-        bgColor={isDark ? 'black' : 'blackAlpha.500'}
+        bgColor={isDark ? 'black' : 'wheat'}
         zIndex={20}
         pos="fixed"
         top="0"
@@ -179,7 +187,7 @@ function Navbar() {
 
         <Flex flexDir="column" align="flex-start" fontSize={20}>
           <Switch color="green" isChecked={isDark} onChange={toggleColorMode} />
-          {user ? AuthLinks : UnAuthLinks}
+          {isAuth ? AuthLinks : UnAuthLinks}
         </Flex>
       </Flex>
     </Flex>

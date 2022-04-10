@@ -11,3 +11,8 @@ a:hover {
 .top {
   margin-top: 25vh;
 }
+@media screen and (max-width: 600px) {
+  .top {
+    margin-top: 10vh;
+  }
+}

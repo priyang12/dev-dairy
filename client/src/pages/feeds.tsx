@@ -19,7 +19,7 @@ function Feeds() {
 
   if (loading) return <Spinner />;
 
-  if (!posts) return <p>No Posts</p>;
+  if (!posts || posts?.length === 0) return <p>No Posts</p>;
   return (
     <div className="top">
       {/* <Send /> */}
