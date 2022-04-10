@@ -1,8 +1,8 @@
-// eslint-disable-next-line
+/* eslint-disable */
+
 export default () => (
   <img
-    // eslint-disable-next-line global-require
-    src={require('../Assets/spinner.gif')}
+    src={require('../Assets/Spinner.gif')}
     style={{ width: '200px', margin: 'auto', display: 'block' }}
     alt="loading..."
   />

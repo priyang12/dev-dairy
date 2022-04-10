@@ -33,6 +33,7 @@ it('Render form', () => {
   const FormSubmitValue = 'Submit';
   render(
     <CustomForm
+      loading={false}
       SubmitForm={SubmitForm}
       FormFields={FormFields}
       FormSubmitValue={FormSubmitValue}
@@ -72,6 +73,7 @@ it('Check for Validation', () => {
   };
   render(
     <CustomForm
+      loading={false}
       SubmitForm={SubmitForm}
       FormFields={FormFields}
       FormSubmitValue={FormSubmitValue}

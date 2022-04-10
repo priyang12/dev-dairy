@@ -16,10 +16,10 @@ const AuthStateMock: AuthState = {
   user: {
     uid: '5f3f8f8f8f8f8f8f8f8f8f8',
     displayName: 'Test User',
-    email: faker.internet.email()
+    email: faker.internet.email(),
   },
   isAuth: true,
-  token: faker.datatype.uuid()
+  token: faker.datatype.uuid(),
 };
 const NewPost: Post = {
   _id: faker.datatype.uuid(),
@@ -28,60 +28,45 @@ const NewPost: Post = {
   user: {
     _id: AuthStateMock.user.uid,
     avatar: faker.image.avatar(),
-    displayName: AuthStateMock.user.displayName
+    displayName: AuthStateMock.user.displayName,
   },
   comments: [
     {
       _id: faker.datatype.uuid(),
       text: 'New Comment',
-      user: AuthStateMock.user
+      user: AuthStateMock.user,
     },
     {
       _id: faker.datatype.uuid(),
       text: 'New Comment',
-      user: faker.datatype.uuid()
-    }
+      user: faker.datatype.uuid(),
+    },
   ],
   likes: [
     {
       // eslint-disable-next-line no-underscore-dangle
-      user: AuthStateMock.user._id
+      user: AuthStateMock.user._id,
     },
     {
-      user: faker.datatype.uuid()
+      user: faker.datatype.uuid(),
     },
     {
-      user: faker.datatype.uuid()
+      user: faker.datatype.uuid(),
     },
     {
-      user: faker.datatype.uuid()
-    }
+      user: faker.datatype.uuid(),
+    },
   ],
-  createdAt: new Date().toDateString()
+  createdAt: new Date().toDateString(),
 };
 
-// Mocked Data for testing
-import { MockedPosts } from '../../mock/MockPost';
-import { AuthState } from '../../actions/interfaces';
-import faker from '@faker-js/faker';
-import { BrowserRouter } from 'react-router-dom';
-
-const AuthStateMock: AuthState = {
-  user: {
-    _id: '5f3f8f8f8f8f8f8f8f8f8f8',
-    displayName: 'Test User',
-    email: faker.internet.email(),
-  },
-  isAuth: true,
-  token: faker.datatype.uuid(),
-};
 it('render Posts', async () => {
   render(
     <BrowserRouter>
       <Feeds />
     </BrowserRouter>,
 
-    { preloadedState: { Auth: AuthStateMock } }
+    { preloadedState: { Auth: AuthStateMock } },
   );
   await waitForElementToBeRemoved(screen.getByAltText('loading...'));
   // compare the data
@@ -96,20 +81,20 @@ it('like Comment Counts Liking and Removing Liking', async () => {
   server.resetHandlers();
   server.use(
     rest.get('/api/post', (req, res, ctx) =>
-      res(ctx.json([NewPost, ...MockedPosts]))
+      res(ctx.json([NewPost, ...MockedPosts])),
     ),
     rest.put('/api/post/like/:id', (req, res, ctx) =>
-      res(ctx.json({ message: 'Post Liked', result: true }))
+      res(ctx.json({ message: 'Post Liked', result: true })),
     ),
     rest.put('/api/post/unlike/:id', (req, res, ctx) =>
-      res(ctx.json({ message: 'Post Like Removed', result: true }))
-    )
+      res(ctx.json({ message: 'Post Like Removed', result: true })),
+    ),
   );
   render(
     <BrowserRouter>
       <Feeds />
     </BrowserRouter>,
-    { preloadedState: { Auth: AuthStateMock } }
+    { preloadedState: { Auth: AuthStateMock } },
   );
   // Check Like on Load
   await waitForElementToBeRemoved(screen.getByAltText('loading...'));
@@ -133,17 +118,17 @@ it('delete post', async () => {
   server.resetHandlers();
   server.use(
     rest.get('/api/post', (req, res, ctx) =>
-      res(ctx.json([NewPost, ...MockedPosts]))
+      res(ctx.json([NewPost, ...MockedPosts])),
     ),
     rest.delete('/api/post/:id', (req, res, ctx) =>
-      res(ctx.json({ message: 'Post Deleted' }))
-    )
+      res(ctx.json({ message: 'Post Deleted' })),
+    ),
   );
   render(
     <BrowserRouter>
       <Feeds />
     </BrowserRouter>,
-    { preloadedState: { Auth: AuthStateMock } }
+    { preloadedState: { Auth: AuthStateMock } },
   );
 
   await waitForElementToBeRemoved(screen.getByAltText('loading...'));
@@ -166,14 +151,14 @@ it('Error Handling For Posts', async () => {
   server.resetHandlers();
   server.use(
     rest.get('/api/post', (req, res, ctx) =>
-      res(ctx.status(500), ctx.json({ message: 'Internal Server Error' }))
-    )
+      res(ctx.status(500), ctx.json({ message: 'Internal Server Error' })),
+    ),
   );
   render(
     <BrowserRouter>
       <Feeds />
     </BrowserRouter>,
-    { preloadedState: { Auth: AuthStateMock } }
+    { preloadedState: { Auth: AuthStateMock } },
   );
   await waitForElementToBeRemoved(screen.getByAltText('loading...'));
   expect(screen.getByText(/Internal Server Error/i)).toBeInTheDocument();

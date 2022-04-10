@@ -6,12 +6,12 @@ import {
   DELETE_POST,
   ADD_COMMENT,
   GET_POSTS,
-  GET_POST
+  GET_POST,
 } from './types';
 import {
   setLoadingAction,
   stopLoadingAction,
-  setAlertAction
+  setAlertAction,
 } from './AlertAction';
 import type { PostActions } from '../reducers/PostReducer';
 import type { AlertActions } from '../reducers/AlertReducer';
@@ -21,10 +21,10 @@ import type { Post } from './interfaces';
 export const getPostsAction = () => async (dispatch: Dispatch<PostActions>) => {
   try {
     dispatch(setLoadingAction(1));
-    const res: any = await axios.get('/api/post');
+    const res: any = await axios.get('/api/posts');
     dispatch({
       type: GET_POSTS,
-      payload: res.data
+      payload: res.data,
     });
   } catch (err: any) {
     let errorMessage = 'Server error';
@@ -42,7 +42,7 @@ export const deletePostAction =
       const res = await axios.delete(`/api/post/${id}`);
       dispatch({
         type: DELETE_POST,
-        payload: id
+        payload: id,
       });
       dispatch(setAlertAction(res.data.message, false));
     } catch (err: any) {
@@ -62,7 +62,7 @@ export const GetPost =
 
       dispatch({
         type: GET_POST,
-        payload: res.data
+        payload: res.data,
       });
     } catch (err: any) {
       let errorMessage = 'Server error';
@@ -79,7 +79,7 @@ export const AddPost =
 
       dispatch({
         type: ADD_POST,
-        payload: res.data
+        payload: res.data,
       });
     } catch (err: any) {
       let errorMessage = 'Server error';
@@ -120,7 +120,7 @@ export const PostComment =
       const res = await axios.post(`/api/posts/comment/${id}`, comment);
       dispatch({
         type: ADD_COMMENT,
-        payload: res.data
+        payload: res.data,
       });
     } catch (err: any) {
       let errorMessage = 'Server error';
@@ -135,12 +135,12 @@ export const DeleteComment =
   async (dispatch: Dispatch<PostActions | AlertActions>) => {
     try {
       const res = await axios.delete(
-        `/api/posts/comment/${postId}/${comment_id}`
+        `/api/posts/comment/${postId}/${comment_id}`,
       );
 
       dispatch({
         type: ADD_COMMENT,
-        payload: res.data
+        payload: res.data,
       });
     } catch (err: any) {
       let errorMessage = 'Server error';

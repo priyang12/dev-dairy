@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { Fragment, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Grid, GridItem } from '@chakra-ui/react';
 import PostContainer from '../components/PostContainer';
@@ -8,19 +8,20 @@ import type { AlertState, Post } from '../actions/interfaces';
 
 function Feeds() {
   const { loading, alert }: AlertState = useSelector(
-    (state: any) => state.Alert
+    (state: any) => state.Alert,
   );
   const { posts } = useSelector((state: any) => state.Post);
   const dispatch = useDispatch();
-    
+
   useEffect(() => {
     dispatch(getPostsAction());
   }, [dispatch]);
 
   if (loading) return <Spinner />;
 
+  if (!posts) return <p>No Posts</p>;
   return (
-    <Fragment>
+    <div className="top">
       {/* <Send /> */}
       <div className="feed">
         {alert}
@@ -42,8 +43,7 @@ function Feeds() {
           </Grid>
         </div>
       </div>
-      )
-    </Fragment>
+    </div>
   );
 }
 

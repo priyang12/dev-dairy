@@ -1,5 +1,5 @@
 import { useState } from 'react';
-/* eslint-disable no-console */
+
 const useForm = (initialState: any) => {
   const [FormValues, setFormValues] = useState(initialState);
   const [ErrorsState, setErrorsState] = useState(initialState);
@@ -8,14 +8,11 @@ const useForm = (initialState: any) => {
     const { id, value } = e.target;
 
     if (value === '') {
-      console.log('ErrorsState', ErrorsState);
       setErrorsState({
         ...ErrorsState,
         [id]: `${id.toUpperCase()} is required`
       });
     } else setErrorsState({ ...ErrorsState, [id]: null });
-
-    console.log(value);
 
     setFormValues({ ...FormValues, [id]: value });
   };
