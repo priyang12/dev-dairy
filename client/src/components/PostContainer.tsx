@@ -2,16 +2,16 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { Box } from '@chakra-ui/react';
 import { AddLike, deletePostAction, RemoveLike } from '../actions/PostAction';
 import type { AuthState, Post } from '../actions/interfaces';
-
 
 type PropTypes = {
   post: Post;
 };
 
 function PostContainer({
-  post: { user: PostUser, likes, _id, text, title, comments, createdAt }
+  post: { user: PostUser, likes, _id, text, title, comments, createdAt },
 }: PropTypes) {
   const { user }: AuthState = useSelector((state: any) => state.Auth);
   const dispatch = useDispatch();
@@ -47,7 +47,7 @@ function PostContainer({
   if (checkDelete) return null;
   return (
     <div className="posts">
-      <div className="card card-body mb-3">
+      <Box as="article">
         <div className="row">
           {Boolean(PostUser?.avatar) && (
             <div className="col-md-2">
@@ -79,7 +79,7 @@ function PostContainer({
                     style={{
                       backgroundColor: 'white',
                       color: 'black',
-                      border: 'none'
+                      border: 'none',
                     }}
                   />
                   <div
@@ -138,7 +138,7 @@ function PostContainer({
             <p className="text-muted">{createdAt.toString()}</p>
           </div>
         </div>
-      </div>
+      </Box>
     </div>
   );
 }

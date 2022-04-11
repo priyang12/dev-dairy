@@ -54,6 +54,7 @@ function Navbar() {
           aria-label="Courses"
           fontWeight="normal"
           onClick={onOpen}
+          onMouseLeave={onClose}
         >
           <span>{isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}</span>
         </MenuButton>

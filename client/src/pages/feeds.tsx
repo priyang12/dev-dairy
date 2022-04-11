@@ -1,10 +1,11 @@
-import { Fragment, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Grid, GridItem } from '@chakra-ui/react';
+import { Box, Flex, Grid, GridItem } from '@chakra-ui/react';
 import PostContainer from '../components/PostContainer';
 import Spinner from '../components/spinner';
 import { getPostsAction } from '../actions/PostAction';
 import type { AlertState, Post } from '../actions/interfaces';
+import MarginContainer from '../components/MarginContainer';
 
 function Feeds() {
   const { loading, alert }: AlertState = useSelector(
@@ -19,30 +20,24 @@ function Feeds() {
 
   if (loading) return <Spinner />;
 
-  if (!posts || posts?.length === 0) return <p>No Posts</p>;
+  if (alert) return <MarginContainer>{alert}</MarginContainer>;
+
   return (
     <div className="top">
       {/* <Send /> */}
-      <div className="feed">
+      <MarginContainer>
         {alert}
-        <div className="container">
-          <div className="mx-5 px-5 ">
-            <div className="card-header bg-info text-white">
-              <a href="#SendModal" data-toggle="modal" data-target="#SendModal">
-                Say Something...
-              </a>
-            </div>
-          </div>
-          <Grid templateColumns="repeat(2, 1fr)" gap={6}>
-            {posts?.map((post: Post) => (
+        <Flex direction="column" gap={20}>
+          {posts.length !== 0 ? (
+            posts?.map((post: Post) => (
               // eslint-disable-next-line no-underscore-dangle
-              <GridItem key={post._id}>
-                <PostContainer post={post} />
-              </GridItem>
-            ))}
-          </Grid>
-        </div>
-      </div>
+              <PostContainer post={post} key={post._id} />
+            ))
+          ) : (
+            <h1>No posts yet</h1>
+          )}
+        </Flex>
+      </MarginContainer>
     </div>
   );
 }

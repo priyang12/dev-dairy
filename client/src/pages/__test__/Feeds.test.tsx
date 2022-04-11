@@ -80,7 +80,7 @@ it('render Posts', async () => {
 it('like Comment Counts Liking and Removing Liking', async () => {
   server.resetHandlers();
   server.use(
-    rest.get('/api/post', (req, res, ctx) =>
+    rest.get('/api/posts', (req, res, ctx) =>
       res(ctx.json([NewPost, ...MockedPosts])),
     ),
     rest.put('/api/post/like/:id', (req, res, ctx) =>
@@ -117,7 +117,7 @@ it('like Comment Counts Liking and Removing Liking', async () => {
 it('delete post', async () => {
   server.resetHandlers();
   server.use(
-    rest.get('/api/post', (req, res, ctx) =>
+    rest.get('/api/posts', (req, res, ctx) =>
       res(ctx.json([NewPost, ...MockedPosts])),
     ),
     rest.delete('/api/post/:id', (req, res, ctx) =>
@@ -150,7 +150,7 @@ it('delete post', async () => {
 it('Error Handling For Posts', async () => {
   server.resetHandlers();
   server.use(
-    rest.get('/api/post', (req, res, ctx) =>
+    rest.get('/api/posts', (req, res, ctx) =>
       res(ctx.status(500), ctx.json({ message: 'Internal Server Error' })),
     ),
   );
