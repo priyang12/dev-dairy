@@ -57,7 +57,7 @@ function Navbar() {
         >
           <span>{isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}</span>
         </MenuButton>
-        <MenuList onMouseEnter={onOpen} onMouseLeave={onClose}>
+        <MenuList onMouseEnter={onOpen} onMouseLeave={onClose} zIndex={2000}>
           <MenuItem>
             <Link as={RouterLink} to={`/profile/${user?.uid}`}>
               <span className="hide-sm">Profile</span>
@@ -169,6 +169,7 @@ function Navbar() {
         top="0"
         left="0"
         padding="5vh"
+        height={`${isOpen ? '70vh' : 'fit-content'}`}
         overflowY="auto"
         flexDir="column"
         justifyContent={['flex-start', 'flex-start', 'center', 'center']}
