@@ -10,10 +10,12 @@ type PropTypes = {
   post: Post;
 };
 
-function PostContainer({
-  post: { user: PostUser, likes, _id, text, title, comments, createdAt },
-}: PropTypes) {
+function PostContainer({ post }: PropTypes) {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  const { user: PostUser, likes, _id, text, title, comments, createdAt } = post;
+
   const { user }: AuthState = useSelector((state: any) => state.Auth);
+  console.log(user);
   const dispatch = useDispatch();
 
   const [checkDelete, setDelete] = useState(false);
@@ -23,9 +25,11 @@ function PostContainer({
   useEffect(() => {
     if (likes.length > 0) {
       setLikesNumber(likes.length);
-      likes.map((like: any) => (like.user === user._id ? setLike(true) : null));
+      likes.map((like: any) =>
+        like.user === user?.uid ? setLike(true) : null,
+      );
     }
-  }, [likes, user._id]);
+  }, [likes, user?.uid]);
 
   const addLike = () => {
     dispatch(AddLike(_id));
@@ -44,6 +48,7 @@ function PostContainer({
     else addLike();
     setLike(!checkLike);
   };
+
   if (checkDelete) return null;
   return (
     <div className="posts">
@@ -51,7 +56,7 @@ function PostContainer({
         <div className="row">
           {Boolean(PostUser?.avatar) && (
             <div className="col-md-2">
-              <Link to={`/profile/${user._id}`}>
+              <Link to={`/profile/${user?.uid}`}>
                 <img
                   className="rounded-circle d-md-block"
                   src={PostUser.avatar}
@@ -65,7 +70,7 @@ function PostContainer({
             <p className="lead">{text}</p>
             <p className="lead">{title}</p>
             {/* eslint-disable-next-line no-underscore-dangle */}
-            {PostUser._id === user.uid && (
+            {PostUser?._id === user?.uid && (
               <div className="col">
                 <div className="dropdown d-flex justify-content-end">
                   <button

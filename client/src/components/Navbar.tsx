@@ -1,11 +1,10 @@
 import { Link as RouterLink } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   useColorMode,
   Switch,
   Flex,
-  Button,
   IconButton,
   Box,
   Link,
@@ -31,10 +30,17 @@ function Navbar() {
   const { isAuth, user }: AuthState = useSelector((state: any) => state.Auth);
   const dispatch = useDispatch();
   const ColorPreference = useColorModePreference();
-  const { toggleColorMode } = useColorMode();
+  const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const isDark = ColorPreference === 'dark';
+  const isDark = colorMode === 'dark';
   const [display, changeDisplay] = useState(false);
+
+  useLayoutEffect(() => {
+    if (ColorPreference === 'dark') {
+      toggleColorMode();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ColorPreference]);
   const onLogout = () => {
     localStorage.clear();
     sessionStorage.removeItem('user');

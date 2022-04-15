@@ -1,24 +1,34 @@
-import React, { useEffect } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
+import { useDispatch } from 'react-redux';
 import Navbar from './components/Navbar';
 import LandingPage from './pages/LandingPage';
 import Login from './pages/login';
 import Register from './pages/register';
-
-import { FirebaseAuth } from './FirebaseConfig';
+import { onAuthStateChanged, FirebaseAuth } from './FirebaseConfig';
 import Feeds from './pages/feeds';
+import PrivateOutlet from './components/PrivateRoute';
+import { LOGOUT, USER_LOADED } from './actions/types';
+
 // import { LOGOUT } from "./actions/types";
 
 function App() {
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (FirebaseAuth.currentUser) {
-      // Store Current User in session storage
-      sessionStorage.setItem('user', JSON.stringify(FirebaseAuth.currentUser));
-    }
+    onAuthStateChanged(FirebaseAuth, (userAuth) => {
+      if (userAuth) {
+        sessionStorage.setItem('user', JSON.stringify(userAuth));
+        dispatch({ type: USER_LOADED, payload: userAuth });
+      } else {
+        dispatch({ type: LOGOUT });
+      }
+    });
+  });
 
+  useEffect(() => {
     FirebaseAuth.onIdTokenChanged((user) => {
       if (user) {
         user.getIdToken(true).then((idToken) => {
@@ -37,7 +47,9 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/Auth/login" element={<Login />} />
         <Route path="/Auth/Register" element={<Register />} />
-        <Route path="/feeds" element={<Feeds />} />
+        <Route path="/" element={<PrivateOutlet />}>
+          <Route path="/feeds" element={<Feeds />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
