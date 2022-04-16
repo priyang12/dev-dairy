@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Box } from '@chakra-ui/react';
+import { Box, GridItem } from '@chakra-ui/react';
 import { AddLike, deletePostAction, RemoveLike } from '../actions/PostAction';
 import type { AuthState, Post } from '../actions/interfaces';
 
@@ -15,7 +15,7 @@ function PostContainer({ post }: PropTypes) {
   const { user: PostUser, likes, _id, text, title, comments, createdAt } = post;
 
   const { user }: AuthState = useSelector((state: any) => state.Auth);
-  console.log(user);
+
   const dispatch = useDispatch();
 
   const [checkDelete, setDelete] = useState(false);
@@ -50,8 +50,9 @@ function PostContainer({ post }: PropTypes) {
   };
 
   if (checkDelete) return null;
+
   return (
-    <div className="posts">
+    <GridItem bgColor="#fff" color="#333" p={10} borderRadius={20}>
       <Box as="article">
         <div className="row">
           {Boolean(PostUser?.avatar) && (
@@ -70,7 +71,7 @@ function PostContainer({ post }: PropTypes) {
             <p className="lead">{text}</p>
             <p className="lead">{title}</p>
             {/* eslint-disable-next-line no-underscore-dangle */}
-            {PostUser?._id === user?.uid && (
+            {PostUser.uid === user.uid && (
               <div className="col">
                 <div className="dropdown d-flex justify-content-end">
                   <button
@@ -144,7 +145,7 @@ function PostContainer({ post }: PropTypes) {
           </div>
         </div>
       </Box>
-    </div>
+    </GridItem>
   );
 }
 

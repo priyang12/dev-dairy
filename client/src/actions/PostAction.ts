@@ -95,8 +95,8 @@ export const AddLike =
       await axios.put(`/api/post/like/${id}`);
     } catch (err: any) {
       let errorMessage = 'Server error';
-      errorMessage = Boolean(err.response) && err.response.data.message;
-      dispatch(setAlertAction(errorMessage, false));
+      errorMessage = Boolean(err.response) && err.response.data?.message;
+
       dispatch(setAlertAction(errorMessage, false));
     }
   };

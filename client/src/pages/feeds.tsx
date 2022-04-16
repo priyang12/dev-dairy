@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Box, Flex, Grid, GridItem } from '@chakra-ui/react';
 import PostContainer from '../components/PostContainer';
@@ -21,22 +21,17 @@ function Feeds() {
   if (posts.length === 0) return <p>No posts</p>;
   if (loading) return <Spinner />;
 
-  if (alert) return <MarginContainer>{alert}</MarginContainer>;
-
-  console.log(posts);
-
   return (
     <div className="top">
-      {/* <Send /> */}
       <MarginContainer>
         {alert}
-        <Flex direction="column" gap={20}>
+        <Grid gridTemplateColumns={['2']} gap={20}>
           {posts.length > 0 &&
             posts?.map((post: Post) => (
               // eslint-disable-next-line no-underscore-dangle
               <PostContainer key={post._id} post={post} />
             ))}
-        </Flex>
+        </Grid>
       </MarginContainer>
     </div>
   );
