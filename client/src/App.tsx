@@ -10,6 +10,7 @@ import { onAuthStateChanged, FirebaseAuth } from './FirebaseConfig';
 import Feeds from './pages/feeds';
 import PrivateOutlet from './components/PrivateRoute';
 import { LOGOUT, USER_LOADED } from './actions/types';
+import SinglePost from './pages/SinglePost';
 
 // import { LOGOUT } from "./actions/types";
 
@@ -49,6 +50,9 @@ function App() {
         <Route path="/Auth/Register" element={<Register />} />
         <Route path="/" element={<PrivateOutlet />}>
           <Route path="/feeds" element={<Feeds />} />
+        </Route>
+        <Route path="/" element={<PrivateOutlet />}>
+          <Route path="/Post/:id" element={<SinglePost />} />
         </Route>
       </Routes>
     </BrowserRouter>

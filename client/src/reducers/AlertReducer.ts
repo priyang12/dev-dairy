@@ -3,7 +3,7 @@ import {
   SET_LOADING,
   STOP_LOADING,
   SET_ALERT,
-  CLEAR_ALERT
+  CLEAR_ALERT,
 } from '../actions/types';
 
 type ActionMap<M extends { [index: string]: any }> = {
@@ -30,7 +30,7 @@ export type AlertActions =
 const initialState: AlertState = {
   alert: '',
   result: false,
-  loading: 0
+  loading: 0,
 };
 
 // eslint-disable-next-line
@@ -39,24 +39,24 @@ export default (state = initialState, action: AlertActions) => {
     case SET_LOADING:
       return {
         ...state,
-        loading: action.payload + 1
+        loading: action.payload + 1,
       };
     case STOP_LOADING:
       return {
         ...state,
-        loading: action.payload - 1
+        loading: action.payload - 1,
       };
     case SET_ALERT:
       return {
         ...state,
         alert: action.payload.msg,
-        result: action.payload.result
+        result: action.payload.result,
       };
     case CLEAR_ALERT:
       return {
         ...state,
         alert: null,
-        result: false
+        result: false,
       };
     default:
       return state;

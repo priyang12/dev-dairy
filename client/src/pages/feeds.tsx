@@ -1,6 +1,6 @@
 import { useLayoutEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Box, Flex, Grid, GridItem } from '@chakra-ui/react';
+import { Grid } from '@chakra-ui/react';
 import PostContainer from '../components/PostContainer';
 import Spinner from '../components/spinner';
 import { getPostsAction } from '../actions/PostAction';

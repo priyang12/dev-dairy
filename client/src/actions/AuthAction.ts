@@ -16,7 +16,7 @@ export const loadUser =
       const res = await axios.get('/api/users/me');
       dispatch({
         type: USER_LOADED,
-        payload: res.data
+        payload: res.data,
       });
     } catch (err: any) {
       let errorMessage = 'Server error';
@@ -36,15 +36,15 @@ export const RegisterUserAction =
       // register firebase user and update display name
       const { user }: any = await FirebaseAuth.createUserWithEmailAndPassword(
         UserData.email,
-        UserData.password
+        UserData.password,
       );
       await user.updateProfile({
-        displayName: UserData.name
+        displayName: UserData.name,
       });
 
       dispatch({
         type: REGISTER_SUCCESS,
-        payload: user
+        payload: user,
       });
       dispatch(setAlertAction('User registered successfully', true));
     } catch (err: any) {
@@ -63,12 +63,12 @@ export const LoginAction =
       dispatch(setLoadingAction(1));
       const response: any = await FirebaseAuth.signInWithEmailAndPassword(
         data.email,
-        data.password
+        data.password,
       );
       const { user } = response;
       dispatch({
         type: LOGIN_SUCCESS,
-        payload: user
+        payload: user,
       });
     } catch (err: any) {
       let errorMessage = 'Server error';

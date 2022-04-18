@@ -1,5 +1,5 @@
-// @ts-nocheck
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { AddPost } from '../actions/PostAction';
 
 function Send() {
@@ -7,11 +7,11 @@ function Send() {
   const [text, setpost] = useState('');
   const onsubmit = (e: any) => {
     e.preventDefault();
-    const post = {
+    const post: any = {
       text,
       title: 'New Post',
       user: '3d5idu5RcuYWKkuuv5jVfrZHx8e2',
-      date: Date.now()
+      date: Date.now(),
     };
     dispatch(AddPost(post));
     window.location.reload();

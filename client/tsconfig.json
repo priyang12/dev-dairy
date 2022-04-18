@@ -20,6 +20,8 @@
     "src/**/*.tsx",
     "src/**/*.ts",
     "src/**/*.d.ts",
+    "**.cjs",
+    "**.config.js",
     "src/serviceworker.js"
   ]
 }

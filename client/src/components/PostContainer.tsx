@@ -135,7 +135,7 @@ function PostContainer({ post }: PropTypes) {
               </span>
             </button>
 
-            <Link to={`/post/${_id}`} className="btn btn-info mr-1">
+            <Link to={`/Post/${_id}`} className="btn btn-info mr-1">
               <span data-testid={`${_id}-comment-count`}>
                 {comments.length}
               </span>

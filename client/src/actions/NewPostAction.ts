@@ -7,12 +7,12 @@ import {
   ADD_COMMENT,
   CLEAR_POST,
   GET_POSTS,
-  GET_POST
+  GET_POST,
 } from './types';
 import {
   setLoadingAction,
   stopLoadingAction,
-  setAlertAction
+  setAlertAction,
 } from './AlertAction';
 
 // Still need Review
@@ -45,7 +45,7 @@ const callApi =
       const data = await AxiosCall();
       dispatch({
         type: Type,
-        payload: data
+        payload: data,
       });
     } catch (err: any) {
       let errorMessage = 'Server Error';

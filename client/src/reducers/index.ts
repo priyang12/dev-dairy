@@ -7,7 +7,7 @@ import AlertReducer from './AlertReducer';
 const RootReducers = combineReducers({
   Auth: AuthReducer,
   Alert: AlertReducer,
-  Post: PostReducer
+  Post: PostReducer,
 });
 
 export default RootReducers;
