@@ -20,8 +20,6 @@
     "express": "^4.17.3",
     "express-async-handler": "^1.2.0",
     "express-validator": "^6.8.0",
-    "firebase-admin": "^10.0.1",
-    "fs": "0.0.1-security",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.8",
     "morgan": "^1.10.0",

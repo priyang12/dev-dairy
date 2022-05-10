@@ -1,6 +1,6 @@
 import asyncHandler from "express-async-handler";
-import User from "../models/User";
-import admin from "firebase-admin";
+import User from "../../models/User";
+
 import { validationResult } from "express-validator";
 
 import type { Request, Response } from "express";
@@ -8,11 +8,7 @@ import type { Request, Response } from "express";
 // @route   GET api/Users/me
 // @desc    Fetch User
 // @access  Private
-export const GetUser = asyncHandler(async (req: any, res: Response) => {
-  const Token = await admin.auth().createCustomToken(req.body.uid);
-  if (!Token) throw new Error("No Uid Token were found");
-  res.json(Token);
-});
+export const GetUser = asyncHandler(async (req: Request, res: Response) => {});
 
 // @router POST api/Users/register
 // @desc Register User
@@ -45,7 +41,8 @@ export const loginUser = asyncHandler(
   async (req, res): Promise<any> => {
     const { email } = req.body;
 
-    let user = await User.findOne({ email });
+    const user = await User.findOne({ email });
+    if (!user) throw new Error("User does not exist");
 
     if (!user) throw new Error("User not found");
     return res.json(user);

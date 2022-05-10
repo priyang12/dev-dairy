@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
 import { validationResult } from "express-validator";
 //PostSchema
-import PostModal from "../models/Post";
+import PostModal from "../../models/Post";
 
 // @route    POST api/posts
 // @desc     Create a post

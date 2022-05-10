@@ -1,16 +1,15 @@
 import express, { Application } from "express";
-import { errorHandler, notFound } from "./middleware/Error";
-import connectFirebase from "./config/firebase";
+import { errorHandler, notFound } from "./API/middleware/Error";
+
 import db from "./config/db";
 import dotenv from "dotenv";
 
-import PostRoute from "./routes/PostRoute";
-import UserRoute from "./routes/UserRoute";
+import PostRoute from "./API/routes/PostRoute.routes";
+import UserRoute from "./API/routes/UserRoute.routes";
 
 dotenv.config();
 
 db();
-connectFirebase();
 
 const app: Application = express();
 

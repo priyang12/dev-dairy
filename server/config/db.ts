@@ -1,5 +1,5 @@
-import { connect } from 'mongoose';
-import keys from './keys';
+import { connect } from "mongoose";
+import keys from "./keys";
 
 const db: any = keys.mongoURL;
 
@@ -11,7 +11,7 @@ const connectDB = async () => {
       useUnifiedTopology: true,
       useFindAndModify: false,
     });
-    console.log(' DB connected');
+    console.log(" DB connected");
   } catch (error: any) {
     console.error(error.message);
     process.exit(1);

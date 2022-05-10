@@ -1,6 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import { auth as getAuth } from "firebase-admin";
-import User from "../models/User";
+import User from "../../models/User";
 
 export default async (req: any, res: Response, next: NextFunction) => {
   const token = req.header("x-auth-token");
