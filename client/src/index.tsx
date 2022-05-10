@@ -10,6 +10,8 @@ import App from './App';
 
 const Store = createStoreWithMiddleware();
 
+const ApiUrl = '/mock';
+
 if (process.env.NODE_ENV === 'development') {
   worker.start({ onUnhandledRequest: 'bypass' });
 }
@@ -22,7 +24,7 @@ ReactDOM.render(
       </ChakraProvider>
     </Provider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );
 
 serviceWorker.unregister();

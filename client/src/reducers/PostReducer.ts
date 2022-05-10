@@ -1,4 +1,4 @@
-import type { Post, PostState } from '../actions/interfaces';
+import type { Comment, Post, PostState } from '../actions/interfaces';
 import {
   ADD_POST,
   ADD_COMMENT,
@@ -20,7 +20,7 @@ type ActionMap<M extends { [index: string]: any }> = {
 };
 type PostPayload = {
   [ADD_POST]: Post;
-  [ADD_COMMENT]: null;
+  [ADD_COMMENT]: Comment;
   [CLEAR_POST]: null;
   [GET_POSTS]: Post[];
   [GET_POST]: Post;
@@ -41,9 +41,7 @@ export default (state = init, action: PostActions) => {
     case GET_POSTS:
       return {
         ...state,
-        loading: false,
         posts: action.payload,
-        error: null,
       };
     case ADD_POST:
       return {
@@ -53,23 +51,26 @@ export default (state = init, action: PostActions) => {
     case DELETE_POST:
       return {
         ...state,
-        // eslint-disable-next-line
         posts: state.posts.filter((post) => post._id !== action.payload),
       };
     case ADD_COMMENT:
+      if (state.post) {
+        return {
+          ...state,
+          post: {
+            ...state.post,
+            comments: [action.payload, ...state.post.comments],
+          },
+        };
+      }
       return {
         ...state,
-        post: { ...state.post, comments: action.payload },
-        loading: false,
-        error: null,
       };
 
     case GET_POST:
       return {
         ...state,
         post: action.payload,
-        loading: false,
-        error: null,
       };
     case CLEAR_POST:
       return {

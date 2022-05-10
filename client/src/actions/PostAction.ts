@@ -15,7 +15,7 @@ import {
 } from './AlertAction';
 import type { PostActions } from '../reducers/PostReducer';
 import type { AlertActions } from '../reducers/AlertReducer';
-import type { Post } from './interfaces';
+import type { Comment, Post } from './interfaces';
 
 // Get Posts
 export const getPostsAction = () => async (dispatch: Dispatch<PostActions>) => {
@@ -58,8 +58,9 @@ export const deletePostAction =
 export const GetPost =
   (id: string) => async (dispatch: Dispatch<PostActions | AlertActions>) => {
     try {
+      dispatch(setLoadingAction(1));
+      console.log(id);
       const res = await axios.get(`/api/posts/${id}`);
-
       dispatch({
         type: GET_POST,
         payload: res.data,
@@ -68,6 +69,8 @@ export const GetPost =
       let errorMessage = 'Server error';
       errorMessage = Boolean(err.response) && err.response.data.message;
       dispatch(setAlertAction(errorMessage, false));
+    } finally {
+      dispatch(stopLoadingAction(1));
     }
   };
 
@@ -92,7 +95,7 @@ export const AddPost =
 export const AddLike =
   (id: string) => async (dispatch: Dispatch<PostActions>) => {
     try {
-      await axios.put(`/api/post/like/${id}`);
+      await axios.put(`/api/posts/like/${id}`);
     } catch (err: any) {
       let errorMessage = 'Server error';
       errorMessage = Boolean(err.response) && err.response.data?.message;
@@ -104,7 +107,7 @@ export const AddLike =
 export const RemoveLike =
   (id: string) => async (dispatch: Dispatch<PostActions | AlertActions>) => {
     try {
-      await axios.put(`/api/post/unlike/${id}`);
+      await axios.put(`/api/posts/unlike/${id}`);
     } catch (err: any) {
       let errorMessage = 'Server error';
       errorMessage = Boolean(err.response) && err.response.data.message;
@@ -114,14 +117,14 @@ export const RemoveLike =
 
 // //post comment
 export const PostComment =
-  (comment: any, id: string) =>
+  (id: string, comment: Comment) =>
   async (dispatch: Dispatch<PostActions | AlertActions>) => {
     try {
-      const res = await axios.post(`/api/posts/comment/${id}`, comment);
       dispatch({
         type: ADD_COMMENT,
-        payload: res.data,
+        payload: comment,
       });
+      const res = await axios.post(`/api/posts/comment/${id}`, comment);
     } catch (err: any) {
       let errorMessage = 'Server error';
       errorMessage = Boolean(err.response) && err.response.data.message;

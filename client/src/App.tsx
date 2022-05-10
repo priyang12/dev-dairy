@@ -2,15 +2,15 @@ import { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { useDispatch } from 'react-redux';
+import { onAuthStateChanged, FirebaseAuth } from './FirebaseConfig';
 import Navbar from './components/Navbar';
 import LandingPage from './pages/LandingPage';
 import Login from './pages/login';
 import Register from './pages/register';
-import { onAuthStateChanged, FirebaseAuth } from './FirebaseConfig';
 import Feeds from './pages/feeds';
+import Post from './pages/Post';
 import PrivateOutlet from './components/PrivateRoute';
 import { LOGOUT, USER_LOADED } from './actions/types';
-import SinglePost from './pages/SinglePost';
 
 // import { LOGOUT } from "./actions/types";
 
@@ -52,7 +52,7 @@ function App() {
           <Route path="/feeds" element={<Feeds />} />
         </Route>
         <Route path="/" element={<PrivateOutlet />}>
-          <Route path="/Post/:id" element={<SinglePost />} />
+          <Route path="/Post/:id" element={<Post />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -23,14 +23,15 @@ export interface Post {
 }
 
 export interface Comment {
-  uid: string;
+  commentingUser: boolean;
+  _id: string;
   text: string;
   user: {
     uid: string;
     name: string;
     photoURL: string;
   };
-  createdAt: string;
+  createdAt?: string;
 }
 
 export interface PostState {

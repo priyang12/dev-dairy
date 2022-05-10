@@ -29,7 +29,7 @@ module.exports = {
   rules: {
     quotes: 'off',
     'no-underscore-dangle': 'off',
-    'no-console': 'error',
+    'no-console': 'off',
     'prettier/prettier': 0,
     // TypeScript
     '@typescript-eslint/consistent-type-imports': 'warn',

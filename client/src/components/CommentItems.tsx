@@ -1,16 +1,17 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import type { AuthState, PostState, Comment } from '../actions/interfaces';
+import type { AuthState, Comment } from '../actions/interfaces';
 import { DeleteComment } from '../actions/PostAction';
 
-function CommentItems({ postId }: { postId: string }) {
-  const { comments }: PostState = useSelector((state: any) => state.Post);
-  const { isAuth, user }: AuthState = useSelector((state: any) => state.Auth);
-  if (comments.length === 0) {
-    // Return no comment if there is no comment container
-    return <h2>No comments yet</h2>;
-  }
+function CommentItems({
+  comments,
+  postUserId,
+}: {
+  comments: Comment[];
+  postUserId: string;
+}) {
+  const { user }: AuthState = useSelector((state: any) => state.Auth);
   return (
     <div className="comments p-3 m-3">
       <h4 className="text-center">Comments</h4>
@@ -33,9 +34,9 @@ function CommentItems({ postId }: { postId: string }) {
                 {comment.createdAt}
               </p>
 
-              {user?.uid === comment.user.uid && (
+              {comment.commentingUser && comment.user.uid === postUserId && (
                 <button
-                  onClick={() => DeleteComment(postId, comment.uid)}
+                  onClick={() => DeleteComment(postUserId, comment._id)}
                   type="button"
                   className="btn btn-danger px-5"
                 >

@@ -1,5 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-import React from 'react';
 import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
 import faker from '@faker-js/faker';

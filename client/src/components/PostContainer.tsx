@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -52,7 +51,7 @@ function PostContainer({ post }: PropTypes) {
   if (checkDelete) return null;
 
   return (
-    <GridItem bgColor="#fff" color="#333" p={10} borderRadius={20}>
+    <GridItem bgColor="gray.500" color="#fff" p={10} borderRadius={20}>
       <Box as="article">
         <div className="row">
           {Boolean(PostUser?.avatar) && (
@@ -68,9 +67,8 @@ function PostContainer({ post }: PropTypes) {
             </div>
           )}
           <div className="col-md-10">
-            <p className="lead">{text}</p>
             <p className="lead">{title}</p>
-            {/* eslint-disable-next-line no-underscore-dangle */}
+            <p className="lead">{text}</p>
             {PostUser.uid === user.uid && (
               <div className="col">
                 <div className="dropdown d-flex justify-content-end">
