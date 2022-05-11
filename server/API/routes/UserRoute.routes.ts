@@ -7,11 +7,12 @@ import {
 } from "../controllers/UserController";
 import validate from "../middleware/Validation";
 import auth from "../middleware/auth";
+import Container from "typedi";
 
-const router: Router = Router();
+export default (app: Router) => {
+  const agendaInstance = Container.get("agendaInstance");
 
-router.route("/register").post(validate("RegisterUser"), registerUser);
-router.route("/login").post(validate("loginUser"), loginUser);
-router.route("/me").get(GetUser).put(auth, UpdateUser);
-
-export default router;
+  app.route("/register").post(validate("RegisterUser"), registerUser);
+  app.route("/login").post(validate("loginUser"), loginUser);
+  app.route("/me").get(GetUser).put(auth, UpdateUser);
+};

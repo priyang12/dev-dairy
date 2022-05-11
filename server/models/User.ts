@@ -1,9 +1,10 @@
 import { Schema, model, ObjectId } from "mongoose";
 import type { Model, Document } from "mongoose";
 
-interface IUser extends Document {
+export interface IUser extends Document {
   _id: ObjectId;
   email: string;
+  password: string;
   user: string;
   ImageUrl: string;
 }
@@ -23,6 +24,10 @@ const UserSchema = new Schema({
     type: String,
     required: true,
     unique: true,
+  },
+  password: {
+    type: String,
+    required: true,
   },
   ImageUrl: {
     type: String,

@@ -1,31 +1,28 @@
-import express, { Application } from "express";
-import { errorHandler, notFound } from "./API/middleware/Error";
+import "reflect-metadata";
 
-import db from "./config/db";
-import dotenv from "dotenv";
+import keys from "./config/keys";
 
-import PostRoute from "./API/routes/PostRoute.routes";
-import UserRoute from "./API/routes/UserRoute.routes";
+import express from "express";
 
-dotenv.config();
+import Logger from "./loaders/logger";
 
-db();
+async function startServer() {
+  const app = express();
 
-const app: Application = express();
+  await require("./loaders").default({ expressApp: app });
 
-//init middleware
-app.use(express.json());
+  app
+    .listen(keys.Port, () => {
+      Logger.info(`
+      ################################################
+       Server listening on port: ${keys.Port} 
+      ################################################
+    `);
+    })
+    .on("error", (err) => {
+      Logger.error(err);
+      process.exit(1);
+    });
+}
 
-//define routes
-app.use("/api/test", (req, res) => {
-  res.send("Test");
-});
-app.use("/api/Users", UserRoute);
-app.use("/api/Posts", PostRoute);
-
-app.use(notFound);
-app.use(errorHandler);
-
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => console.log(`server started on port${PORT}`));
+startServer();
