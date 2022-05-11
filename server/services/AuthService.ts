@@ -1,64 +1,50 @@
 import { Service, Inject } from "typedi";
-import jwt from "jsonwebtoken";
-import keys from "../config/keys";
-import argon2 from "argon2";
 import { randomBytes } from "crypto";
-
-import {
-  EventDispatcher,
-  EventDispatcherInterface,
-} from "../decorators/eventDispatcher";
-import events from "../subscribers/events";
 import { Model } from "mongoose";
 import { IUser } from "../models/User";
 import { Logger } from "winston";
-
+import jwt from "jsonwebtoken";
+import argon2 from "argon2";
 @Service()
 export default class AuthService {
   constructor(
     @Inject("userModel") private userModel: Model<IUser>,
-    @Inject("logger") private logger: Logger,
-    @EventDispatcher() private eventDispatcher: EventDispatcherInterface
+    @Inject("logger") private logger: Logger
   ) {}
 
   public async SignUp(
     userInputDTO: any
   ): Promise<{ user: any; token: string }> {
-    try {
-      // Check if user exists
-      const emailExists = await this.userModel.findOne({
-        email: userInputDTO.email,
-      });
-      if (emailExists) {
-        throw new Error("User already exists");
-      }
-      const salt = randomBytes(32);
-      const hashedPassword = await argon2.hash(userInputDTO.password, { salt });
-
-      const userRecord = await this.userModel.create({
-        ...userInputDTO,
-        password: hashedPassword,
-      });
-      this.logger.silly(`User created: ${userRecord}`);
-      if (!userRecord) {
-        throw new Error("User cannot be created");
-      }
-      const token = this.generateToken(userRecord);
-
-      /**
-       * @TODO This is not the best way to deal with this
-       * There should exist a 'Mapper' layer
-       * that transforms data from layer to layer
-       * but that's too over-engineering for now
-       */
-      const user = userRecord.toObject();
-      Reflect.deleteProperty(user, "password");
-      Reflect.deleteProperty(user, "salt");
-      return { user, token };
-    } catch (e) {
-      this.logger.error(e);
-      throw e;
+    // Check if user exists
+    const emailExists = await this.userModel.findOne({
+      email: userInputDTO.email,
+    });
+    if (emailExists) {
+      throw new Error("User already exists");
     }
+    const salt = randomBytes(32);
+    const hashedPassword = await argon2.hash(userInputDTO.password, { salt });
+
+    const userRecord = await this.userModel.create({
+      ...userInputDTO,
+      password: hashedPassword,
+    });
+    this.logger.silly(`User created: ${userRecord}`);
+    if (!userRecord) {
+      throw new Error("User cannot be created");
+    }
+    const token = this.generateToken(userRecord);
+
+    /**
+     * @TODO This is not the best way to deal with this
+     * There should exist a 'Mapper' layer
+     * that transforms data from layer to layer
+     * but that's too over-engineering for now
+     */
+    const user = userRecord.toObject();
+    Reflect.deleteProperty(user, "password");
+
+    return { user, token };
   }
 
   public async Login(
@@ -80,9 +66,6 @@ export default class AuthService {
       const user = userRecord.toObject();
       Reflect.deleteProperty(user, "password");
 
-      /**
-       * Easy as pie, you don't need passport.js anymore :)
-       */
       return { user, token };
     } else {
       throw new Error("Invalid Password");

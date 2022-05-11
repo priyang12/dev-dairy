@@ -19,17 +19,17 @@ export default class UserService {
     @Inject("logger") private logger: Logger
   ) {}
 
-  public async GetUser(user: any): Promise<{ user: any }> {
+  public async GetUser(user: any): Promise<{ user: IUser }> {
     //  @TODO Add Emitter here
-    return { user };
+    return user;
   }
 
   public async UpdateUser(
     User: IUser,
     userInputDTO: any
-  ): Promise<{ User: any }> {
-    if (userInputDTO.name) {
-      User.username = userInputDTO.name;
+  ): Promise<{ user: IUser; message: string }> {
+    if (userInputDTO) {
+      User.username = userInputDTO.username;
       User.ImageUrl = userInputDTO.ImageUrl;
       if (userInputDTO.password) {
         const salt = randomBytes(32);
@@ -41,15 +41,18 @@ export default class UserService {
 
       await User.save();
 
-      return { User };
+      return {
+        user: User,
+        message: "User updated",
+      };
     }
+    throw new Error("User cannot be updated");
   }
   public async DeleteUser(UserId: string): Promise<{ message: string }> {
     const User = await this.userModel.findByIdAndDelete(UserId);
     if (!User) {
       throw new Error("User cannot be deleted");
     }
-
     return { message: "User deleted" };
   }
 }

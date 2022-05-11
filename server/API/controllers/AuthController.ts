@@ -1,9 +1,10 @@
 import asyncHandler from "express-async-handler";
-import User from "../../models/User";
+import User, { IUser } from "../../models/User";
 
 import { validationResult } from "express-validator";
 
 import type { Request, Response } from "express";
+
 import AuthService from "../../services/AuthService";
 import Container from "typedi";
 import UserService from "../../services/UserService";
@@ -11,10 +12,14 @@ import UserService from "../../services/UserService";
 // @route   GET api/Users/me
 // @desc    Fetch User
 // @access  Private
-export const GetUser = asyncHandler(async (req: any, res: Response) => {
-  const authServiceInstance = Container.get(UserService);
-  const user = await authServiceInstance.GetUser(req.user);
-});
+export const GetUser = asyncHandler(
+  async (req: any, res: Response): Promise<any> => {
+    const authServiceInstance = Container.get(UserService);
+    const user = await authServiceInstance.GetUser(req.user);
+
+    return res.status(200).json(user);
+  }
+);
 
 // @router POST api/Users/register
 // @desc Register User
@@ -22,6 +27,7 @@ export const GetUser = asyncHandler(async (req: any, res: Response) => {
 export const registerUser = asyncHandler(
   async (req, res): Promise<any> => {
     const errors = validationResult(req);
+
     if (!errors.isEmpty()) {
       res.status(422).json({ errors: errors.array() });
       return;
@@ -55,15 +61,24 @@ export const loginUser = asyncHandler(
 // @desc Update User Info
 // @access private
 export const UpdateUser = asyncHandler(
-  async (req, res): Promise<any> => {
-    const { email, ImageUrl } = req.body;
+  async (req: any, res): Promise<any> => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+    const authServiceInstance = Container.get(UserService);
+    const user = await authServiceInstance.UpdateUser(req.user, req.body);
+    return res.status(200).json(user);
+  }
+);
 
-    //Check if user exists
-    let user = await User.findOne({ email });
-    if (!user) throw new Error("User not found");
-    // Update user
-    user.email = email;
-    user.ImageUrl = ImageUrl;
-    await user.save();
+// @router DELETE api/users/delete
+// @desc Delete User
+// @access private
+export const DeleteUser = asyncHandler(
+  async (req: any, res: Response): Promise<any> => {
+    const authServiceInstance = Container.get(UserService);
+    const data = await authServiceInstance.DeleteUser(req.user._id);
+    return res.status(200).json(data);
   }
 );
