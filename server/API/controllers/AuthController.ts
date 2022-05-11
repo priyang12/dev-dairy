@@ -4,11 +4,17 @@ import User from "../../models/User";
 import { validationResult } from "express-validator";
 
 import type { Request, Response } from "express";
+import AuthService from "../../services/AuthService";
+import Container from "typedi";
+import UserService from "../../services/UserService";
 
 // @route   GET api/Users/me
 // @desc    Fetch User
 // @access  Private
-export const GetUser = asyncHandler(async (req: Request, res: Response) => {});
+export const GetUser = asyncHandler(async (req: any, res: Response) => {
+  const authServiceInstance = Container.get(UserService);
+  const user = await authServiceInstance.GetUser(req.user);
+});
 
 // @router POST api/Users/register
 // @desc Register User
@@ -20,17 +26,9 @@ export const registerUser = asyncHandler(
       res.status(422).json({ errors: errors.array() });
       return;
     }
-    const { username, email, uid, ImageUrl } = req.body;
-    const userExists = await User.findOne({ email });
-    if (userExists) throw new Error("User already exists");
-    const user = new User({
-      uid,
-      username,
-      email,
-      ImageUrl,
-    });
-    user.save();
-    return res.status(201).json({ msg: "User created" });
+    const authServiceInstance = Container.get(AuthService);
+    const { user, token } = await authServiceInstance.SignUp(req.body);
+    return res.status(201).json({ user, token });
   }
 );
 
@@ -39,13 +37,17 @@ export const registerUser = asyncHandler(
 // @access Admin
 export const loginUser = asyncHandler(
   async (req, res): Promise<any> => {
-    const { email } = req.body;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
 
-    const user = await User.findOne({ email });
-    if (!user) throw new Error("User does not exist");
-
-    if (!user) throw new Error("User not found");
-    return res.json(user);
+    const authServiceInstance = Container.get(AuthService);
+    const { user, token } = await authServiceInstance.Login(
+      req.body.email,
+      req.body.password
+    );
+    return res.status(200).json({ user, token });
   }
 );
 

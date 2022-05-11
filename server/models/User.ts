@@ -3,19 +3,14 @@ import type { Model, Document } from "mongoose";
 
 export interface IUser extends Document {
   _id: ObjectId;
+  username: string;
   email: string;
   password: string;
-  user: string;
   ImageUrl: string;
 }
 
 // Create Schema
 const UserSchema = new Schema({
-  uid: {
-    type: String,
-    required: true,
-    unique: true,
-  },
   username: {
     type: String,
     required: true,
@@ -31,7 +26,6 @@ const UserSchema = new Schema({
   },
   ImageUrl: {
     type: String,
-    required: true,
   },
   date: {
     type: Date,

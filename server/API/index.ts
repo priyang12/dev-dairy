@@ -1,5 +1,5 @@
 import { Router } from "express";
-import auth from "./routes/UserRoute.routes";
+import auth from "./routes/Auth.routes";
 import agendash from "./routes/agenda.routes";
 
 // guaranteed to get dependencies

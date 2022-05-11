@@ -14,7 +14,7 @@ export default async ({ expressApp }: any) => {
    *
    * We are injecting the mongoose models into the DI container.
    * I know this is controversial but will provide a lot of flexibility at the time
-   * of writing unit tests, just go and check how beautiful they are!
+   * of writing unit te sts, just go and check how beautiful they are!
    */
 
   const userModel = {

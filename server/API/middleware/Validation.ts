@@ -4,12 +4,14 @@ const validate: any = (method: string) => {
   switch (method) {
     case "RegisterUser": {
       return [
-        body("uid", "Invalid id").notEmpty(),
         body("username", "Username needs to max 8 characters")
           .notEmpty()
           .isLength({ max: 8 }),
         body("email", "Invalid email").isEmail(),
-        body("ImageUrl", "Invalid email").notEmpty().isURL(),
+        body(
+          "password",
+          "Password needs to be at least 6 characters"
+        ).notEmpty(),
       ];
     }
     case "loginUser": {
