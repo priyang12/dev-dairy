@@ -6,6 +6,8 @@ export interface IPost extends Document {
   title: string;
   description: string;
   project: string;
+  status: string;
+  roadMap: any;
   date: Date;
 }
 
@@ -28,6 +30,15 @@ const PostSchema = new Schema({
     type: Schema.Types.ObjectId,
     required: true,
     ref: "Project",
+  },
+  status: {
+    type: String,
+    required: true,
+  },
+  roadMap: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: "roadMap",
   },
   date: {
     type: Date,

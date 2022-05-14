@@ -1,7 +1,7 @@
 import * as express from "express";
 
 declare global {
-  namespace Express {
+  declare namespace Express {
     export interface Request {
       user: {
         _id: string;

@@ -64,6 +64,50 @@ export const UpdateProject = asyncHandler(
   }
 );
 
+// @router PUT api/projects/:id/roadMap
+// @desc Add  New RoadMap
+// @access Private
+export const AddRoadMap = asyncHandler(
+  async (req: any, res: Response): Promise<any> => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json(errors.array());
+    }
+    const projectServiceInstance = Container.get(ProjectService);
+    const message = await projectServiceInstance.AddRoadMap(
+      req.user._id,
+      req.params.id,
+      req.body
+    );
+    return res.status(200).json(message);
+  }
+);
+
+// @router DELETE api/projects/:id/roadMap
+// @desc delete  New RoadMap
+// @access Private
+export const DeleteRoadMap = asyncHandler(
+  async (req: any, res: Response): Promise<any> => {
+    const deleteId = req.header("deleteId");
+    if (!deleteId) {
+      return res.status(422).json({
+        errors: [
+          {
+            msg: "Please provide deleteId",
+          },
+        ],
+      });
+    }
+    const projectServiceInstance = Container.get(ProjectService);
+    const message = await projectServiceInstance.DeleteRoadMap(
+      req.user._id,
+      req.params.id,
+      deleteId
+    );
+    return res.status(200).json(message);
+  }
+);
+
 // @router DELETE api/projects/:id
 // @desc Delete Project
 // @access Private

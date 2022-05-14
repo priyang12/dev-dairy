@@ -18,6 +18,11 @@ const road = new Schema({
     type: String,
     required: true,
   },
+  color: {
+    type: String,
+    required: true,
+    default: "white",
+  },
   progress: {
     type: Number,
     required: true,

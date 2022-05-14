@@ -1,236 +1,93 @@
-import { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
+
 import { validationResult } from "express-validator";
-//PostSchema
-import PostModal from "../../models/Post";
 
-// @route    POST api/posts
-// @desc     Create a post
-// @access   Private
-export const NewPost = asyncHandler(
-  async (req: Request, res: Response): Promise<any> => {
-    const Post = new PostModal({
-      user: req.user._id,
-      title: req.body.title,
-      description: req.body.description,
-      name: req.body.name,
-    });
-    await Post.save();
-    res.status(200).json({
-      success: true,
-      data: {
-        msg: `${Post.title} created successfully`,
-      },
-    });
+import type { Request, Response } from "express";
+
+import PostService from "../../services/PostService";
+import Container from "typedi";
+
+// @route   GET api/posts
+// @desc    Fetch User Projects
+// @access  Private
+export const GetPosts = asyncHandler(
+  async (req: any, res: Response): Promise<any> => {
+    const projectServiceInstance = Container.get(PostService);
+    const projects = await projectServiceInstance.GetAllPost(req.user._id);
+    return res.status(200).json(projects);
   }
 );
 
-// @route    GET api/Posts/:id
-// @desc     Get post by ID
-// @access   Private
-export const GetPost = asyncHandler(
-  async (req: Request, res: Response): Promise<any> => {
-    const post = await PostModal.findById(req.params.id);
-
-    if (!post) {
-      return res.status(404).json({
-        success: false,
-        error: "Post not found",
-      });
-    } else {
-      res.status(200).json({
-        success: true,
-        data: post,
-      });
-    }
-  }
-);
-
-// @route    GET api/Posts
-// @desc     Get all posts
-// @access   Private
-export const GetAllPosts = asyncHandler(async (req: Request, res: Response) => {
-  const posts = await PostModal.find().sort({ date: -1 });
-  res.status(200).json({
-    success: true,
-    count: posts.length,
-    data: posts,
-  });
-});
-
-// @route    DELETE api/Posts/:id
-// @desc     Delete a post
-// @access   Private
-export const DeletePost = asyncHandler(
-  async (req: Request, res: Response): Promise<any> => {
-    const post = await PostModal.findById(req.params.id);
-
-    if (!post) {
-      return res.status(404).json({
-        success: false,
-        error: "Post not found",
-      });
-    }
-
-    await post.remove();
-
-    res.status(200).json({
-      success: true,
-      data: {
-        msg: "Post has been removed",
-      },
-    });
-  }
-);
-
-// @route    PUT api/posts/like/:id
-// @desc     Like a post
-// @access   Private
-export const AddLike = asyncHandler(
-  async (req: Request, res: Response): Promise<any> => {
-    const post = await PostModal.findById(req.params.id);
-
-    if (!post) {
-      return res.status(404).json({
-        success: false,
-        error: "Post not found",
-      });
-    }
-
-    if (
-      post.likes.filter((like) => like.user.toString() === req.user._id)
-        .length > 0
-    ) {
-      return res.status(400).json({
-        success: false,
-        error: "Post already liked",
-      });
-    }
-
-    post.likes.unshift({ user: req.user._id });
-
-    await post.save();
-
-    res.status(200).json({
-      success: true,
-      data: post,
-    });
-  }
-);
-
-// @route    PUT api/posts/unlike/:id
-// @desc     Unlike a Put
-// @access   Private
-export const UnlikePost = asyncHandler(
-  async (req: Request, res: Response): Promise<any> => {
-    const post = await PostModal.findById(req.params.id);
-
-    if (!post) {
-      return res.status(404).json({
-        success: false,
-        error: "Post not found",
-      });
-    }
-
-    if (
-      post.likes.filter((like) => like.user.toString() === req.user._id)
-        .length === 0
-    ) {
-      return res.status(400).json({
-        success: false,
-        error: "Post has not yet been liked",
-      });
-    }
-
-    const removeIndex = post.likes
-      .map((like) => like.user.toString())
-      .indexOf(req.user._id);
-
-    post.likes.splice(removeIndex, 1);
-
-    await post.save();
-
-    res.status(200).json({
-      success: true,
-      data: post,
-    });
-  }
-);
-
-// @route    POST api/posts/comment/:id
-// @desc     Comment on a post
-// @access   Private
-export const AddComment = asyncHandler(
-  async (req: Request, res: Response): Promise<any> => {
-    const post = await PostModal.findById(req.params.id);
-
-    if (!post) {
-      return res.status(404).json({
-        success: false,
-        error: "Post not found",
-      });
-    }
-
-    const newComment = {
-      text: req.body.text,
-      name: req.body.name,
-      user: req.user._id,
-    };
-
-    post.comments.unshift(newComment);
-
-    await post.save();
-
-    res.status(200).json({
-      success: true,
-      data: post,
-    });
-  }
-);
-
-// @route    DELETE api/posts/comment/:id/:comment_id
-// @desc     Delete comment
-// @access   Private
-export const DeleteComment = asyncHandler(
-  async (req: Request, res: Response): Promise<any> => {
-    const post = await PostModal.findById(req.params.id);
-
-    if (!post) {
-      return res.status(404).json({
-        success: false,
-        error: "Post not found",
-      });
-    }
-
-    const comment = post.comments.find(
-      (comment) => comment.user === req.params.comment_id
+// @router GET api/posts/project/:id
+// @desc Get project posts
+// @access Private
+export const GetProjectPosts = asyncHandler(
+  async (req: any, res: Response): Promise<any> => {
+    const projectServiceInstance = Container.get(PostService);
+    const project = await projectServiceInstance.GetAllPostByProject(
+      req.params.id
     );
+    return res.status(200).json(project);
+  }
+);
 
-    if (!comment) {
-      return res.status(404).json({
-        success: false,
-        error: "Comment not found",
-      });
+// @router GET api/posts/:id
+// @desc Get project posts
+// @access Private
+export const GetPost = asyncHandler(
+  async (req: any, res: Response): Promise<any> => {
+    const projectServiceInstance = Container.get(PostService);
+    const project = await projectServiceInstance.GetPost(
+      req.user._id,
+      req.params.id
+    );
+    return res.status(200).json(project);
+  }
+);
+
+// @router POST api/posts
+// @desc Create Post
+// @access Private
+export const CreatePost = asyncHandler(
+  async (req: any, res: Response): Promise<any> => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json(errors.array());
     }
+    const projectServiceInstance = Container.get(PostService);
+    const message = await projectServiceInstance.CreatePost(
+      req.user._id,
+      req.body
+    );
+    return res.status(201).json(message);
+  }
+);
 
-    if (comment.user.toString() !== req.user._id) {
-      return res.status(401).json({
-        success: false,
-        error: "User not authorized",
-      });
-    }
+// @router PUT api/posts/:id
+// @desc Update Post
+// @access Private
+export const UpdatePost = asyncHandler(
+  async (req: any, res: Response): Promise<any> => {
+    const projectServiceInstance = Container.get(PostService);
+    const message = await projectServiceInstance.UpdatePost(
+      req.user._id,
+      req.params.id,
+      req.body
+    );
+    return res.status(200).json(message);
+  }
+);
 
-    const removeIndex = post.comments
-      .map((comment) => comment.user.toString())
-      .indexOf(req.user._id);
-
-    post.comments.splice(removeIndex, 1);
-
-    await post.save();
-
-    res.status(200).json({
-      success: true,
-      data: post,
-    });
+// @router DELETE api/posts/:id
+// @desc Delete Post
+// @access Private
+export const DeletePost = asyncHandler(
+  async (req: any, res: Response): Promise<any> => {
+    const projectServiceInstance = Container.get(PostService);
+    const message = await projectServiceInstance.DeletePost(
+      req.user._id,
+      req.params.id
+    );
+    return res.status(200).json(message);
   }
 );

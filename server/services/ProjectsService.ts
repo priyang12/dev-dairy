@@ -38,7 +38,7 @@ export default class UserService {
   public async PostProject(
     userId: string,
     project: IProject
-  ): Promise<{ message: string }> {
+  ): Promise<{ message: string; result: boolean }> {
     const newProject = await this.ProjectModel.create({
       ...project,
       user: userId,
@@ -49,6 +49,7 @@ export default class UserService {
     }
     this.logger.info("Project created");
     return {
+      result: true,
       message: `Project ${newProject.title} created`,
     };
   }
@@ -56,7 +57,7 @@ export default class UserService {
     userId: string,
     projectId: string,
     project: IProject
-  ): Promise<{ message: string }> {
+  ): Promise<{ message: string; result: boolean }> {
     const updatedProject = await this.ProjectModel.findOneAndUpdate(
       { _id: projectId, user: userId },
       { $set: project },
@@ -68,13 +69,52 @@ export default class UserService {
     }
     this.logger.info("Project updated");
     return {
+      result: true,
       message: `Project ${updatedProject.title} updated`,
     };
   }
+  public async AddRoadMap(userId: string, projectId: string, roadmap: any) {
+    const updatedProject = await this.ProjectModel.findOneAndUpdate(
+      { _id: projectId, user: userId },
+      { $push: { roadMap: roadmap } },
+      { new: true }
+    ).exec();
+    if (!updatedProject) {
+      this.logger.error("Roadmap not added");
+      throw new Error("Roadmap not added");
+    }
+    this.logger.info("Roadmap added");
+    return {
+      result: true,
+      message: `Roadmap ${updatedProject.title} added`,
+    };
+  }
+
+  public async DeleteRoadMap(
+    userId: string,
+    projectId: string,
+    roadMapId: string
+  ) {
+    const updatedProject = await this.ProjectModel.findOneAndUpdate(
+      { _id: projectId, user: userId },
+      { $pull: { roadMap: { _id: roadMapId } } },
+      { new: true }
+    ).exec();
+    if (!updatedProject) {
+      this.logger.error("Roadmap not deleted");
+      throw new Error("Roadmap not deleted");
+    }
+    this.logger.info("Roadmap deleted");
+    return {
+      result: true,
+      message: `Roadmap from ${updatedProject.title} is deleted`,
+    };
+  }
+
   public async DeleteProject(
     userId: string,
     projectId: string
-  ): Promise<{ message: string }> {
+  ): Promise<{ message: string; result: boolean }> {
     const deletedProject = await this.ProjectModel.findOneAndDelete({
       _id: projectId,
       user: userId,
@@ -86,6 +126,7 @@ export default class UserService {
     }
     this.logger.info("Project deleted");
     return {
+      result: true,
       message: `Project ${deletedProject.title} deleted`,
     };
   }
