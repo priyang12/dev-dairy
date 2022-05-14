@@ -1,13 +1,14 @@
 import { Router } from "express";
-import auth from "./routes/Auth.routes";
-import user from "./routes/User.routes";
-import agendash from "./routes/agenda.routes";
+import AuthRoutes from "./routes/Auth.routes";
+import UserRoutes from "./routes/User.routes";
+import agendas from "./routes/agenda.routes";
+import ProjectRoutes from "./routes/Project.routes";
 
-// guaranteed to get dependenciess
 export default () => {
   const app = Router();
-  auth(app);
-  user(app);
-  agendash(app);
+  AuthRoutes(app);
+  UserRoutes(app);
+  ProjectRoutes(app);
+  agendas(app);
   return app;
 };

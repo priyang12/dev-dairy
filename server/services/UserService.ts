@@ -1,12 +1,7 @@
 import { Service, Inject } from "typedi";
-import jwt from "jsonwebtoken";
+
 import argon2 from "argon2";
 import { randomBytes } from "crypto";
-
-import {
-  EventDispatcher,
-  EventDispatcherInterface,
-} from "../decorators/eventDispatcher";
 
 import { Model } from "mongoose";
 import { IUser } from "../models/User";
