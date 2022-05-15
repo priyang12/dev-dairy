@@ -1,46 +1,38 @@
+import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
-import { useDispatch } from 'react-redux';
-import { onAuthStateChanged, FirebaseAuth } from './FirebaseConfig';
 import Navbar from './components/Navbar';
 import LandingPage from './pages/LandingPage';
 import Login from './pages/login';
 import Register from './pages/register';
-import Feeds from './pages/feeds';
-import Post from './pages/Post';
+import Feeds from './pages/Feeds';
 import PrivateOutlet from './components/PrivateRoute';
-import { LOGOUT, USER_LOADED } from './actions/types';
+import { setToken } from './features/AuthSlice';
+import { useGetUserQuery } from './API/UserAPI';
+import Spinner from './components/spinner';
 
 // import { LOGOUT } from "./actions/types";
 
 function App() {
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
+
+  const { isLoading } = useGetUserQuery(cookies.token);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
-    onAuthStateChanged(FirebaseAuth, (userAuth) => {
-      if (userAuth) {
-        sessionStorage.setItem('user', JSON.stringify(userAuth));
-        dispatch({ type: USER_LOADED, payload: userAuth });
-      } else {
-        dispatch({ type: LOGOUT });
-      }
-    });
-  });
+    if (cookies.token) {
+      dispatch(setToken(cookies.token));
+    }
+    return () => {
+      // dispatch({ type: LOGOUT });
+    };
+  }, [cookies.token, dispatch]);
 
-  useEffect(() => {
-    FirebaseAuth.onIdTokenChanged((user) => {
-      if (user) {
-        user.getIdToken(true).then((idToken) => {
-          setCookie('token', idToken, { path: '/Auth' });
-        });
-      } else {
-        removeCookie('token', { path: '/Auth' });
-      }
-    });
-  }, [setCookie, removeCookie]);
-
+  if (isLoading) {
+    return <Spinner />;
+  }
   return (
     <BrowserRouter>
       <Navbar />
@@ -50,9 +42,6 @@ function App() {
         <Route path="/Auth/Register" element={<Register />} />
         <Route path="/" element={<PrivateOutlet />}>
           <Route path="/feeds" element={<Feeds />} />
-        </Route>
-        <Route path="/" element={<PrivateOutlet />}>
-          <Route path="/Post/:id" element={<Post />} />
         </Route>
       </Routes>
     </BrowserRouter>

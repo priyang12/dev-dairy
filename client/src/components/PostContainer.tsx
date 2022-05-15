@@ -1,60 +1,26 @@
-import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Box, GridItem } from '@chakra-ui/react';
-import { AddLike, deletePostAction, RemoveLike } from '../actions/PostAction';
-import type { AuthState, Post } from '../actions/interfaces';
+import type { IPost } from '../interface';
 
 type PropTypes = {
-  post: Post;
+  post: IPost;
 };
 
 function PostContainer({ post }: PropTypes) {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  const { user: PostUser, likes, _id, text, title, comments, createdAt } = post;
-
-  const { user }: AuthState = useSelector((state: any) => state.Auth);
+  const { user }: any = useSelector((state: any) => state.User);
 
   const dispatch = useDispatch();
 
-  const [checkDelete, setDelete] = useState(false);
-  const [checkLike, setLike] = useState(false);
-  const [LikesNumber, setLikesNumber] = useState(0);
-
-  useEffect(() => {
-    if (likes.length > 0) {
-      setLikesNumber(likes.length);
-      likes.map((like: any) =>
-        like.user === user?.uid ? setLike(true) : null,
-      );
-    }
-  }, [likes, user?.uid]);
-
-  const addLike = () => {
-    dispatch(AddLike(_id));
-    setLikesNumber(LikesNumber + 1);
-  };
-  const removeLike = () => {
-    dispatch(RemoveLike(_id));
-    setLikesNumber(LikesNumber - 1);
-  };
   const deletePost = () => {
-    dispatch(deletePostAction(_id));
-    setDelete(true);
+    // dispatch(deletePostAction(_id));
   };
-  const check = () => {
-    if (checkLike) removeLike();
-    else addLike();
-    setLike(!checkLike);
-  };
-
-  if (checkDelete) return null;
 
   return (
     <GridItem bgColor="gray.500" color="#fff" p={10} borderRadius={20}>
       <Box as="article">
         <div className="row">
-          {Boolean(PostUser?.avatar) && (
+          {/* {Boolean(PostUser?.avatar) && (
             <div className="col-md-2">
               <Link to={`/profile/${user?.uid}`}>
                 <img
@@ -65,11 +31,11 @@ function PostContainer({ post }: PropTypes) {
                 />
               </Link>
             </div>
-          )}
+          )} */}
           <div className="col-md-10">
-            <p className="lead">{title}</p>
-            <p className="lead">{text}</p>
-            {PostUser.uid === user.uid && (
+            <p className="lead">{post.title}</p>
+            <p className="lead">{post.description}</p>
+            {post.user._id === user._id && (
               <div className="col">
                 <div className="dropdown d-flex justify-content-end">
                   <button
@@ -112,34 +78,8 @@ function PostContainer({ post }: PropTypes) {
                 </div>
               </div>
             )}
-            <button
-              type="button"
-              className="btn btn-light mr-1"
-              onClick={check}
-              data-testid={_id}
-            >
-              <span className="badge badge-light">
-                {checkLike ? (
-                  <div>
-                    <i className="text-info fas fa-thumbs-up" />
-                    {LikesNumber}
-                  </div>
-                ) : (
-                  <div>
-                    <i className="text-secondary fas fa-thumbs-up" />
-                    {LikesNumber}
-                  </div>
-                )}
-              </span>
-            </button>
 
-            <Link to={`/Post/${_id}`} className="btn btn-info mr-1">
-              <span data-testid={`${_id}-comment-count`}>
-                {comments.length}
-              </span>
-              Comments
-            </Link>
-            <p className="text-muted">{createdAt.toString()}</p>
+            <p className="text-muted">{post.date.toString()}</p>
           </div>
         </div>
       </Box>

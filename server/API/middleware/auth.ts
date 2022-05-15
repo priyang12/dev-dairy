@@ -10,7 +10,7 @@ export default async (req: any, res: Response, next: NextFunction) => {
   }
   try {
     const decoded: any = await jwt.verify(token, "abc123");
-    const user = await User.findById(decoded._id);
+    const user = await User.findById(decoded._id).select("-password");
     if (!user) {
       return res.status(401).json({ msg: "user not found" });
     }

@@ -13,7 +13,7 @@ export const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  res.status(res.statusCode || 500);
+  res.status(401);
   return res.json({
     message: err.message,
     stack:

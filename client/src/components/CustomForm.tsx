@@ -5,7 +5,7 @@ import {
   FormLabel,
   Input,
   FormErrorMessage,
-  Button
+  Button,
 } from '@chakra-ui/react';
 import useForm from '../Hooks/useForm';
 
@@ -24,10 +24,9 @@ type Props = {
 };
 
 function Form({ SubmitForm, FormFields, FormSubmitValue, loading }: Props) {
-  console.log(loading);
   const InitState = FormFields.reduce(
     (acc, curr) => ({ ...acc, [curr.fieldName]: '' }),
-    {}
+    {},
   );
   const { FormValues, ErrorsState, HandleChange, setErrors } =
     useForm(InitState);

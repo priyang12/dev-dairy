@@ -1,4 +1,4 @@
-import type { Store } from 'redux';
+import type { Store } from '@reduxjs/toolkit';
 import type { RenderOptions, RenderResult } from '@testing-library/react';
 import type { ReactElement, ReactNode } from 'react';
 import { render as rtlRender } from '@testing-library/react';
@@ -16,7 +16,7 @@ function render(
   ui: ReactElement,
   {
     preloadedState = {},
-    store = createStoreWithMiddleware(preloadedState),
+    store = createStoreWithMiddleware(),
     ...renderOptions
   }: ReduxRenderOptions = {},
 ): RenderResult {

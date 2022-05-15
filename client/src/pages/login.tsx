@@ -1,4 +1,5 @@
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { useCookies } from 'react-cookie';
 import { Link as RouterLink, Navigate } from 'react-router-dom';
 import {
   Alert,
@@ -7,36 +8,33 @@ import {
   Flex,
   Heading,
   Link,
-  Text
+  Text,
 } from '@chakra-ui/react';
 import type { FormField } from '../components/CustomForm';
-import CustomForm from '../components/CustomForm';
-import { LoginAction } from '../actions/AuthAction';
-import type { AlertState, AuthState } from '../actions/interfaces';
+import type { AuthState } from '../interface';
+import { useLoginUserMutation } from '../API/AuthAPI';
 import { ValidateEmail, ValidatePassword } from '../utils/Validation';
+import CustomForm from '../components/CustomForm';
 import Spinner from '../components/spinner';
 
 function Login() {
-  const AuthState: AuthState = useSelector((state: any) => state.Auth);
-  const { loading, alert }: AlertState = useSelector(
-    (state: any) => state.Alert
-  );
+  const [cookies, setCookie, removeCookie] = useCookies(['token']);
+  const [loginUser, result] = useLoginUserMutation();
 
-  const { isAuth } = AuthState;
-
-  const dispatch = useDispatch();
+  const Auth: AuthState = useSelector((state: any) => state.Auth);
+  console.log(Auth);
   const LoginFields: FormField[] = [
     {
       fieldType: 'email',
       fieldName: 'email',
       placeholder: 'Please enter valid Email',
-      isRequired: true
+      isRequired: true,
     },
     {
       fieldType: 'password',
       fieldName: 'password',
-      isRequired: true
-    }
+      isRequired: true,
+    },
   ];
 
   const LoginUser = (FormValues: any, setErrors: any) => {
@@ -44,16 +42,19 @@ function Login() {
     const PasswordError = ValidatePassword(FormValues.password);
     setErrors({
       email: EmailError,
-      password: PasswordError
+      password: PasswordError,
     });
 
     if (!EmailError || !PasswordError) {
-      dispatch(LoginAction(FormValues));
+      loginUser(FormValues);
     }
   };
-  if (isAuth) {
+
+  if (Auth.authenticated) {
+    if (Auth.token) setCookie('token', Auth.token, { path: '/' });
     return <Navigate to="/feeds" />;
   }
+
   return (
     <Box m={['15', '100']}>
       <Flex
@@ -73,17 +74,17 @@ function Login() {
           justify="flex-end"
           width={['100%', '75%', '50%']}
         >
-          {alert && (
+          {Auth.error && (
             <Alert status="error" borderRadius={10} mb={5}>
               <AlertIcon />
-              {alert}
+              {Auth.error}
             </Alert>
           )}
           <CustomForm
             SubmitForm={LoginUser}
             FormFields={LoginFields}
             FormSubmitValue="Log In"
-            loading={!!loading}
+            loading={result.isLoading}
           />
 
           <Link

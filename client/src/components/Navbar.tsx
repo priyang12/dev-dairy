@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 import { Link as RouterLink } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -23,34 +25,36 @@ import {
   ChevronDownIcon,
 } from '@chakra-ui/icons';
 import { motion } from 'framer-motion';
-import { logout } from '../actions/AuthAction';
-import type { AuthState } from '../actions/interfaces';
+import { logout } from '../features/AuthSlice';
+import type { AuthState } from '../interface';
 
 function Navbar() {
-  const { isAuth, user }: AuthState = useSelector((state: any) => state.Auth);
-  const dispatch = useDispatch();
-  const ColorPreference = useColorModePreference();
-  const { colorMode, toggleColorMode } = useColorMode();
+  const [cookies, setCookie, removeCookie] = useCookies(['token']);
+  const Auth: AuthState = useSelector((state: any) => state.Auth);
+  // const ColorPreference = useColorModePreference();
+  // const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const isDark = colorMode === 'dark';
-  const [display, changeDisplay] = useState(false);
+  const isDark = true;
 
-  useLayoutEffect(() => {
-    if (ColorPreference === 'dark') {
-      toggleColorMode();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ColorPreference]);
+  const [display, changeDisplay] = useState(false);
+  const dispatch = useDispatch();
+  // useLayoutEffect(() => {
+  //   if (ColorPreference === 'dark') {
+  //     toggleColorMode();
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [ColorPreference]);
   const onLogout = () => {
     localStorage.clear();
-    sessionStorage.removeItem('user');
+    removeCookie('token');
     dispatch(logout());
+    window.location.reload();
   };
 
   const AuthLinks = (
     <div>
       <Menu isOpen={isOpen}>
-        <span>{user?.displayName}</span>
+        {/* <span>{user?.displayName}</span> */}
         <MenuButton
           mx={5}
           py={[1, 2, 2]}
@@ -66,9 +70,9 @@ function Navbar() {
         </MenuButton>
         <MenuList onMouseEnter={onOpen} onMouseLeave={onClose} zIndex={2000}>
           <MenuItem>
-            <Link as={RouterLink} to={`/profile/${user?.uid}`}>
+            {/* <Link as={RouterLink} to={`/profile/${user?.uid}`}>
               <span className="hide-sm">Profile</span>
-            </Link>
+            </Link> */}
           </MenuItem>
 
           <MenuItem>
@@ -148,7 +152,7 @@ function Navbar() {
       </Link>
       <Flex align="center">
         <Flex display={['none', 'none', 'flex', 'flex']} fontSize="2xl">
-          {user ? AuthLinks : UnAuthLinks}
+          {Auth.authenticated ? AuthLinks : UnAuthLinks}
         </Flex>
 
         <IconButton
@@ -194,8 +198,8 @@ function Navbar() {
         </Flex>
 
         <Flex flexDir="column" align="flex-start" fontSize={20}>
-          <Switch color="green" isChecked={isDark} onChange={toggleColorMode} />
-          {isAuth ? AuthLinks : UnAuthLinks}
+          <Switch color="green" isChecked={isDark} />
+          {Auth.authenticated ? AuthLinks : UnAuthLinks}
         </Flex>
       </Flex>
     </Flex>

@@ -1,8 +1,8 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { useCookies } from 'react-cookie';
 import { Navigate as Redirect } from 'react-router-dom';
 import { Box, Flex } from '@chakra-ui/react';
 import type { FormField } from '../components/CustomForm';
-import type { AlertState, AuthState } from '../actions/interfaces';
 import CustomForm from '../components/CustomForm';
 import {
   ConfirmPassword,
@@ -10,13 +10,13 @@ import {
   ValidateName,
   ValidatePassword,
 } from '../utils/Validation';
-import { RegisterUserAction } from '../actions/AuthAction';
+import { useRegisterUserMutation } from '../API/AuthAPI';
+import type { AuthState } from '../interface';
 
 function Register() {
+  const [cookies, setCookie, removeCookie] = useCookies(['token']);
+  const [registerUser, result] = useRegisterUserMutation();
   const Auth: AuthState = useSelector((state: any) => state.Auth);
-  const { loading }: AlertState = useSelector((state: any) => state.Alert);
-  const { isAuth } = Auth;
-  const dispatch = useDispatch();
   const RegisterFields: FormField[] = [
     {
       fieldType: 'text',
@@ -54,13 +54,14 @@ function Register() {
       confirm: ConfirmError,
     });
     if (!UsernameError && !EmailError && !PasswordError && !ConfirmError) {
-      dispatch(RegisterUserAction(FormValues));
+      registerUser(FormValues);
     } else {
       // Set Alert
     }
   };
-  if (isAuth) {
-    return <Redirect to="/createProfile" />;
+  if (Auth.authenticated) {
+    setCookie('token', Auth.token, { path: '/' });
+    return <Redirect to="/feeds" />;
   }
   return (
     <Box m={['15', '100']}>
@@ -73,7 +74,7 @@ function Register() {
           FormFields={RegisterFields}
           SubmitForm={RegisterUser}
           FormSubmitValue="Register"
-          loading={!!loading}
+          loading={result.isLoading}
         />
         <div>
           <h1 className="display-4 text-center">Register</h1>

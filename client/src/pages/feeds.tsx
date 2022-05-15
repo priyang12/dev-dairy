@@ -1,37 +1,30 @@
-import { useLayoutEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Grid } from '@chakra-ui/react';
+import { useGetPostsQuery } from '../API/PostAPI';
 import PostContainer from '../components/PostContainer';
 import Spinner from '../components/spinner';
-import { getPostsAction } from '../actions/PostAction';
-import type { AlertState, Post } from '../actions/interfaces';
 import MarginContainer from '../components/MarginContainer';
+import type { PostState } from '../interface';
 
 function Feeds() {
-  const { loading, alert }: AlertState = useSelector(
-    (state: any) => state.Alert,
-  );
-  const { posts } = useSelector((state: any) => state.Post);
-  const dispatch = useDispatch();
+  const { isLoading, data } = useGetPostsQuery('');
+  const Post: PostState = useSelector((state: any) => state.Post);
 
-  useLayoutEffect(() => {
-    dispatch(getPostsAction());
-  }, [dispatch]);
-
-  if (posts.length === 0) return <p>No posts</p>;
-  if (loading) return <Spinner />;
+  if (isLoading) return <Spinner />;
 
   return (
     <div className="top">
       <MarginContainer>
-        {alert}
-        <Grid gridTemplateColumns={['2']} gap={20}>
-          {posts.length > 0 &&
-            posts?.map((post: Post) => (
-              // eslint-disable-next-line no-underscore-dangle
+        <h1>Dairy Log</h1>
+        {Post.posts.length > 0 ? (
+          <Grid gridTemplateColumns={['2']} gap={20}>
+            {Post.posts.map((post: any) => (
               <PostContainer key={post._id} post={post} />
             ))}
-        </Grid>
+          </Grid>
+        ) : (
+          <h1>No posts yet</h1>
+        )}
       </MarginContainer>
     </div>
   );

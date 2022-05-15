@@ -11,7 +11,11 @@ export default class PostService {
   ) {}
 
   public async GetAllPost(userId: string): Promise<IPost[]> {
-    const Posts = await this.PostModel.find({ user: userId });
+    const Posts = await this.PostModel.find({ user: userId }).populate(
+      "user",
+      "-password -__v"
+    );
+
     if (!Posts) {
       this.logger.error("Projects not found");
       throw new Error("No Projects Found in Users");

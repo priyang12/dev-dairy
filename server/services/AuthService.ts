@@ -53,7 +53,7 @@ export default class AuthService {
   ): Promise<{ user: any; token: string }> {
     const userRecord = await this.userModel.findOne({ email });
     if (!userRecord) {
-      throw new Error("User not registered");
+      throw Error("User not registered");
     }
     /**
      * We use verify from argon2 to prevent 'timing based' attacks

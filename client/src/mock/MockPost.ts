@@ -1,8 +1,7 @@
 import { faker } from '@faker-js/faker';
-import type { Post } from '../actions/interfaces';
 
 // loop through and create a bunch of mock posts
-const MockedPosts: Post[] = [];
+const MockedPosts: any[] = [];
 // push user post
 MockedPosts.push({
   _id: faker.datatype.uuid(),

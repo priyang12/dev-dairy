@@ -1,10 +1,10 @@
 import { useSelector } from 'react-redux';
 import { Navigate, Outlet } from 'react-router-dom';
-import type { AuthState } from '../actions/interfaces';
+import type { AuthState } from '../interface';
 
 function PrivateOutlet() {
-  const { isAuth }: AuthState = useSelector((state: any) => state.Auth);
-  return isAuth ? <Outlet /> : <Navigate to="/Auth/login" />;
+  const Auth: AuthState = useSelector((state: any) => state.Auth);
+  return Auth.authenticated ? <Outlet /> : <Navigate to="/Auth/login" />;
 }
 
 export default PrivateOutlet;

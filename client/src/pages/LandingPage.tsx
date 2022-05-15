@@ -1,12 +1,12 @@
 import { Box, Flex, Heading } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
-import type { AuthState } from '../actions/interfaces';
+import type { AuthState } from '../interface';
 
 function LandingPage() {
-  const { isAuth }: AuthState = useSelector((state: any) => state.Auth);
+  const { authenticated }: AuthState = useSelector((state: any) => state.Auth);
 
-  if (isAuth) return <Navigate to="/feeds" />;
+  if (authenticated) return <Navigate to="/feeds" />;
 
   return (
     <Box as="div" className="top" bgColor={['']}>

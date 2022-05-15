@@ -19,8 +19,8 @@ it('Login Form', () => {
     </Provider>,
   );
   // Test: login form
-  const email = screen.getByText('email');
-  const password = screen.getByText('password');
+  const email = screen.getByText('Email');
+  const password = screen.getByText('Password');
   const submitBtn = screen.getByText('Log In');
   expect(email).toBeInTheDocument();
   expect(password).toBeInTheDocument();
