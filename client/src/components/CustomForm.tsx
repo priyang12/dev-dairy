@@ -19,21 +19,22 @@ export interface FormField {
 type Props = {
   SubmitForm: (FormValues: any, setErrors: any) => void;
   FormFields: FormField[];
-  FormSubmitValue: string;
-  loading: boolean;
+  // eslint-disable-next-line react/require-default-props
+  mb?: number;
+  children: React.ReactNode;
 };
 
-function Form({ SubmitForm, FormFields, FormSubmitValue, loading }: Props) {
+function Form({ SubmitForm, FormFields, mb = 5, children }: Props) {
   const InitState = FormFields.reduce(
     (acc, curr) => ({ ...acc, [curr.fieldName]: '' }),
     {},
   );
-  const { FormValues, ErrorsState, HandleChange, setErrors } =
-    useForm(InitState);
+
+  const { ErrorsState, HandleChange, setErrors } = useForm(InitState);
 
   const check = (e: any) => {
     e.preventDefault();
-    SubmitForm(FormValues, setErrors);
+    SubmitForm(e, setErrors);
   };
 
   return (
@@ -41,7 +42,7 @@ function Form({ SubmitForm, FormFields, FormSubmitValue, loading }: Props) {
       <form onSubmit={check}>
         {FormFields.map((field, index) => (
           <FormControl
-            mb={5}
+            mb={mb}
             isInvalid={ErrorsState[field.fieldName]}
             isRequired={field.isRequired}
             key={field.fieldName}
@@ -66,15 +67,7 @@ function Form({ SubmitForm, FormFields, FormSubmitValue, loading }: Props) {
             )}
           </FormControl>
         ))}
-        <Button
-          isLoading={loading}
-          type="submit"
-          loadingText="Just a moment ..."
-          colorScheme="blue"
-          variant="solid"
-        >
-          {FormSubmitValue}
-        </Button>
+        {children}
       </form>
     </div>
   );

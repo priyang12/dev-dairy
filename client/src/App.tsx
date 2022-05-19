@@ -2,17 +2,15 @@ import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
+import { setToken } from './features/AuthSlice';
+import { useGetUserQuery } from './API/UserAPI';
 import Navbar from './components/Navbar';
 import LandingPage from './pages/LandingPage';
 import Login from './pages/login';
 import Register from './pages/register';
-import Feeds from './pages/Feeds';
+import Feeds from './pages/feeds';
 import PrivateOutlet from './components/PrivateRoute';
-import { setToken } from './features/AuthSlice';
-import { useGetUserQuery } from './API/UserAPI';
 import Spinner from './components/spinner';
-
-// import { LOGOUT } from "./actions/types";
 
 function App() {
   const [cookies, setCookie, removeCookie] = useCookies(['token']);

@@ -5,6 +5,7 @@ import {
   Alert,
   AlertIcon,
   Box,
+  Button,
   Flex,
   Heading,
   Link,
@@ -37,7 +38,11 @@ function Login() {
     },
   ];
 
-  const LoginUser = (FormValues: any, setErrors: any) => {
+  const LoginUser = (e: any, setErrors: any) => {
+    const FormValues = {
+      email: e.target.elements.email.value,
+      password: e.target.elements.password.value,
+    };
     const EmailError = ValidateEmail(FormValues.email);
     const PasswordError = ValidatePassword(FormValues.password);
     setErrors({
@@ -80,12 +85,17 @@ function Login() {
               {Auth.error}
             </Alert>
           )}
-          <CustomForm
-            SubmitForm={LoginUser}
-            FormFields={LoginFields}
-            FormSubmitValue="Log In"
-            loading={result.isLoading}
-          />
+          <CustomForm SubmitForm={LoginUser} FormFields={LoginFields}>
+            <Button
+              isLoading={result.isLoading}
+              type="submit"
+              loadingText="Just a moment ..."
+              colorScheme="blue"
+              variant="solid"
+            >
+              Log In
+            </Button>
+          </CustomForm>
 
           <Link
             as={RouterLink}

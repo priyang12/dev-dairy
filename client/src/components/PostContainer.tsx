@@ -1,87 +1,103 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { Box, GridItem } from '@chakra-ui/react';
+import moment from 'moment';
+import {
+  Box,
+  Button,
+  GridItem,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  ModalFooter,
+  Select,
+  useDisclosure,
+} from '@chakra-ui/react';
+import { ChevronDownIcon } from '@chakra-ui/icons';
 import type { IPost } from '../interface';
+import { useDeletePostMutation } from '../API/PostAPI';
+import type { FormField } from './CustomForm';
+import CustomForm from './CustomForm';
+import ModalComponent from './ModalComponent';
 
 type PropTypes = {
-  post: IPost;
+  post: any;
 };
 
+const PostField: FormField[] = [
+  {
+    fieldType: 'text',
+    fieldName: 'title',
+    placeholder: 'Please enter title of post',
+    isRequired: true,
+  },
+  {
+    fieldType: 'text',
+    fieldName: 'description',
+    placeholder: 'Enter Brief Description',
+    isRequired: true,
+  },
+];
+
 function PostContainer({ post }: PropTypes) {
-  const { user }: any = useSelector((state: any) => state.User);
-
+  const [mutation, { isLoading }] = useDeletePostMutation();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch();
-
   const deletePost = () => {
-    // dispatch(deletePostAction(_id));
+    dispatch(mutation(post._id));
   };
-
+  const UpdatePost = () => {};
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
   return (
     <GridItem bgColor="gray.500" color="#fff" p={10} borderRadius={20}>
-      <Box as="article">
+      <ModalComponent Title="Create Post" isOpen={isOpen} onClose={onClose}>
+        <CustomForm FormFields={PostField} SubmitForm={() => {}} mb={2}>
+          <Select mb={2} name="status" id="status">
+            <option defaultValue="value" value="In-Process">
+              In-Process
+            </option>
+            <option value="Started">Started</option>
+            <option value="Done">Done</option>
+          </Select>
+          <ModalFooter>
+            <Button
+              // isLoading={NewPostMutaion.isLoading}
+              type="submit"
+              loadingText="Just a moment ..."
+              colorScheme="blue"
+              variant="solid"
+            >
+              New Log
+            </Button>
+          </ModalFooter>
+        </CustomForm>
+      </ModalComponent>
+      <Box as="article" position="relative">
         <div className="row">
-          {/* {Boolean(PostUser?.avatar) && (
-            <div className="col-md-2">
-              <Link to={`/profile/${user?.uid}`}>
-                <img
-                  className="rounded-circle d-md-block"
-                  src={PostUser.avatar}
-                  alt="avatar"
-                  width={150}
-                />
-              </Link>
-            </div>
-          )} */}
+          <p>Title : {post.project.title}</p>
+          <p>Process : {post.project.process}</p>
           <div className="col-md-10">
             <p className="lead">{post.title}</p>
             <p className="lead">{post.description}</p>
-            {post.user._id === user._id && (
-              <div className="col">
-                <div className="dropdown d-flex justify-content-end">
-                  <button
-                    className="btn btn-secondary dropdown-toggle"
-                    type="button"
-                    id="dropdownMenuButton"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-label="Dropdown menu"
-                    aria-expanded="false"
-                    style={{
-                      backgroundColor: 'white',
-                      color: 'black',
-                      border: 'none',
-                    }}
-                  />
-                  <div
-                    className="dropdown-menu"
-                    aria-labelledby="dropdownMenuButton"
-                  >
-                    <div className="col">
-                      <div className="ml-2">
-                        <div>
-                          <button
-                            type="button"
-                            className="btn btn-light"
-                            onClick={deletePost}
-                          >
-                            <span
-                              className="hide-sm tex"
-                              style={{ color: '#343a40' }}
-                            >
-                              Delete the Post
-                            </span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            <p className="text-muted">{post.date.toString()}</p>
+            <p className="">
+              {moment(post.date).format('D MMM YYYY, h:mm:ss')}
+            </p>
           </div>
         </div>
+
+        <Box as="div" position="absolute" top={5} right={5}>
+          <Menu isLazy closeOnBlur>
+            <MenuButton as={Button}>
+              <ChevronDownIcon />
+            </MenuButton>
+
+            <MenuList>
+              <MenuItem onClick={deletePost}>Delete Post</MenuItem>
+              <MenuItem onClick={onOpen}>Update Post</MenuItem>
+            </MenuList>
+          </Menu>
+        </Box>
       </Box>
     </GridItem>
   );

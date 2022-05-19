@@ -118,7 +118,7 @@ function Navbar() {
 
   return (
     <Flex
-      zIndex={2020}
+      zIndex={2}
       bgColor={isDark ? 'gray.700' : 'gray.200'}
       as="nav"
       width="100%"

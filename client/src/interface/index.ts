@@ -18,23 +18,46 @@ export interface UserState {
 }
 
 export interface IAlert {
-  alert: string;
+  message: string;
   result: boolean;
 }
 
-export interface IPost {
-  user: string | any;
+export interface INewPost {
   title: string;
   description: string;
-  project: string;
+  project: any;
   status: string;
   roadMap: any;
-  date: Date;
+}
+export interface IPost extends INewPost {
+  _id: string;
+  user: string | any;
+  date: string;
 }
 
 export interface PostState {
   posts: IPost[];
   post: IPost;
+  error: null | string;
+  alert: null | IAlert;
+}
+
+export interface IProject {
+  _id: string;
+  user: string;
+  title: string;
+  description: string;
+  technologies: string[];
+  roadMap?: string[];
+  process: string;
+  live?: string;
+  github?: string;
+  date: Date;
+}
+
+export interface ProjectState {
+  projects: IProject[];
+  project: IProject | null;
   error: null | string;
   alert: null | IAlert;
 }

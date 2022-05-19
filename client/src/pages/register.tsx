@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import { useCookies } from 'react-cookie';
 import { Navigate as Redirect } from 'react-router-dom';
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Button, Flex } from '@chakra-ui/react';
 import type { FormField } from '../components/CustomForm';
 import CustomForm from '../components/CustomForm';
 import {
@@ -70,12 +70,17 @@ function Register() {
         justifyContent="space-between"
         flexDir={['column', 'column', 'row']}
       >
-        <CustomForm
-          FormFields={RegisterFields}
-          SubmitForm={RegisterUser}
-          FormSubmitValue="Register"
-          loading={result.isLoading}
-        />
+        <CustomForm FormFields={RegisterFields} SubmitForm={RegisterUser}>
+          <Button
+            isLoading={result.isLoading}
+            type="submit"
+            loadingText="Just a moment ..."
+            colorScheme="blue"
+            variant="solid"
+          >
+            Register
+          </Button>
+        </CustomForm>
         <div>
           <h1 className="display-4 text-center">Register</h1>
           <p className="text-center lead">

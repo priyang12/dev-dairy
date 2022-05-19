@@ -84,7 +84,6 @@ const PostApi = createApi({
           body: data,
         };
       },
-
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
