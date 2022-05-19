@@ -1,11 +1,18 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { setPost, setPosts, setError, setAlert } from '../features/PostSlice';
+import API from '.';
+import {
+  setPost,
+  setPosts,
+  setError,
+  setAlert,
+  DeletePost,
+} from '../features/PostSlice';
 import type { RootState } from '../store';
 
 const PostApi = createApi({
   reducerPath: 'PostAPI',
   baseQuery: fetchBaseQuery({
-    baseUrl: '/api/posts',
+    baseUrl: `${API}/posts`,
     prepareHeaders: (headers, { getState }) => {
       const { token } = (getState() as RootState).Auth;
       if (token) {
@@ -97,12 +104,22 @@ const PostApi = createApi({
         };
       },
     }),
-    DeletePost: builder.mutation<any, Partial<any>>({
+    DeletePost: builder.mutation({
       query(id) {
         return {
           url: `/${id}`,
           method: 'delete',
         };
+      },
+
+      async onQueryStarted(id, { dispatch, queryFulfilled }) {
+        dispatch(DeletePost(id));
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(setAlert(data));
+        } catch (error) {
+          PostApi.util.invalidateTags(['Posts']);
+        }
       },
     }),
   }),

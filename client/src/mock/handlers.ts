@@ -1,38 +1,34 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { rest } from 'msw';
-import MockedPosts from './MockPost';
+import API from '../API';
+import { AuthResponse, NewPostResponse, PostsResponse } from './MockedData';
 
 const handlers = [
-  rest.get('/api/posts', (req, res, ctx) => res(ctx.json(MockedPosts))),
-  rest.get('/api/posts/:id', (req, res, ctx) => res(ctx.json(MockedPosts[0]))),
-
-  rest.delete('/api/post/:id', (req, res, ctx) =>
+  rest.post(`/mock/login`, (req, res, ctx) => res(ctx.json(AuthResponse))),
+  rest.post(`${API}/register`, (req, res, ctx) => res(ctx.json(AuthResponse))),
+  rest.get(`${API}/user/me`, (req, res, ctx) =>
+    res(ctx.json(AuthResponse.user)),
+  ),
+  rest.post(`${API}/posts`, (req, res, ctx) => res(ctx.json(NewPostResponse))),
+  rest.get(`${API}/posts`, (req, res, ctx) => res(ctx.json(PostsResponse))),
+  rest.get(`${API}/posts/:id`, (req, res, ctx) =>
+    res(ctx.json(PostsResponse[0])),
+  ),
+  rest.get(`${API}/project/:id`, (req, res, ctx) =>
+    res(ctx.json(PostsResponse)),
+  ),
+  rest.put(`${API}/posts/:id`, (req, res, ctx) =>
     res(
       ctx.json({
-        message: 'Post Deleted',
+        result: true,
+        message: 'Post Updated Successfully',
       }),
     ),
   ),
-  // api/post/like
-  rest.put('/api/posts/like/:id', (req, res, ctx) =>
+  rest.delete(`${API}/posts/:id`, (req, res, ctx) =>
     res(
       ctx.json({
-        message: 'Post liked',
-      }),
-    ),
-  ),
-  rest.put('/api/posts/unlike/:id', (req, res, ctx) =>
-    res(
-      ctx.json({
-        message: 'Post unliked',
-      }),
-    ),
-  ),
-  // api/post/comment
-  rest.post('/api/posts/comment/:id', (req, res, ctx) =>
-    res(
-      ctx.json({
-        message: 'Comment posted',
+        result: true,
+        message: 'Post Deleted Successfully',
       }),
     ),
   ),
