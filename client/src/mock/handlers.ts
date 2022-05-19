@@ -1,6 +1,11 @@
 import { rest } from 'msw';
 import API from '../API';
-import { AuthResponse, NewPostResponse, PostsResponse } from './MockedData';
+import {
+  AuthResponse,
+  NewPostResponse,
+  PostsResponse,
+  ProjectsResponse,
+} from './MockedData';
 
 const handlers = [
   rest.post(`/mock/login`, (req, res, ctx) => res(ctx.json(AuthResponse))),
@@ -29,6 +34,34 @@ const handlers = [
       ctx.json({
         result: true,
         message: 'Post Deleted Successfully',
+      }),
+    ),
+  ),
+  // Projects
+  rest.get(`${API}/projects`, (req, res, ctx) =>
+    res(ctx.json(ProjectsResponse)),
+  ),
+  rest.post(`${API}/projects`, (req, res, ctx) =>
+    res(
+      ctx.json({
+        result: true,
+        message: 'Project Created Successfully',
+      }),
+    ),
+  ),
+  rest.put(`${API}/projects/:id`, (req, res, ctx) =>
+    res(
+      ctx.json({
+        result: true,
+        message: 'Project Updated Successfully',
+      }),
+    ),
+  ),
+  rest.delete(`${API}/projects/:id`, (req, res, ctx) =>
+    res(
+      ctx.json({
+        result: true,
+        message: 'Project Deleted Successfully',
       }),
     ),
   ),

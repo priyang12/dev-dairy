@@ -62,4 +62,41 @@ export const PostsResponse = [
   },
 ];
 
+export const ProjectsResponse = [
+  {
+    technologies: ['React', 'Node.js', 'Monogo', 'Express'],
+    process: 'in-progress',
+    _id: '628515d405524527385df72a',
+    title: 'Dev-Dairy',
+    description: "MERN stack prototype for maintaing dev's personal dairy",
+    user: '62812edf18f5ba45b7667f2e',
+    roadMap: [
+      {
+        color: '#fff',
+        progress: 0,
+        _id: '6285167905524527385df72f',
+        name: 'backend',
+      },
+      {
+        color: '#fff',
+        progress: 0,
+        _id: '6285168e05524527385df734',
+        name: 'frontEnd',
+      },
+    ],
+    date: '2022-05-18T15:50:44.201Z',
+    __v: 0,
+  },
+  {
+    technologies: ['React', 'Node.js', 'Monogo', 'Express'],
+    process: 'in-progress',
+    _id: '628515d405524527385dsdf2a',
+    title: 'Dev-Dairy',
+    description: "Next stack prototype for maintaing dev's personal dairy",
+    user: '62812edf18f5ba45b7667f2e',
+    date: '2022-05-18T15:50:44.201Z',
+    __v: 0,
+  },
+];
+
 export default AuthResponse;
