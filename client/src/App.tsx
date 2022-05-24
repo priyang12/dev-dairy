@@ -11,6 +11,8 @@ import Register from './pages/register';
 import Feeds from './pages/feeds';
 import PrivateOutlet from './components/PrivateRoute';
 import Spinner from './components/spinner';
+import Projects from './pages/Projects';
+import SingleProject from './pages/SingleProject';
 
 function App() {
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
@@ -40,6 +42,12 @@ function App() {
         <Route path="/Auth/Register" element={<Register />} />
         <Route path="/" element={<PrivateOutlet />}>
           <Route path="/feeds" element={<Feeds />} />
+        </Route>
+        <Route path="/" element={<PrivateOutlet />}>
+          <Route path="/Projects" element={<Projects />} />
+        </Route>
+        <Route path="/" element={<PrivateOutlet />}>
+          <Route path="/Projects/:id" element={<SingleProject />} />
         </Route>
       </Routes>
     </BrowserRouter>

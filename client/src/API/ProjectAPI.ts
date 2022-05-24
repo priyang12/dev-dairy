@@ -1,12 +1,18 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import API from '.';
-import { setAlert, setError, setProjects } from '../features/ProjectSlice';
+import {
+  setError,
+  setProjects,
+  setProject,
+  setAlert,
+} from '../features/ProjectSlice';
+import type { IProject } from '../interface';
 import type { RootState } from '../store';
 
 const ProjectApi = createApi({
   reducerPath: 'ProjectApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: `${API}/project`,
+    baseUrl: `${API}/projects`,
     prepareHeaders: (headers, { getState }) => {
       const { token } = (getState() as RootState).Auth;
       if (token) {
@@ -25,6 +31,21 @@ const ProjectApi = createApi({
         try {
           const { data } = await queryFulfilled;
           dispatch(setProjects(data));
+        } catch (error: any) {
+          const errorMessage = error.error.data.msg || 'server Error';
+          setError(errorMessage);
+        }
+      },
+    }),
+    GetProjectId: builder.query({
+      query: (id) => ({
+        url: `/${id}`,
+        method: 'get',
+      }),
+      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(setProject(data));
         } catch (error: any) {
           const errorMessage = error.error.data.msg || 'server Error';
           setError(errorMessage);
@@ -50,12 +71,27 @@ const ProjectApi = createApi({
       },
     }),
     DeleteProject: builder.mutation({
-      query(data) {
+      query(id) {
         return {
-          url: '',
+          url: `/${id}`,
           method: 'delete',
-          body: data,
         };
+      },
+      async onQueryStarted(id, { dispatch, getState, queryFulfilled }) {
+        const state = getState() as RootState;
+        const { projects } = state.Project;
+        const NewProjects = projects.filter(
+          (project: IProject) => project._id !== id,
+        );
+
+        dispatch(setProjects(NewProjects));
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(setAlert(data));
+        } catch (error: any) {
+          const errorMessage = error.error.data.msg || 'server Error';
+          setError(errorMessage);
+        }
       },
     }),
     AddRoadMap: builder.mutation({
@@ -81,6 +117,7 @@ const ProjectApi = createApi({
 
 export const {
   useGetProjectsQuery,
+  useGetProjectIdQuery,
   useAddRoadMapMutation,
   useCreateProjectMutation,
   useDeleteProjectMutation,

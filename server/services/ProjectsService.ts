@@ -11,7 +11,9 @@ export default class UserService {
   ) {}
 
   public async GetUserProjects(userId: string): Promise<IProject[]> {
-    const Projects = await this.ProjectModel.find({ user: userId });
+    const Projects = await this.ProjectModel.find({ user: userId }).select(
+      "title description process technologies date"
+    );
     if (!Projects) {
       this.logger.error("Projects not found");
       throw new Error("No Projects Found in Users");

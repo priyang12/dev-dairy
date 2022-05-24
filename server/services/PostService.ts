@@ -12,8 +12,8 @@ export default class PostService {
 
   public async GetAllPost(userId: string): Promise<IPost[]> {
     const Posts = await this.PostModel.find({ user: userId }).populate(
-      "user",
-      "-password -__v"
+      "project",
+      "title process"
     );
 
     if (!Posts) {
@@ -43,20 +43,29 @@ export default class PostService {
     this.logger.info("Project Found");
     return post;
   }
-  public async CreatePost(userId: string, post: IPost): Promise<IPost> {
+  public async CreatePost(
+    userId: string,
+    post: IPost
+  ): Promise<{
+    result: boolean;
+    message: string;
+  }> {
     const newPost = await this.PostModel.create({
       ...post,
       user: userId,
     });
     this.logger.info("Project Created");
-    return newPost;
+    return {
+      result: true,
+      message: "Project Created Successfully",
+    };
   }
   public async UpdatePost(
     userId: string,
     postId: string,
     post: IPost
   ): Promise<{
-    success: boolean;
+    result: boolean;
     message: string;
   }> {
     const updatedPost = await this.PostModel.findOneAndUpdate(
@@ -70,7 +79,7 @@ export default class PostService {
     }
     this.logger.info("Project Updated");
     return {
-      success: true,
+      result: true,
       message: "Project Updated Successfully",
     };
   }
@@ -78,7 +87,7 @@ export default class PostService {
     userId: string,
     postId: string
   ): Promise<{
-    success: boolean;
+    result: boolean;
     message: string;
   }> {
     const deletedPost = await this.PostModel.findOneAndDelete({
@@ -91,7 +100,7 @@ export default class PostService {
     }
     this.logger.info("Post Deleted");
     return {
-      success: true,
+      result: true,
       message: "Post Deleted Successfully",
     };
   }

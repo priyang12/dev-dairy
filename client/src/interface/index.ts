@@ -42,14 +42,21 @@ export interface PostState {
   alert: null | IAlert;
 }
 
+export interface IRoadMap {
+  _id: string;
+  name: string;
+  color?: string;
+  progress?: number;
+}
+
 export interface IProject {
   _id: string;
   user: string;
   title: string;
   description: string;
   technologies: string[];
-  roadMap?: string[];
-  process: string;
+  roadMap?: IRoadMap[];
+  process: number;
   live?: string;
   github?: string;
   date: Date;

@@ -57,7 +57,7 @@ function Login() {
 
   if (Auth.authenticated) {
     if (Auth.token) setCookie('token', Auth.token, { path: '/' });
-    return <Navigate to="/feeds" />;
+    return <Navigate to="/Projects" />;
   }
 
   return (

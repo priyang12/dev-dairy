@@ -13,8 +13,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@chakra-ui/icons';
-import type { IPost } from '../interface';
-import { useDeletePostMutation } from '../API/PostAPI';
+import { useDeletePostMutation, useUpdatePostMutation } from '../API/PostAPI';
 import type { FormField } from './CustomForm';
 import CustomForm from './CustomForm';
 import ModalComponent from './ModalComponent';
@@ -40,19 +39,26 @@ const PostField: FormField[] = [
 
 function PostContainer({ post }: PropTypes) {
   const [mutation, { isLoading }] = useDeletePostMutation();
+  const [UpdateMutate, UpdateResult] = useUpdatePostMutation();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch();
   const deletePost = () => {
     dispatch(mutation(post._id));
   };
-  const UpdatePost = () => {};
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
   return (
     <GridItem bgColor="gray.500" color="#fff" p={10} borderRadius={20}>
       <ModalComponent Title="Create Post" isOpen={isOpen} onClose={onClose}>
-        <CustomForm FormFields={PostField} SubmitForm={() => {}} mb={2}>
+        <CustomForm
+          FormFields={PostField}
+          SubmitForm={() => {
+            console.log('Update UpdateMutate');
+          }}
+          mb={2}
+        >
           <Select mb={2} name="status" id="status">
             <option defaultValue="value" value="In-Process">
               In-Process
@@ -62,13 +68,13 @@ function PostContainer({ post }: PropTypes) {
           </Select>
           <ModalFooter>
             <Button
-              // isLoading={NewPostMutaion.isLoading}
+              isLoading={UpdateResult.isLoading}
               type="submit"
               loadingText="Just a moment ..."
               colorScheme="blue"
               variant="solid"
             >
-              New Log
+              Update Log
             </Button>
           </ModalFooter>
         </CustomForm>

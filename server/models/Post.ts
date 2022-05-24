@@ -29,7 +29,7 @@ const PostSchema = new Schema({
   project: {
     type: Schema.Types.ObjectId,
     required: true,
-    ref: "Project",
+    ref: "project",
   },
   status: {
     type: String,

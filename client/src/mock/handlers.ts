@@ -5,6 +5,7 @@ import {
   NewPostResponse,
   PostsResponse,
   ProjectsResponse,
+  SingleProjectResponse,
 } from './MockedData';
 
 const handlers = [
@@ -18,8 +19,8 @@ const handlers = [
   rest.get(`${API}/posts/:id`, (req, res, ctx) =>
     res(ctx.json(PostsResponse[0])),
   ),
-  rest.get(`${API}/project/:id`, (req, res, ctx) =>
-    res(ctx.json(PostsResponse)),
+  rest.get(`${API}/projects/:id`, (req, res, ctx) =>
+    res(ctx.json(SingleProjectResponse)),
   ),
   rest.put(`${API}/posts/:id`, (req, res, ctx) =>
     res(

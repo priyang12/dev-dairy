@@ -4,17 +4,21 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit/';
 import AuthApi from './API/AuthAPI';
 import PostApi from './API/PostAPI';
 import UserApi from './API/UserAPI';
+import ProjectApi from './API/ProjectAPI';
 import AuthReducer from './features/AuthSlice';
 import UserReducer from './features/UserSlice';
 import PostReducer from './features/PostSlice';
+import ProjectReducer from './features/ProjectSlice';
 
 const RootReducers = combineReducers({
   [AuthApi.reducerPath]: AuthApi.reducer,
   [UserApi.reducerPath]: UserApi.reducer,
   [PostApi.reducerPath]: PostApi.reducer,
+  [ProjectApi.reducerPath]: ProjectApi.reducer,
   Auth: AuthReducer,
   User: UserReducer,
   Post: PostReducer,
+  Project: ProjectReducer,
 });
 
 export const createStoreWithMiddleware = (initialState = {}): Store =>
@@ -26,7 +30,8 @@ export const createStoreWithMiddleware = (initialState = {}): Store =>
       getDefaultMiddleware()
         .concat(AuthApi.middleware)
         .concat(UserApi.middleware)
-        .concat(PostApi.middleware),
+        .concat(PostApi.middleware)
+        .concat(ProjectApi.middleware),
   });
 
 const store = createStoreWithMiddleware();
