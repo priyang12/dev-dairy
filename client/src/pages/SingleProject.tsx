@@ -12,22 +12,23 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import moment from 'moment';
-import { useSelector } from 'react-redux';
 import { Navigate, useParams } from 'react-router-dom';
-
 import {
   useDeleteProjectMutation,
   useGetProjectIdQuery,
 } from '../API/ProjectAPI';
 import ModalComponent from '../components/ModalComponent';
-import type { ProjectState } from '../interface';
 import RandomColor from '../utils/RandomColor';
 
 function SingleProject() {
   const params = useParams();
-  const { isFetching, isLoading } = useGetProjectIdQuery(params.id);
+  const {
+    isFetching,
+    isLoading,
+    data: project,
+  } = useGetProjectIdQuery(params.id);
   const [DeleteProjectMutation, DeleteResult] = useDeleteProjectMutation();
-  const { project }: ProjectState = useSelector((state: any) => state.Project);
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   if (isFetching || isLoading) return <div>Loading...</div>;
   if (project === null) {
@@ -55,7 +56,7 @@ function SingleProject() {
           <Heading as="h2" fontSize="2xl">
             Technologies
           </Heading>
-          {project.technologies.map((tech) => (
+          {project.technologies.map((tech: any) => (
             <Text
               key={tech}
               p={2}
@@ -80,7 +81,7 @@ function SingleProject() {
             <Heading as="h3" fontSize="2xl">
               Road Map
             </Heading>
-            {project.roadMap.map((road) => (
+            {project.roadMap.map((road: any) => (
               <Box mt={5}>
                 <Text
                   key={road.name}

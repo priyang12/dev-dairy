@@ -1,11 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import API from '.';
-import {
-  setError,
-  setProjects,
-  setProject,
-  setAlert,
-} from '../features/ProjectSlice';
 import type { IProject } from '../interface';
 import type { RootState } from '../store';
 
@@ -25,32 +19,14 @@ const ProjectApi = createApi({
     GetProjects: builder.query({
       query: () => ({
         url: '',
-        method: 'get',
+        method: 'GET',
       }),
-      async onQueryStarted(args, { dispatch, queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled;
-          dispatch(setProjects(data));
-        } catch (error: any) {
-          const errorMessage = error.error.data.msg || 'server Error';
-          setError(errorMessage);
-        }
-      },
     }),
     GetProjectId: builder.query({
       query: (id) => ({
         url: `/${id}`,
         method: 'get',
       }),
-      async onQueryStarted(args, { dispatch, queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled;
-          dispatch(setProject(data));
-        } catch (error: any) {
-          const errorMessage = error.error.data.msg || 'server Error';
-          setError(errorMessage);
-        }
-      },
     }),
     CreateProject: builder.mutation({
       query(data) {
@@ -77,21 +53,15 @@ const ProjectApi = createApi({
           method: 'delete',
         };
       },
-      async onQueryStarted(id, { dispatch, getState, queryFulfilled }) {
-        const state = getState() as RootState;
-        const { projects } = state.Project;
-        const NewProjects = projects.filter(
-          (project: IProject) => project._id !== id,
+      onQueryStarted(id, { dispatch, queryFulfilled }) {
+        const deleteResult = dispatch(
+          ProjectApi.util.updateQueryData('GetProjects', '', (data: any) => {
+            const newData = data.filter((item: IProject) => item._id !== id);
+            return newData;
+          }),
         );
 
-        dispatch(setProjects(NewProjects));
-        try {
-          const { data } = await queryFulfilled;
-          dispatch(setAlert(data));
-        } catch (error: any) {
-          const errorMessage = error.error.data.msg || 'server Error';
-          setError(errorMessage);
-        }
+        queryFulfilled.catch(deleteResult.undo);
       },
     }),
     AddRoadMap: builder.mutation({

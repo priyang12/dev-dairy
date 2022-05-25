@@ -1,6 +1,5 @@
 import type { Store } from '@reduxjs/toolkit/';
 import { combineReducers, configureStore } from '@reduxjs/toolkit/';
-
 import AuthApi from './API/AuthAPI';
 import PostApi from './API/PostAPI';
 import UserApi from './API/UserAPI';
@@ -8,7 +7,6 @@ import ProjectApi from './API/ProjectAPI';
 import AuthReducer from './features/AuthSlice';
 import UserReducer from './features/UserSlice';
 import PostReducer from './features/PostSlice';
-import ProjectReducer from './features/ProjectSlice';
 
 const RootReducers = combineReducers({
   [AuthApi.reducerPath]: AuthApi.reducer,
@@ -18,7 +16,6 @@ const RootReducers = combineReducers({
   Auth: AuthReducer,
   User: UserReducer,
   Post: PostReducer,
-  Project: ProjectReducer,
 });
 
 export const createStoreWithMiddleware = (initialState = {}): Store =>
