@@ -5,6 +5,7 @@ import {
   AlertIcon,
   AlertTitle,
   Button,
+  FormLabel,
   Grid,
   Heading,
   ModalFooter,
@@ -15,11 +16,17 @@ import { useGetPostsQuery, useNewPostMutation } from '../API/PostAPI';
 import PostContainer from '../components/PostContainer';
 import Spinner from '../components/spinner';
 import MarginContainer from '../components/MarginContainer';
-import type { INewPost, IPost, PostState } from '../interface';
+import type { INewPost, IPost, IProject, PostState } from '../interface';
 import ModalComponent from '../components/ModalComponent';
 import type { FormField } from '../components/CustomForm';
 import CustomForm from '../components/CustomForm';
 import { setPosts } from '../features/PostSlice';
+import {
+  GetProjectsSelector,
+  useGetProjectIdQuery,
+  useGetProjectsQuery,
+  usePrefetch,
+} from '../API/ProjectAPI';
 
 const PostField: FormField[] = [
   {
@@ -40,8 +47,21 @@ function Feeds() {
   const { isLoading } = useGetPostsQuery('');
   const [OptimisticPost, setOptimisticPost] = useState<any>(null);
   const Post: PostState = useSelector((state: any) => state.Post);
+  const { data: Projects, isLoading: LoadingProject } = useGetProjectsQuery('');
+  const [proId, setproId] = useState('');
+  const { data: RoadMap, isFetching: RoadMapFetching } = useGetProjectIdQuery(
+    proId,
+    {
+      skip: !proId,
+    },
+  );
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [AddNewPost, NewPostMutaion] = useNewPostMutation();
+
+  const ChangeRoadMapSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setproId(e.target.value);
+  };
 
   const NewPost = (e: any, setErrors: any) => {
     e.preventDefault();
@@ -68,12 +88,32 @@ function Feeds() {
         </Button>
         <ModalComponent Title="Create Post" isOpen={isOpen} onClose={onClose}>
           <CustomForm FormFields={PostField} SubmitForm={NewPost} mb={2}>
-            <Select mb={2} name="Project" id="Project">
-              <option defaultValue="value" value="value">
-                Value
-              </option>
-              <option value="628515d405524527385df72a">Value2</option>
+            <FormLabel htmlFor="Project">Project</FormLabel>
+            <Select
+              mb={2}
+              name="Project"
+              id="Project"
+              onChange={ChangeRoadMapSelect}
+            >
+              <option>Select Project</option>
+              {!LoadingProject &&
+                Projects?.map((project: IProject) => (
+                  <option key={project._id} value={project._id}>
+                    {project.title}
+                  </option>
+                ))}
             </Select>
+
+            <Select mb={2} name="roadMap" id="roadMap">
+              {!LoadingProject ||
+                RoadMap?.roadMap?.map((roadMap: any) => (
+                  <option key={roadMap._id} value={roadMap._id}>
+                    {roadMap.title}
+                  </option>
+                ))}
+            </Select>
+
+            <FormLabel htmlFor="status">status</FormLabel>
             <Select mb={2} name="status" id="status">
               <option defaultValue="value" value="In-Process">
                 In-Process
@@ -81,12 +121,7 @@ function Feeds() {
               <option value="Started">Started</option>
               <option value="Done">Done</option>
             </Select>
-            <Select mb={2} name="roadMap" id="roadMap">
-              <option defaultValue="value" value="value">
-                RoadMap
-              </option>
-              <option value="6285168e05524527385df734">Value2</option>
-            </Select>
+
             <ModalFooter>
               <Button
                 isLoading={NewPostMutaion.isLoading}

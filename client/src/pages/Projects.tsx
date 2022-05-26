@@ -1,5 +1,5 @@
 import { HStack, Container, Progress, Flex } from '@chakra-ui/react';
-import { useSelector } from 'react-redux';
+
 import { useGetProjectsQuery } from '../API/ProjectAPI';
 import ProjectCard from '../components/ProjectCard';
 import type { IProject } from '../interface';

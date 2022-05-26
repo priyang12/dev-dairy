@@ -70,14 +70,14 @@ function Navbar() {
         </MenuButton>
         <MenuList onMouseEnter={onOpen} onMouseLeave={onClose} zIndex={2000}>
           <MenuItem>
-            {/* <Link as={RouterLink} to={`/profile/${user?.uid}`}>
-              <span className="hide-sm">Profile</span>
-            </Link> */}
+            <Link as={RouterLink} to="/Projects">
+              <span className="hide-sm">Projects</span>
+            </Link>
           </MenuItem>
 
           <MenuItem>
-            <Link as={RouterLink} to="/editProfile">
-              <span className="hide-sm">Edit Profile</span>
+            <Link as={RouterLink} to="/feeds">
+              <span className="hide-sm">feeds</span>
             </Link>
           </MenuItem>
 

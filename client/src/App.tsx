@@ -13,22 +13,25 @@ import PrivateOutlet from './components/PrivateRoute';
 import Spinner from './components/spinner';
 import Projects from './pages/Projects';
 import SingleProject from './pages/SingleProject';
+import { usePrefetch } from './API/ProjectAPI';
 
 function App() {
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
 
   const { isLoading } = useGetUserQuery(cookies.token);
+  const getProjects = usePrefetch('GetProjects');
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (cookies.token) {
+      getProjects('');
       dispatch(setToken(cookies.token));
     }
     return () => {
       // dispatch({ type: LOGOUT });
     };
-  }, [cookies.token, dispatch]);
+  }, [cookies.token, dispatch, getProjects]);
 
   if (isLoading) {
     return <Spinner />;

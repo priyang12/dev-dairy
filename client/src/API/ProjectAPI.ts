@@ -23,9 +23,16 @@ const ProjectApi = createApi({
         method: 'GET',
       }),
     }),
+
     GetProjectId: builder.query({
       query: (id) => ({
         url: `/${id}`,
+        method: 'get',
+      }),
+    }),
+    GetProjectRoadMap: builder.query({
+      query: ({ projectId, RoadMapId }) => ({
+        url: `/${projectId}/roadMap/${RoadMapId}`,
         method: 'get',
       }),
     }),
@@ -125,8 +132,12 @@ const ProjectApi = createApi({
   }),
 });
 
+export const GetProjectsSelector = () =>
+  ProjectApi.endpoints.GetProjects.useQuery;
+
 export const {
   useGetProjectsQuery,
+  usePrefetch,
   useGetProjectIdQuery,
   useAddRoadMapMutation,
   useCreateProjectMutation,
