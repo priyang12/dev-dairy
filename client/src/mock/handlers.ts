@@ -66,6 +66,15 @@ const handlers = [
       }),
     ),
   ),
+  rest.patch(`${API}/projects/:id/roadMap`, (req, res, ctx) =>
+    res(
+      ctx.json({
+        _id: '5f5d8f9b9b9b9b9b9b9b9b9b',
+        result: true,
+        message: 'New RoadMap Added Successfully',
+      }),
+    ),
+  ),
 ];
 
 export default handlers;

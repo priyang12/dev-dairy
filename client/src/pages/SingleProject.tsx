@@ -1,5 +1,10 @@
 import { CheckIcon, CloseIcon } from '@chakra-ui/icons';
 import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
   Box,
   Button,
   Container,
@@ -14,10 +19,12 @@ import {
 import moment from 'moment';
 import { Navigate, useParams } from 'react-router-dom';
 import {
+  useAddRoadMapMutation,
   useDeleteProjectMutation,
   useGetProjectIdQuery,
 } from '../API/ProjectAPI';
 import ModalComponent from '../components/ModalComponent';
+import RoadMapModal from '../components/RoadMapModal';
 import RandomColor from '../utils/RandomColor';
 
 function SingleProject() {
@@ -27,9 +34,12 @@ function SingleProject() {
     isLoading,
     data: project,
   } = useGetProjectIdQuery(params.id);
+
   const [DeleteProjectMutation, DeleteResult] = useDeleteProjectMutation();
+  const [RoadMapMutate, RoadMapResult] = useAddRoadMapMutation();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   if (isFetching || isLoading) return <div>Loading...</div>;
   if (project === null) {
     return <div className="top">No Project Found</div>;
@@ -78,33 +88,49 @@ function SingleProject() {
         </Heading>
         {project.roadMap && (
           <Box justifyContent="space-between" alignItems="center" mt={5}>
-            <Heading as="h3" fontSize="2xl">
-              Road Map
-            </Heading>
-            {project.roadMap.map((road: any) => (
-              <Box mt={5}>
-                <Text
-                  key={road.name}
-                  p={2}
-                  bg={`${road.color ? road.color : RandomColor()}`}
-                  fontSize={20}
-                  borderRadius={10}
-                >
-                  {road.name}
-                </Text>
-                <Stack>
-                  <Progress
-                    colorScheme="green"
-                    height="20px"
-                    size="sm"
-                    mt={4}
-                    borderRadius="10px"
-                    value={road.progress}
-                  />
-                  {road.progress}
-                </Stack>
-              </Box>
-            ))}
+            <Flex alignItems="center" m={5}>
+              <Heading as="h3" fontSize="2xl">
+                Road Map
+              </Heading>
+              <RoadMapModal
+                onSubmit={RoadMapMutate}
+                result={RoadMapResult}
+                projectId={params.id}
+              />
+            </Flex>
+
+            <Accordion allowToggle>
+              {project.roadMap.map((road: any) => (
+                <AccordionItem>
+                  <AccordionButton>
+                    <Text
+                      key={road.name}
+                      p={2}
+                      bg={`${road.color ? road.color : RandomColor()}`}
+                      fontSize={20}
+                      borderRadius={10}
+                      width="100%"
+                    >
+                      {road.name}
+                    </Text>
+                    <AccordionIcon />
+                  </AccordionButton>
+                  <AccordionPanel pb={4}>
+                    <>
+                      Work {road.progress} %
+                      <Progress
+                        colorScheme="green"
+                        height="20px"
+                        size="sm"
+                        mt={4}
+                        borderRadius="10px"
+                        value={road.progress}
+                      />
+                    </>
+                  </AccordionPanel>
+                </AccordionItem>
+              ))}
+            </Accordion>
             {project.github && (
               <Box mt={5}>
                 <Text>

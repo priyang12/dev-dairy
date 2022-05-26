@@ -1,3 +1,4 @@
+import { current } from '@reduxjs/toolkit';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import API from '.';
 import type { IProject } from '../interface';
@@ -65,12 +66,35 @@ const ProjectApi = createApi({
       },
     }),
     AddRoadMap: builder.mutation({
-      query(data) {
+      query({ projectId, roadMapData }) {
         return {
-          url: '/:id/roadMap',
-          method: 'put',
-          body: data,
+          url: `/${projectId}/roadMap`,
+          method: 'PATCH',
+          body: roadMapData,
         };
+      },
+      async onQueryStarted(
+        { projectId, roadMapData },
+        { dispatch, queryFulfilled },
+      ) {
+        const id = Math.random().toString(36);
+
+        const RoadMapResult = dispatch(
+          ProjectApi.util.updateQueryData(
+            'GetProjectId',
+            projectId,
+            (data: IProject) => {
+              data.roadMap.push({ ...roadMapData, progress: 0, _id: id });
+              return data;
+            },
+          ),
+        );
+        try {
+          const { data: RoadMap } = await queryFulfilled;
+          // Add Alert
+        } catch {
+          RoadMapResult.undo();
+        }
       },
     }),
     RemoveRoadMap: builder.mutation({

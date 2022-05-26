@@ -55,7 +55,7 @@ export interface IProject {
   title: string;
   description: string;
   technologies: string[];
-  roadMap?: IRoadMap[];
+  roadMap: IRoadMap[];
   process: number;
   live?: string;
   github?: string;
