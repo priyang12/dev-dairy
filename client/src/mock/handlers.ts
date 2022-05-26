@@ -75,6 +75,23 @@ const handlers = [
       }),
     ),
   ),
+  rest.patch(`${API}/projects/:id/roadMap/:roadMapId`, (req, res, ctx) =>
+    res(
+      ctx.json({
+        _id: '5f5d8f9b9b9b9b9b9b9b9b9b',
+        result: true,
+        message: 'RoadMap Updated Successfully',
+      }),
+    ),
+  ),
+  rest.delete(`${API}/projects/:id/roadMap/:roadMapId`, (req, res, ctx) =>
+    res(
+      ctx.json({
+        result: true,
+        message: 'RoadMap Deleted Successfully',
+      }),
+    ),
+  ),
 ];
 
 export default handlers;

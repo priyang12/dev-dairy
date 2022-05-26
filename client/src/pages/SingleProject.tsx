@@ -22,7 +22,9 @@ import {
   useAddRoadMapMutation,
   useDeleteProjectMutation,
   useGetProjectIdQuery,
+  useRemoveRoadMapMutation,
 } from '../API/ProjectAPI';
+import DeleteRoadMapModal from '../components/DeleteRoadMap';
 import ModalComponent from '../components/ModalComponent';
 import RoadMapModal from '../components/RoadMapModal';
 import RandomColor from '../utils/RandomColor';
@@ -37,7 +39,7 @@ function SingleProject() {
 
   const [DeleteProjectMutation, DeleteResult] = useDeleteProjectMutation();
   const [RoadMapMutate, RoadMapResult] = useAddRoadMapMutation();
-
+  const [DeleteRoadMap, DeleteMapResult] = useRemoveRoadMapMutation();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   if (isFetching || isLoading) return <div>Loading...</div>;
@@ -97,6 +99,11 @@ function SingleProject() {
                 result={RoadMapResult}
                 projectId={params.id}
               />
+              <DeleteRoadMapModal
+                onSubmit={RoadMapMutate}
+                result={RoadMapResult}
+                projectId={params.id}
+              />
             </Flex>
 
             <Accordion allowToggle>
@@ -126,6 +133,20 @@ function SingleProject() {
                         borderRadius="10px"
                         value={road.progress}
                       />
+                      <Button
+                        colorScheme="red"
+                        mt={5}
+                        isLoading={DeleteMapResult.isLoading}
+                        loadingText="Deleting..."
+                        onClick={() => {
+                          DeleteRoadMap({
+                            projectId: params.id,
+                            RoadMapId: road._id,
+                          });
+                        }}
+                      >
+                        Delete {road.name} RoadMap
+                      </Button>
                     </>
                   </AccordionPanel>
                 </AccordionItem>
@@ -168,7 +189,6 @@ function SingleProject() {
                   bg: 'red',
                   color: 'white',
                 }}
-                mt={5}
                 isLoading={DeleteResult.isLoading}
                 onClick={() => {
                   DeleteProjectMutation(project._id);

@@ -98,12 +98,28 @@ const ProjectApi = createApi({
       },
     }),
     RemoveRoadMap: builder.mutation({
-      query(data) {
+      query({ projectId, RoadMapId }) {
         return {
-          url: '/:id/roadMap',
+          url: `/${projectId}/roadMap/${RoadMapId}`,
           method: 'delete',
-          body: data,
         };
+      },
+      onQueryStarted({ projectId, RoadMapId }, { dispatch, queryFulfilled }) {
+        const deleteResult = dispatch(
+          ProjectApi.util.updateQueryData(
+            'GetProjectId',
+            projectId,
+            (data: IProject) => {
+              const NewRoadMap = data.roadMap.filter(
+                (item: any) => item._id !== RoadMapId,
+              );
+              data.roadMap = NewRoadMap;
+              return data;
+            },
+          ),
+        );
+
+        queryFulfilled.catch(deleteResult.undo);
       },
     }),
   }),
