@@ -11,7 +11,21 @@ export const AuthResponse = {
 
 export const NewPostResponse = {
   result: true,
-  message: 'Project Created Successfully',
+  message: 'Post Created Successfully',
+  post: {
+    _id: '628516b50552452738sadf73c',
+    title: 'New Created Post the Post',
+    description: 'New Post asdsad as asdihasd description',
+    project: {
+      process: 'in-progress',
+      _id: '628515d405524527385df72a',
+      title: 'Dev-Dairy',
+    },
+    status: 'In-Process',
+    roadMap: '6285167905524527385df72f',
+    user: '62812edf18f5ba45b7667f2e',
+    date: '2022-05-18T15:54:29.864Z',
+  },
 };
 
 export const PostsResponse = [

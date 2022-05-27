@@ -11,10 +11,19 @@ export default class PostService {
   ) {}
 
   public async GetAllPost(userId: string): Promise<IPost[]> {
-    const Posts = await this.PostModel.find({ user: userId }).populate(
-      "project",
-      "title process"
-    );
+    const Posts = await this.PostModel.find({ user: userId }).populate({
+      path: "project",
+      select: "title status",
+      // aggregate: {
+      //   $lookup: {
+      //     from: "projects",
+      //     localField: "project",
+      //     foreignField: "_id",
+      //     as: "project",
+      //   },
+      //   // Get only Roadmap
+      // },
+    });
 
     if (!Posts) {
       this.logger.error("Projects not found");

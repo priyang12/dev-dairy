@@ -6,7 +6,6 @@ import UserApi from './API/UserAPI';
 import ProjectApi from './API/ProjectAPI';
 import AuthReducer from './features/AuthSlice';
 import UserReducer from './features/UserSlice';
-import PostReducer from './features/PostSlice';
 
 const RootReducers = {
   [AuthApi.reducerPath]: AuthApi.reducer,
@@ -15,7 +14,6 @@ const RootReducers = {
   [ProjectApi.reducerPath]: ProjectApi.reducer,
   Auth: AuthReducer,
   User: UserReducer,
-  Post: PostReducer,
 };
 
 export const createStoreWithMiddleware = (initialState = {}): Store =>

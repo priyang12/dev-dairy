@@ -1,12 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import API from '.';
-import {
-  setPost,
-  setPosts,
-  setError,
-  setAlert,
-  DeletePost,
-} from '../features/PostSlice';
+import type { IPost } from '../interface';
 import type { RootState } from '../store';
 
 const PostApi = createApi({
@@ -31,16 +25,6 @@ const PostApi = createApi({
           method: 'get',
         };
       },
-      async onQueryStarted(args, { dispatch, queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled;
-          dispatch(setPosts(data));
-        } catch (error: any) {
-          const errorMessage = error.error.data.msg || 'server Error';
-          console.log(errorMessage);
-          //   setError(errorMessage);
-        }
-      },
     }),
     GetPost: builder.query<any, Partial<any>>({
       query(id) {
@@ -49,15 +33,6 @@ const PostApi = createApi({
           method: 'get',
         };
       },
-      async onQueryStarted(args, { dispatch, queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled;
-          dispatch(setPost(data));
-        } catch (error: any) {
-          const errorMessage = error.error.data.msg || 'server Error';
-          setError(errorMessage);
-        }
-      },
     }),
     GetPostByProject: builder.query<any, Partial<any>>({
       query(id) {
@@ -65,15 +40,6 @@ const PostApi = createApi({
           url: `/project/${id}`,
           method: 'get',
         };
-      },
-      async onQueryStarted(args, { dispatch, queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled;
-          dispatch(setPosts(data));
-        } catch (error: any) {
-          const errorMessage = error.error.data.msg || 'server Error';
-          setError(errorMessage);
-        }
       },
     }),
     NewPost: builder.mutation<any, Partial<any>>({
@@ -86,11 +52,17 @@ const PostApi = createApi({
       },
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         try {
-          const { data } = await queryFulfilled;
-          dispatch(setAlert(data));
+          const { data: NewPost } = await queryFulfilled;
+          dispatch(
+            PostApi.util.updateQueryData('GetPosts', '', (posts) => [
+              ...posts,
+              NewPost,
+            ]),
+          );
+          // dispatch(setAlert(data));
         } catch (error: any) {
-          const errorMessage = error.error.data.msg || 'server Error';
-          setError(errorMessage);
+          // const errorMessage = error.error.data.msg || 'server Error';
+          // setError(errorMessage);
         }
       },
     }),
@@ -102,6 +74,21 @@ const PostApi = createApi({
           body: data,
         };
       },
+      onQueryStarted(data, { dispatch, queryFulfilled }) {
+        const UpdateResult = dispatch(
+          PostApi.util.updateQueryData(
+            'GetPosts',
+            data._id,
+            (posts: IPost[]) => {
+              const newPost = posts.map((post) =>
+                post._id === data._id ? data : post,
+              );
+              return newPost;
+            },
+          ),
+        );
+        queryFulfilled.catch(UpdateResult.undo);
+      },
     }),
     DeletePost: builder.mutation({
       query(id) {
@@ -111,14 +98,14 @@ const PostApi = createApi({
         };
       },
 
-      async onQueryStarted(id, { dispatch, queryFulfilled }) {
-        dispatch(DeletePost(id));
-        try {
-          const { data } = await queryFulfilled;
-          dispatch(setAlert(data));
-        } catch (error) {
-          PostApi.util.invalidateTags(['Posts']);
-        }
+      onQueryStarted(id, { dispatch, queryFulfilled }) {
+        const deleteResult = dispatch(
+          PostApi.util.updateQueryData('GetPosts', '', (data: any) => {
+            const newData = data.filter((item: IPost) => item._id !== id);
+            return newData;
+          }),
+        );
+        queryFulfilled.catch(deleteResult.undo);
       },
     }),
   }),

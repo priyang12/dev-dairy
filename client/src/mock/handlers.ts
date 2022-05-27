@@ -14,8 +14,12 @@ const handlers = [
   rest.get(`${API}/user/me`, (req, res, ctx) =>
     res(ctx.json(AuthResponse.user)),
   ),
-  rest.post(`${API}/posts`, (req, res, ctx) => res(ctx.json(NewPostResponse))),
-  rest.get(`${API}/posts`, (req, res, ctx) => res(ctx.json(PostsResponse))),
+  rest.post(`${API}/posts`, (req, res, ctx) =>
+    res(ctx.delay(2000), ctx.json(NewPostResponse)),
+  ),
+  rest.get(`${API}/posts`, (req, res, ctx) =>
+    res(ctx.delay(2000), ctx.json(PostsResponse)),
+  ),
   rest.get(`${API}/posts/:id`, (req, res, ctx) =>
     res(ctx.json(PostsResponse[0])),
   ),
