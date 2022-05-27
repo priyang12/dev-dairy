@@ -1,35 +1,41 @@
-import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
+import { setToken } from './features/AuthSlice';
+import { useGetUserQuery } from './API/UserAPI';
 import Navbar from './components/Navbar';
 import LandingPage from './pages/LandingPage';
 import Login from './pages/login';
 import Register from './pages/register';
-
-import { FirebaseAuth } from './FirebaseConfig';
-import Feeds from './pages/feeds';
-// import { LOGOUT } from "./actions/types";
+import Posts from './pages/Posts';
+import PrivateOutlet from './components/PrivateRoute';
+import Spinner from './components/spinner';
+import Projects from './pages/Projects';
+import SingleProject from './pages/SingleProject';
+import { usePrefetch } from './API/ProjectAPI';
 
 function App() {
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
 
+  const { isLoading } = useGetUserQuery(cookies.token);
+  const getProjects = usePrefetch('GetProjects');
+
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    if (FirebaseAuth.currentUser) {
-      // Store Current User in session storage
-      sessionStorage.setItem('user', JSON.stringify(FirebaseAuth.currentUser));
+    if (cookies.token) {
+      getProjects('');
+      dispatch(setToken(cookies.token));
     }
+    return () => {
+      // dispatch({ type: LOGOUT });
+    };
+  }, [cookies.token, dispatch, getProjects]);
 
-    FirebaseAuth.onIdTokenChanged((user) => {
-      if (user) {
-        user.getIdToken(true).then((idToken) => {
-          setCookie('token', idToken, { path: '/Auth' });
-        });
-      } else {
-        removeCookie('token', { path: '/Auth' });
-      }
-    });
-  }, [setCookie, removeCookie]);
-
+  if (isLoading) {
+    return <Spinner />;
+  }
   return (
     <BrowserRouter>
       <Navbar />
@@ -37,7 +43,15 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/Auth/login" element={<Login />} />
         <Route path="/Auth/Register" element={<Register />} />
-        <Route path="/feeds" element={<Feeds />} />
+        <Route path="/" element={<PrivateOutlet />}>
+          <Route path="/feeds" element={<Posts />} />
+        </Route>
+        <Route path="/" element={<PrivateOutlet />}>
+          <Route path="/Projects" element={<Projects />} />
+        </Route>
+        <Route path="/" element={<PrivateOutlet />}>
+          <Route path="/Projects/:id" element={<SingleProject />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

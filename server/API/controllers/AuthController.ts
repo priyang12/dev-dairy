@@ -15,7 +15,6 @@ export const GetUser = asyncHandler(
   async (req: any, res: Response): Promise<any> => {
     const authServiceInstance = Container.get(UserService);
     const user = await authServiceInstance.GetUser(req.user);
-
     return res.status(200).json(user);
   }
 );

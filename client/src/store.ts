@@ -1,42 +1,34 @@
-import { createStore, applyMiddleware } from 'redux';
-import type { Store } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
-import thunk from 'redux-thunk';
-import RootReducers from './reducers';
+import type { Store } from '@reduxjs/toolkit/';
+import { configureStore } from '@reduxjs/toolkit/';
+import AuthApi from './API/AuthAPI';
+import PostApi from './API/PostAPI';
+import UserApi from './API/UserAPI';
+import ProjectApi from './API/ProjectAPI';
+import AuthReducer from './features/AuthSlice';
+import UserReducer from './features/UserSlice';
 
-const middleware = [thunk];
-
-
-export const createStoreWithMiddleware = (initialState = {}): Store => {
-  return createStore(
-    RootReducers,
-    initialState,
-    composeWithDevTools(applyMiddleware(...middleware)),
-  );
+const RootReducers = {
+  [AuthApi.reducerPath]: AuthApi.reducer,
+  [UserApi.reducerPath]: UserApi.reducer,
+  [PostApi.reducerPath]: PostApi.reducer,
+  [ProjectApi.reducerPath]: ProjectApi.reducer,
+  Auth: AuthReducer,
+  User: UserReducer,
 };
+
+export const createStoreWithMiddleware = (initialState = {}): Store =>
+  configureStore({
+    reducer: RootReducers,
+    preloadedState: initialState,
+    devTools: process.env.NODE_ENV !== 'production',
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware()
+        .concat(AuthApi.middleware)
+        .concat(UserApi.middleware)
+        .concat(PostApi.middleware)
+        .concat(ProjectApi.middleware),
+  });
+
 const store = createStoreWithMiddleware();
+
 export type RootState = ReturnType<typeof store.getState>;
-// const store: Store = createStore(
-//   RootReducers,
-//   initialState,
-//   composeWithDevTools(applyMiddleware(...middleware)),
-// );
-
-// set up a store subscription listener
-// to store the users token in localStorage
-
-// initialize current state from redux store for subscription comparison
-// preventing undefined error
-// let currentState = store.getState();
-
-// store.subscribe(() => {
-//   // keep track of the previous and current state to compare changes
-//   let previousState = currentState;
-//   currentState = store.getState();
-
-//   // if the token changes set the value in localStorage and axios headers
-//   // if (previousState.auth.token !== currentState.auth.token) {
-//   //   const token = currentState.auth.token;
-//   //   setAuthToken(token);
-//   // }
-// });

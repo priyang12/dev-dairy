@@ -16,7 +16,7 @@ declare global {
 
 window.msw = {
   worker,
-  rest
+  rest,
 };
 
 export default worker;

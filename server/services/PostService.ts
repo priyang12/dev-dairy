@@ -11,7 +11,20 @@ export default class PostService {
   ) {}
 
   public async GetAllPost(userId: string): Promise<IPost[]> {
-    const Posts = await this.PostModel.find({ user: userId });
+    const Posts = await this.PostModel.find({ user: userId }).populate({
+      path: "project",
+      select: "title status",
+      // aggregate: {
+      //   $lookup: {
+      //     from: "projects",
+      //     localField: "project",
+      //     foreignField: "_id",
+      //     as: "project",
+      //   },
+      //   // Get only Roadmap
+      // },
+    });
+
     if (!Posts) {
       this.logger.error("Projects not found");
       throw new Error("No Projects Found in Users");
@@ -52,7 +65,7 @@ export default class PostService {
     postId: string,
     post: IPost
   ): Promise<{
-    success: boolean;
+    result: boolean;
     message: string;
   }> {
     const updatedPost = await this.PostModel.findOneAndUpdate(
@@ -66,7 +79,7 @@ export default class PostService {
     }
     this.logger.info("Project Updated");
     return {
-      success: true,
+      result: true,
       message: "Project Updated Successfully",
     };
   }
@@ -74,7 +87,7 @@ export default class PostService {
     userId: string,
     postId: string
   ): Promise<{
-    success: boolean;
+    result: boolean;
     message: string;
   }> {
     const deletedPost = await this.PostModel.findOneAndDelete({
@@ -87,7 +100,7 @@ export default class PostService {
     }
     this.logger.info("Post Deleted");
     return {
-      success: true,
+      result: true,
       message: "Post Deleted Successfully",
     };
   }

@@ -50,7 +50,7 @@ export const GetPost = asyncHandler(
 // @desc     Get all posts
 // @access   Private
 export const GetAllPosts = asyncHandler(async (req: Request, res: Response) => {
-  const posts = await PostModal.find().sort({ date: -1 });
+  const posts = await PostModal.find().sort({ date: -1 }).populate("user");
   res.status(200).json({
     success: true,
     count: posts.length,
