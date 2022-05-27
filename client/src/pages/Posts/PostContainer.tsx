@@ -8,15 +8,16 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-  ModalFooter,
-  Select,
   useDisclosure,
 } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@chakra-ui/icons';
-import { useDeletePostMutation, useUpdatePostMutation } from '../API/PostAPI';
-import type { FormField } from './CustomForm';
-import CustomForm from './CustomForm';
-import ModalComponent from './ModalComponent';
+import {
+  useDeletePostMutation,
+  useUpdatePostMutation,
+} from '../../API/PostAPI';
+import type { FormField } from '../../components/CustomForm';
+import CustomForm from '../../components/CustomForm';
+import ModalComponent from '../../components/ModalComponent';
 
 type PropTypes = {
   post: any;
@@ -39,7 +40,7 @@ const PostField: FormField[] = [
 
 function PostContainer({ post }: PropTypes) {
   const [mutation, { isLoading }] = useDeletePostMutation();
-  const [UpdateMutate, UpdateResult] = useUpdatePostMutation();
+  // const [UpdateMutate, UpdateResult] = useUpdatePostMutation();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch();
   const deletePost = () => {
@@ -51,34 +52,6 @@ function PostContainer({ post }: PropTypes) {
   }
   return (
     <GridItem bgColor="gray.500" color="#fff" p={10} borderRadius={20}>
-      <ModalComponent Title="Create Post" isOpen={isOpen} onClose={onClose}>
-        <CustomForm
-          FormFields={PostField}
-          SubmitForm={() => {
-            console.log('Update UpdateMutate');
-          }}
-          mb={2}
-        >
-          <Select mb={2} name="status" id="status">
-            <option defaultValue="value" value="In-Process">
-              In-Process
-            </option>
-            <option value="Started">Started</option>
-            <option value="Done">Done</option>
-          </Select>
-          <ModalFooter>
-            <Button
-              isLoading={UpdateResult.isLoading}
-              type="submit"
-              loadingText="Just a moment ..."
-              colorScheme="blue"
-              variant="solid"
-            >
-              Update Log
-            </Button>
-          </ModalFooter>
-        </CustomForm>
-      </ModalComponent>
       <Box as="article" position="relative">
         <div className="row">
           <p>Title : {post.project.title}</p>

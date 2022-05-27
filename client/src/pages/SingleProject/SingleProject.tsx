@@ -23,11 +23,11 @@ import {
   useDeleteProjectMutation,
   useGetProjectIdQuery,
   useRemoveRoadMapMutation,
-} from '../API/ProjectAPI';
-import DeleteRoadMapModal from '../components/DeleteRoadMap';
-import ModalComponent from '../components/ModalComponent';
-import RoadMapModal from '../components/RoadMapModal';
-import RandomColor from '../utils/RandomColor';
+} from '../../API/ProjectAPI';
+import DeleteRoadMapModal from '../../components/DeleteRoadMap';
+import ModalComponent from '../../components/ModalComponent';
+import RoadMapModal from '../../components/RoadMapModal';
+import RandomColor from '../../utils/RandomColor';
 
 function SingleProject() {
   const params = useParams();

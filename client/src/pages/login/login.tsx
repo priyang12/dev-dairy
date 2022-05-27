@@ -11,12 +11,12 @@ import {
   Link,
   Text,
 } from '@chakra-ui/react';
-import type { FormField } from '../components/CustomForm';
-import type { AuthState } from '../interface';
-import { useLoginUserMutation } from '../API/AuthAPI';
-import { ValidateEmail, ValidatePassword } from '../utils/Validation';
-import CustomForm from '../components/CustomForm';
-import Spinner from '../components/spinner';
+import type { FormField } from '../../components/CustomForm';
+import type { AuthState } from '../../interface';
+import { useLoginUserMutation } from '../../API/AuthAPI';
+import { ValidateEmail, ValidatePassword } from '../../utils/Validation';
+import CustomForm from '../../components/CustomForm';
+import Spinner from '../../components/spinner';
 
 function Login() {
   const [cookies, setCookie, removeCookie] = useCookies(['token']);

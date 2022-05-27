@@ -1,7 +1,7 @@
 import { Box, Flex, Heading } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
-import type { AuthState } from '../interface';
+import type { AuthState } from '../../interface';
 
 function LandingPage() {
   const { authenticated }: AuthState = useSelector((state: any) => state.Auth);

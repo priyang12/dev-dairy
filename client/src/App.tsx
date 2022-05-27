@@ -8,7 +8,7 @@ import Navbar from './components/Navbar';
 import LandingPage from './pages/LandingPage';
 import Login from './pages/login';
 import Register from './pages/register';
-import Feeds from './pages/feeds';
+import Posts from './pages/Posts';
 import PrivateOutlet from './components/PrivateRoute';
 import Spinner from './components/spinner';
 import Projects from './pages/Projects';
@@ -44,7 +44,7 @@ function App() {
         <Route path="/Auth/login" element={<Login />} />
         <Route path="/Auth/Register" element={<Register />} />
         <Route path="/" element={<PrivateOutlet />}>
-          <Route path="/feeds" element={<Feeds />} />
+          <Route path="/feeds" element={<Posts />} />
         </Route>
         <Route path="/" element={<PrivateOutlet />}>
           <Route path="/Projects" element={<Projects />} />

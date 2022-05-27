@@ -1,8 +1,8 @@
-import { HStack, Container, Progress, Flex } from '@chakra-ui/react';
+import { Container, Flex } from '@chakra-ui/react';
 
-import { useGetProjectsQuery } from '../API/ProjectAPI';
-import ProjectCard from '../components/ProjectCard';
-import type { IProject } from '../interface';
+import { useGetProjectsQuery } from '../../API/ProjectAPI';
+import ProjectCard from '../../components/ProjectCard';
+import type { IProject } from '../../interface';
 
 function Projects() {
   const { isLoading, isFetching, data } = useGetProjectsQuery('');

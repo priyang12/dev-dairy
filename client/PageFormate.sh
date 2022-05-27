@@ -18,7 +18,7 @@ for entry in "$Path"/*; do
     touch "$Path/$(basename "$entry" .tsx)/index.tsx"
     # create a file for each file and remove .js extension
     mv "$entry" "$Path/$(basename "$entry" .tsx)/$(basename "$entry" .tsx).tsx"
-    # touch "$Path/$(basename "$entry" .tsx)/index.tsx"
-    # index $(basename "$entry" .tsx)
+    touch "$Path/$(basename "$entry" .tsx)/index.tsx"
+    index $(basename "$entry" .tsx)
 
 done

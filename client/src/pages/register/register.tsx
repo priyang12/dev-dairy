@@ -2,16 +2,16 @@ import { useSelector } from 'react-redux';
 import { useCookies } from 'react-cookie';
 import { Navigate as Redirect } from 'react-router-dom';
 import { Box, Button, Flex } from '@chakra-ui/react';
-import type { FormField } from '../components/CustomForm';
-import CustomForm from '../components/CustomForm';
+import type { FormField } from '../../components/CustomForm';
+import CustomForm from '../../components/CustomForm';
 import {
   ConfirmPassword,
   ValidateEmail,
   ValidateName,
   ValidatePassword,
-} from '../utils/Validation';
-import { useRegisterUserMutation } from '../API/AuthAPI';
-import type { AuthState } from '../interface';
+} from '../../utils/Validation';
+import { useRegisterUserMutation } from '../../API/AuthAPI';
+import type { AuthState } from '../../interface';
 
 function Register() {
   const [cookies, setCookie, removeCookie] = useCookies(['token']);

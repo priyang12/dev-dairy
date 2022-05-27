@@ -6,7 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { createStoreWithMiddleware } from '../../store';
 
 // Component: Feeds
-import Feeds from '../feeds';
+import Posts from './posts';
 
 const store = createStoreWithMiddleware();
 // Test: Feeds
@@ -14,7 +14,7 @@ it('Feeds Form', () => {
   render(
     <Provider store={store}>
       <BrowserRouter>
-        <Feeds />
+        <Posts />
       </BrowserRouter>
     </Provider>,
   );
