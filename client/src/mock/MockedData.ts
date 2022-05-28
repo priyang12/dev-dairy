@@ -38,7 +38,7 @@ export const PostsResponse = [
       _id: '628515d405524527385df72a',
       title: 'Dev-Dairy',
     },
-    status: 'In-Process',
+    status: 'Done',
     roadMap: '6285167905524527385df72f',
     user: '62812edf18f5ba45b7667f2e',
     date: '2022-05-18T15:54:29.864Z',

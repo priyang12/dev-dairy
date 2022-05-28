@@ -25,6 +25,7 @@ const PostApi = createApi({
           method: 'get',
         };
       },
+      providesTags: ['Posts'],
     }),
     GetPost: builder.query<any, Partial<any>>({
       query(id) {
@@ -50,42 +51,40 @@ const PostApi = createApi({
           body: data,
         };
       },
-      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+      async onQueryStarted(data, { dispatch, queryFulfilled }) {
         try {
           const { data: NewPost } = await queryFulfilled;
           dispatch(
-            PostApi.util.updateQueryData('GetPosts', '', (posts) => [
+            PostApi.util.updateQueryData('GetPosts', '', (posts: IPost[]) => [
+              NewPost.post,
               ...posts,
-              NewPost,
             ]),
           );
           // dispatch(setAlert(data));
         } catch (error: any) {
           // const errorMessage = error.error.data.msg || 'server Error';
-          // setError(errorMessage);
+          // setError(errorMessage);s
+          console.log(error);
+          dispatch(PostApi.util.invalidateTags(['Posts']));
         }
       },
     }),
     UpdatePost: builder.mutation<any, Partial<any>>({
       query(data) {
         return {
-          url: '',
+          url: `/${data._id}`,
           method: 'put',
           body: data,
         };
       },
       onQueryStarted(data, { dispatch, queryFulfilled }) {
         const UpdateResult = dispatch(
-          PostApi.util.updateQueryData(
-            'GetPosts',
-            data._id,
-            (posts: IPost[]) => {
-              const newPost = posts.map((post) =>
-                post._id === data._id ? data : post,
-              );
-              return newPost;
-            },
-          ),
+          PostApi.util.updateQueryData('GetPosts', '', (posts: IPost[]) => {
+            const newPost = posts.map((post) =>
+              post._id === data._id ? data : post,
+            );
+            return newPost;
+          }),
         );
         queryFulfilled.catch(UpdateResult.undo);
       },

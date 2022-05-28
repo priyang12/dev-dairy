@@ -8,18 +8,18 @@ import PostModal from './PostModal';
 
 function Feeds() {
   const { isLoading, data: Posts } = useGetPostsQuery('');
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [AddNewPost, NewPostMutaion] = useNewPostMutation();
 
   if (isLoading) return <Spinner />;
 
   return (
     <div className="top">
       <MarginContainer>
-        <Button onClick={onOpen} textAlign="center">
-          Create New Log
-        </Button>
-        <PostModal />
+        <PostModal
+          action="New"
+          actionSubmit={AddNewPost}
+          actionResult={NewPostMutaion}
+        />
         <Heading size="4xl">Dairy Log</Heading>
         {/* {Post.alert && (
           <Alert status={Post.alert.result ? 'success' : 'error'}>
