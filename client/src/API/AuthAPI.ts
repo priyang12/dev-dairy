@@ -25,7 +25,6 @@ const AuthApi = createApi({
           dispatch(setToken(data.token));
           dispatch(setUser(data.user));
         } catch (error: any) {
-          console.log(error.error);
           const ErrorMessage = error.error.data.message || 'Server Error';
 
           dispatch(setError(ErrorMessage));
@@ -48,8 +47,9 @@ const AuthApi = createApi({
           const { data } = await queryFulfilled;
           dispatch(setToken(data.token));
           dispatch(setUser(data.user));
-        } catch (error) {
-          dispatch(setError(error));
+        } catch (error: any) {
+          const ErrorMessage = error.error.data.message || 'Server Error';
+          dispatch(setError(ErrorMessage));
         }
       },
     }),

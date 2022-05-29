@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useCookies } from 'react-cookie';
 import { Link as RouterLink, Navigate } from 'react-router-dom';
@@ -16,14 +17,13 @@ import type { AuthState } from '../../interface';
 import { useLoginUserMutation } from '../../API/AuthAPI';
 import { ValidateEmail, ValidatePassword } from '../../utils/Validation';
 import CustomForm from '../../components/CustomForm';
-import Spinner from '../../components/spinner';
 
 function Login() {
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
   const [loginUser, result] = useLoginUserMutation();
 
   const Auth: AuthState = useSelector((state: any) => state.Auth);
-  console.log(Auth);
+
   const LoginFields: FormField[] = [
     {
       fieldType: 'email',
@@ -55,11 +55,16 @@ function Login() {
     }
   };
 
+  useEffect(() => {
+    if (Auth.authenticated) {
+      <Navigate to="/Projects" />;
+    }
+  }, [Auth.authenticated]);
+
   if (Auth.authenticated) {
     if (Auth.token) setCookie('token', Auth.token, { path: '/' });
-    return <Navigate to="/Projects" />;
   }
-
+  console.log(Auth.error);
   return (
     <Box m={['15', '100']}>
       <Flex
@@ -79,12 +84,12 @@ function Login() {
           justify="flex-end"
           width={['100%', '75%', '50%']}
         >
-          {Auth.error && (
+          {/* {Auth.error && (
             <Alert status="error" borderRadius={10} mb={5}>
               <AlertIcon />
               {Auth.error}
             </Alert>
-          )}
+          )} */}
           <CustomForm SubmitForm={LoginUser} FormFields={LoginFields}>
             <Button
               isLoading={result.isLoading}

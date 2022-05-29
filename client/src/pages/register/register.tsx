@@ -1,11 +1,12 @@
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useCookies } from 'react-cookie';
-import { Navigate as Redirect } from 'react-router-dom';
-import { Box, Button, Flex } from '@chakra-ui/react';
+import { Navigate, Navigate as Redirect } from 'react-router-dom';
+import { Alert, AlertIcon, Box, Button, Flex } from '@chakra-ui/react';
 import type { FormField } from '../../components/CustomForm';
 import CustomForm from '../../components/CustomForm';
 import {
-  ConfirmPassword,
+  ConfirmPasswordCheck,
   ValidateEmail,
   ValidateName,
   ValidatePassword,
@@ -35,33 +36,56 @@ function Register() {
     },
     {
       fieldType: 'password',
-      fieldName: 'Confirm password',
+      fieldName: 'ConfirmPassword',
       placeholder: 'Confirm your Password',
     },
   ];
-  const RegisterUser = (FormValues: any, setErrors: any) => {
-    const UsernameError = ValidateName(FormValues.name);
-    const EmailError = ValidateEmail(FormValues.email);
-    const PasswordError = ValidatePassword(FormValues.password);
-    const ConfirmError = ConfirmPassword(
-      FormValues.password,
-      FormValues.password,
+  interface FormData {
+    name: { value: string };
+    email: { value: string };
+    password: { value: string };
+    ConfirmPassword: { value: string };
+  }
+  const RegisterUser = (
+    e: React.FormEvent<HTMLFormElement> | any,
+    setErrors: any,
+  ) => {
+    e.preventDefault();
+
+    const { email, name, password, ConfirmPassword } = e.target
+      .elements as typeof e.target.elements & FormData;
+
+    const UsernameError = ValidateName(name.value);
+    const EmailError = ValidateEmail(email.value);
+    const PasswordError = ValidatePassword(password.value);
+    const ConfirmError = ConfirmPasswordCheck(
+      password.value,
+      ConfirmPassword.value,
     );
-    setErrors({
-      name: UsernameError,
-      email: EmailError,
-      password: PasswordError,
-      confirm: ConfirmError,
-    });
+
     if (!UsernameError && !EmailError && !PasswordError && !ConfirmError) {
-      registerUser(FormValues);
+      registerUser({
+        name: name.value,
+        email: email.value,
+        password: password.value,
+        password2: ConfirmPassword.value,
+      });
     } else {
-      // Set Alert
+      setErrors({
+        name: UsernameError,
+        email: EmailError,
+        password: PasswordError,
+        ConfirmPassword: ConfirmError,
+      });
     }
   };
+  useEffect(() => {
+    if (Auth.authenticated) {
+      <Navigate to="/Projects" />;
+    }
+  }, [Auth.authenticated]);
   if (Auth.authenticated) {
     setCookie('token', Auth.token, { path: '/' });
-    return <Redirect to="/feeds" />;
   }
   return (
     <Box m={['15', '100']}>
@@ -70,6 +94,12 @@ function Register() {
         justifyContent="space-between"
         flexDir={['column', 'column', 'row']}
       >
+        {Auth.error && (
+          <Alert status="error" borderRadius={10} mb={5}>
+            <AlertIcon />
+            {Auth.error}
+          </Alert>
+        )}
         <CustomForm FormFields={RegisterFields} SubmitForm={RegisterUser}>
           <Button
             isLoading={result.isLoading}
@@ -78,11 +108,11 @@ function Register() {
             colorScheme="blue"
             variant="solid"
           >
-            Register
+            Register Now
           </Button>
         </CustomForm>
         <div>
-          <h1 className="display-4 text-center">Register</h1>
+          <h1 className="display-4 text-center">Register your self</h1>
           <p className="text-center lead">
             Sign up for your DevConnector account
           </p>

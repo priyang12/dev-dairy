@@ -3,7 +3,13 @@ import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import type { AuthState } from '../../interface';
 
-function LandingPage() {
+function LandingPage({
+  heading,
+  subheading,
+}: {
+  heading: string;
+  subheading: string;
+}) {
   const { authenticated }: AuthState = useSelector((state: any) => state.Auth);
 
   if (authenticated) return <Navigate to="/feeds" />;
@@ -17,15 +23,14 @@ function LandingPage() {
       >
         <Box margin={50}>
           <Heading as="h1" fontSize={['4xl', '6xl', '9xl']}>
-            Developer Connector
+            {heading}{' '}
           </Heading>
           <Heading
             as="p"
             fontSize={['xl', 'xl', '2xl']}
             textAlign={['left', 'left', 'center']}
           >
-            Create a developer profile/portfolio, share posts and get help from
-            other developers
+            {subheading}
           </Heading>
         </Box>
       </Flex>

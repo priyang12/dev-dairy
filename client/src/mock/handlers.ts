@@ -9,7 +9,7 @@ import {
 } from './MockedData';
 
 const handlers = [
-  rest.post(`/mock/login`, (req, res, ctx) => res(ctx.json(AuthResponse))),
+  rest.post(`${API}/login`, (req, res, ctx) => res(ctx.json(AuthResponse))),
   rest.post(`${API}/register`, (req, res, ctx) => res(ctx.json(AuthResponse))),
   rest.get(`${API}/user/me`, (req, res, ctx) =>
     res(ctx.json(AuthResponse.user)),

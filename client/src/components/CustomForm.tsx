@@ -34,6 +34,7 @@ function Form({ SubmitForm, FormFields, mb = 5, children }: Props) {
 
   const check = (e: any) => {
     e.preventDefault();
+
     SubmitForm(e, setErrors);
   };
 
