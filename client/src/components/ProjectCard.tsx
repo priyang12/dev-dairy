@@ -38,6 +38,7 @@ function ProjectCard({ Project }: { Project: IProject }) {
           height="20px"
           size="sm"
           mt={4}
+          data-testid={`progress-bar-${Project._id}`}
           borderRadius="10px"
           value={Project.process}
         />

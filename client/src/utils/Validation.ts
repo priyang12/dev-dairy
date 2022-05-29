@@ -19,7 +19,7 @@ export const ValidatePassword = (password: string) => {
   return '';
 };
 
-export const ConfirmPassword = (password: string, password2: string) => {
+export const ConfirmPasswordCheck = (password: string, password2: string) => {
   if (password !== password2) return 'Passwords do not match';
   return '';
 };

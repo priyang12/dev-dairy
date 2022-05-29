@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useCookies } from 'react-cookie';
-import { Link as RouterLink, Navigate } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import {
   Alert,
   AlertIcon,
@@ -21,7 +21,7 @@ import CustomForm from '../../components/CustomForm';
 function Login() {
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
   const [loginUser, result] = useLoginUserMutation();
-
+  const navigate = useNavigate();
   const Auth: AuthState = useSelector((state: any) => state.Auth);
 
   const LoginFields: FormField[] = [
@@ -57,14 +57,14 @@ function Login() {
 
   useEffect(() => {
     if (Auth.authenticated) {
-      <Navigate to="/Projects" />;
+      navigate('/Projects');
     }
-  }, [Auth.authenticated]);
+  }, [Auth.authenticated, navigate]);
 
   if (Auth.authenticated) {
     if (Auth.token) setCookie('token', Auth.token, { path: '/' });
   }
-  console.log(Auth.error);
+
   return (
     <Box m={['15', '100']}>
       <Flex
@@ -84,12 +84,12 @@ function Login() {
           justify="flex-end"
           width={['100%', '75%', '50%']}
         >
-          {/* {Auth.error && (
+          {Auth.error && (
             <Alert status="error" borderRadius={10} mb={5}>
               <AlertIcon />
               {Auth.error}
             </Alert>
-          )} */}
+          )}
           <CustomForm SubmitForm={LoginUser} FormFields={LoginFields}>
             <Button
               isLoading={result.isLoading}

@@ -32,7 +32,7 @@ export const PostsResponse = [
   {
     _id: '628516b505524527385df73c',
     title: 'Second Post the Post',
-    description: 'New Post asdsad as asdihasd description',
+    description: 'New Post as asdihasd description',
     project: {
       process: 'in-progress',
       _id: '628515d405524527385df72a',
@@ -47,7 +47,7 @@ export const PostsResponse = [
   {
     _id: '628516d105524527385df73f',
     title: 'FrontEnd Progress Post the Post',
-    description: 'New Post asdsad as asdihasd description',
+    description: 'New Post 2 asdsad as asdihasd description',
     project: {
       process: 'in-progress',
       _id: '628515d405524527385df72a',
@@ -62,7 +62,7 @@ export const PostsResponse = [
   {
     _id: '6285e63bb2870148f0b43c0b',
     title: 'New Post',
-    description: 'New Post asdsad as asdihasd description',
+    description: 'New Post 3 asdsad as asdihasd description',
     project: {
       process: 'in-progress',
       _id: '628515d405524527385df72a',
@@ -81,14 +81,14 @@ export const ProjectsResponse = [
     technologies: ['React', 'Node.js', 'Monogo', 'Express'],
     process: 20,
     _id: '628515d405524527385df72a',
-    title: 'Dev-Dairy',
-    description: "MERN stack prototype for maintaing dev's personal dairy",
+    title: 'Dev-Dairy 2',
+    description: "MERN stack prototype for dev's personal dairy",
     user: '62812edf18f5ba45b7667f2e',
-    date: '2022-05-18T15:50:44.201Z',
+    date: '2022-05-19T15:50:44.201Z',
     __v: 0,
   },
   {
-    technologies: ['React', 'Node.js', 'Monogo', 'Express'],
+    technologies: ['Next.js', 'Tailwind'],
     process: 50,
     _id: '628515d405524527385dsdf2a',
     title: 'Dev-Dairy',
