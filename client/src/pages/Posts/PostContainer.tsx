@@ -1,7 +1,6 @@
-import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import { Box, Button, GridItem } from '@chakra-ui/react';
-import { ChevronDownIcon } from '@chakra-ui/icons';
+import { Box, Button, GridItem, useDisclosure } from '@chakra-ui/react';
+
 import {
   useDeletePostMutation,
   useUpdatePostMutation,
@@ -9,26 +8,27 @@ import {
 
 import PostModal from './PostModal';
 import { useGetProjectsQuery } from '../../API/ProjectAPI';
+import Spinner from '../../components/spinner';
 
 type PropTypes = {
   post: any;
 };
 
 function PostContainer({ post }: PropTypes) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [mutation, { isLoading }] = useDeletePostMutation();
   const [UpdateMutate, UpdateResult] = useUpdatePostMutation();
   const { data: Projects } = useGetProjectsQuery('');
   const postProject =
     typeof post.project === 'string' &&
     Projects.find((project: any) => project._id === post.project);
-  console.log(postProject);
-  const dispatch = useDispatch();
+
   const deletePost = () => {
-    dispatch(mutation(post._id));
+    mutation(post._id);
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Spinner />;
   }
 
   return (
@@ -54,12 +54,17 @@ function PostContainer({ post }: PropTypes) {
         <Button colorScheme="red" onClick={deletePost}>
           Delete Post
         </Button>
-        <PostModal
-          action="Update"
-          post={post}
-          actionSubmit={UpdateMutate}
-          actionResult={UpdateResult}
-        />
+        <Button onClick={onOpen}>Update Post</Button>
+        {isOpen && (
+          <PostModal
+            onClose={onClose}
+            isOpen={isOpen}
+            action="Update"
+            post={post}
+            actionSubmit={UpdateMutate}
+            actionResult={UpdateResult}
+          />
+        )}
       </Box>
     </GridItem>
   );

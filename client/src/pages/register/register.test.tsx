@@ -5,7 +5,7 @@ import API from '../../API';
 import server from '../../mock/server';
 import { render, screen, waitForElementToBeRemoved } from '../../test-utils';
 
-import Register from './register';
+import Register from './index';
 
 const setup = (): any => {
   render(

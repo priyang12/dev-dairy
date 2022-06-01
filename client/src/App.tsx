@@ -15,6 +15,11 @@ import Projects from './pages/Projects';
 import SingleProject from './pages/SingleProject';
 import { usePrefetch } from './API/ProjectAPI';
 
+const LandingData = {
+  heading: 'Dev Dairy',
+  subheading: 'Mange your projects and share your knowledge with the world',
+};
+
 function App() {
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
 
@@ -25,8 +30,8 @@ function App() {
 
   useEffect(() => {
     if (cookies.token) {
-      getProjects('');
       dispatch(setToken(cookies.token));
+      getProjects('');
     }
     return () => {
       // dispatch({ type: LOGOUT });
@@ -40,7 +45,15 @@ function App() {
     <BrowserRouter>
       <Navbar />
       <Routes>
-        <Route path="/" element={<LandingPage />} />
+        <Route
+          path="/"
+          element={
+            <LandingPage
+              subheading={LandingData.subheading}
+              heading={LandingData.heading}
+            />
+          }
+        />
         <Route path="/Auth/login" element={<Login />} />
         <Route path="/Auth/Register" element={<Register />} />
         <Route path="/" element={<PrivateOutlet />}>

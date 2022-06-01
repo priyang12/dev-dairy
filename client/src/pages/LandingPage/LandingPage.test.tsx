@@ -1,5 +1,5 @@
 import { screen, render } from '../../test-utils';
-import LandingPage from './LandingPage';
+import LandingPage from './index';
 
 it('render The Landing Text', () => {
   const LandingData = {

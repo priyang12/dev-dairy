@@ -24,6 +24,6 @@ export default (app: Router) => {
     .delete(auth, DeleteProject);
   app
     .route("/projects/:id/roadMap")
-    .put(auth, ProjectValidator("AddRoadMap"), AddRoadMap)
+    .patch(auth, ProjectValidator("AddRoadMap"), AddRoadMap)
     .delete(auth, DeleteRoadMap);
 };

@@ -52,13 +52,24 @@ export default class PostService {
     this.logger.info("Project Found");
     return post;
   }
-  public async CreatePost(userId: string, post: IPost): Promise<IPost> {
+  public async CreatePost(
+    userId: string,
+    post: IPost
+  ): Promise<{
+    result: boolean;
+    message: string;
+    post: IPost;
+  }> {
     const newPost = await this.PostModel.create({
       ...post,
       user: userId,
     });
     this.logger.info("Project Created");
-    return newPost;
+    return {
+      result: true,
+      message: "Project Created Successfully",
+      post: newPost,
+    };
   }
   public async UpdatePost(
     userId: string,

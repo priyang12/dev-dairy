@@ -6,6 +6,7 @@ import {
   useDisclosure,
   Input,
   Textarea,
+  Skeleton,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 
@@ -13,7 +14,7 @@ import {
   useGetProjectIdQuery,
   useGetProjectsQuery,
 } from '../../API/ProjectAPI';
-import type { IPost, IProject } from '../../interface';
+import type { INewPost, IPost, IProject } from '../../interface';
 import ModalComponent from '../../components/ModalComponent';
 
 interface Props {
@@ -21,9 +22,18 @@ interface Props {
   post?: IPost;
   actionSubmit: (data: any) => void;
   actionResult: any;
+  onClose: () => void;
+  isOpen: boolean;
 }
 
-function PostModal({ action, post, actionSubmit, actionResult }: Props) {
+function PostModal({
+  action,
+  post,
+  actionSubmit,
+  actionResult,
+  onClose,
+  isOpen,
+}: Props) {
   const [RoadMapColor, setRoadMapColor] = useState('');
   const [proId, setproId] = useState(post?.project ? post.project._id : '');
   const { data: Projects, isLoading: LoadingProject } = useGetProjectsQuery('');
@@ -34,8 +44,6 @@ function PostModal({ action, post, actionSubmit, actionResult }: Props) {
       skip: !proId,
     },
   );
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const ChangeRoadMapSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setproId(e.target.value);
@@ -48,53 +56,48 @@ function PostModal({ action, post, actionSubmit, actionResult }: Props) {
     setRoadMapColor('');
     setproId('');
   };
-  const NewPost = (e: any) => {
+  const submit = (e: React.FormEvent<HTMLFormElement> | any) => {
     e.preventDefault();
-    const { title, description, Project, status, roadMap } = e.target.elements;
-    const data: any = {
+
+    const { title, description, Project, status, roadMap } = e.target
+      .elements as typeof e.target.elements & any;
+
+    const data: INewPost | any = {
       title: title.value,
       description: description.value,
       project: Project.value,
       status: status.value,
-      roadMap: roadMap.value.split[0],
+      roadMap: roadMap.value.split(',')[0],
     };
     if (action !== 'New') {
       data._id = post?._id;
     }
+
     actionSubmit(data);
     ResetModal();
   };
-  if (actionResult.isSuccess && isOpen) {
-    actionResult.reset();
-    ResetModal();
-    onClose();
-  }
 
   return (
-    <>
-      <Button onClick={onOpen}>
-        {action === 'New' ? 'Create New Log' : 'Update Post'}
-      </Button>
-      <ModalComponent Title={`${action} Log`} isOpen={isOpen} onClose={onClose}>
-        <form onSubmit={NewPost}>
-          <FormLabel htmlFor="title" spellCheck>
-            Title
-          </FormLabel>
-          <Input
-            type="text"
-            name="title"
-            id="title"
-            defaultValue={post?.title}
-          />
-          <FormLabel htmlFor="description" spellCheck>
-            Description
-          </FormLabel>
-          <Textarea
-            name="description"
-            id="description"
-            defaultValue={post?.description}
-          />
-          <FormLabel htmlFor="Project">Project</FormLabel>
+    <ModalComponent Title={`${action} Log`} isOpen={isOpen} onClose={onClose}>
+      <form onSubmit={submit}>
+        <FormLabel htmlFor="title" spellCheck>
+          Title
+        </FormLabel>
+        <Input type="text" name="title" id="title" defaultValue={post?.title} />
+        <FormLabel htmlFor="description" spellCheck>
+          Description
+        </FormLabel>
+        <Textarea
+          name="description"
+          id="description"
+          defaultValue={post?.description}
+        />
+        <FormLabel htmlFor="Project">Project</FormLabel>
+        {LoadingProject ? (
+          <Skeleton>
+            <div>Loading Projects</div>
+          </Skeleton>
+        ) : (
           <Select
             mb={2}
             name="Project"
@@ -103,14 +106,22 @@ function PostModal({ action, post, actionSubmit, actionResult }: Props) {
             onChange={ChangeRoadMapSelect}
           >
             <option>Select Project</option>
-            {!LoadingProject &&
-              Projects?.map((project: IProject) => (
-                <option key={project._id} value={project._id}>
-                  {project.title}
-                </option>
-              ))}
-          </Select>
 
+            {Projects?.map((project: IProject) => (
+              <option key={project._id} value={project._id}>
+                {project.title}
+              </option>
+            ))}
+          </Select>
+        )}
+        <FormLabel htmlFor="roadMap" hidden>
+          RoadMap
+        </FormLabel>
+        {RoadMapFetching ? (
+          <Skeleton>
+            <div>Loading RoadMap</div>
+          </Skeleton>
+        ) : (
           <Select
             mb={2}
             name="roadMap"
@@ -119,35 +130,33 @@ function PostModal({ action, post, actionSubmit, actionResult }: Props) {
             onChange={RoadMapChange}
           >
             <option>Select RoadMap</option>
-            {!RoadMapFetching &&
-              RoadMap?.roadMap?.map((roadMap: any) => (
-                <option key={roadMap._id} value={[roadMap._id, roadMap.color]}>
-                  {roadMap.name}
-                </option>
-              ))}
+            {RoadMap?.roadMap.map((roadMap: any) => (
+              <option key={roadMap._id} value={[roadMap._id, roadMap.color]}>
+                {roadMap.name}
+              </option>
+            ))}
           </Select>
+        )}
 
-          <FormLabel htmlFor="status">status</FormLabel>
-          <Select mb={2} name="status" id="status" defaultValue={post?.status}>
-            <option value="In-Process">In-Process</option>
-            <option value="Started">Started</option>
-            <option value="Done">Done</option>
-          </Select>
-
-          <ModalFooter>
-            <Button
-              isLoading={actionResult.isLoading}
-              type="submit"
-              loadingText="Just a moment ..."
-              colorScheme="blue"
-              variant="solid"
-            >
-              {action === 'New' ? 'Create Log' : 'Update Log'}
-            </Button>
-          </ModalFooter>
-        </form>
-      </ModalComponent>
-    </>
+        <FormLabel htmlFor="status">status</FormLabel>
+        <Select mb={2} name="status" id="status" defaultValue={post?.status}>
+          <option value="In-Process">In-Process</option>
+          <option value="Started">Started</option>
+          <option value="Done">Done</option>
+        </Select>
+        <ModalFooter>
+          <Button
+            isLoading={actionResult.isLoading}
+            type="submit"
+            loadingText="Wait just for it..."
+            colorScheme="blue"
+            variant="solid"
+          >
+            {action === 'New' ? 'Create Log' : 'Update New Log'}
+          </Button>
+        </ModalFooter>
+      </form>
+    </ModalComponent>
   );
 }
 
