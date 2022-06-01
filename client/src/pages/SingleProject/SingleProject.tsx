@@ -18,6 +18,7 @@ import {
 } from '@chakra-ui/react';
 import moment from 'moment';
 import { Navigate, useParams } from 'react-router-dom';
+import invert from 'invert-color';
 import {
   useAddRoadMapMutation,
   useDeleteProjectMutation,
@@ -27,6 +28,8 @@ import {
 import DeleteRoadMapModal from '../../components/DeleteRoadMap';
 import ModalComponent from '../../components/ModalComponent';
 import RoadMapModal from '../../components/RoadMapModal';
+import Spinner from '../../components/spinner';
+
 import RandomColor from '../../utils/RandomColor';
 
 function SingleProject() {
@@ -42,13 +45,14 @@ function SingleProject() {
   const [DeleteRoadMap, DeleteMapResult] = useRemoveRoadMapMutation();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  if (isFetching || isLoading) return <div>Loading...</div>;
+  if (isFetching || isLoading) return <Spinner />;
   if (project === null) {
     return <div className="top">No Project Found</div>;
   }
   if (DeleteResult.isSuccess) {
     return <Navigate to="/projects" />;
   }
+
   return (
     <div className="top">
       <Container maxW="800px" mb={10}>
@@ -108,12 +112,15 @@ function SingleProject() {
 
             <Accordion allowToggle>
               {project.roadMap.map((road: any) => (
-                <AccordionItem>
+                <AccordionItem key={road._id}>
                   <AccordionButton>
                     <Text
                       key={road.name}
                       p={2}
                       bg={`${road.color ? road.color : RandomColor()}`}
+                      color={`${
+                        road.color ? invert(road.color) : RandomColor()
+                      }`}
                       fontSize={20}
                       borderRadius={10}
                       width="100%"

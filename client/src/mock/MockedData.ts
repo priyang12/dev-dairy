@@ -109,7 +109,7 @@ export const SingleProjectResponse = {
   user: '627bcea32b463cb2da6853b7',
   roadMap: [
     {
-      color: 'blue',
+      color: '#ffc107',
       progress: 20,
       _id: '627fa6043f711612ba80bd7d',
       name: 'backend',

@@ -33,7 +33,7 @@ module.exports = {
     'prettier/prettier': 0,
     // TypeScript
     'no-param-reassign': 0,
-
+    'jsx-props-no-spreading': 0,
     '@typescript-eslint/consistent-type-imports': 'warn',
     '@typescript-eslint/no-parameter-reassign': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
