@@ -14,6 +14,7 @@ import Spinner from './components/spinner';
 import Projects from './pages/Projects';
 import SingleProject from './pages/SingleProject';
 import { usePrefetch } from './API/ProjectAPI';
+import NewProject from './pages/NewProject';
 
 const LandingData = {
   heading: 'Dev Dairy',
@@ -64,6 +65,9 @@ function App() {
         </Route>
         <Route path="/" element={<PrivateOutlet />}>
           <Route path="/Projects/:id" element={<SingleProject />} />
+        </Route>
+        <Route path="/" element={<PrivateOutlet />}>
+          <Route path="/NewProject" element={<NewProject />} />
         </Route>
       </Routes>
     </BrowserRouter>

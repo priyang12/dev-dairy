@@ -88,21 +88,11 @@ export const AddRoadMap = asyncHandler(
 // @access Private
 export const DeleteRoadMap = asyncHandler(
   async (req: any, res: Response): Promise<any> => {
-    const deleteId = req.header("deleteId");
-    if (!deleteId) {
-      return res.status(422).json({
-        errors: [
-          {
-            msg: "Please provide deleteId",
-          },
-        ],
-      });
-    }
     const projectServiceInstance = Container.get(ProjectService);
     const message = await projectServiceInstance.DeleteRoadMap(
       req.user._id,
       req.params.id,
-      deleteId
+      req.params.roadMapId
     );
     return res.status(200).json(message);
   }

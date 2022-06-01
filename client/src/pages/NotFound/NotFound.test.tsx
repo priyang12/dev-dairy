@@ -1,5 +1,5 @@
 import { screen, render } from '../../test-utils';
-import NotFound from './NotFound';
+import NotFound from './index';
 
 it('render The Landing Text', () => {
   const LandingData = {

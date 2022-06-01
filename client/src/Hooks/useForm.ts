@@ -4,7 +4,9 @@ const useForm = (initialState: any) => {
   const [FormValues, setFormValues] = useState(initialState);
   const [ErrorsState, setErrorsState] = useState(initialState);
 
-  const HandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const HandleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { id, value } = e.target;
 
     if (value === '') {
