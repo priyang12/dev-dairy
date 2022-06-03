@@ -1,7 +1,31 @@
-export const ValidateName = (name: string) => {
+export const ValidateName = (name: string, FieldName?: string) => {
+  let error = '';
   if (name.length < 4 || name.length > 10)
-    return 'Name must be between 4 and 10 characters';
-  return '';
+    error = `${FieldName ?? 'Name'} must be between 4 and 10 characters`;
+
+  return error;
+};
+
+export const ValidateDescription = (
+  description: string,
+  FieldName?: string,
+) => {
+  let error = '';
+  if (description.length < 10 || description.length > 100)
+    error = `${
+      FieldName ?? 'Description'
+    } must be between 10 and 100 characters`;
+  return error;
+};
+
+export const userName = (name: string) => {
+  let error = '';
+  if (name.length < 4 || name.length > 10)
+    error = `Name must be between 4 and 10 characters`;
+
+  if (name.match(/[^a-zA-Z0-9]/)) {
+    error = 'Name must be alphanumeric';
+  }
 };
 
 export const ValidateEmail = (email: string) => {
@@ -22,4 +46,14 @@ export const ValidatePassword = (password: string) => {
 export const ConfirmPasswordCheck = (password: string, password2: string) => {
   if (password !== password2) return 'Passwords do not match';
   return '';
+};
+
+export const CheckURL = (string: string) => {
+  let url;
+  try {
+    url = new URL(string);
+  } catch (_) {
+    return false;
+  }
+  return url.protocol === 'http:' || url.protocol === 'https:';
 };

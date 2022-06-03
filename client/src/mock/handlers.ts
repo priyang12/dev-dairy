@@ -3,6 +3,7 @@ import API from '../API';
 import {
   AuthResponse,
   NewPostResponse,
+  NewProjectResponse,
   PostsResponse,
   ProjectsResponse,
   SingleProjectResponse,
@@ -46,13 +47,9 @@ const handlers = [
   rest.get(`${API}/projects`, (req, res, ctx) =>
     res(ctx.json(ProjectsResponse)),
   ),
+
   rest.post(`${API}/projects`, (req, res, ctx) =>
-    res(
-      ctx.json({
-        result: true,
-        message: 'Project Created Successfully',
-      }),
-    ),
+    res(ctx.json(NewProjectResponse)),
   ),
   rest.put(`${API}/projects/:id`, (req, res, ctx) =>
     res(

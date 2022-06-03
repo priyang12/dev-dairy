@@ -9,7 +9,7 @@ import App from './App';
 
 const Store = createStoreWithMiddleware();
 
-worker.stop();
+worker.start();
 
 const config = {
   useSystemColorMode: true,

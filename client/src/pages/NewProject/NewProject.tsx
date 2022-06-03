@@ -14,55 +14,133 @@ import {
   Textarea,
   Flex,
   Button,
-  Text,
   NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,
   NumberInputField,
   NumberInputStepper,
+  Switch,
 } from '@chakra-ui/react';
-import type { FormEvent } from 'react';
+
 import { useState } from 'react';
+import { Navigate as Redirect } from 'react-router-dom';
+import { useCreateProjectMutation } from '../../API/ProjectAPI';
 
 import useForm from '../../Hooks/useForm';
+import {
+  CheckURL,
+  ValidateDescription,
+  ValidateName,
+} from '../../utils/Validation';
+
+interface RoadMap {
+  title: string;
+  color: string;
+}
 
 function NewProject() {
+  const [CreateProject, CreateProjectResult] = useCreateProjectMutation();
   const [NewTech, setNewTech] = useState('');
   const [Technologies, setTechnologies] = useState<any[]>([]);
-  const AddNewTech = (e: FormEvent) => {
-    e.preventDefault();
-    setTechnologies([...Technologies, NewTech]);
-    setNewTech('');
+  const [NewRoadMap, setNewRoadMap] = useState<any>({
+    title: '',
+    color: '#000',
+  });
+  const [RoadMaps, setRoadMaps] = useState<RoadMap[]>([]);
+  const { FormValues, ErrorsState, HandleChange, SetState, setError } = useForm(
+    {
+      Title: '',
+      Description: '',
+      process: 5,
+      Github: '',
+      Live: false,
+      Website: '',
+      NewTech: '',
+    },
+  );
+
+  const AddNewTech = () => {
+    if (!ErrorsState.NewTech) {
+      setTechnologies([...Technologies, FormValues.NewTech]);
+      setNewTech('');
+      SetState({ ...FormValues, NewTech: '' });
+    }
+  };
+  const AddNewRoadMap = () => {
+    setRoadMaps([...RoadMaps, NewRoadMap]);
+    setNewRoadMap({
+      title: '',
+      color: '',
+    });
   };
   const DeleteTech = (index: number) => {
     const newTechs = [...Technologies];
     newTechs.splice(index, 1);
     setTechnologies(newTechs);
   };
-  const { FormValues, ErrorsState, HandleChange, setErrors, SetState } =
-    useForm({
-      Title: '',
-      Description: '',
-      process: 5,
-    });
-
   const ProcessChange = (value: number | any) => {
     SetState((prevState: any) => ({
       ...prevState,
       process: value,
     }));
   };
+
+  const AddNewProject = () => {
+    const { Title, Description, process, Github, Live, Website } = FormValues;
+    const newRoadMaps = [...RoadMaps];
+    const newTechs = [...Technologies];
+
+    const TitleError = setError('Title', ValidateName(Title, 'Title'));
+    const DescriptionError = setError(
+      'Description',
+      ValidateDescription(Description, 'Description'),
+    );
+    let GithubError = null;
+    let WebsiteError = null;
+    if (Github && !CheckURL(Github)) {
+      GithubError = setError('Github', 'Enter Valid Github Link');
+    }
+    if (Website && !CheckURL(Website)) {
+      WebsiteError = setError('Website', 'Enter Valid URL for Website');
+    }
+    const newProject = {
+      title: Title,
+      description: Description,
+      process,
+      github: Github,
+      live: Live,
+      website: Website,
+      RoadMaps: newRoadMaps,
+      Technologies: newTechs,
+    };
+
+    if (TitleError || DescriptionError || GithubError || WebsiteError) {
+      console.log('Invalid');
+    } else {
+      console.log('valid');
+      CreateProject(newProject);
+    }
+  };
+  if (CreateProjectResult.isSuccess) {
+    return <Redirect to="/Projects" />;
+  }
   return (
     <Container className="top" maxW="1000px" pb={10}>
       <Heading size="lg">New Project</Heading>
       <Flex
+        mt={5}
         direction={['column', 'column', 'row']}
         justifyContent="space-between"
-        gap={5}
+        gap={10}
       >
         <Flex w="100%" as="form" direction="column" gap={5}>
-          <FormControl isRequired>
-            <FormLabel htmlFor="Title">Title : </FormLabel>
+          <FormControl isRequired isInvalid={ErrorsState.Title}>
+            {ErrorsState.Title ? (
+              <FormLabel color="red">{ErrorsState.Title}</FormLabel>
+            ) : (
+              <FormLabel htmlFor="Title">Title : </FormLabel>
+            )}
+
             <Input
               id="Title"
               placeholder="Pick Good Project Title"
@@ -71,8 +149,13 @@ function NewProject() {
               required
             />
           </FormControl>
-          <FormControl isRequired>
-            <FormLabel htmlFor="Description">Description : </FormLabel>
+          <FormControl isInvalid={ErrorsState.Description} isRequired>
+            {ErrorsState.Description ? (
+              <FormLabel color="red">{ErrorsState.Description}</FormLabel>
+            ) : (
+              <FormLabel htmlFor="Description">Description : </FormLabel>
+            )}
+
             <Textarea
               id="Description"
               placeholder=" Project Description"
@@ -90,6 +173,7 @@ function NewProject() {
             <NumberInput
               maxW="100px"
               mr="2rem"
+              id="Process"
               value={FormValues.process}
               onChange={ProcessChange}
               min={0}
@@ -117,38 +201,87 @@ function NewProject() {
               </SliderThumb>
             </Slider>
           </FormControl>
+          <FormControl>
+            {ErrorsState.Github ? (
+              <FormLabel color="red">{ErrorsState.Github}</FormLabel>
+            ) : (
+              <FormLabel htmlFor="Github">Github : </FormLabel>
+            )}
+
+            <Input
+              name="github"
+              id="Github"
+              type="url"
+              placeholder="Github Link"
+              value={FormValues.Github}
+              onChange={HandleChange}
+            />
+          </FormControl>
+          <FormControl>
+            {ErrorsState.Website ? (
+              <FormLabel color="red">{ErrorsState.Website}</FormLabel>
+            ) : (
+              <FormLabel htmlFor="Website">Website : </FormLabel>
+            )}
+
+            <Input
+              name="Website"
+              id="Website"
+              disabled={!FormValues.Live}
+              placeholder="Website Link"
+              value={FormValues.Website}
+              onChange={HandleChange}
+            />
+          </FormControl>
+          <FormControl display="flex" alignItems="center">
+            <FormLabel htmlFor="Live" mb="0">
+              Is Live?
+            </FormLabel>
+            <Switch
+              id="Live"
+              onChange={(e) => {
+                SetState({
+                  ...FormValues,
+                  Live: e.target.checked,
+                });
+              }}
+            />
+          </FormControl>
         </Flex>
         <Flex
-          w="50%"
-          as="form"
-          onSubmit={AddNewTech}
+          w={['100%', '70%', '50%']}
+          m={['auto, 0']}
           gap={5}
           direction="column"
         >
-          <FormControl>
-            <FormLabel>Technologies</FormLabel>
+          <FormControl isInvalid={ErrorsState.NewTech}>
+            {ErrorsState.NewTech ? (
+              <FormLabel color="red">Enter Name</FormLabel>
+            ) : (
+              <FormLabel htmlFor="NewTech">Technologies : </FormLabel>
+            )}
             <Flex gap={5}>
               <Input
-                id="Technologies"
+                id="NewTech"
                 placeholder="Pick Good Project Title"
-                value={NewTech}
-                onChange={(e) => {
-                  setNewTech(e.target.value);
-                }}
+                value={FormValues.NewTech}
+                onChange={HandleChange}
               />
               <Button
                 type="submit"
+                data-testid="add-tech"
                 loadingText="Just a moment ..."
                 colorScheme="blue"
                 variant="solid"
+                onClick={AddNewTech}
               >
                 <AddIcon color="white" />
               </Button>
             </Flex>
           </FormControl>
           {Technologies.map((tech: any, index) => (
-            <Flex alignItems="center" gap={5}>
-              <Input value={tech} bg="blue.800" />
+            <Flex alignItems="center" gap={5} key={tech}>
+              <Input defaultValue={tech} bg="blue.800" disabled />
               <DeleteIcon
                 color="red"
                 cursor="pointer"
@@ -158,11 +291,76 @@ function NewProject() {
               />
             </Flex>
           ))}
-          <FormControl>
+          <Flex direction="column" as={FormControl} gap={5}>
             <FormLabel htmlFor="RoadMap">RoadMap</FormLabel>
-          </FormControl>
+            <Flex gap={5}>
+              <Input
+                type="text"
+                id="RoadMap"
+                name="RoadMap"
+                value={NewRoadMap.title}
+                onChange={(e) => {
+                  setNewRoadMap({
+                    ...NewRoadMap,
+                    title: e.target.value,
+                  });
+                }}
+              />
+              <FormLabel htmlFor="Color" hidden>
+                Color
+              </FormLabel>
+              <Input
+                id="Color"
+                type="color"
+                w="30%"
+                onChange={(e) => {
+                  setNewRoadMap({
+                    ...NewRoadMap,
+                    color: e.target.value,
+                  });
+                }}
+              />
+              <Button
+                type="submit"
+                loadingText="Just a moment ..."
+                colorScheme="blue"
+                data-testid="add-RoadMap"
+                variant="solid"
+                onClick={AddNewRoadMap}
+              >
+                <AddIcon color="white" />
+              </Button>
+            </Flex>
+            {RoadMaps.map((roadMap: RoadMap, index: number) => (
+              <Flex alignItems="center" gap={5}>
+                <Input bg={roadMap.color} disabled value={roadMap.title} />
+                <DeleteIcon
+                  color="red.700"
+                  _hover={{
+                    color: 'red',
+                  }}
+                  cursor="pointer"
+                  onClick={() => {
+                    const newRoadMaps = [...RoadMaps];
+                    newRoadMaps.splice(index, 1);
+                    setRoadMaps(newRoadMaps);
+                  }}
+                />
+              </Flex>
+            ))}
+          </Flex>
         </Flex>
       </Flex>
+      <Button
+        w="100%"
+        p={10}
+        mt={10}
+        loadingText="Add Project"
+        isLoading={CreateProjectResult.isLoading}
+        onClick={AddNewProject}
+      >
+        Create Project
+      </Button>
     </Container>
   );
 }

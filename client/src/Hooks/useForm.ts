@@ -24,10 +24,17 @@ const useForm = (initialState: any) => {
   const setErrors = (ErrorState: any) => {
     setErrorsState(ErrorState);
   };
-  // Pass Init State
-  // Pass Change State for on change event
-  // Pass SetErrorState for set error state
-  // Pass Set State for set state to null of init
+  const setError = (field: any, message: string) => {
+    console.log(field, message);
+    setErrorsState((CurrentState: any) => ({
+      ...CurrentState,
+      [field]: message,
+    }));
+    if (message === '') {
+      return false;
+    }
+    return true;
+  };
 
   return {
     FormValues,
@@ -35,6 +42,7 @@ const useForm = (initialState: any) => {
     SetState,
     ErrorsState,
     setErrors,
+    setError,
   };
 };
 export default useForm;

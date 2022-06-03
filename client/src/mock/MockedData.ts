@@ -76,6 +76,21 @@ export const PostsResponse = [
   },
 ];
 
+export const NewProjectResponse = {
+  result: true,
+  message: 'Project Created Successfully',
+  project: {
+    technologies: ['React', 'Node.js', 'Monogo', 'Express'],
+    process: 20,
+    _id: '128515d405524527385df72a',
+    title: 'New Project',
+    description: "MERN stack prototype for dev's personal dairy",
+    user: '62812edf18f5ba45b7667f2e',
+    date: '2022-05-19T15:50:44.201Z',
+    __v: 0,
+  },
+};
+
 export const ProjectsResponse = [
   {
     technologies: ['React', 'Node.js', 'Monogo', 'Express'],

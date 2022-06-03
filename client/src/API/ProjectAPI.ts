@@ -44,6 +44,20 @@ const ProjectApi = createApi({
           body: data,
         };
       },
+      async onQueryStarted(data, { dispatch, queryFulfilled }) {
+        try {
+          const { data: NewProject } = await queryFulfilled;
+          dispatch(
+            ProjectApi.util.updateQueryData(
+              'GetProjects',
+              '',
+              (projects: IProject[]) => [NewProject.project, ...projects],
+            ),
+          );
+        } catch (error) {
+          console.log(error);
+        }
+      },
     }),
     UpdateProject: builder.mutation({
       query(data) {

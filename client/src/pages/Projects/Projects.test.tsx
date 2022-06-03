@@ -26,7 +26,7 @@ it('render Projects', async () => {
   expect(screen.getByAltText('loading...')).toBeInTheDocument();
   await waitForElementToBeRemoved(screen.getByAltText('loading...'));
   expect(
-    screen.getByText(`Projects ${ProjectsResponse.length}`),
+    screen.getByText(`Total Projects ${ProjectsResponse.length}`),
   ).toBeInTheDocument();
   ProjectsResponse.forEach((project) => {
     expect(screen.getByText(project.title)).toBeInTheDocument();
@@ -70,32 +70,4 @@ it('Redirect On Single Project Page', async () => {
     },
     undefined,
   );
-});
-
-it('Add New Project', async () => {
-  setup();
-  await waitForElementToBeRemoved(screen.getByAltText('loading...'));
-  const AddProject = screen.getByRole('button', {
-    name: 'Add New Project',
-  });
-  const Title = screen.getByPlaceholderText('Title');
-  const Description = screen.getByPlaceholderText('Description');
-  const Technologies = screen.getByPlaceholderText('Technologies');
-
-  userEvent.type(Title, 'New Project');
-  userEvent.type(Description, 'New Project Description');
-  userEvent.type(Technologies, 'New Project Technologies');
-
-  userEvent.click(AddProject);
-
-  await waitForElementToBeRemoved(screen.getByAltText('loading...'));
-  expect(history.push).toHaveBeenCalledWith(
-    {
-      hash: '',
-      pathname: '/Projects',
-      search: '',
-    },
-    undefined,
-  );
-  expect(screen.getByText('New Project Added')).toBeInTheDocument();
 });
