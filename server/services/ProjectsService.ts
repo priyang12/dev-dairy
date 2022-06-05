@@ -40,7 +40,7 @@ export default class UserService {
   public async PostProject(
     userId: string,
     project: IProject
-  ): Promise<{ message: string; result: boolean }> {
+  ): Promise<{ message: string; result: boolean; project: IProject }> {
     const newProject = await this.ProjectModel.create({
       ...project,
       user: userId,
@@ -52,6 +52,7 @@ export default class UserService {
     this.logger.info("Project created");
     return {
       result: true,
+      project: newProject,
       message: `Project ${newProject.title} created`,
     };
   }

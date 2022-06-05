@@ -12,22 +12,22 @@ import {
   Heading,
   Icon,
   Progress,
-  Stack,
   Text,
   useDisclosure,
+  Grid,
+  GridItem,
+  Link,
 } from '@chakra-ui/react';
 import moment from 'moment';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams, Link as RouterLink } from 'react-router-dom';
 import invert from 'invert-color';
 import {
-  useAddRoadMapMutation,
   useDeleteProjectMutation,
   useGetProjectIdQuery,
-  useRemoveRoadMapMutation,
 } from '../../API/ProjectAPI';
-import DeleteRoadMapModal from '../../components/DeleteRoadMap';
+import type { IRoadMap } from '../../interface';
+
 import ModalComponent from '../../components/ModalComponent';
-import RoadMapModal from '../../components/RoadMapModal';
 import Spinner from '../../components/spinner';
 
 import RandomColor from '../../utils/RandomColor';
@@ -37,16 +37,16 @@ function SingleProject() {
   const {
     isFetching,
     isLoading,
+    isError,
     data: project,
   } = useGetProjectIdQuery(params.id);
 
   const [DeleteProjectMutation, DeleteResult] = useDeleteProjectMutation();
-  const [RoadMapMutate, RoadMapResult] = useAddRoadMapMutation();
-  const [DeleteRoadMap, DeleteMapResult] = useRemoveRoadMapMutation();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   if (isFetching || isLoading) return <Spinner />;
-  if (project === null) {
+
+  if (isError) {
     return <div className="top">No Project Found</div>;
   }
   if (DeleteResult.isSuccess) {
@@ -55,63 +55,81 @@ function SingleProject() {
 
   return (
     <div className="top">
-      <Container maxW="800px" mb={10}>
-        <Flex justifyContent="space-between" alignItems="center" m={5}>
-          <Heading>Title : {project.title}</Heading>
-          <Text textAlign="right">
+      <Container maxW="900px" mb={10}>
+        <Flex justifyContent="space-between" alignItems="center" my={5}>
+          <Heading>
+            Title : <span>{project.title}</span>
+          </Heading>
+          <Text textAlign="right" fontSize="2xl">
             {moment(project.date).format('D MMM YYYY, h:mm:ss')}
           </Text>
         </Flex>
-        <Text>Description : {project.description}</Text>
-        <Flex
-          gap={['4', '5', '10']}
-          mt={5}
-          direction={['column', 'row']}
+        <Text fontSize="3xl" w="100%">
+          <Text as="span" fontWeight="medium">
+            Description :
+          </Text>
+
+          <Text as="span" fontSize="2xl" w="100px" px="2" lineHeight="1px">
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ducimus
+            tempora recusandae labore laboriosam incidunt quos eos quam
+            aspernatur eaque odio inventore repudiandae autem doloremque, omnis
+            voluptatem natus dolorem necessitatibus illum vel placeat rem. Nulla
+            officia numquam non obcaecati dignissimos inventore id dolor,
+            repellat sunt dicta nam molestiae vero quos possimus, expedita
+            quaerat velit nisi voluptatibus molestias. Quibusdam ipsum
+            perspiciatis architecto minus. Impedit error quisquam quae? Maiores
+            facere placeat eligendi minima quaerat nobis. Mollitia ducimus, quod
+            voluptas nostrum nulla eos provident, dolores rerum velit, neque
+            minima. Repellendus, ad maiores cupiditate, eaque omnis, obcaecati
+            voluptatum dolore porro est voluptates iure facere sapiente.
+            {/* {project.description} */}
+          </Text>
+        </Text>
+        <Heading as="h2" fontSize="2xl" my={5}>
+          Technologies :
+        </Heading>
+        <Grid
+          gap="10"
+          templateColumns="repeat(auto-fit, minmax(150px, 1fr))"
+          // direction={['column', 'row']}
           alignItems="center"
+          w="100%"
         >
-          <Heading as="h2" fontSize="2xl">
-            Technologies
-          </Heading>
           {project.technologies.map((tech: any) => (
-            <Text
+            <GridItem
               key={tech}
               p={2}
               bg={`${RandomColor()}`}
               fontSize={20}
               borderRadius={10}
+              textAlign="center"
             >
               {tech}
-            </Text>
+            </GridItem>
           ))}
-        </Flex>
+        </Grid>
         <Heading as="h3" fontSize="2xl" mt={5}>
-          Deployed :{' '}
-          {project.live ? (
-            <Icon bg="red" as={CheckIcon} fontSize="4xl" />
-          ) : (
-            <Icon bg="red" as={CloseIcon} fontSize="4xl" />
-          )}
+          Deployed :
+          <Text as="span" px={5}>
+            {project.live ? (
+              <Icon as={CheckIcon} fontSize="4xl" />
+            ) : (
+              <Text as="span" fontSize="1rem">
+                Not Yet Deployed
+              </Text>
+            )}
+          </Text>
         </Heading>
         {project.roadMap && (
           <Box justifyContent="space-between" alignItems="center" mt={5}>
-            <Flex alignItems="center" m={5}>
+            <Flex alignItems="center" my={5}>
               <Heading as="h3" fontSize="2xl">
                 Road Map
               </Heading>
-              <RoadMapModal
-                onSubmit={RoadMapMutate}
-                result={RoadMapResult}
-                projectId={params.id}
-              />
-              <DeleteRoadMapModal
-                onSubmit={RoadMapMutate}
-                result={RoadMapResult}
-                projectId={params.id}
-              />
             </Flex>
 
             <Accordion allowToggle>
-              {project.roadMap.map((road: any) => (
+              {project.roadMap.map((road: IRoadMap) => (
                 <AccordionItem key={road._id}>
                   <AccordionButton>
                     <Text
@@ -121,11 +139,12 @@ function SingleProject() {
                       color={`${
                         road.color ? invert(road.color) : RandomColor()
                       }`}
-                      fontSize={20}
+                      fontSize="1.5rem"
                       borderRadius={10}
                       width="100%"
+                      textAlign={['left', 'center']}
                     >
-                      {road.name}
+                      {road.name.toUpperCase()}
                     </Text>
                     <AccordionIcon />
                   </AccordionButton>
@@ -140,30 +159,23 @@ function SingleProject() {
                         borderRadius="10px"
                         value={road.progress}
                       />
-                      <Button
-                        colorScheme="red"
-                        mt={5}
-                        isLoading={DeleteMapResult.isLoading}
-                        loadingText="Deleting..."
-                        onClick={() => {
-                          DeleteRoadMap({
-                            projectId: params.id,
-                            RoadMapId: road._id,
-                          });
-                        }}
-                      >
-                        Delete {road.name} RoadMap
-                      </Button>
                     </>
                   </AccordionPanel>
                 </AccordionItem>
               ))}
             </Accordion>
             {project.github && (
-              <Box mt={5}>
-                <Text>
-                  <a href={project.github}>Github Link</a>
-                </Text>
+              <Box mt={5} textAlign="center">
+                <Link
+                  fontSize="2rem"
+                  textDecoration="none"
+                  href={project.github}
+                  _hover={{
+                    color: 'blue.500',
+                  }}
+                >
+                  Github Link : {project.github}
+                </Link>
               </Box>
             )}
           </Box>
@@ -181,6 +193,22 @@ function SingleProject() {
           >
             Delete Project
           </Button>
+          <Button
+            mt={5}
+            as={RouterLink}
+            to={`/EditProject/${project._id}`}
+            colorScheme="blue"
+            w="100%"
+            p={5}
+            variant="outline"
+            onClick={onOpen}
+            _hover={{
+              bg: 'blue',
+              color: 'white',
+            }}
+          >
+            Edit Project
+          </Button>
           <ModalComponent
             Title="Delete Project"
             isOpen={isOpen}
@@ -197,9 +225,9 @@ function SingleProject() {
                   color: 'white',
                 }}
                 isLoading={DeleteResult.isLoading}
+                loadingText="Deleting..."
                 onClick={() => {
                   DeleteProjectMutation(project._id);
-                  // onClose();
                 }}
               >
                 Delete

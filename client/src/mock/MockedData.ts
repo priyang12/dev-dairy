@@ -115,7 +115,20 @@ export const ProjectsResponse = [
 ];
 
 export const SingleProjectResponse = {
-  technologies: ['React', 'Node.js'],
+  technologies: [
+    'React',
+    'Node.js',
+    'React',
+    'Node.js',
+    'React',
+    'Node.js',
+    'React',
+    'Node.js',
+    'React',
+    'Node.js',
+    'React',
+    'Node.js',
+  ],
   process: 40,
   github: 'https://github.com/',
   _id: '628515d405524527385dsdf2a',
@@ -128,6 +141,19 @@ export const SingleProjectResponse = {
       progress: 20,
       _id: '627fa6043f711612ba80bd7d',
       name: 'backend',
+    },
+    {
+      // Random Color
+      color: '#cec0e0',
+      progress: 40,
+      _id: '627fa6043sd711612ba80bd7d',
+      name: 'Frontend',
+    },
+    {
+      color: '#2e1747',
+      progress: 80,
+      _id: '627fas6043f711612ba80bd7d',
+      name: 'CI/CD',
     },
   ],
   date: '2022-05-14T12:31:18.431Z',

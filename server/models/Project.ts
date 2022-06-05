@@ -56,12 +56,15 @@ const ProjectSchema = new Schema({
     type: [road],
   },
   process: {
-    type: String,
+    type: Number,
     required: true,
-    default: "in-progress",
+    default: 1,
   },
   live: {
     type: Boolean,
+  },
+  website: {
+    type: String,
   },
   github: {
     type: String,

@@ -24,9 +24,7 @@ const handlers = [
   rest.get(`${API}/posts/:id`, (req, res, ctx) =>
     res(ctx.json(PostsResponse[0])),
   ),
-  rest.get(`${API}/projects/:id`, (req, res, ctx) =>
-    res(ctx.json(SingleProjectResponse)),
-  ),
+
   rest.put(`${API}/posts/:id`, (req, res, ctx) =>
     res(
       ctx.json({
@@ -47,7 +45,9 @@ const handlers = [
   rest.get(`${API}/projects`, (req, res, ctx) =>
     res(ctx.json(ProjectsResponse)),
   ),
-
+  rest.get(`${API}/projects/:id`, (req, res, ctx) =>
+    res(ctx.json(SingleProjectResponse)),
+  ),
   rest.post(`${API}/projects`, (req, res, ctx) =>
     res(ctx.json(NewProjectResponse)),
   ),
