@@ -15,6 +15,7 @@ import Projects from './pages/Projects';
 import SingleProject from './pages/SingleProject';
 import { usePrefetch } from './API/ProjectAPI';
 import NewProject from './pages/NewProject';
+import EditProject from './pages/EditProject';
 
 const LandingData = {
   heading: 'Dev Dairy',
@@ -65,6 +66,9 @@ function App() {
         </Route>
         <Route path="/" element={<PrivateOutlet />}>
           <Route path="/Projects/:id" element={<SingleProject />} />
+        </Route>
+        <Route path="/" element={<PrivateOutlet />}>
+          <Route path="/EditProject/:id" element={<EditProject />} />
         </Route>
         <Route path="/" element={<PrivateOutlet />}>
           <Route path="/NewProject" element={<NewProject />} />

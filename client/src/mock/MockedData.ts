@@ -157,8 +157,7 @@ export const SingleProjectResponse = {
     },
   ],
   date: '2022-05-14T12:31:18.431Z',
-  __v: 0,
-  live: false,
+  live: true,
 };
 
 export default AuthResponse;

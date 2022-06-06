@@ -1,3 +1,3 @@
-# Dev-hub
-community for developers to interact.
- 
+# Dev-dairy
+
+Maintain work on multiple projects at once.

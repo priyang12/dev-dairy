@@ -9,7 +9,9 @@ import App from './App';
 
 const Store = createStoreWithMiddleware();
 
-worker.start();
+if (process.env.NODE_ENV === 'development') {
+  worker.start();
+}
 
 const config = {
   useSystemColorMode: true,

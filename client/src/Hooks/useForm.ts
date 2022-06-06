@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 const useForm = (initialState: any) => {
   const [FormValues, setFormValues] = useState(initialState);
@@ -18,9 +18,9 @@ const useForm = (initialState: any) => {
 
     setFormValues({ ...FormValues, [id]: value });
   };
-  const SetState = (NewState: any) => {
+  const SetState = useCallback((NewState: any) => {
     setFormValues(NewState);
-  };
+  }, []);
   const setErrors = (ErrorState: any) => {
     setErrorsState(ErrorState);
   };
