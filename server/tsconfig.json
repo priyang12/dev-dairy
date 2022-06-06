@@ -10,9 +10,12 @@
     "strict": true,
     "skipLibCheck": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "outDir": "./build",
+    "sourceMap": false,
+    "declaration": false
   },
-
-  "include": ["./*.ts", "types/*", "../express"],
+  // "include": ["./*.ts", "types/*", "../express"],
+  "include": ["/**/*.ts"],
   "exclude": ["node_modules", "dist", "__tests__", "coverage"]
 }

@@ -3,6 +3,7 @@ import cors from "cors";
 import { errorHandler, notFound } from "../API/middleware/Error";
 import routes from "../API/";
 import config from "../config/keys";
+import path from "path";
 export default ({ app }: { app: express.Application }) => {
   /**
    * Health Check endpoints
@@ -31,6 +32,20 @@ export default ({ app }: { app: express.Application }) => {
   // Load API routes
   app.use(config.api.prefix, routes());
 
+  //static for Browser
+
+  if (process.env.NODE_ENV === "production") {
+    const _dirname = path.resolve();
+    app.use(express.static(path.join(_dirname, "/client/build")));
+
+    app.get("*", (req, res) =>
+      res.sendFile(path.resolve(_dirname, "Client", "build", "index.html"))
+    );
+  } else {
+    app.get("/", (req, res) => {
+      res.send("API is running....");
+    });
+  }
   /// error handlers
   app.use(errorHandler);
   app.use(notFound);

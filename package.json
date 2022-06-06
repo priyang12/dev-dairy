@@ -2,14 +2,13 @@
   "name": "dev-dairy",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
   "scripts": {
     "start": "node server/server.ts",
     "server": "nodemon server/server.ts",
     "client": "npm start --prefix client",
+    "tsc": "npm run tsc server/server.ts",
     "build": "tsc -p ./server ",
     "clientInstall": "npm install",
-    "FormatePages": "bash PageFormate.sh",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "author": "priyang",
