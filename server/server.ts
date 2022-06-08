@@ -21,4 +21,4 @@ async function startServer() {
     });
 }
 
-startServer();
+export default startServer;

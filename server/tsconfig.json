@@ -15,7 +15,7 @@
     "sourceMap": false,
     "declaration": false
   },
-  // "include": ["./*.ts", "types/*", "../express"],
+
   "include": ["/**/*.ts"],
   "exclude": ["node_modules", "dist", "__tests__", "coverage"]
 }

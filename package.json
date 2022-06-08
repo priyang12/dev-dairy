@@ -2,14 +2,16 @@
   "name": "dev-dairy",
   "version": "1.0.0",
   "description": "",
+  "main": "build/index.js",
   "scripts": {
-    "start": "node server/server.ts",
-    "server": "nodemon server/server.ts",
+    "start": "node server/index.js",
+    "server": "nodemon server/index.ts",
     "client": "npm start --prefix client",
-    "tsc": "npm run tsc server/server.ts",
-    "build": "tsc -p ./server ",
+    "start:prod": "node server/build/index.js",
+    "build": "tsc -p ./server",
     "clientInstall": "npm install",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "vercel-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "author": "priyang",
   "license": "ISC",
