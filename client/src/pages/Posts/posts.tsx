@@ -27,7 +27,9 @@ function Feeds() {
           actionSubmit={AddNewPost}
           actionResult={NewPostMutaion}
         />
-        <Heading size="4xl">Dairy Log</Heading>
+        <Heading size="4xl" textAlign="center" mb={5}>
+          Dairy Log
+        </Heading>
 
         {Posts.length > 0 ? (
           <Grid gridTemplateColumns={['2']} gap={10}>

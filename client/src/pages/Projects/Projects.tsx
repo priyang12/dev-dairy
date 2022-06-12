@@ -10,7 +10,24 @@ function Projects() {
 
   if (isLoading || isFetching) return <Spinner />;
   if (data.length === 0) {
-    return <div className="top">No Projects</div>;
+    return (
+      <div className="top">
+        <Button
+          to="/NewProject"
+          w="50%"
+          colorScheme="blue"
+          my={5}
+          h={50}
+          as={RouterLink}
+          textAlign="center"
+          fontSize="1.5rem"
+          fontWeight="bold"
+        >
+          New Project
+        </Button>
+        <h1>No Projects</h1>
+      </div>
+    );
   }
 
   return (

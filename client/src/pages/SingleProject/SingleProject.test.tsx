@@ -34,10 +34,11 @@ it('render Single Project', async () => {
     ),
   ).toBeInTheDocument();
   SingleProjectResponse.roadMap.forEach((roadMap: any) => {
-    expect(screen.getByText(roadMap.name)).toBeInTheDocument();
+    expect(screen.getByText(roadMap.name.toUpperCase())).toBeInTheDocument();
   });
+
   SingleProjectResponse.technologies.forEach((tech: any) => {
-    expect(screen.getByText(tech)).toBeInTheDocument();
+    expect(screen.getAllByText(tech)[0]).toBeInTheDocument();
   });
 });
 it('render Empty Project', async () => {
@@ -74,7 +75,7 @@ it('Click on Edit Project', async () => {
   expect(screen.getByAltText('loading...')).toBeInTheDocument();
   await waitForElementToBeRemoved(screen.getByAltText('loading...'));
   // Edit Project
-  const editButton = screen.getByRole('button', { name: 'Edit Project' });
+  const editButton = screen.getByText('Edit Project');
   userEvent.click(editButton);
   expect(History.location.pathname).toMatch(/EditProject/);
 });

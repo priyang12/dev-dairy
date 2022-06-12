@@ -1,5 +1,14 @@
 import moment from 'moment';
-import { Box, Button, GridItem, useDisclosure } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  GridItem,
+  Heading,
+  Progress,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react';
 
 import {
   useDeletePostMutation,
@@ -16,7 +25,7 @@ type PropTypes = {
 
 function PostContainer({ post }: PropTypes) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [mutation, { isLoading }] = useDeletePostMutation();
+  const [mutation] = useDeletePostMutation();
   const [UpdateMutate, UpdateResult] = useUpdatePostMutation();
   const { data: Projects } = useGetProjectsQuery('');
   const postProject =
@@ -27,34 +36,70 @@ function PostContainer({ post }: PropTypes) {
     mutation(post._id);
   };
 
-  if (isLoading) {
-    return <Spinner />;
-  }
-
   return (
-    <GridItem bgColor="gray.500" color="#fff" p={10} borderRadius={20}>
+    <GridItem
+      bgColor="gray.500"
+      color="#fff"
+      position="relative"
+      p={10}
+      borderRadius="20px"
+      bg="#ffffff6c"
+      border="1px solid #fff"
+      _before={{
+        content: '""',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backdropFilter: 'blur(10px) saturate(200%)',
+        borderRadius: '20px',
+      }}
+    >
       <Box as="article" position="relative">
         <div className="row">
-          <p>
-            Title : {postProject.title ? postProject.title : post.project.title}
-          </p>
-          <p>
-            Process :
+          <Heading textAlign="center" mb={5}>
+            Project : &nbsp;
+            {postProject.title ? postProject.title : post.project.title}
+          </Heading>
+          <Box
+            fontSize="2xl"
+            w="100%"
+            bg="#333"
+            py={5}
+            px={2}
+            borderRadius={10}
+          >
+            Process : &nbsp;
             {postProject.process ? postProject.process : post.project.process}
-          </p>
-          <div className="col-md-10">
-            <p className="lead">{post.title}</p>
-            <p className="lead">{post.description}</p>
-            <p className="">
+            <Progress
+              colorScheme="green"
+              height="20px"
+              size="sm"
+              mt={4}
+              borderRadius="10px"
+              value={
+                postProject.process ? postProject.process : post.project.process
+              }
+            />
+          </Box>
+          <Flex direction="column" p={5} fontSize="xl" pl={0}>
+            <Text fontSize="3xl">{post.title}</Text>
+            <Text>{post.description}</Text>
+            <Text alignSelf="flex-end">
               {moment(post.date).format('D MMM YYYY, h:mm:ss')}
-            </p>
-          </div>
+            </Text>
+          </Flex>
         </div>
 
-        <Button colorScheme="red" onClick={deletePost}>
-          Delete Post
-        </Button>
-        <Button onClick={onOpen}>Update Post</Button>
+        <Flex justifyContent="space-between" gap={5}>
+          <Button onClick={onOpen} colorScheme="twitter">
+            Update Post
+          </Button>
+          <Button colorScheme="red" onClick={deletePost}>
+            Delete Post
+          </Button>
+        </Flex>
         {isOpen && (
           <PostModal
             onClose={onClose}

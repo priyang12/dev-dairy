@@ -9,6 +9,7 @@ import {
   waitFor,
 } from '../../test-utils';
 import {
+  NewPostResponse,
   PostsResponse,
   ProjectsResponse,
   SingleProjectResponse,
@@ -105,7 +106,11 @@ it('Add New Post', async () => {
   userEvent.selectOptions(ProcessSelect, ['Started']);
 
   userEvent.click(screen.getByText('Create Log'));
-  // expect(screen.getByText('New Post is created')).toBeInTheDocument();
+
+  await waitForElementToBeRemoved(screen.queryByText('New Log'), {
+    timeout: 2000,
+  });
+  expect(screen.getByText(NewPostResponse.post.title)).toBeInTheDocument();
 
   // await waitForElementToBeRemoved(screen.getByText(/Wait/), {
   //   timeout: 2000,

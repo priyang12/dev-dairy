@@ -16,7 +16,7 @@ export default class PostService {
       select: "title status",
       // aggregate: {
       //   $lookup: {
-      //     from: "projects",
+      //     from: "Posts",
       //     localField: "project",
       //     foreignField: "_id",
       //     as: "project",
@@ -26,30 +26,30 @@ export default class PostService {
     });
 
     if (!Posts) {
-      this.logger.error("Projects not found");
-      throw new Error("No Projects Found in Users");
+      this.logger.error("Posts not found");
+      throw new Error("No Posts Found in Users");
     }
-    this.logger.info("Projects Found");
+    this.logger.info("Posts Found");
     return Posts;
   }
 
   public async GetAllPostByProject(projectId: string): Promise<IPost[]> {
     const Posts = await this.PostModel.find({ project: projectId });
     if (!Posts) {
-      this.logger.error("Projects not found");
-      throw new Error("No Projects Found in Users");
+      this.logger.error("Posts not found");
+      throw new Error("No Posts Found in Users");
     }
-    this.logger.info("Projects Found");
+    this.logger.info("Posts Found");
     return Posts;
   }
 
   public async GetPost(UserId: string, PostId: string): Promise<IPost> {
     const post = await this.PostModel.findById({ _id: PostId, user: UserId });
     if (!post) {
-      this.logger.error("Project not found");
-      throw new Error("No Project Found");
+      this.logger.error("project not found");
+      throw new Error("No project Found");
     }
-    this.logger.info("Project Found");
+    this.logger.info("project Found");
     return post;
   }
   public async CreatePost(
@@ -64,10 +64,10 @@ export default class PostService {
       ...post,
       user: userId,
     });
-    this.logger.info("Project Created");
+    this.logger.info("project Created");
     return {
       result: true,
-      message: "Project Created Successfully",
+      message: "project Created Successfully",
       post: newPost,
     };
   }
@@ -85,13 +85,13 @@ export default class PostService {
       { new: true }
     );
     if (!updatedPost) {
-      this.logger.error("Project not found");
-      throw new Error("No Project Found");
+      this.logger.error("project not found");
+      throw new Error("No project Found");
     }
-    this.logger.info("Project Updated");
+    this.logger.info("project Updated");
     return {
       result: true,
-      message: "Project Updated Successfully",
+      message: "project Updated Successfully",
     };
   }
   public async DeletePost(

@@ -70,19 +70,7 @@ function SingleProject() {
           </Text>
 
           <Text as="span" fontSize="2xl" w="100px" px="2" lineHeight="1px">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ducimus
-            tempora recusandae labore laboriosam incidunt quos eos quam
-            aspernatur eaque odio inventore repudiandae autem doloremque, omnis
-            voluptatem natus dolorem necessitatibus illum vel placeat rem. Nulla
-            officia numquam non obcaecati dignissimos inventore id dolor,
-            repellat sunt dicta nam molestiae vero quos possimus, expedita
-            quaerat velit nisi voluptatibus molestias. Quibusdam ipsum
-            perspiciatis architecto minus. Impedit error quisquam quae? Maiores
-            facere placeat eligendi minima quaerat nobis. Mollitia ducimus, quod
-            voluptas nostrum nulla eos provident, dolores rerum velit, neque
-            minima. Repellendus, ad maiores cupiditate, eaque omnis, obcaecati
-            voluptatum dolore porro est voluptates iure facere sapiente.
-            {/* {project.description} */}
+            {project.description}
           </Text>
         </Text>
         <Heading as="h2" fontSize="2xl" my={5}>

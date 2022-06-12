@@ -16,11 +16,7 @@ export const NewPostResponse = {
     _id: '628516b50552452738sadf73c',
     title: 'New Created Post the Post',
     description: 'New Post asdsad as asdihasd description',
-    project: {
-      process: 'in-progress',
-      _id: '628515d405524527385df72a',
-      title: 'Dev-Dairy',
-    },
+    project: '628515d405524527385df72a',
     status: 'In-Process',
     roadMap: '6285167905524527385df72f',
     user: '62812edf18f5ba45b7667f2e',
@@ -34,7 +30,7 @@ export const PostsResponse = [
     title: 'Second Post the Post',
     description: 'New Post as asdihasd description',
     project: {
-      process: 'in-progress',
+      process: 50,
       _id: '628515d405524527385df72a',
       title: 'Dev-Dairy',
     },
@@ -49,7 +45,7 @@ export const PostsResponse = [
     title: 'FrontEnd Progress Post the Post',
     description: 'New Post 2 asdsad as asdihasd description',
     project: {
-      process: 'in-progress',
+      process: 20,
       _id: '628515d405524527385df72a',
       title: 'Dev-Dairy',
     },
@@ -64,7 +60,7 @@ export const PostsResponse = [
     title: 'New Post',
     description: 'New Post 3 asdsad as asdihasd description',
     project: {
-      process: 'in-progress',
+      process: 20,
       _id: '628515d405524527385df72a',
       title: 'Dev-Dairy',
     },

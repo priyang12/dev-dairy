@@ -27,7 +27,7 @@ const ProjectApi = createApi({
     GetProjectId: builder.query({
       query: (id) => ({
         url: `/${id}`,
-        method: 'get',
+        method: 'GET',
       }),
     }),
     GetProjectRoadMap: builder.query({
@@ -113,6 +113,22 @@ const ProjectApi = createApi({
         try {
           const { data: RoadMap } = await queryFulfilled;
           // Add Alert
+          console.log(RoadMap._id);
+          dispatch(
+            ProjectApi.util.updateQueryData(
+              'GetProjectId',
+              projectId,
+              (data: IProject) => {
+                data.roadMap.map((item: any) => {
+                  if (item._id === id) {
+                    item._id = RoadMap._id;
+                  }
+                  return item;
+                });
+                return data;
+              },
+            ),
+          );
         } catch {
           RoadMapResult.undo();
         }
