@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
 import { Link as RouterLink } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   useColorMode,
@@ -16,7 +16,8 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  useColorModePreference,
+  Icon,
+  Img,
 } from '@chakra-ui/react';
 import {
   HamburgerIcon,
@@ -25,6 +26,7 @@ import {
   ChevronDownIcon,
 } from '@chakra-ui/icons';
 import { motion } from 'framer-motion';
+import Logo from '../Assets/diary.png';
 import { logout } from '../features/AuthSlice';
 import type { AuthState } from '../interface';
 
@@ -137,15 +139,10 @@ function Navbar() {
         className="nav-link"
       >
         <Flex alignItems="center">
-          <img
-            src="https://picsum.photos/seed/picsum/200"
-            alt="logo"
-            width="50px"
-            height="50px"
-          />
+          <img src={Logo} width={50} alt="Logo" />
           <Box ml={2}>
             <Heading fontFamily="cursive">
-              <span className="logo-text">Logo</span>
+              <span className="logo-text">Dairy</span>
             </Heading>
           </Box>
         </Flex>
