@@ -76,7 +76,12 @@ function Login() {
           <Heading as="h1" fontSize="6xl" mb={5}>
             Log in
           </Heading>
-          <Text as="p">Login in to your DevConnector account</Text>
+          <Text as="p">Login in to your Dev Dairy account</Text>
+          <Link as={RouterLink} to="/register">
+            <Text as="p" fontSize="xl">
+              Don&lsquo;t have an account? Sign up
+            </Text>
+          </Link>
         </Flex>
 
         <Flex

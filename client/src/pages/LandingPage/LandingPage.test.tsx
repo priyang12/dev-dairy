@@ -1,3 +1,4 @@
+import { BrowserRouter } from 'react-router-dom';
 import { screen, render } from '../../test-utils';
 import LandingPage from './index';
 
@@ -7,10 +8,12 @@ it('render The Landing Text', () => {
     subheading: 'Mange your projects and share your knowledge with the world',
   };
   render(
-    <LandingPage
-      heading={LandingData.heading}
-      subheading={LandingData.subheading}
-    />,
+    <BrowserRouter>
+      <LandingPage
+        heading={LandingData.heading}
+        subheading={LandingData.subheading}
+      />
+    </BrowserRouter>,
   );
 
   expect(

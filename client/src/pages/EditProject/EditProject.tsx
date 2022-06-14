@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import { ArrowForwardIcon } from '@chakra-ui/icons';
 import {
   Accordion,
@@ -32,7 +32,7 @@ import {
   Textarea,
   useDisclosure,
 } from '@chakra-ui/react';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useLocation, useParams } from 'react-router-dom';
 import invert from 'invert-color';
 import {
   useAddRoadMapMutation,
@@ -48,9 +48,11 @@ import Spinner from '../../components/spinner';
 import RandomColor from '../../utils/RandomColor';
 import useForm from '../../Hooks/useForm';
 import { isErrorWithMessage } from '../../utils/helpers';
+import Navlayout from '../../layout/Navlayout';
 
 function EditProject() {
   const params = useParams();
+
   const {
     isFetching,
     isLoading,
@@ -108,7 +110,7 @@ function EditProject() {
   }
 
   return (
-    <div className="top">
+    <Navlayout>
       <Container maxW="800px" mb={10}>
         <Heading as="h1" size="lg" mb={4}>
           Edit Project
@@ -345,7 +347,7 @@ function EditProject() {
           </ModalComponent>
         </Container>
       </Container>
-    </div>
+    </Navlayout>
   );
 }
 

@@ -1,4 +1,4 @@
-import { CheckIcon, CloseIcon } from '@chakra-ui/icons';
+import { CheckIcon, ExternalLinkIcon } from '@chakra-ui/icons';
 import {
   Accordion,
   AccordionButton,
@@ -25,8 +25,8 @@ import {
   useDeleteProjectMutation,
   useGetProjectIdQuery,
 } from '../../API/ProjectAPI';
-import type { IRoadMap } from '../../interface';
-
+import type { IProject, IRoadMap } from '../../interface';
+import Navlayout from '../../layout/Navlayout';
 import ModalComponent from '../../components/ModalComponent';
 import Spinner from '../../components/spinner';
 
@@ -34,29 +34,33 @@ import RandomColor from '../../utils/RandomColor';
 
 function SingleProject() {
   const params = useParams();
-  const {
-    isFetching,
-    isLoading,
-    isError,
-    data: project,
-  } = useGetProjectIdQuery(params.id);
-
+  const { isFetching, isLoading, isError, data } = useGetProjectIdQuery(
+    params.id,
+  );
+  const project = data as IProject;
   const [DeleteProjectMutation, DeleteResult] = useDeleteProjectMutation();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   if (isFetching || isLoading) return <Spinner />;
 
   if (isError) {
-    return <div className="top">No Project Found</div>;
+    return <Navlayout>No Project Found</Navlayout>;
   }
   if (DeleteResult.isSuccess) {
     return <Navigate to="/projects" />;
   }
 
   return (
-    <div className="top">
+    <Navlayout>
       <Container maxW="900px" mb={10}>
-        <Flex justifyContent="space-between" alignItems="center" my={5}>
+        <Flex
+          justifyContent="space-between"
+          alignItems="center"
+          my={5}
+          border="4px solid grey"
+          borderRadius={10}
+          p={5}
+        >
           <Heading>
             Title : <span>{project.title}</span>
           </Heading>
@@ -64,7 +68,13 @@ function SingleProject() {
             {moment(project.date).format('D MMM YYYY, h:mm:ss')}
           </Text>
         </Flex>
-        <Text fontSize="3xl" w="100%">
+        <Text
+          fontSize="3xl"
+          w="100%"
+          border="4px solid grey"
+          borderRadius={10}
+          p={5}
+        >
           <Text as="span" fontWeight="medium">
             Description :
           </Text>
@@ -82,6 +92,9 @@ function SingleProject() {
           // direction={['column', 'row']}
           alignItems="center"
           w="100%"
+          border="4px solid white"
+          borderRadius={10}
+          p={5}
         >
           {project.technologies.map((tech: any) => (
             <GridItem
@@ -96,7 +109,13 @@ function SingleProject() {
             </GridItem>
           ))}
         </Grid>
-        <Heading as="h3" fontSize="2xl" mt={5}>
+        <Heading
+          as="h3"
+          fontSize="2xl"
+          mt={5}
+          borderBottom="4px solid white"
+          py={5}
+        >
           Deployed :
           <Text as="span" px={5}>
             {project.live ? (
@@ -108,7 +127,51 @@ function SingleProject() {
             )}
           </Text>
         </Heading>
-        {project.roadMap && (
+        {project.website && (
+          <Flex gap={5} fontSize="3xl" borderBottom="4px solid white" py={5}>
+            <span>Website : </span>
+            <Link
+              href={project.website}
+              isExternal
+              _hover={{
+                textDecoration: 'none',
+                color: '#fff',
+                backgroundColor: '#000',
+              }}
+              display="flex"
+              gap={5}
+              px={5}
+              borderRadius={10}
+              justifyItems="center"
+              alignItems="center"
+            >
+              Link <ExternalLinkIcon mx="2px" />
+            </Link>
+          </Flex>
+        )}
+        {project.github && (
+          <Flex gap={5} fontSize="3xl" borderBottom="4px solid white" py={5}>
+            <span>Website : </span>
+            <Link
+              href={project.github}
+              isExternal
+              _hover={{
+                textDecoration: 'none',
+                color: '#fff',
+                backgroundColor: '#000',
+              }}
+              display="flex"
+              gap={5}
+              px={5}
+              borderRadius={10}
+              justifyItems="center"
+              alignItems="center"
+            >
+              Github <ExternalLinkIcon mx="2px" />
+            </Link>
+          </Flex>
+        )}
+        {project.roadMap.length > 0 && (
           <Box justifyContent="space-between" alignItems="center" mt={5}>
             <Flex alignItems="center" my={5}>
               <Heading as="h3" fontSize="2xl">
@@ -224,7 +287,7 @@ function SingleProject() {
           </ModalComponent>
         </Container>
       </Container>
-    </div>
+    </Navlayout>
   );
 }
 

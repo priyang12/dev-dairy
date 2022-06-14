@@ -1,8 +1,17 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useCookies } from 'react-cookie';
-import { Navigate, Navigate as Redirect } from 'react-router-dom';
-import { Alert, AlertIcon, Box, Button, Flex } from '@chakra-ui/react';
+import { Navigate, Link as RouterLink } from 'react-router-dom';
+import {
+  Alert,
+  AlertIcon,
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Text,
+  Link,
+} from '@chakra-ui/react';
 import type { FormField } from '../../components/CustomForm';
 import CustomForm from '../../components/CustomForm';
 import {
@@ -65,7 +74,7 @@ function Register() {
 
     if (!UsernameError && !EmailError && !PasswordError && !ConfirmError) {
       registerUser({
-        name: name.value,
+        username: name.value,
         email: email.value,
         password: password.value,
         password2: ConfirmPassword.value,
@@ -88,9 +97,9 @@ function Register() {
     setCookie('token', Auth.token, { path: '/' });
   }
   return (
-    <Box m={['15', '100']}>
+    <Box mx={['15', '100']} mt={15}>
+      <Heading textAlign="center">Register Page</Heading>
       <Flex
-        className="top"
         justifyContent="space-between"
         flexDir={['column', 'column', 'row']}
       >
@@ -111,12 +120,15 @@ function Register() {
             Register Now
           </Button>
         </CustomForm>
-        <div>
-          <h1 className="display-4 text-center">Register your self</h1>
-          <p className="text-center lead">
-            Sign up for your DevConnector account
-          </p>
-        </div>
+        <Box fontFamily="arial" fontSize="4xl" mt={20}>
+          <Text>Sign up for your DevConnector account</Text>
+          <Text>Already have an account?</Text>
+          <Button colorScheme="blue">
+            <Link as={RouterLink} to="/login">
+              Login
+            </Link>
+          </Button>
+        </Box>
       </Flex>
     </Box>
   );

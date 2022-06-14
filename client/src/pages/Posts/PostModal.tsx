@@ -55,6 +55,7 @@ function PostModal({
   const ResetModal = () => {
     setRoadMapColor('');
     setproId('');
+    onClose();
   };
   const submit = (e: React.FormEvent<HTMLFormElement> | any) => {
     e.preventDefault();

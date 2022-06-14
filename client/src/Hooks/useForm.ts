@@ -25,7 +25,6 @@ const useForm = (initialState: any) => {
     setErrorsState(ErrorState);
   };
   const setError = (field: any, message: string) => {
-    console.log(field, message);
     setErrorsState((CurrentState: any) => ({
       ...CurrentState,
       [field]: message,

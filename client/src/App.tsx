@@ -25,7 +25,9 @@ const LandingData = {
 function App() {
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
 
-  const { isLoading } = useGetUserQuery(cookies.token);
+  const { isLoading } = useGetUserQuery(cookies.token, {
+    skip: !cookies.token,
+  });
   const getProjects = usePrefetch('GetProjects');
 
   const dispatch = useDispatch();
@@ -45,7 +47,6 @@ function App() {
   }
   return (
     <BrowserRouter>
-      <Navbar />
       <Routes>
         <Route
           path="/"
@@ -56,8 +57,8 @@ function App() {
             />
           }
         />
-        <Route path="/Auth/login" element={<Login />} />
-        <Route path="/Auth/Register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/Register" element={<Register />} />
         <Route path="/" element={<PrivateOutlet />}>
           <Route path="/feeds" element={<Posts />} />
         </Route>

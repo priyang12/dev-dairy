@@ -1,10 +1,18 @@
-import { Button, Grid, Heading, useDisclosure } from '@chakra-ui/react';
+import {
+  Alert,
+  Button,
+  Flex,
+  Grid,
+  Heading,
+  useDisclosure,
+} from '@chakra-ui/react';
 import { useGetPostsQuery, useNewPostMutation } from '../../API/PostAPI';
 import PostContainer from './PostContainer';
 import Spinner from '../../components/spinner';
 import MarginContainer from '../../components/MarginContainer';
 
 import PostModal from './PostModal';
+import NavLayout from '../../layout/Navlayout';
 
 function Feeds() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -13,13 +21,16 @@ function Feeds() {
 
   if (isLoading || isFetching) return <Spinner />;
 
-  if (NewPostMutaion.isSuccess && isOpen) {
-    onClose();
+  if (NewPostMutaion.isSuccess) {
+    //  Alert
   }
   return (
-    <div className="top">
-      <MarginContainer>
-        <Button onClick={onOpen}>Create New Entry</Button>
+    <NavLayout>
+      <MarginContainer display="flex" flexDir="column">
+        <Button onClick={onOpen} fontSize="3xl" p={10} m="auto" my={5}>
+          Create New Entry
+        </Button>
+        {NewPostMutaion.isLoading && <Alert>Creating New Entry</Alert>}
         <PostModal
           onClose={onClose}
           isOpen={isOpen}
@@ -27,10 +38,10 @@ function Feeds() {
           actionSubmit={AddNewPost}
           actionResult={NewPostMutaion}
         />
+
         <Heading size="4xl" textAlign="center" mb={5}>
           Dairy Log
         </Heading>
-
         {Posts.length > 0 ? (
           <Grid gridTemplateColumns={['2']} gap={10}>
             {Posts.map((post: any) => (
@@ -41,7 +52,7 @@ function Feeds() {
           <h1>No posts yet</h1>
         )}
       </MarginContainer>
-    </div>
+    </NavLayout>
   );
 }
 

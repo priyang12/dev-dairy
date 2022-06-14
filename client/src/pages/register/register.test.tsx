@@ -23,7 +23,7 @@ const setup = (): any => {
 };
 it('Render Register Page', () => {
   const { name, email, password, password2, submit } = setup();
-  expect(screen.getByText(/Register your self/)).toBeInTheDocument();
+  expect(screen.getByText(/Register Page/)).toBeInTheDocument();
   expect(name).toBeInTheDocument();
   expect(email).toBeInTheDocument();
   expect(password).toBeInTheDocument();

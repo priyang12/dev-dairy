@@ -1,5 +1,8 @@
-import { BrowserRouter } from 'react-router-dom';
+import { createMemoryHistory } from 'history';
+import { rest } from 'msw';
+import { Router, Route } from 'react-router-dom';
 import { SingleProjectResponse } from '../../mock/MockedData';
+import server from '../../mock/server';
 import {
   render,
   screen,
@@ -8,11 +11,14 @@ import {
 } from '../../test-utils';
 import EditProject from './EditProject';
 
+const route = '/EditProject/132';
+const History = createMemoryHistory({ initialEntries: [route] });
+
 const setup = () =>
   render(
-    <BrowserRouter>
+    <Router location={route} navigator={History}>
       <EditProject />
-    </BrowserRouter>,
+    </Router>,
   );
 
 it('Render EditProject', async () => {
@@ -22,16 +28,6 @@ it('Render EditProject', async () => {
   expect(
     screen.getByText(SingleProjectResponse.description),
   ).toBeInTheDocument();
-});
-
-it('Render EditProject with error', async () => {
-  setup();
-  await waitForElementToBeRemoved(screen.getByAltText(/loading/));
-  expect(screen.getByText(/Edit Project/)).toBeInTheDocument();
-  expect(
-    screen.getByText(SingleProjectResponse.description),
-  ).toBeInTheDocument();
-  expect(screen.getByText(/Error/)).toBeInTheDocument();
 });
 
 // Need to test delete project and add/delete roadMap

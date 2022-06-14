@@ -107,14 +107,10 @@ it('Add New Post', async () => {
 
   userEvent.click(screen.getByText('Create Log'));
 
-  await waitForElementToBeRemoved(screen.queryByText('New Log'), {
-    timeout: 2000,
+  await waitForElementToBeRemoved(screen.queryByText('Creating New Entry'), {
+    timeout: 2100,
   });
   expect(screen.getByText(NewPostResponse.post.title)).toBeInTheDocument();
-
-  // await waitForElementToBeRemoved(screen.getByText(/Wait/), {
-  //   timeout: 2000,
-  // });
 });
 
 it('Update Post', async () => {

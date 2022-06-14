@@ -4,8 +4,6 @@ import { useCookies } from 'react-cookie';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  useColorMode,
-  Switch,
   Flex,
   IconButton,
   Box,
@@ -16,8 +14,6 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  Icon,
-  Img,
 } from '@chakra-ui/react';
 import {
   HamburgerIcon,
@@ -62,7 +58,8 @@ function Navbar() {
           py={[1, 2, 2]}
           px={4}
           borderRadius={5}
-          _hover={{ bg: isDark ? 'gray.700' : 'gray.100' }}
+          _hover={{ bg: isDark ? '#102344' : 'black' }}
+          _focus={{ border: `2px solid${isDark ? 'gray.700' : 'gray.100'}` }}
           aria-label="Courses"
           fontWeight="normal"
           onClick={onOpen}
@@ -70,22 +67,40 @@ function Navbar() {
         >
           <span>{isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}</span>
         </MenuButton>
-        <MenuList onMouseEnter={onOpen} onMouseLeave={onClose} zIndex={2000}>
+        <MenuList
+          onMouseEnter={onOpen}
+          onMouseLeave={onClose}
+          zIndex={2000}
+          fontSize="3xl"
+        >
           <MenuItem>
-            <Link as={RouterLink} to="/Projects">
+            <Link
+              as={RouterLink}
+              to="/Projects"
+              _hover={{ color: isDark ? 'blue.500' : 'gray.100' }}
+            >
               <span className="hide-sm">Projects</span>
             </Link>
           </MenuItem>
 
           <MenuItem>
-            <Link as={RouterLink} to="/feeds">
+            <Link
+              as={RouterLink}
+              to="/feeds"
+              _hover={{ color: isDark ? 'blue.500' : 'gray.100' }}
+            >
               <span className="hide-sm">feeds</span>
             </Link>
           </MenuItem>
 
           <div className="dropdown-divider" />
           <MenuItem>
-            <Link as={RouterLink} onClick={onLogout} to="/Auth/login">
+            <Link
+              as={RouterLink}
+              onClick={onLogout}
+              to="/login"
+              _hover={{ color: isDark ? 'red.500' : 'gray.100' }}
+            >
               <i className="fas fa-sign-out-alt" />{' '}
               <span className="hide-sm">Logout</span>
             </Link>
@@ -95,22 +110,32 @@ function Navbar() {
     </div>
   );
   const UnAuthLinks = (
-    <Flex flexDir={['column', 'column', 'row']} width="80%">
+    <Flex flexDir={['column', 'column', 'row']} width="80%" gap={5}>
       <Link
+        onClick={() => changeDisplay(false)}
         as={RouterLink}
-        to="/Auth/login"
-        _hover={{ color: 'teal.600' }}
-        borderBottom="2px"
+        to="/login"
+        backgroundColor={isDark ? 'gray.700' : 'gray.100'}
+        _hover={{ color: 'gray.500' }}
+        border="10px solid #102344"
+        outline="2px solid white"
+        borderRadius={10}
+        textAlign="center"
         padding={2}
       >
         Login
       </Link>
 
       <Link
+        onClick={() => changeDisplay(false)}
         as={RouterLink}
-        to="/Auth/register"
-        _hover={{ color: 'teal.600' }}
-        borderBottom="2px"
+        to="/register"
+        backgroundColor={isDark ? 'gray.700' : 'gray.100'}
+        _hover={{ color: 'gray  .500' }}
+        border="10px solid #102344"
+        outline="2px solid white"
+        borderRadius={10}
+        textAlign="center"
         padding={2}
       >
         Register
@@ -121,13 +146,14 @@ function Navbar() {
   return (
     <Flex
       zIndex={2}
-      bgColor={isDark ? 'gray.700' : 'gray.200'}
+      bgColor={isDark ? '#102344' : 'gray.200'}
       as="nav"
       width="100%"
       position="fixed"
       top="0"
       right="0"
-      padding={['6vh', '8vh', '10vh', '10vh']}
+      py={['6vh', '8vh', '10vh', '10vh']}
+      px={[10, 50, 70, 100, 200]}
       height="10vh"
       alignItems="center"
       justifyContent="space-between"
@@ -135,7 +161,7 @@ function Navbar() {
       <Link
         as={RouterLink}
         to="/"
-        _hover={{ color: 'teal.600' }}
+        _hover={{ color: 'black.600' }}
         className="nav-link"
       >
         <Flex alignItems="center">
@@ -155,6 +181,7 @@ function Navbar() {
         <IconButton
           aria-label="Open Menu"
           size="lg"
+          _focus={{ outline: 'none', border: '3px solid teal.600' }}
           bgColor={isDark ? 'blackAlpha.100' : 'blackAlpha.500'}
           mr={2}
           icon={<HamburgerIcon />}
@@ -171,7 +198,7 @@ function Navbar() {
           hidden: { y: -1000, opacity: 0 },
           show: { y: 1, opacity: 1 },
         }}
-        bgColor={isDark ? 'black' : 'wheat'}
+        bgColor={isDark ? '#102344' : 'wheat'}
         zIndex={20}
         pos="fixed"
         top="0"
@@ -182,7 +209,22 @@ function Navbar() {
         flexDir="column"
         justifyContent={['flex-start', 'flex-start', 'center', 'center']}
       >
-        <Flex justify="flex-end">
+        <Flex justify="space-between" alignItems="center" py={5}>
+          <Link
+            as={RouterLink}
+            to="/"
+            _hover={{ color: 'black.600' }}
+            className="nav-link"
+          >
+            <Flex alignItems="center">
+              <img src={Logo} width={50} alt="Logo" />
+              <Box ml={2}>
+                <Heading fontFamily="cursive">
+                  <span className="logo-text">Dairy</span>
+                </Heading>
+              </Box>
+            </Flex>
+          </Link>
           <IconButton
             mt={2}
             mr={2}
@@ -195,7 +237,7 @@ function Navbar() {
         </Flex>
 
         <Flex flexDir="column" align="flex-start" fontSize={20}>
-          <Switch color="green" isChecked={isDark} />
+          {/* <Switch color="green" isChecked={isDark} /> */}
           {Auth.authenticated ? AuthLinks : UnAuthLinks}
         </Flex>
       </Flex>

@@ -4,6 +4,7 @@ import { useGetProjectsQuery } from '../../API/ProjectAPI';
 import ProjectCard from '../../components/ProjectCard';
 import Spinner from '../../components/spinner';
 import type { IProject } from '../../interface';
+import NavLayout from '../../layout/Navlayout';
 
 function Projects() {
   const { isLoading, isFetching, data } = useGetProjectsQuery('');
@@ -11,7 +12,7 @@ function Projects() {
   if (isLoading || isFetching) return <Spinner />;
   if (data.length === 0) {
     return (
-      <div className="top">
+      <NavLayout>
         <Button
           to="/NewProject"
           w="50%"
@@ -26,7 +27,7 @@ function Projects() {
           New Project
         </Button>
         <h1>No Projects</h1>
-      </div>
+      </NavLayout>
     );
   }
 

@@ -57,46 +57,39 @@ function PostContainer({ post }: PropTypes) {
       }}
     >
       <Box as="article" position="relative">
-        <div className="row">
-          <Heading textAlign="center" mb={5}>
-            Project : &nbsp;
-            {postProject.title ? postProject.title : post.project.title}
-          </Heading>
-          <Box
-            fontSize="2xl"
-            w="100%"
-            bg="#333"
-            py={5}
-            px={2}
-            borderRadius={10}
-          >
-            Process : &nbsp;
-            {postProject.process ? postProject.process : post.project.process}
-            <Progress
-              colorScheme="green"
-              height="20px"
-              size="sm"
-              mt={4}
-              borderRadius="10px"
-              value={
-                postProject.process ? postProject.process : post.project.process
-              }
-            />
-          </Box>
-          <Flex direction="column" p={5} fontSize="xl" pl={0}>
-            <Text fontSize="3xl">{post.title}</Text>
-            <Text>{post.description}</Text>
-            <Text alignSelf="flex-end">
-              {moment(post.date).format('D MMM YYYY, h:mm:ss')}
-            </Text>
-          </Flex>
-        </div>
+        <Heading textAlign="center" mb={5}>
+          Project : &nbsp;
+          {postProject.title ? postProject.title : post.project.title}
+        </Heading>
+        <Box fontSize="2xl" w="100%" bg="#333" py={5} px={2} borderRadius={10}>
+          Process : &nbsp;
+          {postProject.process ? postProject.process : post.project.process}
+          <Progress
+            colorScheme="green"
+            height="20px"
+            size="sm"
+            mt={4}
+            borderRadius="10px"
+            value={
+              postProject.process ? postProject.process : post.project.process
+            }
+          />
+        </Box>
+        <Flex direction="column" p={5} fontSize="xl" pl={0}>
+          <Text fontSize="4xl" fontWeight="bold">
+            {post.title}
+          </Text>
+          <Text>{post.description}</Text>
+          <Text alignSelf="flex-end">
+            {moment(post.date).format('D MMM YYYY, h:mm:ss')}
+          </Text>
+        </Flex>
 
         <Flex justifyContent="space-between" gap={5}>
-          <Button onClick={onOpen} colorScheme="twitter">
+          <Button onClick={onOpen} colorScheme="twitter" fontSize="2xl">
             Update Post
           </Button>
-          <Button colorScheme="red" onClick={deletePost}>
+          <Button colorScheme="red" onClick={deletePost} fontSize="2xl">
             Delete Post
           </Button>
         </Flex>
