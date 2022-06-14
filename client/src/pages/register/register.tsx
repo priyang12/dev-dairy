@@ -97,7 +97,14 @@ function Register() {
     setCookie('token', Auth.token, { path: '/' });
   }
   return (
-    <Box mx={['15', '100']} mt={15}>
+    <Box
+      pt={15}
+      px={10}
+      backgroundImage="url('https://source.unsplash.com/random/?nature')"
+      backgroundPosition="center"
+      backgroundSize="cover"
+      backgroundRepeat="no-repeat"
+    >
       <Heading textAlign="center">Register Page</Heading>
       <Flex
         justifyContent="space-between"
@@ -111,11 +118,15 @@ function Register() {
         )}
         <CustomForm FormFields={RegisterFields} SubmitForm={RegisterUser}>
           <Button
+            backdropFilter="auto"
+            backdropBlur="10px"
             isLoading={result.isLoading}
             type="submit"
             loadingText="Just a moment ..."
-            colorScheme="blue"
-            variant="solid"
+            colorScheme="green"
+            variant="outline"
+            w="100%"
+            ml="auto"
           >
             Register Now
           </Button>
@@ -123,7 +134,12 @@ function Register() {
         <Box fontFamily="arial" fontSize="4xl" mt={20}>
           <Text>Sign up for your DevConnector account</Text>
           <Text>Already have an account?</Text>
-          <Button colorScheme="blue">
+          <Button
+            colorScheme="green"
+            variant="outline"
+            backdropFilter="auto"
+            backdropBlur="10px"
+          >
             <Link as={RouterLink} to="/login">
               Login
             </Link>

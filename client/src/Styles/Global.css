@@ -11,3 +11,11 @@ a:hover {
 .top {
   margin-top: 25vh;
 }
+#landing-page {
+  background: url('../Assets/zen.jpeg') repeat center center;
+  background-size: cover;
+  background-attachment: fixed;
+  position: static;
+  top: 0;
+  z-index: -1;
+}

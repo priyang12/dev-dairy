@@ -5,7 +5,7 @@ import {
   FormLabel,
   Input,
   FormErrorMessage,
-  Button,
+  Box,
 } from '@chakra-ui/react';
 import useForm from '../Hooks/useForm';
 
@@ -19,7 +19,6 @@ export interface FormField {
 type Props = {
   SubmitForm: (FormValues: any, setErrors: any) => void;
   FormFields: FormField[];
-  // eslint-disable-next-line react/require-default-props
   mb?: number;
   children: React.ReactNode;
 };
@@ -40,13 +39,17 @@ function Form({ SubmitForm, FormFields, mb = 5, children }: Props) {
 
   return (
     <div>
-      <form onSubmit={check}>
-        {FormFields.map((field, index) => (
+      <Box as="form" onSubmit={check}>
+        {FormFields.map((field) => (
           <FormControl
             mb={mb}
             isInvalid={ErrorsState[field.fieldName]}
             isRequired={field.isRequired}
             key={field.fieldName}
+            backdropFilter="auto"
+            backdropBlur="10px"
+            borderRadius={10}
+            p={5}
           >
             <FormLabel htmlFor={field.fieldName} fontSize="2xl">
               {field.fieldName[0].toUpperCase() + field.fieldName.slice(1)}
@@ -60,18 +63,22 @@ function Form({ SubmitForm, FormFields, mb = 5, children }: Props) {
             />
 
             {ErrorsState[field.fieldName] ? (
-              <FormErrorMessage>
+              <FormErrorMessage color="red" fontSize="xl">
                 {ErrorsState[`${field.fieldName}`]}
               </FormErrorMessage>
             ) : (
-              <FormHelperText>{field.placeholder}</FormHelperText>
+              <FormHelperText fontSize="xl">{field.placeholder}</FormHelperText>
             )}
           </FormControl>
         ))}
         {children}
-      </form>
+      </Box>
     </div>
   );
 }
+
+Form.defaultProps = {
+  mb: 5,
+};
 
 export default Form;

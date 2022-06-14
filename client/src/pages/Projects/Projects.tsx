@@ -32,7 +32,7 @@ function Projects() {
   }
 
   return (
-    <div className="top">
+    <NavLayout>
       <Container maxW="800px">
         <Heading m={5} ml={0} textAlign="center">
           Total Projects {data.length}
@@ -57,7 +57,7 @@ function Projects() {
           ))}
         </Flex>
       </Container>
-    </div>
+    </NavLayout>
   );
 }
 

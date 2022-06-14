@@ -66,9 +66,15 @@ function Login() {
   }
 
   return (
-    <Box m={['15', '100']}>
+    <Box
+      p={10}
+      backgroundImage="url('https://source.unsplash.com/random/?nature')"
+      backgroundPosition="center"
+      backgroundSize="cover"
+      backgroundRepeat="no-repeat"
+      h="100vh"
+    >
       <Flex
-        className="top"
         justifyContent="space-between"
         flexDir={['column', 'column', 'row']}
       >
@@ -77,11 +83,13 @@ function Login() {
             Log in
           </Heading>
           <Text as="p">Login in to your Dev Dairy account</Text>
-          <Link as={RouterLink} to="/register">
-            <Text as="p" fontSize="xl">
-              Don&lsquo;t have an account? Sign up
-            </Text>
-          </Link>
+
+          <Text as="p" fontSize="xl">
+            Don&lsquo;t have an account?
+            <Link as={RouterLink} to="/register" _hover={{ color: 'green' }}>
+              {''} Sign up
+            </Link>
+          </Text>
         </Flex>
 
         <Flex
@@ -97,11 +105,15 @@ function Login() {
           )}
           <CustomForm SubmitForm={LoginUser} FormFields={LoginFields}>
             <Button
+              backdropFilter="auto"
+              backdropBlur="10px"
               isLoading={result.isLoading}
               type="submit"
               loadingText="Just a moment ..."
-              colorScheme="blue"
-              variant="solid"
+              colorScheme="green"
+              variant="outline"
+              w="100%"
+              ml="auto"
             >
               Log In
             </Button>
@@ -110,11 +122,10 @@ function Login() {
           <Link
             as={RouterLink}
             to="ResetPassword"
-            className="black-text"
             fontSize={30}
             fontWeight={500}
             alignSelf="flex-end"
-            _hover={{ color: 'teal.600' }}
+            _hover={{ color: 'white' }}
           >
             / Forgot Password ?
           </Link>

@@ -52,7 +52,6 @@ function Navbar() {
   const AuthLinks = (
     <div>
       <Menu isOpen={isOpen}>
-        {/* <span>{user?.displayName}</span> */}
         <MenuButton
           mx={5}
           py={[1, 2, 2]}

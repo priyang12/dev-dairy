@@ -42,88 +42,207 @@ function LandingPage({
   if (authenticated) return <Navigate to="/feeds" />;
 
   return (
-    <Container>
-      <svg
-        viewBox="0 0 528 560"
-        focusable="false"
-        className="chakra-icon css-w1ojc0"
-        xmlns="http://www.w3.org/2000/svg"
-        style={{
-          filter: 'blue(70px)',
-        }}
-      >
-        <circle cx="71" cy="61" r="111" fill="#F56565" />
-        <circle cx="244" cy="106" r="139" fill="#ED64A6" />
-        <circle cy="291" r="139" fill="#ED64A6" />
-        <circle cx="80.5" cy="189.5" r="101.5" fill="#ED8936" />
-        <circle cx="196.5" cy="317.5" r="101.5" fill="#ECC94B" />
-        <circle cx="70.5" cy="458.5" r="101.5" fill="#48BB78" />
-        <circle cx="426.5" cy="-0.5" r="101.5" fill="#4299E1" />
-      </svg>
-      <Stack
-        as={Box}
-        textAlign="center"
-        spacing={{ base: 8, md: 14 }}
-        py={{ base: 20, md: 5 }}
-      >
-        <Heading
-          fontWeight={600}
-          fontSize={{ base: '2xl', sm: '4xl', md: '6xl' }}
-          lineHeight="110%"
+    <Box id="landing-page">
+      <Container>
+        <svg
+          viewBox="0 0 528 560"
+          focusable="false"
+          className="chakra-icon css-w1ojc0"
+          xmlns="http://www.w3.org/2000/svg"
+          style={{
+            backdropFilter: 'blur(16px) saturate(180%)',
+            backgroundColor: 'rgba(17, 25, 40, 0.75)',
+            border: '1px solid rgba(255, 255, 255, 0.125)',
+          }}
         >
-          {heading} <br />
-          <Text as="span" color="green.400">
-            {subheading}
-          </Text>
-        </Heading>
-        <Text color="gray.500">{paragraph}</Text>
+          <defs>
+            <filter id="blur">
+              <feGaussianBlur stdDeviation="50" />
+            </filter>
+          </defs>
+          <circle cx="71" cy="61" r="111" fill="#F56565" filter="url(#blur)" />
+          <circle
+            cx="244"
+            cy="106"
+            r="139"
+            fill="#ED64A6"
+            filter="url(#blur)"
+          />
+          <circle cy="291" r="139" fill="#ED64A6" filter="url(#blur)" />
+          <circle
+            cx="80.5"
+            cy="189.5"
+            r="101.5"
+            fill="#ED8936"
+            filter="url(#blur)"
+          />
+          <circle
+            cx="196.5"
+            cy="317.5"
+            r="101.5"
+            fill="#ECC94B"
+            filter="url(#blur)"
+          />
+          <circle
+            cx="70.5"
+            cy="458.5"
+            r="101.5"
+            fill="#48BB78"
+            filter="url(#blur)"
+          />
+          <circle
+            cx="426.5"
+            cy="-0.5"
+            r="101.5"
+            fill="#4299E1"
+            filter="url(#blur)"
+          />
+        </svg>
+
         <Stack
-          direction="column"
-          spacing={3}
-          align="center"
-          alignSelf="center"
-          position="relative"
+          as={Box}
+          textAlign="center"
+          spacing={{ base: 8, md: 14 }}
+          py={{ base: 20, md: 200 }}
+          height="150vh"
+          backgroundColor="#fafafa"
         >
-          <Button
-            colorScheme="green"
-            bg="green.400"
-            rounded="full"
-            px={6}
-            _hover={{
-              bg: 'green.500',
-            }}
+          <Heading
+            fontWeight={600}
+            fontSize={{ base: '2xl', sm: '4xl', md: '6xl' }}
+            lineHeight="110%"
+            color="black"
           >
-            <Link as={ReactLink} to="/Register">
-              Register
-            </Link>
-          </Button>
-          <Button variant="link" colorScheme="blue" size="sm">
-            <Link as={ReactLink} to="/login">
-              Login
-            </Link>
-          </Button>
-          <Box>
-            <Icon
-              as={Arrow}
-              w={71}
-              position="absolute"
-              right={-71}
-              top="10px"
-            />
-            <Text
-              fontSize="lg"
-              fontFamily="Caveat"
-              position="absolute"
-              right="-125px"
-              top="-15px"
-              transform="rotate(10deg)"
-            >
-              {TiltText}
+            {heading} <br />
+            <Text as="span" color="green.400">
+              {subheading}
             </Text>
-          </Box>
+          </Heading>
+          <Text color="gray.500" p={5}>
+            {paragraph}
+          </Text>
+          <Stack
+            direction="column"
+            spacing={3}
+            align="center"
+            alignSelf="center"
+            position="relative"
+          >
+            <Button
+              fontSize="3xl"
+              p={5}
+              colorScheme="green"
+              bg="green.400"
+              rounded="full"
+              px={6}
+              _hover={{
+                bg: 'green.500',
+              }}
+            >
+              <Link as={ReactLink} to="/Register">
+                Register
+              </Link>
+            </Button>
+            <Button
+              fontSize="3xl"
+              p={5}
+              variant="link"
+              colorScheme="blue"
+              size="sm"
+            >
+              <Link as={ReactLink} to="/login">
+                Login
+              </Link>
+            </Button>
+            <Box>
+              <Icon
+                as={Arrow}
+                w={71}
+                position="absolute"
+                right={-71}
+                top="10px"
+              />
+              <Text
+                fontSize="lg"
+                fontFamily="Caveat"
+                position="absolute"
+                right="-125px"
+                top="-15px"
+                transform="rotate(10deg)"
+              >
+                {TiltText}
+              </Text>
+            </Box>
+          </Stack>
         </Stack>
-      </Stack>
-    </Container>
+        <svg
+          viewBox="40 20 528 560"
+          focusable="false"
+          className="chakra-icon css-w1ojc0"
+          xmlns="http://www.w3.org/2000/svg"
+          style={{
+            backdropFilter: 'blur(16px) saturate(180%)',
+            backgroundColor: 'rgba(17, 25, 40, 0.75)',
+            border: '1px solid rgba(255, 255, 255, 0.125)',
+          }}
+        >
+          <defs>
+            <filter id="blur2">
+              <feGaussianBlur stdDeviation="10" />
+            </filter>
+          </defs>
+          <circle
+            cx="300"
+            cy="100"
+            r="111"
+            fill="#F56565"
+            filter="url(#blur2)"
+          />
+          <circle
+            cx="500"
+            cy="106"
+            r="139"
+            fill="#ED64A6"
+            filter="url(#blur2)"
+          />
+          <circle
+            cx="470"
+            cy="351"
+            r="139"
+            fill="#bf236e"
+            filter="url(#blur2)"
+          />
+          <circle
+            cx="500.5"
+            cy="189.5"
+            r="101.5"
+            fill="#ED8936"
+            filter="url(#blur2)"
+          />
+          <circle
+            cx="350.5"
+            cy="207.5"
+            r="101.5"
+            fill="#ECC94B"
+            filter="url(#blur2)"
+          />
+          <circle
+            cx="550.5"
+            cy="540.5"
+            r="101.5"
+            fill="#48BB78"
+            filter="url(#blur2)"
+          />
+          <circle
+            cx="300.5"
+            cy="-0.5"
+            r="101.5"
+            fill="#4299E1"
+            filter="url(#blur2)"
+          />
+        </svg>
+      </Container>
+    </Box>
   );
 }
 
