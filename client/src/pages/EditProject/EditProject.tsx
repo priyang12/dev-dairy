@@ -1,4 +1,6 @@
-import { useLayoutEffect } from 'react';
+import type { FormEvent } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { ArrowForwardIcon } from '@chakra-ui/icons';
 import {
   Accordion,
@@ -6,6 +8,9 @@ import {
   AccordionIcon,
   AccordionItem,
   AccordionPanel,
+  Alert,
+  AlertIcon,
+  AlertTitle,
   Box,
   Button,
   Container,
@@ -14,7 +19,6 @@ import {
   FormHelperText,
   FormLabel,
   Heading,
-  Icon,
   Input,
   NumberDecrementStepper,
   NumberIncrementStepper,
@@ -26,32 +30,35 @@ import {
   SliderFilledTrack,
   SliderThumb,
   SliderTrack,
-  Stack,
   Switch,
   Text,
   Textarea,
+  Spinner as ChakraSpinner,
   useDisclosure,
 } from '@chakra-ui/react';
-import { Navigate, useLocation, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import invert from 'invert-color';
 import {
   useAddRoadMapMutation,
   useDeleteProjectMutation,
   useGetProjectIdQuery,
   useRemoveRoadMapMutation,
+  useUpdateProjectMutation,
 } from '../../API/ProjectAPI';
-import DeleteRoadMapModal from '../../components/DeleteRoadMap';
 import ModalComponent from '../../components/ModalComponent';
 import RoadMapModal from '../../components/RoadMapModal';
 import Spinner from '../../components/spinner';
-
 import RandomColor from '../../utils/RandomColor';
 import useForm from '../../Hooks/useForm';
 import { isErrorWithMessage } from '../../utils/helpers';
 import Navlayout from '../../layout/Navlayout';
+import type { AlertState } from '../../interface';
 
 function EditProject() {
   const params = useParams();
+  const { alert, result }: AlertState = useSelector(
+    (state: any) => state.Alert,
+  );
 
   const {
     isFetching,
@@ -72,6 +79,7 @@ function EditProject() {
     },
   );
   const [DeleteProjectMutation, DeleteResult] = useDeleteProjectMutation();
+  const [UpdateProjectMutation, UpdateResult] = useUpdateProjectMutation();
   const [RoadMapMutate, RoadMapResult] = useAddRoadMapMutation();
   const [DeleteRoadMap, DeleteMapResult] = useRemoveRoadMapMutation();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -81,6 +89,15 @@ function EditProject() {
       ...prevState,
       process: value,
     }));
+  };
+
+  const UpdateProject = (e: FormEvent) => {
+    e.preventDefault();
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+    UpdateProjectMutation({ ...FormValues, id: params.id });
   };
 
   useLayoutEffect(() => {
@@ -94,6 +111,18 @@ function EditProject() {
       });
     }
   }, [project, SetState]);
+
+  useEffect(() => {
+    if (UpdateResult.isSuccess) {
+      onClose();
+    }
+  }, [UpdateResult.isSuccess, onClose]);
+
+  useEffect(() => {
+    if (RoadMapResult.isSuccess) {
+      onClose();
+    }
+  }, [RoadMapResult.isSuccess, onClose]);
 
   if (isFetching || isLoading) return <Spinner />;
 
@@ -112,10 +141,40 @@ function EditProject() {
   return (
     <Navlayout>
       <Container maxW="800px" mb={10}>
+        {UpdateResult.isLoading && (
+          <Alert status="info" borderRadius={10} my={5}>
+            <AlertIcon />
+            <strong>Loading...</strong>
+          </Alert>
+        )}
+        {alert && (
+          <Alert
+            my={5}
+            borderRadius={10}
+            status={result ? 'success' : 'error'}
+            variant="subtle"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+            textAlign="center"
+            height="200px"
+          >
+            <AlertIcon boxSize="40px" mr={0} />
+            <AlertTitle mt={4} mb={1} fontSize="lg">
+              <strong>{alert}</strong>
+            </AlertTitle>
+          </Alert>
+        )}
         <Heading as="h1" size="lg" mb={4}>
           Edit Project
         </Heading>
-        <Flex w="100%" as="form" direction="column" gap={5}>
+        <Flex
+          w="100%"
+          as="form"
+          direction="column"
+          gap={5}
+          onSubmit={UpdateProject}
+        >
           <FormControl isRequired isInvalid={ErrorsState.Title}>
             {ErrorsState.Title ? (
               <FormLabel color="red">{ErrorsState.Title}</FormLabel>
@@ -231,83 +290,90 @@ function EditProject() {
               }}
             />
           </FormControl>
+          <Button type="submit" colorScheme="blue" variant="outline">
+            Update Project
+          </Button>
         </Flex>
-        {project.roadMap && (
-          <Box justifyContent="space-between" alignItems="center" mt={5}>
-            <Flex alignItems="center" m={5}>
-              <Heading as="h3" fontSize="2xl">
-                Road Map
-              </Heading>
-              <RoadMapModal
+        <Box p={5} my={5} bg="#333">
+          {project.roadMap && (
+            <Box justifyContent="space-between" alignItems="center" mt={5}>
+              {RoadMapResult.isLoading && (
+                <Alert>
+                  <AlertTitle>Adding RoadMap</AlertTitle>
+                  <ChakraSpinner />
+                </Alert>
+              )}
+              <Flex alignItems="center" m={5}>
+                <Heading as="h3" fontSize="2xl">
+                  Road Map
+                </Heading>
+                <RoadMapModal onSubmit={RoadMapMutate} projectId={params.id} />
+                {/* <DeleteRoadMapModal
                 onSubmit={RoadMapMutate}
                 result={RoadMapResult}
                 projectId={params.id}
-              />
-              <DeleteRoadMapModal
-                onSubmit={RoadMapMutate}
-                result={RoadMapResult}
-                projectId={params.id}
-              />
-            </Flex>
+              /> */}
+              </Flex>
 
-            <Accordion allowToggle>
-              {project.roadMap.map((road: any) => (
-                <AccordionItem key={road._id}>
-                  <AccordionButton>
-                    <Text
-                      key={road.name}
-                      p={2}
-                      bg={`${road.color ? road.color : RandomColor()}`}
-                      color={`${
-                        road.color ? invert(road.color) : RandomColor()
-                      }`}
-                      fontSize={20}
-                      borderRadius={10}
-                      width="100%"
-                    >
-                      {road.name}
-                    </Text>
-                    <AccordionIcon />
-                  </AccordionButton>
-                  <AccordionPanel pb={4}>
-                    <>
-                      Work {road.progress} %
-                      <Progress
-                        colorScheme="green"
-                        height="20px"
-                        size="sm"
-                        mt={4}
-                        borderRadius="10px"
-                        value={road.progress}
-                      />
-                      <Button
-                        colorScheme="red"
-                        mt={5}
-                        isLoading={DeleteMapResult.isLoading}
-                        loadingText="Deleting..."
-                        onClick={() => {
-                          DeleteRoadMap({
-                            projectId: params.id,
-                            RoadMapId: road._id,
-                          });
-                        }}
+              <Accordion allowToggle>
+                {project.roadMap.map((road: any) => (
+                  <AccordionItem key={road._id}>
+                    <AccordionButton>
+                      <Text
+                        key={road.name}
+                        p={2}
+                        bg={`${road.color ? road.color : RandomColor()}`}
+                        color={`${
+                          road.color ? invert(road.color) : RandomColor()
+                        }`}
+                        fontSize={20}
+                        borderRadius={10}
+                        width="100%"
                       >
-                        Delete {road.name} RoadMap
-                      </Button>
-                    </>
-                  </AccordionPanel>
-                </AccordionItem>
-              ))}
-            </Accordion>
-            {project.github && (
-              <Box mt={5}>
-                <Text>
-                  <a href={project.github}>Github Link</a>
-                </Text>
-              </Box>
-            )}
-          </Box>
-        )}
+                        {road.name}
+                      </Text>
+                      <AccordionIcon />
+                    </AccordionButton>
+                    <AccordionPanel pb={4}>
+                      <>
+                        Work {road.progress} %
+                        <Progress
+                          colorScheme="green"
+                          height="20px"
+                          size="sm"
+                          mt={4}
+                          borderRadius="10px"
+                          value={road.progress}
+                        />
+                        <Button
+                          colorScheme="red"
+                          mt={5}
+                          isLoading={DeleteMapResult.isLoading}
+                          loadingText="Deleting..."
+                          onClick={() => {
+                            DeleteRoadMap({
+                              projectId: params.id,
+                              RoadMapId: road._id,
+                            });
+                          }}
+                        >
+                          Delete {road.name}
+                        </Button>
+                      </>
+                    </AccordionPanel>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+              {project.github && (
+                <Box mt={5}>
+                  <Text>
+                    <a href={project.github}>Github Link</a>
+                  </Text>
+                </Box>
+              )}
+            </Box>
+          )}
+        </Box>
         <Container mt={5}>
           <Button
             colorScheme="red"
@@ -322,7 +388,7 @@ function EditProject() {
             Delete Project
           </Button>
           <ModalComponent
-            Title="Delete Project"
+            Title="Confirm Delete Project"
             isOpen={isOpen}
             onClose={onClose}
           >
@@ -337,6 +403,7 @@ function EditProject() {
                   color: 'white',
                 }}
                 isLoading={DeleteResult.isLoading}
+                loadingText="Deleting..."
                 onClick={() => {
                   DeleteProjectMutation(project._id);
                 }}

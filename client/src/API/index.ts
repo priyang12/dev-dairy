@@ -1,4 +1,3 @@
-const API =
-  process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:3000/api';
+const API = process.env.NODE_ENV === 'production' ? '/api' : '/mock';
 
 export default API;

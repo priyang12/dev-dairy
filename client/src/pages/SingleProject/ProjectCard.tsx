@@ -9,8 +9,8 @@ import {
 } from '@chakra-ui/react';
 import moment from 'moment';
 import { Link as RouterLink } from 'react-router-dom';
-import RandomColor from '../utils/RandomColor';
-import type { IProject } from '../interface';
+import RandomColor from '../../utils/RandomColor';
+import type { IProject } from '../../interface';
 
 function ProjectCard({ Project }: { Project: IProject }) {
   return (

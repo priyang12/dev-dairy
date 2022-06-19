@@ -1,16 +1,18 @@
-import { Button, Container, Flex, Heading, Link } from '@chakra-ui/react';
+import { Button, Container, Flex, Heading } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 import { useGetProjectsQuery } from '../../API/ProjectAPI';
-import ProjectCard from '../../components/ProjectCard';
+import ProjectCard from '../SingleProject/ProjectCard';
+import AlertComponent from '../../components/AlertComponent';
 import Spinner from '../../components/spinner';
-import type { IProject } from '../../interface';
+import type { AlertState, IProject } from '../../interface';
 import NavLayout from '../../layout/Navlayout';
 
 function Projects() {
   const { isLoading, isFetching, data } = useGetProjectsQuery('');
 
   if (isLoading || isFetching) return <Spinner />;
-  if (data.length === 0) {
+
+  if (!data || data.length === 0) {
     return (
       <NavLayout>
         <Button
@@ -34,6 +36,7 @@ function Projects() {
   return (
     <NavLayout>
       <Container maxW="800px">
+        <AlertComponent />
         <Heading m={5} ml={0} textAlign="center">
           Total Projects {data.length}
         </Heading>

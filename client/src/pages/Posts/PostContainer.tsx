@@ -17,10 +17,10 @@ import {
 
 import PostModal from './PostModal';
 import { useGetProjectsQuery } from '../../API/ProjectAPI';
-import Spinner from '../../components/spinner';
+import type { IPost } from '../../interface';
 
 type PropTypes = {
-  post: any;
+  post: IPost;
 };
 
 function PostContainer({ post }: PropTypes) {
@@ -80,6 +80,28 @@ function PostContainer({ post }: PropTypes) {
             {post.title}
           </Text>
           <Text>{post.description}</Text>
+          <Text
+            bg={
+              // eslint-disable-next-line no-nested-ternary
+              post.status === 'Done'
+                ? '#00ff00'
+                : // eslint-disable-next-line no-nested-ternary
+                post.status === 'In-Process'
+                ? '#ffc300'
+                : post.status === 'Started'
+                ? '#001aff'
+                : '#ff0000'
+            }
+            color="#fff"
+            fontSize={['2xl', '3xl', '4xl']}
+            width="fit-content"
+            px={5}
+            py={2}
+            mt={5}
+            borderRadius={10}
+          >
+            {post.status}
+          </Text>
           <Text alignSelf="flex-end">
             {moment(post.date).format('D MMM YYYY, h:mm:ss')}
           </Text>

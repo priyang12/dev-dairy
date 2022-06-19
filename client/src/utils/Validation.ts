@@ -11,10 +11,11 @@ export const ValidateDescription = (
   FieldName?: string,
 ) => {
   let error = '';
-  if (description.length < 10 || description.length > 100)
+
+  if (description.length < 10 || description.length > 400)
     error = `${
       FieldName ?? 'Description'
-    } must be between 10 and 100 characters`;
+    } must be between 10 and 400 characters`;
   return error;
 };
 

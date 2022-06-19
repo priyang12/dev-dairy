@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import API from '.';
+import { setAlert } from '../features/AlertSlice';
 import type { IPost } from '../interface';
 import type { RootState } from '../store';
 
@@ -60,11 +61,19 @@ const PostApi = createApi({
               ...posts,
             ]),
           );
-          // dispatch(setAlert(data));
+          dispatch(
+            setAlert({
+              alert: `${NewPost.post.title} Created Successfully`,
+              result: true,
+            }),
+          );
         } catch (error: any) {
-          // const errorMessage = error.error.data.msg || 'server Error';
-          // setError(errorMessage);s
-          console.log(error);
+          dispatch(
+            setAlert({
+              alert: error.error.data.msg || 'server Error',
+              result: false,
+            }),
+          );
           dispatch(PostApi.util.invalidateTags(['Posts']));
         }
       },
@@ -86,6 +95,7 @@ const PostApi = createApi({
             return newPost;
           }),
         );
+
         queryFulfilled.catch(UpdateResult.undo);
       },
     }),

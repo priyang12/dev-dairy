@@ -111,20 +111,7 @@ export const ProjectsResponse = [
 ];
 
 export const SingleProjectResponse = {
-  technologies: [
-    'React',
-    'Node.js',
-    'React',
-    'Node.js',
-    'React',
-    'Node.js',
-    'React',
-    'Node.js',
-    'React',
-    'Node.js',
-    'React',
-    'Node.js',
-  ],
+  technologies: ['React', 'Node.js'],
   process: 40,
   github: 'https://github.com/',
   _id: '628515d405524527385dsdf2a',
@@ -133,7 +120,6 @@ export const SingleProjectResponse = {
   user: '627bcea32b463cb2da6853b7',
   roadMap: [
     {
-      color: '#ffc107',
       progress: 20,
       _id: '627fa6043f711612ba80bd7d',
       name: 'backend',
@@ -154,6 +140,7 @@ export const SingleProjectResponse = {
   ],
   date: '2022-05-14T12:31:18.431Z',
   live: true,
+  website: 'https://www.google.com',
 };
 
 export default AuthResponse;

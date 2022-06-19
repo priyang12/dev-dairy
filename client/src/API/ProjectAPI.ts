@@ -1,6 +1,6 @@
-import { current } from '@reduxjs/toolkit';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import API from '.';
+import { setAlert } from '../features/AlertSlice';
 import type { IProject } from '../interface';
 import type { RootState } from '../store';
 
@@ -16,6 +16,8 @@ const ProjectApi = createApi({
       return headers;
     },
   }),
+  tagTypes: ['projectId'],
+
   endpoints: (builder) => ({
     GetProjects: builder.query({
       query: () => ({
@@ -29,6 +31,7 @@ const ProjectApi = createApi({
         url: `/${id}`,
         method: 'GET',
       }),
+      providesTags: ['projectId'],
     }),
     GetProjectRoadMap: builder.query({
       query: ({ projectId, RoadMapId }) => ({
@@ -54,19 +57,40 @@ const ProjectApi = createApi({
               (projects: IProject[]) => [NewProject.project, ...projects],
             ),
           );
-        } catch (error) {
-          console.log(error);
+        } catch (error: any) {
+          dispatch(setAlert(error.data.message));
         }
       },
     }),
     UpdateProject: builder.mutation({
       query(data) {
         return {
-          url: '',
+          url: `/${data.id}`,
           method: 'put',
           body: data,
         };
       },
+      async onQueryStarted(data, { dispatch, queryFulfilled }) {
+        try {
+          const { data: UpdatedProject } = await queryFulfilled;
+
+          dispatch(
+            ProjectApi.util.updateQueryData(
+              'GetProjects',
+              '',
+              (projects: IProject[]) =>
+                projects.map((project) =>
+                  project._id === UpdatedProject.project._id
+                    ? UpdatedProject.project
+                    : project,
+                ),
+            ),
+          );
+        } catch (error: any) {
+          dispatch(setAlert(error.data.message));
+        }
+      },
+      invalidatesTags: ['projectId'],
     }),
     DeleteProject: builder.mutation({
       query(id) {
@@ -75,15 +99,30 @@ const ProjectApi = createApi({
           method: 'delete',
         };
       },
-      onQueryStarted(id, { dispatch, queryFulfilled }) {
+      async onQueryStarted(id, { dispatch, queryFulfilled }) {
         const deleteResult = dispatch(
           ProjectApi.util.updateQueryData('GetProjects', '', (data: any) => {
             const newData = data.filter((item: IProject) => item._id !== id);
             return newData;
           }),
         );
-
-        queryFulfilled.catch(deleteResult.undo);
+        try {
+          await queryFulfilled;
+          dispatch(
+            setAlert({
+              alert: 'Project Deleted Successfully',
+              result: true,
+            }),
+          );
+        } catch (e: any) {
+          deleteResult.undo();
+          dispatch(
+            setAlert({
+              alert: e.error.data.message,
+              result: false,
+            }),
+          );
+        }
       },
     }),
     AddRoadMap: builder.mutation({
@@ -111,9 +150,15 @@ const ProjectApi = createApi({
           ),
         );
         try {
-          const { data: RoadMap } = await queryFulfilled;
-          // Add Alert
-          console.log(RoadMap._id);
+          const { data: resData } = await queryFulfilled;
+
+          dispatch(
+            setAlert({
+              alert: 'New RoadMap Added',
+              result: true,
+            }),
+          );
+
           dispatch(
             ProjectApi.util.updateQueryData(
               'GetProjectId',
@@ -121,7 +166,7 @@ const ProjectApi = createApi({
               (data: IProject) => {
                 data.roadMap.map((item: any) => {
                   if (item._id === id) {
-                    item._id = RoadMap._id;
+                    item._id = resData.roadmap._id;
                   }
                   return item;
                 });
@@ -129,7 +174,12 @@ const ProjectApi = createApi({
               },
             ),
           );
-        } catch {
+        } catch (e: any) {
+          console.log(e);
+          setAlert({
+            alert: e.error.data.message,
+            type: false,
+          });
           RoadMapResult.undo();
         }
       },
@@ -156,14 +206,14 @@ const ProjectApi = createApi({
           ),
         );
 
-        queryFulfilled.catch(deleteResult.undo);
+        queryFulfilled.catch(() => {
+          dispatch(setAlert('Server Error'));
+          deleteResult.undo();
+        });
       },
     }),
   }),
 });
-
-export const GetProjectsSelector = () =>
-  ProjectApi.endpoints.GetProjects.useQuery;
 
 export const {
   useGetProjectsQuery,

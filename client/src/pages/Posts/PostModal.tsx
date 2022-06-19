@@ -141,6 +141,7 @@ function PostModal({
 
         <FormLabel htmlFor="status">status</FormLabel>
         <Select mb={2} name="status" id="status" defaultValue={post?.status}>
+          <option value="Not Started">Not Started</option>
           <option value="In-Process">In-Process</option>
           <option value="Started">Started</option>
           <option value="Done">Done</option>

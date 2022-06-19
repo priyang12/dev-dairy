@@ -8,25 +8,26 @@ import {
   Input,
   FormHelperText,
   ModalFooter,
+  FormErrorMessage,
 } from '@chakra-ui/react';
+import { useState } from 'react';
 
 import ModalComponent from './ModalComponent';
 
 interface Props {
   onSubmit: any;
-  result: any;
   projectId: any;
 }
 
-function RoadMapModal({ onSubmit, result, projectId }: Props) {
+function RoadMapModal({ onSubmit, projectId }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
+  const [roadMapError, setRoadMapError] = useState('');
   const FormSubmit = (e: any) => {
     e.preventDefault();
     const { name, color } = e.target.elements;
 
-    if (name === '') {
-      console.log('name is empty');
+    if (name.value === '') {
+      setRoadMapError('Please enter a RoadMap name');
     } else {
       onSubmit({
         projectId,
@@ -38,6 +39,7 @@ function RoadMapModal({ onSubmit, result, projectId }: Props) {
       onClose();
     }
   };
+
   return (
     <div>
       <Button colorScheme="blue" variant="outline" onClick={onOpen} ml={5}>
@@ -46,26 +48,21 @@ function RoadMapModal({ onSubmit, result, projectId }: Props) {
       <ModalComponent Title="Add New RoadMap" isOpen={isOpen} onClose={onClose}>
         <Box>
           <form onSubmit={FormSubmit}>
-            <FormControl mb={5}>
+            <FormControl mb={5} isInvalid={!!roadMapError}>
               <FormLabel htmlFor="name">RoadMap Name</FormLabel>
               <Input id="name" type="text" />
               <FormHelperText>
                 Give Abstracted name to RoadMap like frontend, backend
               </FormHelperText>
+              <FormErrorMessage>{roadMapError}</FormErrorMessage>
             </FormControl>
             <FormControl mb={5}>
               <FormLabel htmlFor="color">Pick a Good Color</FormLabel>
               <Input id="color" type="color" />
             </FormControl>
             <ModalFooter>
-              <Button
-                isLoading={result.isLoading}
-                type="submit"
-                loadingText="Just a moment..."
-                colorScheme="blue"
-                variant="solid"
-              >
-                Add RoadMap
+              <Button type="submit" colorScheme="blue" variant="solid">
+                Submit RoadMap
               </Button>
             </ModalFooter>
           </form>

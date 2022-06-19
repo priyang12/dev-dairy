@@ -17,6 +17,11 @@ export interface UserState {
   error: string;
 }
 
+export interface AlertState {
+  alert: string;
+  result: boolean;
+}
+
 export interface IAlert {
   message: string;
   result: boolean;

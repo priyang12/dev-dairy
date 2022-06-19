@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux';
 import { CheckIcon, ExternalLinkIcon } from '@chakra-ui/icons';
 import {
   Accordion,
@@ -17,6 +18,7 @@ import {
   Grid,
   GridItem,
   Link,
+  Alert,
 } from '@chakra-ui/react';
 import moment from 'moment';
 import { Navigate, useParams, Link as RouterLink } from 'react-router-dom';
@@ -25,7 +27,7 @@ import {
   useDeleteProjectMutation,
   useGetProjectIdQuery,
 } from '../../API/ProjectAPI';
-import type { IProject, IRoadMap } from '../../interface';
+import type { AlertState, IProject, IRoadMap } from '../../interface';
 import Navlayout from '../../layout/Navlayout';
 import ModalComponent from '../../components/ModalComponent';
 import Spinner from '../../components/spinner';
@@ -34,6 +36,8 @@ import RandomColor from '../../utils/RandomColor';
 
 function SingleProject() {
   const params = useParams();
+  const { alert }: AlertState = useSelector((state: any) => state.Alert);
+  console.log(alert);
   const { isFetching, isLoading, isError, data } = useGetProjectIdQuery(
     params.id,
   );
@@ -266,6 +270,7 @@ function SingleProject() {
             onClose={onClose}
           >
             <Box>
+              {alert && <Alert>{alert}</Alert>}
               <Text>Are you sure you want to delete this project?</Text>
               <Button
                 colorScheme="red"

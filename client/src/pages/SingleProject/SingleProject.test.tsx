@@ -3,7 +3,12 @@ import { rest } from 'msw';
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import userEvent from '@testing-library/user-event';
-import { render, screen, waitForElementToBeRemoved } from '../../test-utils';
+import {
+  render,
+  screen,
+  waitFor,
+  waitForElementToBeRemoved,
+} from '../../test-utils';
 import { SingleProjectResponse } from '../../mock/MockedData';
 import SingleProject from './index';
 import server from '../../mock/server';
@@ -53,6 +58,25 @@ it('render Empty Project', async () => {
   expect(screen.getByText('No Project Found')).toBeInTheDocument();
 });
 
+it('Render Different Values', async () => {
+  server.use(
+    rest.get(`${API}/projects/:id`, (req, res, ctx) =>
+      res(
+        ctx.status(200),
+        ctx.json({
+          ...SingleProjectResponse,
+          live: false,
+          website: '',
+        }),
+      ),
+    ),
+  );
+  setup();
+  expect(screen.getByAltText('loading...')).toBeInTheDocument();
+  await waitForElementToBeRemoved(screen.getByAltText('loading...'));
+
+  expect(screen.getByText('Not Yet Deployed')).toBeInTheDocument();
+});
 it('Delete Project', async () => {
   setup();
   expect(screen.getByAltText('loading...')).toBeInTheDocument();
@@ -69,7 +93,6 @@ it('Delete Project', async () => {
 
   expect(History.location.pathname).toBe('/projects');
 });
-
 it('Click on Edit Project', async () => {
   setup();
   expect(screen.getByAltText('loading...')).toBeInTheDocument();
@@ -78,4 +101,29 @@ it('Click on Edit Project', async () => {
   const editButton = screen.getByText('Edit Project');
   userEvent.click(editButton);
   expect(History.location.pathname).toMatch(/EditProject/);
+});
+
+it('Server Error on Delete', async () => {
+  server.use(
+    rest.delete(`${API}/projects/:id`, (req, res, ctx) =>
+      res(ctx.status(401), ctx.json({ message: 'Server Error' })),
+    ),
+  );
+
+  setup();
+  expect(screen.getByAltText('loading...')).toBeInTheDocument();
+  await waitForElementToBeRemoved(screen.getByAltText('loading...'));
+  // Delete Project
+
+  const deleteButton = screen.getByRole('button', { name: 'Delete Project' });
+  userEvent.click(deleteButton);
+  expect(
+    screen.getByText('Are you sure you want to delete this project?'),
+  ).toBeInTheDocument();
+  const cancelButton = screen.getByRole('button', { name: 'Delete' });
+  userEvent.click(cancelButton);
+
+  await waitFor(() => {
+    expect(screen.getByText('Server Error')).toBeInTheDocument();
+  });
 });
