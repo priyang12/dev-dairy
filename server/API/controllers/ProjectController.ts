@@ -92,7 +92,7 @@ export const DeleteRoadMap = asyncHandler(
     const message = await projectServiceInstance.DeleteRoadMap(
       req.user._id,
       req.params.id,
-      req.params.roadMapId
+      req.body
     );
     return res.status(200).json(message);
   }

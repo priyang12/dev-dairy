@@ -1,6 +1,6 @@
 import { Service, Inject } from "typedi";
 import { Model } from "mongoose";
-import { IProject } from "../models/Project";
+import { IProject, IRoadMap } from "../models/Project";
 import { Logger } from "winston";
 
 @Service()
@@ -45,6 +45,11 @@ export default class UserService {
       ...project,
       user: userId,
     });
+    if (project.roadMap) {
+      project.roadMap.forEach(async (roadMap: any) => {
+        await this.AddRoadMap(userId, newProject._id, roadMap);
+      });
+    }
     if (!newProject) {
       this.logger.error("Project not created");
       throw new Error("Project not created");
@@ -76,38 +81,50 @@ export default class UserService {
       message: `Project ${updatedProject.title} updated`,
     };
   }
-  public async AddRoadMap(userId: string, projectId: string, roadmap: any) {
+  public async AddRoadMap(
+    userId: string,
+    projectId: string,
+    roadmap: IRoadMap | IRoadMap[]
+  ) {
     const updatedProject = await this.ProjectModel.findOneAndUpdate(
       { _id: projectId, user: userId },
       { $push: { roadMap: roadmap } },
       { new: true }
     ).exec();
+
     if (!updatedProject) {
       this.logger.error("Roadmap not added");
       throw new Error("Roadmap not added");
     }
     this.logger.info("Roadmap added");
+    const roadMap = updatedProject?.roadMap
+      ? updatedProject.roadMap[updatedProject.roadMap.length - 1]
+      : null;
     return {
       result: true,
-      message: `Roadmap ${updatedProject.title} added`,
+      message: `New RoadMap Added to ${updatedProject.title}`,
+      roadmap: roadMap,
     };
   }
 
   public async DeleteRoadMap(
     userId: string,
     projectId: string,
-    roadMapId: string
+    roadMap: string | string[]
   ) {
     const updatedProject = await this.ProjectModel.findOneAndUpdate(
       { _id: projectId, user: userId },
-      { $pull: { roadMap: { _id: roadMapId } } },
+      { $pull: { roadMap: { _id: { $in: roadMap } } } },
       { new: true }
     ).exec();
+
     if (!updatedProject) {
       this.logger.error("Roadmap not deleted");
       throw new Error("Roadmap not deleted");
     }
     this.logger.info("Roadmap deleted");
+    // Check if roadmap is array or string
+
     return {
       result: true,
       message: `Roadmap from ${updatedProject.title} is deleted`,

@@ -187,8 +187,9 @@ const ProjectApi = createApi({
     RemoveRoadMap: builder.mutation({
       query({ projectId, RoadMapId }) {
         return {
-          url: `/${projectId}/roadMap/${RoadMapId}`,
-          method: 'delete',
+          url: `/${projectId}/roadMap/delete`,
+          method: 'patch',
+          data: RoadMapId,
         };
       },
       onQueryStarted({ projectId, RoadMapId }, { dispatch, queryFulfilled }) {

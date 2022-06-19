@@ -6,11 +6,18 @@ export interface IProject extends Document {
   title: string;
   description: string;
   technologies: string[];
-  roadMap?: string[];
+  roadMap?: IRoadMap[];
   process: string;
   live?: string;
   github?: string;
   date: Date;
+}
+
+export interface IRoadMap extends Document {
+  name: string;
+  color: string;
+  progress: number;
+  github?: string;
 }
 
 const road = new Schema({
@@ -21,7 +28,7 @@ const road = new Schema({
   color: {
     type: String,
     required: true,
-    default: "white",
+    default: "#fff",
   },
   progress: {
     type: Number,

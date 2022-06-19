@@ -39,7 +39,7 @@ export default ({ app }: { app: express.Application }) => {
     app.use(express.static(path.join(_dirname, "/client/build")));
 
     app.get("*", (req, res) =>
-      res.sendFile(path.resolve(_dirname, "Client", "build", "index.html"))
+      res.sendFile(path.resolve(_dirname, "client", "build", "index.html"))
     );
   } else {
     app.get("/", (req, res) => {
