@@ -9,7 +9,7 @@ import App from './App';
 
 const Store = createStoreWithMiddleware();
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.REACT_APP_ENVIRONMENT === 'test') {
   worker.start();
 }
 

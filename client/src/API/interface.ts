@@ -1,5 +1,15 @@
 import type { AlertState } from '../interface';
 
+export interface AuthUserResponse {
+  user: {
+    _id: string;
+    username: string;
+    email: string;
+    date: string;
+  };
+  token: string;
+}
+
 export interface NewPostAPI {
   result: boolean;
   message: string;
@@ -9,3 +19,11 @@ export interface NewPostAPI {
 export type UpdatePostAPI = NewPostAPI;
 
 export type DeletedPostAPI = AlertState;
+
+export interface NewProjectAPI {
+  result: boolean;
+  message: string;
+  project: any;
+}
+
+export type DeletedProjectAPI = AlertState;

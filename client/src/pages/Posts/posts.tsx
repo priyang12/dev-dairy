@@ -16,7 +16,8 @@ import NavLayout from '../../layout/Navlayout';
 
 function Feeds() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { isLoading, isFetching, data: Posts } = useGetPostsQuery('');
+  const { isLoading, isFetching, data: Posts } = useGetPostsQuery(null);
+
   const [AddNewPost, NewPostMutaion] = useNewPostMutation();
 
   if (isLoading || isFetching) return <Spinner />;

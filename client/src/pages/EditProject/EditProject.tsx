@@ -52,10 +52,10 @@ import RandomColor from '../../utils/RandomColor';
 import useForm from '../../Hooks/useForm';
 import { isErrorWithMessage } from '../../utils/helpers';
 import Navlayout from '../../layout/Navlayout';
-import type { AlertState } from '../../interface';
+import type { AlertState, IProject } from '../../interface';
 
 function EditProject() {
-  const params = useParams();
+  const { id } = useParams<{ id: string }>();
   const { alert, result }: AlertState = useSelector(
     (state: any) => state.Alert,
   );
@@ -66,7 +66,9 @@ function EditProject() {
     isError,
     error,
     data: project,
-  } = useGetProjectIdQuery(params.id);
+  } = useGetProjectIdQuery(id, {
+    skip: !!id,
+  });
   const { FormValues, ErrorsState, HandleChange, SetState, setError } = useForm(
     {
       Title: '',
@@ -97,16 +99,17 @@ function EditProject() {
       top: 0,
       behavior: 'smooth',
     });
-    UpdateProjectMutation({ ...FormValues, id: params.id });
+    UpdateProjectMutation({ ...FormValues, _id: id });
   };
 
   useLayoutEffect(() => {
     if (project) {
       const keys = Object.keys(project);
-      keys.forEach((key) => {
+
+      keys.forEach((key: string) => {
         SetState((prevState: any) => ({
           ...prevState,
-          [key]: project[key],
+          [key]: project[key as keyof IProject],
         }));
       });
     }
@@ -138,6 +141,7 @@ function EditProject() {
     return <Navigate to="/projects" />;
   }
 
+  if (!project) return null;
   return (
     <Navlayout>
       <Container maxW="800px" mb={10}>
@@ -295,7 +299,7 @@ function EditProject() {
           </Button>
         </Flex>
         <Box p={5} my={5} bg="#333">
-          {project.roadMap && (
+          {project.roadMap.length > 0 && (
             <Box justifyContent="space-between" alignItems="center" mt={5}>
               {RoadMapResult.isLoading && (
                 <Alert>
@@ -307,7 +311,7 @@ function EditProject() {
                 <Heading as="h3" fontSize="2xl">
                   Road Map
                 </Heading>
-                <RoadMapModal onSubmit={RoadMapMutate} projectId={params.id} />
+                <RoadMapModal onSubmit={RoadMapMutate} projectId={id} />
                 {/* <DeleteRoadMapModal
                 onSubmit={RoadMapMutate}
                 result={RoadMapResult}
@@ -352,7 +356,7 @@ function EditProject() {
                           loadingText="Deleting..."
                           onClick={() => {
                             DeleteRoadMap({
-                              projectId: params.id,
+                              projectId: id,
                               RoadMapId: road._id,
                             });
                           }}

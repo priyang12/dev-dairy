@@ -1,6 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { setToken, setError } from '../features/AuthSlice';
 import { setUser } from '../features/UserSlice';
+import type { IUser } from '../interface';
+import type { AuthUserResponse } from './interface';
 import API from '.';
 
 const AuthApi = createApi({
@@ -8,7 +10,7 @@ const AuthApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: API }),
 
   endpoints: (builder) => ({
-    LoginUser: builder.mutation<any, Partial<any>>({
+    LoginUser: builder.mutation<AuthUserResponse, Partial<IUser>>({
       query(data) {
         return {
           url: '/login',
@@ -31,7 +33,7 @@ const AuthApi = createApi({
         }
       },
     }),
-    RegisterUser: builder.mutation<any, Partial<any>>({
+    RegisterUser: builder.mutation<AuthUserResponse, Partial<any>>({
       query(data) {
         return {
           url: '/register',

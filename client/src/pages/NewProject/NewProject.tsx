@@ -25,8 +25,9 @@ import {
 import { useState } from 'react';
 import { Navigate as Redirect } from 'react-router-dom';
 import { useCreateProjectMutation } from '../../API/ProjectAPI';
-
+import type { IProject } from '../../interface';
 import useForm from '../../Hooks/useForm';
+
 import Navlayout from '../../layout/Navlayout';
 import {
   CheckURL,
@@ -104,7 +105,7 @@ function NewProject() {
     if (Website && !CheckURL(Website)) {
       WebsiteError = setError('Website', 'Enter Valid URL for Website');
     }
-    const newProject = {
+    const newProject: IProject | any = {
       title: Title,
       description: Description,
       process,

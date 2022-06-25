@@ -35,12 +35,12 @@ import Spinner from '../../components/spinner';
 import RandomColor from '../../utils/RandomColor';
 
 function SingleProject() {
-  const params = useParams();
+  const { id } = useParams<{ id: string }>();
   const { alert }: AlertState = useSelector((state: any) => state.Alert);
-  console.log(alert);
-  const { isFetching, isLoading, isError, data } = useGetProjectIdQuery(
-    params.id,
-  );
+
+  const { isFetching, isLoading, isError, data } = useGetProjectIdQuery(id, {
+    skip: !!id,
+  });
   const project = data as IProject;
   const [DeleteProjectMutation, DeleteResult] = useDeleteProjectMutation();
   const { isOpen, onOpen, onClose } = useDisclosure();

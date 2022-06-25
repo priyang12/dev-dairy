@@ -3,6 +3,7 @@ import API from '.';
 import { setAlert } from '../features/AlertSlice';
 import type { IProject } from '../interface';
 import type { RootState } from '../store';
+import type { DeletedProjectAPI, NewProjectAPI } from './interface';
 
 const ProjectApi = createApi({
   reducerPath: 'ProjectApi',
@@ -19,27 +20,33 @@ const ProjectApi = createApi({
   tagTypes: ['projectId'],
 
   endpoints: (builder) => ({
-    GetProjects: builder.query({
+    GetProjects: builder.query<IProject[], Partial<string>>({
       query: () => ({
         url: '',
         method: 'GET',
       }),
     }),
 
-    GetProjectId: builder.query({
+    GetProjectId: builder.query<IProject, Partial<string | undefined>>({
       query: (id) => ({
         url: `/${id}`,
         method: 'GET',
       }),
       providesTags: ['projectId'],
     }),
-    GetProjectRoadMap: builder.query({
+    GetProjectRoadMap: builder.query<
+      IProject,
+      Partial<{
+        projectId: string;
+        RoadMapId: string;
+      }>
+    >({
       query: ({ projectId, RoadMapId }) => ({
         url: `/${projectId}/roadMap/${RoadMapId}`,
         method: 'get',
       }),
     }),
-    CreateProject: builder.mutation({
+    CreateProject: builder.mutation<NewProjectAPI, IProject>({
       query(data) {
         return {
           url: '',
@@ -62,10 +69,10 @@ const ProjectApi = createApi({
         }
       },
     }),
-    UpdateProject: builder.mutation({
+    UpdateProject: builder.mutation<NewProjectAPI, Partial<IProject>>({
       query(data) {
         return {
-          url: `/${data.id}`,
+          url: `/${data._id}`,
           method: 'put',
           body: data,
         };
@@ -92,7 +99,7 @@ const ProjectApi = createApi({
       },
       invalidatesTags: ['projectId'],
     }),
-    DeleteProject: builder.mutation({
+    DeleteProject: builder.mutation<DeletedProjectAPI, Partial<string>>({
       query(id) {
         return {
           url: `/${id}`,

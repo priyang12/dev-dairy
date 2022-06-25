@@ -1,4 +1,6 @@
-export const AuthResponse = {
+import type { AuthUserResponse } from '../API/interface';
+
+export const AuthResponse: AuthUserResponse = {
   user: {
     _id: '627bcea32b463cb2da6853b7',
     username: 'test',
@@ -120,6 +122,7 @@ export const SingleProjectResponse = {
   user: '627bcea32b463cb2da6853b7',
   roadMap: [
     {
+      color: '#cec0e0',
       progress: 20,
       _id: '627fa6043f711612ba80bd7d',
       name: 'backend',
