@@ -87,7 +87,8 @@ function Login() {
           <Text as="p" fontSize="xl">
             Don&lsquo;t have an account?
             <Link as={RouterLink} to="/register" _hover={{ color: 'green' }}>
-              {''} Sign up
+              <span>&nbsp;</span>
+              Sign up
             </Link>
           </Text>
         </Flex>

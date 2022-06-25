@@ -24,6 +24,7 @@ function Feeds() {
   if (NewPostMutaion.isSuccess) {
     //  Alert
   }
+  if (!Posts) return <div>No Posts</div>;
   return (
     <NavLayout>
       <MarginContainer display="flex" flexDir="column">

@@ -3,6 +3,7 @@ import API from '.';
 import { setAlert } from '../features/AlertSlice';
 import type { IPost } from '../interface';
 import type { RootState } from '../store';
+import type { DeletedPostAPI, NewPostAPI, UpdatePostAPI } from './interface';
 
 const PostApi = createApi({
   reducerPath: 'PostAPI',
@@ -19,7 +20,7 @@ const PostApi = createApi({
   tagTypes: ['Posts'],
 
   endpoints: (builder) => ({
-    GetPosts: builder.query({
+    GetPosts: builder.query<IPost[], null>({
       query() {
         return {
           url: '',
@@ -28,7 +29,7 @@ const PostApi = createApi({
       },
       providesTags: ['Posts'],
     }),
-    GetPost: builder.query<any, Partial<any>>({
+    GetPost: builder.query<IPost, Partial<string>>({
       query(id) {
         return {
           url: `/${id}`,
@@ -36,7 +37,7 @@ const PostApi = createApi({
         };
       },
     }),
-    GetPostByProject: builder.query<any, Partial<any>>({
+    GetPostByProject: builder.query<IPost[], Partial<string>>({
       query(id) {
         return {
           url: `/project/${id}`,
@@ -44,7 +45,7 @@ const PostApi = createApi({
         };
       },
     }),
-    NewPost: builder.mutation<any, Partial<any>>({
+    NewPost: builder.mutation<NewPostAPI, Partial<IPost>>({
       query(data) {
         return {
           url: '',
@@ -56,7 +57,7 @@ const PostApi = createApi({
         try {
           const { data: NewPost } = await queryFulfilled;
           dispatch(
-            PostApi.util.updateQueryData('GetPosts', '', (posts: IPost[]) => [
+            PostApi.util.updateQueryData('GetPosts', null, (posts: IPost[]) => [
               NewPost.post,
               ...posts,
             ]),
@@ -78,7 +79,7 @@ const PostApi = createApi({
         }
       },
     }),
-    UpdatePost: builder.mutation<any, Partial<any>>({
+    UpdatePost: builder.mutation<UpdatePostAPI, Partial<IPost>>({
       query(data) {
         return {
           url: `/${data._id}`,
@@ -88,18 +89,18 @@ const PostApi = createApi({
       },
       onQueryStarted(data, { dispatch, queryFulfilled }) {
         const UpdateResult = dispatch(
-          PostApi.util.updateQueryData('GetPosts', '', (posts: IPost[]) => {
+          PostApi.util.updateQueryData('GetPosts', null, (posts) => {
             const newPost = posts.map((post) =>
               post._id === data._id ? data : post,
             );
-            return newPost;
+            return newPost as IPost[];
           }),
         );
 
         queryFulfilled.catch(UpdateResult.undo);
       },
     }),
-    DeletePost: builder.mutation({
+    DeletePost: builder.mutation<DeletedPostAPI, Partial<string>>({
       query(id) {
         return {
           url: `/${id}`,
@@ -109,7 +110,7 @@ const PostApi = createApi({
 
       onQueryStarted(id, { dispatch, queryFulfilled }) {
         const deleteResult = dispatch(
-          PostApi.util.updateQueryData('GetPosts', '', (data: any) => {
+          PostApi.util.updateQueryData('GetPosts', null, (data: IPost[]) => {
             const newData = data.filter((item: IPost) => item._id !== id);
             return newData;
           }),
