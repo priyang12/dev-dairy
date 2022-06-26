@@ -5,3 +5,4 @@ firebase.json
 .vercel
 build
 .vscode
+*.mp3

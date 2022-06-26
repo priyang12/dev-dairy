@@ -91,6 +91,15 @@ function Navbar() {
               <span className="hide-sm">feeds</span>
             </Link>
           </MenuItem>
+          <MenuItem>
+            <Link
+              as={RouterLink}
+              to="/MusicPlaylist"
+              _hover={{ color: isDark ? 'blue.500' : 'gray.100' }}
+            >
+              <span className="hide-sm">MusicPlaylist</span>
+            </Link>
+          </MenuItem>
 
           <div className="dropdown-divider" />
           <MenuItem>

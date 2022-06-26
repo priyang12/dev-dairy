@@ -16,6 +16,8 @@ import SingleProject from './pages/SingleProject';
 import { usePrefetch } from './API/ProjectAPI';
 import NewProject from './pages/NewProject';
 import EditProject from './pages/EditProject';
+import MusicPlaylist from './pages/MusicPlaylist';
+import MusicPlayer from './components/MusicPlayer';
 
 const LandingData = {
   heading: 'Dev Dairy',
@@ -47,6 +49,7 @@ function App() {
   }
   return (
     <BrowserRouter>
+      <MusicPlayer />
       <Routes>
         <Route
           path="/"
@@ -73,6 +76,9 @@ function App() {
         </Route>
         <Route path="/" element={<PrivateOutlet />}>
           <Route path="/NewProject" element={<NewProject />} />
+        </Route>
+        <Route path="/" element={<PrivateOutlet />}>
+          <Route path="/MusicPlaylist" element={<MusicPlaylist />} />
         </Route>
       </Routes>
     </BrowserRouter>
