@@ -39,7 +39,7 @@ it('Invalided input', () => {
   userEvent.type(password2, 'test2');
   userEvent.click(submit);
   expect(
-    screen.getByText(/Name must be between 4 and 10 characters/),
+    screen.getByText(/Name must be between 4 and 30 characters/),
   ).toBeInTheDocument();
 
   expect(screen.getByText(/Please enter a valid email/)).toBeInTheDocument();

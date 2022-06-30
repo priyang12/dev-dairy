@@ -28,7 +28,6 @@ function Login() {
     {
       fieldType: 'email',
       fieldName: 'email',
-      placeholder: 'Please enter valid Email',
       isRequired: true,
     },
     {

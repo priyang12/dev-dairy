@@ -84,7 +84,7 @@ it('Check Field Inputs and validation', () => {
 
   // check if the validation is working
   expect(
-    screen.getByText(/Title must be between 4 and 10 characters/),
+    screen.getByText(/Title must be between 4 and 30 characters/),
   ).toBeInTheDocument();
   expect(
     screen.getByText(/Description must be between 10 and 400 characters/),

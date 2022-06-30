@@ -17,7 +17,7 @@ import CustomForm from '../../components/CustomForm';
 import {
   ConfirmPasswordCheck,
   ValidateEmail,
-  ValidateName,
+  ValidateTitle,
   ValidatePassword,
 } from '../../utils/Validation';
 import { useRegisterUserMutation } from '../../API/AuthAPI';
@@ -64,7 +64,7 @@ function Register() {
     const { email, name, password, ConfirmPassword } = e.target
       .elements as typeof e.target.elements & FormData;
 
-    const UsernameError = ValidateName(name.value);
+    const UsernameError = ValidateTitle(name.value);
     const EmailError = ValidateEmail(email.value);
     const PasswordError = ValidatePassword(password.value);
     const ConfirmError = ConfirmPasswordCheck(

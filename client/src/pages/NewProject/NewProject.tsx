@@ -32,7 +32,7 @@ import Navlayout from '../../layout/Navlayout';
 import {
   CheckURL,
   ValidateDescription,
-  ValidateName,
+  ValidateTitle,
 } from '../../utils/Validation';
 
 interface RoadMap {
@@ -92,7 +92,7 @@ function NewProject() {
     const newRoadMaps = [...RoadMaps];
     const newTechs = [...Technologies];
 
-    const TitleError = setError('Title', ValidateName(Title, 'Title'));
+    const TitleError = setError('Title', ValidateTitle(Title, 'Title'));
     const DescriptionError = setError(
       'Description',
       ValidateDescription(Description, 'Description'),

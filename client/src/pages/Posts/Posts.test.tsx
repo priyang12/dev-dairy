@@ -74,6 +74,28 @@ it('Delete Post', async () => {
   // expect(screen.getByText('Post Deleted')).toBeInTheDocument();
 });
 
+it('Post Field Validation', async () => {
+  setup();
+  expect(screen.getByAltText('loading...')).toBeInTheDocument();
+  await waitForElementToBeRemoved(screen.queryByAltText('loading...'), {
+    timeout: 2100,
+  });
+  expect(screen.getByText('Dairy Log')).toBeInTheDocument();
+
+  userEvent.click(screen.getByText('Create New Entry'));
+
+  expect(screen.getByText('New Log')).toBeInTheDocument();
+
+  await waitForElementToBeRemoved(screen.queryByText('Loading Projects'));
+
+  userEvent.click(screen.getByText('Create Log'));
+
+  expect(screen.getByText(/must be between 4 and 30 characters/));
+  expect(screen.getByText(/must be between 10 and 400 characters/));
+  expect(screen.getByText(/Project is Required/));
+  expect(screen.getByText(/RoadMap is Required/));
+});
+
 it('Add New Post', async () => {
   setup();
   expect(screen.getByAltText('loading...')).toBeInTheDocument();
@@ -81,8 +103,8 @@ it('Add New Post', async () => {
     timeout: 2100,
   });
   expect(screen.getByText('Dairy Log')).toBeInTheDocument();
-  const addNewPostButton = screen.getByText('Create New Entry');
-  userEvent.click(addNewPostButton);
+
+  userEvent.click(screen.getByText('Create New Entry'));
 
   expect(screen.getByText('New Log')).toBeInTheDocument();
   userEvent.type(screen.getByLabelText('Title'), 'New Title');
@@ -123,14 +145,15 @@ it('Update Post', async () => {
   const UpdateButton = screen.getAllByText('Update Post');
   userEvent.click(UpdateButton[0]);
   expect(screen.getByText('Update New Log')).toBeInTheDocument();
-  const title = screen.getByLabelText('Title') as HTMLInputElement;
-  userEvent.clear(title);
-  userEvent.type(title, 'Updated Title');
 
-  // SO FAR WHEN UPDATE BUTTON IS CLICKED, THE ELEMENT IS RECEIVE
-  // TRIED CHANGING THE VALUE OF THE ELEMENT, IT CHANGES THE VALUE BUT WHEN FORM IS SUBMITTED,
-  // THE FIELDS ARE NOT RECEIVED.
-  // CHANGE DEFAULT VALUE WITH VALUE AND IT DID WORK BUT IT IS NOT THE BEST WAY. AND WILL GIVE ON CHANGE WARNING.
+  await waitForElementToBeRemoved(screen.queryByText('Loading RoadMap'));
 
-  // userEvent.click(screen.getByText('Update New Log'));
+  userEvent.type(screen.getByLabelText('Title'), 'New Title');
+  userEvent.type(screen.getByLabelText('Description'), 'New Description');
+  const RoadMapSelect = screen.getByLabelText('RoadMap');
+
+  userEvent.selectOptions(RoadMapSelect, [
+    `${SingleProjectResponse.roadMap[0]._id},${SingleProjectResponse.roadMap[0].color}`,
+  ]);
+  userEvent.click(screen.getByText('Update New Log'));
 });

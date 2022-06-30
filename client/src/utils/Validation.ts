@@ -1,7 +1,7 @@
-export const ValidateName = (name: string, FieldName?: string) => {
+export const ValidateTitle = (name: string, FieldName?: string) => {
   let error = '';
-  if (name.length < 4 || name.length > 10)
-    error = `${FieldName ?? 'Name'} must be between 4 and 10 characters`;
+  if (name.length < 4 || name.length > 30)
+    error = `${FieldName ?? 'Name'} must be between 4 and 30 characters`;
 
   return error;
 };
@@ -17,16 +17,6 @@ export const ValidateDescription = (
       FieldName ?? 'Description'
     } must be between 10 and 400 characters`;
   return error;
-};
-
-export const userName = (name: string) => {
-  let error = '';
-  if (name.length < 4 || name.length > 10)
-    error = `Name must be between 4 and 10 characters`;
-
-  if (name.match(/[^a-zA-Z0-9]/)) {
-    error = 'Name must be alphanumeric';
-  }
 };
 
 export const ValidateEmail = (email: string) => {
