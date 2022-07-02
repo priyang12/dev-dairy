@@ -1,6 +1,6 @@
 import userEvent from '@testing-library/user-event';
 import { createMemoryHistory } from 'history';
-import { Router } from 'react-router-dom';
+import { Route, Router, BrowserRouter, Routes } from 'react-router-dom';
 import { SingleProjectResponse } from '../../mock/MockedData';
 
 import {
@@ -17,7 +17,9 @@ const History = createMemoryHistory({ initialEntries: [route] });
 const setup = () =>
   render(
     <Router location={route} navigator={History}>
-      <EditProject />
+      <Routes>
+        <Route path="/EditProject/:id" element={<EditProject />} />
+      </Routes>
     </Router>,
   );
 

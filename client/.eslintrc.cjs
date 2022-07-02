@@ -5,13 +5,13 @@ module.exports = {
   },
   plugins: ['react', '@typescript-eslint', 'prettier'],
   extends: [
+    'airbnb',
+    'airbnb-typescript',
+    'airbnb/hooks',
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/eslint-recommended',
-    'airbnb',
-    'airbnb-typescript',
-    'airbnb/hooks',
     'prettier',
   ],
   parser: '@typescript-eslint/parser',
@@ -30,7 +30,7 @@ module.exports = {
     quotes: 'off',
     'no-underscore-dangle': 'off',
     'no-console': 'off',
-    'prettier/prettier': 0,
+
     // TypeScript
     'no-param-reassign': 0,
     'jsx-props-no-spreading': 0,

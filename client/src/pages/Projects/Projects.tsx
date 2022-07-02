@@ -4,7 +4,7 @@ import { useGetProjectsQuery } from '../../API/ProjectAPI';
 import ProjectCard from '../SingleProject/ProjectCard';
 import AlertComponent from '../../components/AlertComponent';
 import Spinner from '../../components/spinner';
-import type { AlertState, IProject } from '../../interface';
+import type { IProject } from '../../interface';
 import NavLayout from '../../layout/Navlayout';
 
 function Projects() {

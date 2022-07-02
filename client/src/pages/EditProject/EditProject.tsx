@@ -67,7 +67,7 @@ function EditProject() {
     error,
     data: project,
   } = useGetProjectIdQuery(id, {
-    skip: !!id,
+    skip: !id,
   });
   const { FormValues, ErrorsState, HandleChange, SetState, setError } = useForm(
     {

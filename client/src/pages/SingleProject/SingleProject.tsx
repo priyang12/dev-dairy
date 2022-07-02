@@ -39,9 +39,10 @@ function SingleProject() {
   const { alert }: AlertState = useSelector((state: any) => state.Alert);
 
   const { isFetching, isLoading, isError, data } = useGetProjectIdQuery(id, {
-    skip: !!id,
+    skip: !id,
   });
-  const project = data as IProject;
+
+  const project = data;
   const [DeleteProjectMutation, DeleteResult] = useDeleteProjectMutation();
   const { isOpen, onOpen, onClose } = useDisclosure();
 

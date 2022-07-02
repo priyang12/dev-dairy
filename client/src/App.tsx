@@ -1,28 +1,37 @@
+import { Suspense, lazy, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
-import { setToken } from './features/AuthSlice';
+import { logout, setToken } from './features/AuthSlice';
 import { useGetUserQuery } from './API/UserAPI';
-import Navbar from './components/Navbar';
+import { usePrefetch } from './API/ProjectAPI';
+
+// Pages
 import LandingPage from './pages/LandingPage';
 import Login from './pages/login';
 import Register from './pages/register';
 import Posts from './pages/Posts';
+import Projects from './pages/Projects';
+import NewProject from './pages/NewProject';
+
+// Components
 import PrivateOutlet from './components/PrivateRoute';
 import Spinner from './components/spinner';
-import Projects from './pages/Projects';
-import SingleProject from './pages/SingleProject';
-import { usePrefetch } from './API/ProjectAPI';
-import NewProject from './pages/NewProject';
-import EditProject from './pages/EditProject';
 import MusicPlaylist from './pages/MusicPlaylist';
-import MusicPlayer from './components/MusicPlayer';
+
+// Lazy load  components
+const MusicPlayer = lazy(async () => import('./components/MusicPlayer'));
+const EditProject = lazy(async () => import('./pages/EditProject'));
+const SingleProject = lazy(async () => import('./pages/SingleProject'));
 
 const LandingData = {
   heading: 'Dev Dairy',
   subheading: 'Mange your projects and share your knowledge with the world',
 };
+
+function FallBackSuspenseWrapper({ children }: { children: React.ReactNode }) {
+  return <Suspense fallback={<Spinner />}>{children}</Suspense>;
+}
 
 function App() {
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
@@ -40,7 +49,7 @@ function App() {
       getProjects('');
     }
     return () => {
-      // dispatch({ type: LOGOUT });
+      dispatch(logout());
     };
   }, [cookies.token, dispatch, getProjects]);
 
@@ -49,7 +58,9 @@ function App() {
   }
   return (
     <BrowserRouter>
-      <MusicPlayer />
+      <FallBackSuspenseWrapper>
+        <MusicPlayer />
+      </FallBackSuspenseWrapper>
       <Routes>
         <Route
           path="/"
@@ -69,10 +80,24 @@ function App() {
           <Route path="/Projects" element={<Projects />} />
         </Route>
         <Route path="/" element={<PrivateOutlet />}>
-          <Route path="/Projects/:id" element={<SingleProject />} />
+          <Route
+            path="/Projects/:id"
+            element={
+              <FallBackSuspenseWrapper>
+                <SingleProject />
+              </FallBackSuspenseWrapper>
+            }
+          />
         </Route>
         <Route path="/" element={<PrivateOutlet />}>
-          <Route path="/EditProject/:id" element={<EditProject />} />
+          <Route
+            path="/EditProject/:id"
+            element={
+              <FallBackSuspenseWrapper>
+                <EditProject />
+              </FallBackSuspenseWrapper>
+            }
+          />
         </Route>
         <Route path="/" element={<PrivateOutlet />}>
           <Route path="/NewProject" element={<NewProject />} />

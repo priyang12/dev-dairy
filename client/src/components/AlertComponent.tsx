@@ -12,7 +12,6 @@ function AlertComponent() {
   const { alert, result }: AlertState = useSelector(
     (state: any) => state.Alert,
   );
-  console.log(alert);
   if (!alert) return null;
   return (
     <Alert

@@ -90,7 +90,6 @@ function PostModal({
       roadMap.value === 'Select RoadMap' ? 'RoadMap is Required' : '';
 
     if (ErrorTitle || ErrorDes || ErrorProject || ErrorRoadMap) {
-      console.log(ErrorTitle, ErrorDes, ErrorProject, ErrorRoadMap);
       setErrorState({
         title: ErrorTitle,
         description: ErrorDes,

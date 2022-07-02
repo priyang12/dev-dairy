@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { rest } from 'msw';
-import { Router } from 'react-router-dom';
+import { Route, Router, Routes } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import userEvent from '@testing-library/user-event';
 import {
@@ -14,12 +14,15 @@ import SingleProject from './index';
 import server from '../../mock/server';
 import API from '../../API';
 
-const History = createMemoryHistory();
+const route = '/Projects/132';
+const History = createMemoryHistory({ initialEntries: [route] });
 
 const setup = (): any => {
   render(
-    <Router navigator={History} location="/">
-      <SingleProject />
+    <Router navigator={History} location={route}>
+      <Routes>
+        <Route path="/Projects/:id" element={<SingleProject />} />
+      </Routes>
     </Router>,
   );
 };

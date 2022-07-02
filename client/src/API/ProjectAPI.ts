@@ -195,8 +195,8 @@ const ProjectApi = createApi({
       query({ projectId, RoadMapId }) {
         return {
           url: `/${projectId}/roadMap/delete`,
-          method: 'patch',
-          data: RoadMapId,
+          method: 'PATCH',
+          body: [RoadMapId],
         };
       },
       onQueryStarted({ projectId, RoadMapId }, { dispatch, queryFulfilled }) {

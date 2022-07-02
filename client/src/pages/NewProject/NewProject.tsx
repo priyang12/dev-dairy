@@ -40,6 +40,26 @@ interface RoadMap {
   color: string;
 }
 
+interface NewProjectInterface {
+  Title: string;
+  Description: string;
+  process: number;
+  Github: string;
+  Live: boolean;
+  Website: string;
+  NewTech: string;
+}
+
+const init: NewProjectInterface = {
+  Title: '',
+  Description: '',
+  process: 5,
+  Github: '',
+  Live: false,
+  Website: '',
+  NewTech: '',
+};
+
 function NewProject() {
   const [CreateProject, CreateProjectResult] = useCreateProjectMutation();
   const [NewTech, setNewTech] = useState('');
@@ -49,17 +69,8 @@ function NewProject() {
     color: '#000',
   });
   const [RoadMaps, setRoadMaps] = useState<RoadMap[]>([]);
-  const { FormValues, ErrorsState, HandleChange, SetState, setError } = useForm(
-    {
-      Title: '',
-      Description: '',
-      process: 5,
-      Github: '',
-      Live: false,
-      Website: '',
-      NewTech: '',
-    },
-  );
+  const { FormValues, ErrorsState, HandleChange, SetState, setError } =
+    useForm(init);
 
   const AddNewTech = () => {
     if (!ErrorsState.NewTech) {
@@ -116,10 +127,7 @@ function NewProject() {
       technologies: newTechs,
     };
 
-    if (TitleError || DescriptionError || GithubError || WebsiteError) {
-      console.log('Invalid');
-    } else {
-      console.log('valid');
+    if (!TitleError || !DescriptionError || !GithubError || !WebsiteError) {
       CreateProject(newProject);
     }
   };
