@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -27,27 +27,26 @@ import { logout } from '../features/AuthSlice';
 import type { AuthState } from '../interface';
 
 function Navbar() {
+  const location = useLocation();
+  const isLogin = location.pathname === '/login';
+  const isRegister = location.pathname === '/register';
+  const LandingPage = location.pathname === '/';
+
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
   const Auth: AuthState = useSelector((state: any) => state.Auth);
-  // const ColorPreference = useColorModePreference();
-  // const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const isDark = true;
-
   const [display, changeDisplay] = useState(false);
   const dispatch = useDispatch();
-  // useLayoutEffect(() => {
-  //   if (ColorPreference === 'dark') {
-  //     toggleColorMode();
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [ColorPreference]);
+
   const onLogout = () => {
     localStorage.clear();
     removeCookie('token');
     dispatch(logout());
     window.location.reload();
   };
+
+  if (isLogin || isRegister || LandingPage) return null;
 
   const AuthLinks = (
     <div>
@@ -157,7 +156,7 @@ function Navbar() {
       bgColor={isDark ? '#102344' : 'gray.200'}
       as="nav"
       width="100%"
-      position="fixed"
+      position="sticky"
       top="0"
       right="0"
       py={['6vh', '8vh', '10vh', '10vh']}
