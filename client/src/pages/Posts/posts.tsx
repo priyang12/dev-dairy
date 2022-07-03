@@ -1,5 +1,6 @@
 import {
   Alert,
+  Box,
   Button,
   Flex,
   Grid,
@@ -10,9 +11,7 @@ import { useGetPostsQuery, useNewPostMutation } from '../../API/PostAPI';
 import PostContainer from './PostContainer';
 import Spinner from '../../components/spinner';
 import MarginContainer from '../../components/MarginContainer';
-
 import PostModal from './PostModal';
-import NavLayout from '../../layout/Navlayout';
 
 function Feeds() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -27,7 +26,7 @@ function Feeds() {
   }
   if (!Posts) return <div>No Posts</div>;
   return (
-    <NavLayout>
+    <Box>
       <MarginContainer display="flex" flexDir="column">
         <Button onClick={onOpen} fontSize="3xl" p={10} m="auto" my={5}>
           Create New Entry
@@ -54,7 +53,7 @@ function Feeds() {
           <h1>No posts yet</h1>
         )}
       </MarginContainer>
-    </NavLayout>
+    </Box>
   );
 }
 

@@ -18,6 +18,7 @@ import NewProject from './pages/NewProject';
 import PrivateOutlet from './components/PrivateRoute';
 import Spinner from './components/spinner';
 import MusicPlaylist from './pages/MusicPlaylist';
+import Navbar from './components/Navbar';
 
 // Lazy load  components
 const MusicPlayer = lazy(async () => import('./components/MusicPlayer'));
@@ -58,6 +59,7 @@ function App() {
   }
   return (
     <BrowserRouter>
+      <Navbar />
       <FallBackSuspenseWrapper>
         <MusicPlayer />
       </FallBackSuspenseWrapper>

@@ -8,9 +8,6 @@ a:hover {
   color: black;
   text-decoration: none;
 }
-.top {
-  margin-top: 25vh;
-}
 #landing-page {
   background: url('../Assets/zen.jpeg') repeat center center;
   background-size: cover;

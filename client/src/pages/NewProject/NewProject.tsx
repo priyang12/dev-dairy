@@ -27,8 +27,6 @@ import { Navigate as Redirect } from 'react-router-dom';
 import { useCreateProjectMutation } from '../../API/ProjectAPI';
 import type { IProject } from '../../interface';
 import useForm from '../../Hooks/useForm';
-
-import Navlayout from '../../layout/Navlayout';
 import {
   CheckURL,
   ValidateDescription,
@@ -135,7 +133,7 @@ function NewProject() {
     return <Redirect to="/Projects" />;
   }
   return (
-    <Navlayout>
+    <Box>
       <Container className="top" maxW="1000px" pb={10}>
         <Heading size="lg">New Project</Heading>
         <Flex
@@ -375,7 +373,7 @@ function NewProject() {
           Create Project
         </Button>
       </Container>
-    </Navlayout>
+    </Box>
   );
 }
 

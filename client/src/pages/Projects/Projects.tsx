@@ -5,7 +5,6 @@ import ProjectCard from '../SingleProject/ProjectCard';
 import AlertComponent from '../../components/AlertComponent';
 import Spinner from '../../components/spinner';
 import type { IProject } from '../../interface';
-import NavLayout from '../../layout/Navlayout';
 
 function Projects() {
   const { isLoading, isFetching, data } = useGetProjectsQuery('');
@@ -14,7 +13,7 @@ function Projects() {
 
   if (!data || data.length === 0) {
     return (
-      <NavLayout>
+      <div>
         <Button
           to="/NewProject"
           w="50%"
@@ -29,12 +28,12 @@ function Projects() {
           New Project
         </Button>
         <h1>No Projects</h1>
-      </NavLayout>
+      </div>
     );
   }
 
   return (
-    <NavLayout>
+    <div>
       <Container maxW="800px">
         <AlertComponent />
         <Heading m={5} ml={0} textAlign="center">
@@ -60,7 +59,7 @@ function Projects() {
           ))}
         </Flex>
       </Container>
-    </NavLayout>
+    </div>
   );
 }
 

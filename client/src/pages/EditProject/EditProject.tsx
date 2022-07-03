@@ -51,7 +51,6 @@ import Spinner from '../../components/spinner';
 import RandomColor from '../../utils/RandomColor';
 import useForm from '../../Hooks/useForm';
 import { isErrorWithMessage } from '../../utils/helpers';
-import Navlayout from '../../layout/Navlayout';
 import type { AlertState, IProject } from '../../interface';
 
 function EditProject() {
@@ -143,7 +142,7 @@ function EditProject() {
 
   if (!project) return null;
   return (
-    <Navlayout>
+    <Box>
       <Container maxW="800px" mb={10}>
         {UpdateResult.isLoading && (
           <Alert status="info" borderRadius={10} my={5}>
@@ -418,7 +417,7 @@ function EditProject() {
           </ModalComponent>
         </Container>
       </Container>
-    </Navlayout>
+    </Box>
   );
 }
 

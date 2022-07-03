@@ -28,7 +28,6 @@ import {
   useGetProjectIdQuery,
 } from '../../API/ProjectAPI';
 import type { AlertState, IProject, IRoadMap } from '../../interface';
-import Navlayout from '../../layout/Navlayout';
 import ModalComponent from '../../components/ModalComponent';
 import Spinner from '../../components/spinner';
 
@@ -48,15 +47,15 @@ function SingleProject() {
 
   if (isFetching || isLoading) return <Spinner />;
 
-  if (isError) {
-    return <Navlayout>No Project Found</Navlayout>;
+  if (isError || !project) {
+    return <div>No Project Found</div>;
   }
   if (DeleteResult.isSuccess) {
     return <Navigate to="/projects" />;
   }
 
   return (
-    <Navlayout>
+    <div>
       <Container maxW="900px" mb={10}>
         <Flex
           justifyContent="space-between"
@@ -293,7 +292,7 @@ function SingleProject() {
           </ModalComponent>
         </Container>
       </Container>
-    </Navlayout>
+    </div>
   );
 }
 
