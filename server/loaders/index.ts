@@ -5,7 +5,8 @@ import Logger from "./logger";
 // //We have to import at least all the events once so they can be triggered
 
 export default async ({ expressApp }: any) => {
-  const mongoConnection = await mongooseLoader();
+  const { Db: mongoConnection } = await mongooseLoader();
+
   Logger.info("✌️ DB loaded and connected!");
 
   const userModel = {

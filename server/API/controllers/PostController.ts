@@ -11,7 +11,7 @@ import Container from "typedi";
 // @desc    Fetch User Projects
 // @access  Private
 export const GetPosts = asyncHandler(
-  async (req: any, res: Response): Promise<any> => {
+  async (req: Request, res: Response): Promise<any> => {
     const projectServiceInstance = Container.get(PostService);
     const projects = await projectServiceInstance.GetAllPost(req.user._id);
     return res.status(200).json(projects);
@@ -22,7 +22,7 @@ export const GetPosts = asyncHandler(
 // @desc Get project posts
 // @access Private
 export const GetProjectPosts = asyncHandler(
-  async (req: any, res: Response): Promise<any> => {
+  async (req: Request, res: Response): Promise<any> => {
     const projectServiceInstance = Container.get(PostService);
     const project = await projectServiceInstance.GetAllPostByProject(
       req.params.id
@@ -35,7 +35,7 @@ export const GetProjectPosts = asyncHandler(
 // @desc Get project posts
 // @access Private
 export const GetPost = asyncHandler(
-  async (req: any, res: Response): Promise<any> => {
+  async (req: Request, res: Response): Promise<any> => {
     const projectServiceInstance = Container.get(PostService);
     const project = await projectServiceInstance.GetPost(
       req.user._id,
@@ -49,7 +49,7 @@ export const GetPost = asyncHandler(
 // @desc Create Post
 // @access Private
 export const CreatePost = asyncHandler(
-  async (req: any, res: Response): Promise<any> => {
+  async (req: Request, res: Response): Promise<any> => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(422).json(errors.array());
@@ -67,7 +67,7 @@ export const CreatePost = asyncHandler(
 // @desc Update Post
 // @access Private
 export const UpdatePost = asyncHandler(
-  async (req: any, res: Response): Promise<any> => {
+  async (req: Request, res: Response): Promise<any> => {
     const projectServiceInstance = Container.get(PostService);
     const message = await projectServiceInstance.UpdatePost(
       req.user._id,
@@ -82,7 +82,7 @@ export const UpdatePost = asyncHandler(
 // @desc Delete Post
 // @access Private
 export const DeletePost = asyncHandler(
-  async (req: any, res: Response): Promise<any> => {
+  async (req: Request, res: Response): Promise<any> => {
     const projectServiceInstance = Container.get(PostService);
     const message = await projectServiceInstance.DeletePost(
       req.user._id,

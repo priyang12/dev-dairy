@@ -8,7 +8,7 @@
     "server": "nodemon server/index.ts",
     "client": "npm start --prefix client",
     "start:prod": "node server/build/index.js",
-    "build": "tsc -p ./server",
+    "build": "tsc -p ./server && npm build --prefix client",
     "clientBuild": "npm run build --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "vercel-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"

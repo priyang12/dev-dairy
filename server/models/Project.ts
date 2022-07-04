@@ -67,6 +67,15 @@ const ProjectSchema = new Schema({
     required: true,
     default: 1,
   },
+  workSessions: {
+    type: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "WorkSessions",
+      },
+    ],
+    required: true,
+  },
   live: {
     type: Boolean,
   },

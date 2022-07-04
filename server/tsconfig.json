@@ -16,6 +16,6 @@
     "declaration": false
   },
 
-  "include": ["/**/*.ts"],
+  "include": ["/**/*.ts", "./types/express/index.d.ts"],
   "exclude": ["node_modules", "dist", "__tests__", "coverage"]
 }

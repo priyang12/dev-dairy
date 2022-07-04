@@ -12,7 +12,7 @@ import UserService from "../../services/UserService";
 // @desc    Fetch User
 // @access  Private
 export const GetUser = asyncHandler(
-  async (req: any, res: Response): Promise<any> => {
+  async (req: Request, res: Response): Promise<any> => {
     const authServiceInstance = Container.get(UserService);
     const user = await authServiceInstance.GetUser(req.user);
     return res.status(200).json(user);

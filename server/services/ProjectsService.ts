@@ -2,11 +2,13 @@ import { Service, Inject } from "typedi";
 import { Model } from "mongoose";
 import { IProject, IRoadMap } from "../models/Project";
 import { Logger } from "winston";
+import { IPost } from "../models/Post";
 
 @Service()
 export default class UserService {
   constructor(
     @Inject("projectModel") private ProjectModel: Model<IProject>,
+    @Inject("postModel") private PostModel: Model<IPost>,
     @Inject("logger") private logger: Logger
   ) {}
 
@@ -123,7 +125,6 @@ export default class UserService {
       throw new Error("Roadmap not deleted");
     }
     this.logger.info("Roadmap deleted");
-    // Check if roadmap is array or string
 
     return {
       result: true,
@@ -135,12 +136,18 @@ export default class UserService {
     userId: string,
     projectId: string
   ): Promise<{ message: string; result: boolean }> {
+    //
     const deletedProject = await this.ProjectModel.findOneAndDelete({
       _id: projectId,
       user: userId,
     }).exec();
 
-    if (!deletedProject) {
+    const deletedPosts = await this.PostModel.deleteMany({
+      project: projectId,
+      user: userId,
+    }).exec();
+
+    if (!deletedProject || !deletedPosts) {
       this.logger.error("Project not deleted");
       throw new Error("Project not deleted");
     }
