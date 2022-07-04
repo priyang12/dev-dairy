@@ -5,7 +5,8 @@ const initState = {
   isLoading: false,
   isError: false,
   errorMessage: '',
-  CurrentMusicKey: '',
+  CurrentMusicInPlaylist: 0,
+  PlayList: [],
 };
 
 export type MusicState = typeof initState;
@@ -14,9 +15,6 @@ const MusicSlice = createSlice({
   name: 'AuthAPI',
   initialState: initState,
   reducers: {
-    setCurrentMusicKey: (state, action) => {
-      state.CurrentMusicKey = action.payload;
-    },
     setLoading: (state, action) => {
       state.isLoading = action.payload;
     },
@@ -28,11 +26,22 @@ const MusicSlice = createSlice({
       state.isError = false;
       state.errorMessage = '';
     },
+    setPlayList: (state, action) => {
+      state.PlayList = action.payload;
+    },
+    setCurrentMusicInPlaylist: (state, action) => {
+      state.CurrentMusicInPlaylist = action.payload;
+    },
   },
 });
 
 // Exporting Actions
-export const { setCurrentMusicKey, setLoading, setError, clearError } =
-  MusicSlice.actions;
+export const {
+  setLoading,
+  setCurrentMusicInPlaylist,
+  setPlayList,
+  setError,
+  clearError,
+} = MusicSlice.actions;
 
 export default MusicSlice.reducer;

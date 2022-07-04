@@ -11,7 +11,6 @@ interface ComponentProps extends BoxProps {
 }
 
 function BgImage({ BgImageData, children, ...rest }: ComponentProps) {
-  console.log(BgImageData);
   return (
     <Box
       style={{
@@ -25,7 +24,6 @@ function BgImage({ BgImageData, children, ...rest }: ComponentProps) {
         width: '100%',
         zIndex: -1,
       }}
-      // eslint-disable-next-line react/jsx-props-no-spreading
       {...rest}
     >
       {children}

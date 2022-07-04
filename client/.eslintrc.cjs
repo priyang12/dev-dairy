@@ -33,7 +33,6 @@ module.exports = {
 
     // TypeScript
     'no-param-reassign': 0,
-    'jsx-props-no-spreading': 0,
     '@typescript-eslint/consistent-type-imports': 'warn',
     '@typescript-eslint/no-parameter-reassign': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
@@ -85,12 +84,13 @@ module.exports = {
     '@typescript-eslint/switch-exhaustiveness-check': 'error',
 
     // React
-    'react/jsx-boolean-value': 'warn',
-    'react/jsx-curly-brace-presence': 'warn',
-    'react/jsx-fragments': 'warn',
-    'react/jsx-no-useless-fragment': 'warn',
+    'react/jsx-boolean-value': 'error',
+    'react/jsx-curly-brace-presence': 'error',
+    'react/jsx-fragments': 'error',
+    'react/jsx-no-useless-fragment': 'error',
     'react/jsx-uses-react': 'off',
-    'react/prefer-stateless-function': 'warn',
+    'react/jsx-props-no-spreading': 'off',
+    'react/prefer-stateless-function': 'error',
     'react/prop-types': 'off',
     'react/react-in-jsx-scope': 'off',
   },

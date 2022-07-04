@@ -7,6 +7,7 @@ import ProjectApi from './API/ProjectAPI';
 import AuthReducer from './features/AuthSlice';
 import UserReducer from './features/UserSlice';
 import AlertReducer from './features/AlertSlice';
+import MusicReducer from './features/MusicSlice';
 
 const RootReducers = {
   [AuthApi.reducerPath]: AuthApi.reducer,
@@ -16,6 +17,7 @@ const RootReducers = {
   Auth: AuthReducer,
   User: UserReducer,
   Alert: AlertReducer,
+  Music: MusicReducer,
 };
 
 export const createStoreWithMiddleware = (initialState = {}): Store =>
