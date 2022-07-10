@@ -18,6 +18,7 @@ import {
 import PostModal from './PostModal';
 import { useGetProjectsQuery } from '../../API/ProjectAPI';
 import type { IPost } from '../../interface';
+import { GetTaskColor } from '../../utils/GetStatusColor';
 
 type PropTypes = {
   post: IPost;
@@ -80,17 +81,7 @@ function PostContainer({ post }: PropTypes) {
           </Text>
           <Text>{post.description}</Text>
           <Text
-            bg={
-              // eslint-disable-next-line no-nested-ternary
-              post.status === 'Done'
-                ? '#00ff00'
-                : // eslint-disable-next-line no-nested-ternary
-                post.status === 'In-Process'
-                ? '#ffc300'
-                : post.status === 'Started'
-                ? '#001aff'
-                : '#ff0000'
-            }
+            bg={GetTaskColor(post.status)}
             color="#fff"
             fontSize={['2xl', '3xl', '4xl']}
             width="fit-content"

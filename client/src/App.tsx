@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, memo } from 'react';
+import { lazy, useEffect, memo } from 'react';
 import { useDispatch } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
@@ -18,6 +18,7 @@ import PrivateOutlet from './components/PrivateRoute';
 import Spinner from './components/spinner';
 import MusicPlaylist from './pages/MusicPlaylist';
 import Navbar from './components/Navbar';
+import FallBackSuspenseWrapper from './components/FallBackSuspenseWrapper';
 
 // Lazy load  components
 const MusicPlayer = lazy(async () => import('./components/MusicPlayer'));
@@ -30,19 +31,13 @@ const LandingData = {
   subheading: 'Mange your projects and share your knowledge with the world',
 };
 
-function FallBackSuspenseWrapper({ children }: { children: React.ReactNode }) {
-  return <Suspense fallback={<Spinner />}>{children}</Suspense>;
-}
-
 function App() {
+  const dispatch = useDispatch();
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
-
   const { isLoading } = useGetUserQuery(cookies.token, {
     skip: !cookies.token,
   });
   const getProjects = usePrefetch('GetProjects');
-
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (cookies.token) {
@@ -60,8 +55,7 @@ function App() {
   return (
     <BrowserRouter>
       <Navbar />
-      {/* <Button> asdsadsda</Button> */}
-      <FallBackSuspenseWrapper>
+      <FallBackSuspenseWrapper fallback={false}>
         <MusicPlayerMemo />
       </FallBackSuspenseWrapper>
       <Routes>

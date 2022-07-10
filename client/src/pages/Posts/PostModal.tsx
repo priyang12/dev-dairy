@@ -181,6 +181,7 @@ function PostModal({
               mb={2}
               name="roadMap"
               id="roadMap"
+              defaultValue={(post?.roadMap, '#333')}
               bgColor={RoadMapColor}
               onChange={RoadMapChange}
             >

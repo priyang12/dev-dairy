@@ -80,16 +80,16 @@ function MusicPlayer() {
   }
   return (
     <Draggable>
-      <div>
+      <Box>
         {!ClosePlayer ? (
           <Box
+            zIndex={200}
             mt={20}
             bg="transparent"
             className="card"
             position="absolute"
             left="500px"
             w={Hidden ? '0px' : '250px'}
-            zIndex={1}
             p={5}
             rounded="2xl"
             shadow={4}
@@ -265,7 +265,7 @@ function MusicPlayer() {
             </Button>
           </div>
         )}
-      </div>
+      </Box>
     </Draggable>
   );
 }

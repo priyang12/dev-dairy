@@ -44,7 +44,7 @@ function Feeds() {
           Dairy Log
         </Heading>
         {Posts.length > 0 ? (
-          <Grid gridTemplateColumns={['2']} gap={10}>
+          <Grid gridTemplateColumns={['2']} gap={10} zIndex={-1}>
             {Posts.map((post: any) => (
               <PostContainer key={post._id} post={post} />
             ))}
