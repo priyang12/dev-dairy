@@ -1,11 +1,10 @@
-import { Suspense, lazy, useEffect } from 'react';
+import { Suspense, lazy, useEffect, memo } from 'react';
 import { useDispatch } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { logout, setToken } from './features/AuthSlice';
 import { useGetUserQuery } from './API/UserAPI';
 import { usePrefetch } from './API/ProjectAPI';
-
 // Pages
 import LandingPage from './pages/LandingPage';
 import Login from './pages/login';
@@ -22,6 +21,7 @@ import Navbar from './components/Navbar';
 
 // Lazy load  components
 const MusicPlayer = lazy(async () => import('./components/MusicPlayer'));
+const MusicPlayerMemo = memo(MusicPlayer);
 const EditProject = lazy(async () => import('./pages/EditProject'));
 const SingleProject = lazy(async () => import('./pages/SingleProject'));
 
@@ -60,8 +60,9 @@ function App() {
   return (
     <BrowserRouter>
       <Navbar />
+      {/* <Button> asdsadsda</Button> */}
       <FallBackSuspenseWrapper>
-        <MusicPlayer />
+        <MusicPlayerMemo />
       </FallBackSuspenseWrapper>
       <Routes>
         <Route
