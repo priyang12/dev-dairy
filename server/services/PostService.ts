@@ -11,10 +11,14 @@ export default class PostService {
   ) {}
 
   public async GetAllPost(userId: string): Promise<IPost[]> {
-    const Posts = await this.PostModel.find({ user: userId }).populate({
-      path: "project",
-      select: "title process",
-    });
+    const Posts = await this.PostModel.find({ user: userId })
+      .sort({
+        date: -1,
+      })
+      .populate({
+        path: "project",
+        select: "title process",
+      });
 
     if (!Posts) {
       this.logger.error("Posts not found");

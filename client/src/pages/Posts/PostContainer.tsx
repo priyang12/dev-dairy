@@ -1,4 +1,3 @@
-import moment from 'moment';
 import {
   Box,
   Button,
@@ -9,16 +8,16 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-
+import { parseISO, format } from 'date-fns';
+import { useMemo } from 'react';
 import {
   useDeletePostMutation,
   useUpdatePostMutation,
 } from '../../API/PostAPI';
-
 import PostModal from './PostModal';
 import { useGetProjectsQuery } from '../../API/ProjectAPI';
-import type { IPost } from '../../interface';
 import { GetTaskColor } from '../../utils/GetStatusColor';
+import type { IPost } from '../../interface';
 
 type PropTypes = {
   post: IPost;
@@ -93,7 +92,7 @@ function PostContainer({ post }: PropTypes) {
             {post.status}
           </Text>
           <Text alignSelf="flex-end">
-            {moment(post.date).format('D MMM YYYY, h:mm:ss')}
+            {format(parseISO(post.date), "yyyy-MM-dd'T'HH:mm")}
           </Text>
         </Flex>
 
