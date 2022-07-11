@@ -4,7 +4,7 @@
   "description": "",
   "main": "build/index.js",
   "scripts": {
-    "start": "node server/index.js",
+    "start": "ts-node --transpile-only server/index.ts",
     "server": "nodemon  --transpile-only server/index.ts",
     "client": "npm start --prefix client",
     "start:prod": "node server/build/index.js",

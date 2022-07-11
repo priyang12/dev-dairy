@@ -19,7 +19,6 @@ import type { MusicState } from '../../features/MusicSlice';
 import useSongsdb from '../../Hooks/useSongsdb';
 import BgImage from '../../components/BgImage';
 import MusicSymbol from '../../Assets/music.png';
-import MusicPlayer from '../../components/MusicPlayer';
 
 function MusicPlaylist() {
   const dispatch = useDispatch();

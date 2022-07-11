@@ -18,6 +18,9 @@ import {
   FaPause,
   FaPlay,
 } from 'react-icons/fa';
+
+import { AiOutlineCloseCircle } from 'react-icons/ai';
+
 import { GoMute, GoUnmute } from 'react-icons/go';
 import { useEffect, useRef, useState, Profiler, memo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -25,7 +28,7 @@ import ReactPlayer from 'react-player/file';
 import Draggable from 'react-draggable';
 import {
   setCurrentMusicInPlaylist,
-  setLoading as MusicSliceLoading,
+  setLoading as MusicLoading,
 } from '../features/MusicSlice';
 import useSongsdb from '../Hooks/useSongsdb';
 import MusicSymbol from '../Assets/music.png';
@@ -65,7 +68,7 @@ function MusicPlayer() {
       } catch (error) {
         console.log('error', error);
       } finally {
-        dispatch(MusicSliceLoading(false));
+        dispatch(MusicLoading(false));
       }
     }
   }, [CurrentMusicInPlaylist, PlayList, SongsDB, dispatch]);
@@ -79,29 +82,27 @@ function MusicPlayer() {
     console.log('interactions', interactions);
   }
   return (
-    <Draggable>
-      <Box>
+    <Draggable defaultPosition={{ x: 1000, y: 0 }} grid={[25, 25]}>
+      <Box position="fixed" zIndex={200}>
         {!ClosePlayer ? (
           <Box
-            zIndex={200}
             mt={20}
             bg="transparent"
             className="card"
-            position="absolute"
-            left="500px"
             w={Hidden ? '0px' : '250px'}
             p={5}
-            rounded="2xl"
             shadow={4}
+            rounded="3xl"
             boxShadow="0px 0px 10px #fff"
             transition="all 0.5s ease-in-out"
           >
             <IconButton
               position="absolute"
               right="0"
-              top="-5"
+              top="0"
               bg="#333"
               aria-label="MusicButton"
+              rounded="3xl"
               onClick={() => {
                 setHidden((prev) => !prev);
               }}
@@ -113,11 +114,15 @@ function MusicPlayer() {
               <IconButton
                 bg="#333"
                 aria-label="MusicCloseButton"
+                _hover={{
+                  bg: 'red',
+                }}
                 onClick={() => {
+                  setPlaying(false);
                   setClosePlayer((prev) => !prev);
                 }}
               >
-                <FaMusic />
+                <AiOutlineCloseCircle />
               </IconButton>
               <Img src={MusicSymbol} alt="album" rounded="3xl" my={5} />
               {CurrentMusicInPlaylist > 0 && (
@@ -252,18 +257,15 @@ function MusicPlayer() {
             />
           </Box>
         ) : (
-          <div>
+          <Box>
             <Button
-              position="absolute"
-              top="0"
-              left="0"
               onClick={() => {
                 setClosePlayer(false);
               }}
             >
               Show Player
             </Button>
-          </div>
+          </Box>
         )}
       </Box>
     </Draggable>

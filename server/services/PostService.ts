@@ -13,16 +13,7 @@ export default class PostService {
   public async GetAllPost(userId: string): Promise<IPost[]> {
     const Posts = await this.PostModel.find({ user: userId }).populate({
       path: "project",
-      select: "title status",
-      // aggregate: {
-      //   $lookup: {
-      //     from: "Posts",
-      //     localField: "project",
-      //     foreignField: "_id",
-      //     as: "project",
-      //   },
-      //   // Get only Roadmap
-      // },
+      select: "title process",
     });
 
     if (!Posts) {
