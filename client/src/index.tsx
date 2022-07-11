@@ -1,13 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
-import { createStoreWithMiddleware } from './store';
+import { store as Store, Persister } from './store';
 import worker from './mock/browser';
 import './Styles/Global.css';
 import App from './App';
-
-const Store = createStoreWithMiddleware();
 
 if (process.env.REACT_APP_ENVIRONMENT === 'test') {
   worker.start();
@@ -23,9 +22,11 @@ const theme = extendTheme({
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={Store}>
-      <ChakraProvider theme={theme}>
-        <App />
-      </ChakraProvider>
+      <PersistGate loading={null} persistor={Persister}>
+        <ChakraProvider theme={theme}>
+          <App />
+        </ChakraProvider>
+      </PersistGate>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root'),

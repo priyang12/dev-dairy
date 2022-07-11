@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import type { AuthState } from '../interface';
 
 const initState = {
   isLoading: false,
@@ -12,7 +11,7 @@ const initState = {
 export type MusicState = typeof initState;
 
 const MusicSlice = createSlice({
-  name: 'AuthAPI',
+  name: 'MusicSlice',
   initialState: initState,
   reducers: {
     setLoading: (state, action) => {
