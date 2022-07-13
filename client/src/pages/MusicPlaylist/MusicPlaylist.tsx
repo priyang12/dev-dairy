@@ -1,24 +1,30 @@
-import {
-  Box,
-  Container,
-  Text,
-  Heading,
-  Spinner,
-  Flex,
-  Button,
-} from '@chakra-ui/react';
+import { Box, Heading, Spinner, Flex, Button } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import type { DropResult } from 'react-beautiful-dnd';
 import DropZone from 'react-dropzone';
+import useSongsdb from '../../Hooks/useSongsdb';
+import BgImage from '../../components/BgImage';
+import MusicSymbol from '../../Assets/music.png';
+import MusicList from './MusicList';
 import {
-  setCurrentMusicInPlaylist,
+  setCurrentMusic,
   setLoading as MusicSliceLoading,
   setPlayList,
 } from '../../features/MusicSlice';
 import type { MusicState } from '../../features/MusicSlice';
-import useSongsdb from '../../Hooks/useSongsdb';
-import BgImage from '../../components/BgImage';
-import MusicSymbol from '../../Assets/music.png';
+
+const reorder = (lists: any[], startIndex: number, endIndex: number) => {
+  const result = Array.from(lists);
+  const [removed] = result.splice(startIndex, 1);
+  result.splice(endIndex, 0, removed);
+
+  return result;
+};
+const getListStyle = (isDraggingOver: any) => ({
+  background: isDraggingOver ? 'blue' : 'transparent',
+});
 
 function MusicPlaylist() {
   const dispatch = useDispatch();
@@ -49,13 +55,28 @@ function MusicPlaylist() {
     }
   };
 
-  const playSong = (name: string, index: number) => {
+  const playSong = (song: string, index: number) => {
     dispatch(MusicSliceLoading(true));
-    dispatch(setCurrentMusicInPlaylist(index));
+    dispatch(setCurrentMusic(index));
+  };
+
+  const onDragEnd = (result: DropResult) => {
+    if (!result.destination) {
+      return;
+    }
+    console.log(result);
+
+    const NewSongs = reorder(
+      songs,
+      result.source.index,
+      result.destination.index,
+    );
+    setSongs(NewSongs);
   };
 
   return (
     <BgImage
+      height={['100%', '100%', '150vh']}
       pt={10}
       BgImageData={{
         ImageFile: MusicSymbol,
@@ -71,38 +92,25 @@ function MusicPlaylist() {
           <Flex
             direction="column"
             w={['100%', '100%', 'fit-content']}
-            className="card"
             rounded="2xl"
           >
-            {songs.length === 0 && <Text>No Songs</Text>}
             <Heading py={5} textAlign="center">
               Music Playlist
             </Heading>
-            <Container h="50vh" overflowY="scroll">
-              {[...songs].map((song: string, index) => (
-                <Text
-                  key={song}
-                  cursor="pointer"
-                  my={5}
-                  p={5}
-                  border="1px solid #fff"
-                  rounded="xl"
-                  overflowY="scroll"
-                  _hover={{
-                    backgroundColor: '#fff',
-                    color: '#000',
-                  }}
-                  onClick={() => {
-                    playSong(song, index);
-                  }}
-                >
-                  <Button bg="transparent" w="100%">
-                    {song}
-                  </Button>
-                </Text>
-              ))}
-            </Container>
-            <Box mt={5}>
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Droppable droppableId="droppable">
+                {(provided, snapshot) => (
+                  <div
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                    style={getListStyle(snapshot.isDraggingOver)}
+                  >
+                    <MusicList songs={songs} playSongFN={playSong} />
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
+            <Box mt={5} className="card">
               <DropZone
                 onDrop={onFileChange}
                 accept={{
@@ -122,17 +130,14 @@ function MusicPlaylist() {
                         multiple
                         {...getInputProps()}
                       />
-
-                      <Button>
-                        Drag n drop some files here, or click to select files
-                      </Button>
+                      <Button w="fit-content">Drop Your Music Here</Button>
                     </Flex>
                   </Box>
                 )}
               </DropZone>
             </Box>
           </Flex>
-          {/* <MusicPlayer /> */}
+          {/* Divider */}
         </Flex>
       </Box>
     </BgImage>

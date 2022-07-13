@@ -27,22 +27,28 @@ import { useDispatch, useSelector } from 'react-redux';
 import ReactPlayer from 'react-player/file';
 import Draggable from 'react-draggable';
 import {
-  setCurrentMusicInPlaylist,
+  setCurrentMusic,
   setLoading as MusicLoading,
 } from '../features/MusicSlice';
 import useSongsdb from '../Hooks/useSongsdb';
 import MusicSymbol from '../Assets/music.png';
 import type { MusicState } from '../features/MusicSlice';
+import type { AuthState } from '../interface';
 
 function MusicPlayer() {
   const { SongsDB } = useSongsdb();
-  const { CurrentMusicInPlaylist, PlayList }: MusicState = useSelector(
+  const { authenticated }: AuthState = useSelector((state: any) => state.Auth);
+  const { CurrentMusic, PlayList }: MusicState = useSelector(
     (state: any) => state.Music,
   );
   const dispatch = useDispatch();
   const MusicPlayerRef = useRef<any>(null);
+  const [SongFile, setSongFile] = useState<any>(null);
+
+  // Music Controllers
   const [ClosePlayer, setClosePlayer] = useState<boolean>(false);
   const [Hidden, setHidden] = useState(false);
+  const [Mute, setMute] = useState(false);
   const [sliderValue, setSliderValue] = useState(5);
   const [showTooltip, setShowTooltip] = useState(false);
   const [Playing, setPlaying] = useState(false);
@@ -54,14 +60,12 @@ function MusicPlayer() {
     minutes: 0,
     seconds: 0,
   });
-  const [Mute, setMute] = useState(false);
   const [ProgressStates, setProgressStates] = useState(0);
-  const [SongFile, setSongFile] = useState<any>(null);
 
   useEffect(() => {
-    if (CurrentMusicInPlaylist) {
+    if (CurrentMusic) {
       try {
-        SongsDB?.get('Songs', PlayList[CurrentMusicInPlaylist]).then((song) => {
+        SongsDB?.get('Songs', PlayList[CurrentMusic]).then((song) => {
           const songUrl = URL.createObjectURL(song);
           setSongFile(songUrl);
         });
@@ -71,16 +75,14 @@ function MusicPlayer() {
         dispatch(MusicLoading(false));
       }
     }
-  }, [CurrentMusicInPlaylist, PlayList, SongsDB, dispatch]);
+  }, [CurrentMusic, PlayList, SongsDB, dispatch]);
 
   const Toggle = () => {
     setPlaying((prev) => !prev);
   };
-  function Render(phase: any, actualDuration: any, interactions: any) {
-    console.log('phase', phase);
-    console.log('actualDuration', actualDuration);
-    console.log('interactions', interactions);
-  }
+
+  if (!authenticated) return null;
+
   return (
     <Draggable defaultPosition={{ x: 1000, y: 0 }} grid={[25, 25]}>
       <Box position="fixed" zIndex={200}>
@@ -125,7 +127,7 @@ function MusicPlayer() {
                 <AiOutlineCloseCircle />
               </IconButton>
               <Img src={MusicSymbol} alt="album" rounded="3xl" my={5} />
-              {CurrentMusicInPlaylist > 0 && (
+              {CurrentMusic > 0 && (
                 <Text
                   fontSize="lg"
                   fontWeight="bold"
@@ -133,7 +135,7 @@ function MusicPlayer() {
                   textAlign="center"
                   pb={2}
                 >
-                  Playing {PlayList[CurrentMusicInPlaylist]}
+                  Playing {PlayList[CurrentMusic]}
                 </Text>
               )}
 
@@ -143,9 +145,7 @@ function MusicPlayer() {
                   icon={<FaBackward />}
                   aria-label="Music"
                   onClick={() => {
-                    dispatch(
-                      setCurrentMusicInPlaylist(CurrentMusicInPlaylist - 1),
-                    );
+                    dispatch(setCurrentMusic(CurrentMusic - 1));
                   }}
                 />
                 {!Playing ? (
@@ -169,9 +169,7 @@ function MusicPlayer() {
                   aria-label="Music"
                   bg="transparent"
                   onClick={() => {
-                    dispatch(
-                      setCurrentMusicInPlaylist(CurrentMusicInPlaylist + 1),
-                    );
+                    dispatch(setCurrentMusic(CurrentMusic + 1));
                   }}
                 />
               </Flex>

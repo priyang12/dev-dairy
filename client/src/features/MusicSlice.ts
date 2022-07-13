@@ -4,7 +4,7 @@ const initState = {
   isLoading: false,
   isError: false,
   errorMessage: '',
-  CurrentMusicInPlaylist: 0,
+  CurrentMusic: 0,
   PlayList: [],
 };
 
@@ -28,8 +28,8 @@ const MusicSlice = createSlice({
     setPlayList: (state, action) => {
       state.PlayList = action.payload;
     },
-    setCurrentMusicInPlaylist: (state, action) => {
-      state.CurrentMusicInPlaylist = action.payload;
+    setCurrentMusic: (state, action) => {
+      state.CurrentMusic = action.payload;
     },
   },
 });
@@ -37,7 +37,7 @@ const MusicSlice = createSlice({
 // Exporting Actions
 export const {
   setLoading,
-  setCurrentMusicInPlaylist,
+  setCurrentMusic,
   setPlayList,
   setError,
   clearError,

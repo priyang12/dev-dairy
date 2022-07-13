@@ -13,15 +13,14 @@ interface ComponentProps extends BoxProps {
 function BgImage({ BgImageData, children, ...rest }: ComponentProps) {
   return (
     <Box
+      backgroundPosition={['none', 'none', 'center center']}
+      width="100%"
       style={{
         backgroundImage: `url(${
           BgImageData.ImageFile ? BgImageData.ImageFile : BgImageData.url
         })`,
         backgroundSize: 'cover',
-        backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
-        height: '100vh',
-        width: '100%',
         zIndex: -1,
       }}
       {...rest}
