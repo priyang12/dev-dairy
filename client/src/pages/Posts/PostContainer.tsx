@@ -9,7 +9,6 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { parseISO, format } from 'date-fns';
-import { useMemo } from 'react';
 import {
   useDeletePostMutation,
   useUpdatePostMutation,
@@ -42,7 +41,7 @@ function PostContainer({ post }: PropTypes) {
       bgColor="gray.500"
       color="#fff"
       position="relative"
-      p={10}
+      p={5}
       borderRadius="20px"
       bg="#ffffff6c"
       border="1px solid #fff"
@@ -62,12 +61,12 @@ function PostContainer({ post }: PropTypes) {
           Project : &nbsp;
           {postProject ? postProject.title : post.project.title}
         </Heading>
-        <Box fontSize="2xl" w="100%" bg="#333" py={5} px={2} borderRadius={10}>
+        <Box fontSize="2xl" w="100%" bg="#333" py={3} px={2} borderRadius={10}>
           Process : &nbsp;
           {postProject ? postProject.process : post.project.process}
           <Progress
             colorScheme="green"
-            height="20px"
+            height="10px"
             size="sm"
             mt={4}
             borderRadius="10px"
@@ -78,32 +77,41 @@ function PostContainer({ post }: PropTypes) {
           <Text fontSize="4xl" fontWeight="bold">
             {post.title}
           </Text>
-          <Text>{post.description}</Text>
-          <Text
-            bg={GetTaskColor(post.status)}
-            color="#fff"
-            fontSize={['2xl', '3xl', '4xl']}
-            width="fit-content"
-            px={5}
-            py={2}
-            mt={5}
-            borderRadius={10}
-          >
-            {post.status}
+
+          <Text>
+            {post.description}Lorem ipsum dolor sit amet consectetur adipisicing
+            elit. Esse fuga tenetur consequatur ea illum necessitatibus sed
+            voluptas minus beatae velit, amet, sint error quisquam iste et nobis
+            ut minima eum fugit id, quasi voluptatibus quae accusantium?
+            Sapiente excepturi odit voluptatibus officiis quis pariatur
+            reiciendis beatae eveniet ut, veniam corporis. Provident?
           </Text>
-          <Text alignSelf="flex-end">
-            {format(parseISO(post.date), "yyyy-MM-dd'T'HH:mm")}
-          </Text>
+          <Flex justifyContent="space-between" alignItems="center">
+            <Flex direction="column">
+              <Text
+                bg={GetTaskColor(post.status)}
+                color="#fff"
+                fontSize={['2xl', '3xl', '4xl']}
+                width="fit-content"
+                p={2}
+                my={5}
+                borderRadius={10}
+              >
+                {post.status}
+              </Text>
+              <Text>{format(parseISO(post.date), "yyyy-MM-dd'T'HH:mm")}</Text>
+            </Flex>
+            <Flex gap={5} direction="column">
+              <Button onClick={onOpen} bg="red.500" fontSize="2xl">
+                Update Post
+              </Button>
+              <Button bg="blue.500" onClick={deletePost} fontSize="2xl">
+                Delete Post
+              </Button>
+            </Flex>
+          </Flex>
         </Flex>
 
-        <Flex justifyContent="space-between" gap={5}>
-          <Button onClick={onOpen} colorScheme="twitter" fontSize="2xl">
-            Update Post
-          </Button>
-          <Button colorScheme="red" onClick={deletePost} fontSize="2xl">
-            Delete Post
-          </Button>
-        </Flex>
         {isOpen && (
           <PostModal
             onClose={onClose}
