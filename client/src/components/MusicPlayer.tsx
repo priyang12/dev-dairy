@@ -82,7 +82,9 @@ function MusicPlayer() {
         });
         SongsDB?.get('SongsMeta', PlayList[CurrentMusic]).then(
           async (songImage: any) => {
-            const Image = (await BlobToImg(songImage)) as string;
+            const Image =
+              (songImage && ((await BlobToImg(songImage)) as string)) || null;
+
             setSongImage(Image);
           },
         );

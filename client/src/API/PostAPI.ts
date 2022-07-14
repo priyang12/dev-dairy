@@ -89,12 +89,15 @@ const PostApi = createApi({
       },
       onQueryStarted(data, { dispatch, queryFulfilled }) {
         const UpdateResult = dispatch(
-          PostApi.util.updateQueryData('GetPosts', null, (posts) => {
-            const newPost = posts.map((post) =>
-              post._id === data._id ? data : post,
-            );
-            return newPost as IPost[];
-          }),
+          PostApi.util.updateQueryData('GetPosts', null, (posts) =>
+            posts.map((post) => {
+              if (post._id === data._id) {
+                data.date = post.date;
+                return data as IPost;
+              }
+              return post;
+            }),
+          ),
         );
 
         queryFulfilled.catch(UpdateResult.undo);

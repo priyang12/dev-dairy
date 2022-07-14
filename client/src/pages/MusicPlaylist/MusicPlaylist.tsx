@@ -78,7 +78,6 @@ function MusicPlaylist() {
           },
         });
       });
-      // window.location.reload();
     }
   };
 
