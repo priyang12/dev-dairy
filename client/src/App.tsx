@@ -19,12 +19,12 @@ import Spinner from './components/spinner';
 import MusicPlaylist from './pages/MusicPlaylist';
 import Navbar from './components/Navbar';
 import FallBackSuspenseWrapper from './components/FallBackSuspenseWrapper';
+import SingleProject from './pages/SingleProject';
 
 // Lazy load  components
 const MusicPlayer = lazy(async () => import('./components/MusicPlayer'));
 const MusicPlayerMemo = memo(MusicPlayer);
 const EditProject = lazy(async () => import('./pages/EditProject'));
-const SingleProject = lazy(async () => import('./pages/SingleProject'));
 
 const LandingData = {
   heading: 'Dev Dairy',
@@ -77,14 +77,7 @@ function App() {
           <Route path="/Projects" element={<Projects />} />
         </Route>
         <Route path="/" element={<PrivateOutlet />}>
-          <Route
-            path="/Projects/:id"
-            element={
-              <FallBackSuspenseWrapper>
-                <SingleProject />
-              </FallBackSuspenseWrapper>
-            }
-          />
+          <Route path="/Projects/:id" element={<SingleProject />} />
         </Route>
         <Route path="/" element={<PrivateOutlet />}>
           <Route

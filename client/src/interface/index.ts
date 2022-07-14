@@ -65,7 +65,7 @@ export interface IProject {
   process: number;
   live?: string;
   github?: string;
-  date: Date;
+  date: string;
 }
 
 export interface ProjectState {
