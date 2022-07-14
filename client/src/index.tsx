@@ -4,13 +4,8 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 import { store as Store, Persister } from './store';
-import worker from './mock/browser';
 import './Styles/Global.css';
 import App from './App';
-
-if (process.env.REACT_APP_ENVIRONMENT === 'test') {
-  worker.start();
-}
 
 const config = {
   useSystemColorMode: true,
