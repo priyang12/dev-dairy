@@ -2,12 +2,7 @@ import { Service, Inject } from "typedi";
 import { LeanDocument, Model } from "mongoose";
 import { Logger } from "winston";
 import { ISession, IWorkSessions } from "../models/WorkSessions";
-import {
-  BulkWriteDeleteManyOperation,
-  BulkWriteDeleteOneOperation,
-  BulkWriteDeleteOperation,
-  DeleteWriteOpResultObject,
-} from "mongodb";
+import type { DeleteWriteOpResultObject } from "mongodb";
 
 @Service()
 export default class UserService {
