@@ -32,6 +32,7 @@ import {
 } from '../features/MusicSlice';
 import useSongsdb from '../Hooks/useSongsdb';
 import MusicSymbol from '../Assets/music.png';
+import BlobToImg from '../utils/BlobToImg';
 import type { MusicState } from '../features/MusicSlice';
 import type { AuthState } from '../interface';
 
@@ -44,7 +45,13 @@ function MusicPlayer() {
   const dispatch = useDispatch();
   const MusicPlayerRef = useRef<any>(null);
   const [SongFile, setSongFile] = useState<any>(null);
-
+  const [SongInfo, setSongInfo] = useState<{
+    title: string;
+    artist: string;
+    album: string;
+    year: string;
+  } | null>(null);
+  const [SongImage, setSongImage] = useState('');
   // Music Controllers
   const [ClosePlayer, setClosePlayer] = useState<boolean>(false);
   const [Hidden, setHidden] = useState(false);
@@ -61,14 +68,24 @@ function MusicPlayer() {
     seconds: 0,
   });
   const [ProgressStates, setProgressStates] = useState(0);
+  console.log(SongInfo?.title);
 
   useEffect(() => {
-    if (CurrentMusic) {
+    if (CurrentMusic >= 0) {
       try {
         SongsDB?.get('Songs', PlayList[CurrentMusic]).then((song) => {
           const songUrl = URL.createObjectURL(song);
           setSongFile(songUrl);
         });
+        SongsDB?.get('SongsInfo', PlayList[CurrentMusic]).then((songInfo) => {
+          setSongInfo(songInfo);
+        });
+        SongsDB?.get('SongsMeta', PlayList[CurrentMusic]).then(
+          async (songImage: any) => {
+            const Image = (await BlobToImg(songImage)) as string;
+            setSongImage(Image);
+          },
+        );
       } catch (error) {
         console.log('error', error);
       } finally {
@@ -126,8 +143,13 @@ function MusicPlayer() {
               >
                 <AiOutlineCloseCircle />
               </IconButton>
-              <Img src={MusicSymbol} alt="album" rounded="3xl" my={5} />
-              {CurrentMusic > 0 && (
+              <Img
+                src={SongImage || MusicSymbol}
+                alt="album"
+                rounded="3xl"
+                my={5}
+              />
+              {CurrentMusic > -1 && (
                 <Text
                   fontSize="lg"
                   fontWeight="bold"
@@ -135,7 +157,8 @@ function MusicPlayer() {
                   textAlign="center"
                   pb={2}
                 >
-                  Playing {PlayList[CurrentMusic]}
+                  Playing : &nbsp;
+                  {SongInfo?.title ? SongInfo.title : PlayList[CurrentMusic]}
                 </Text>
               )}
 

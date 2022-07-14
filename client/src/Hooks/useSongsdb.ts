@@ -12,9 +12,15 @@ const useSongsdb = () => {
           const MusicPlayerDb = await openDB('MusicPlayer', 1, {
             upgrade(db) {
               db.createObjectStore('Songs');
+              db.createObjectStore('SongsMeta');
+              db.createObjectStore('SongsInfo');
             },
           });
           if (MusicPlayerDb.objectStoreNames.contains('Songs')) {
+            console.log('SongsDB created');
+
+            console.log(MusicPlayerDb.objectStoreNames.contains('Songs'));
+
             localStorage.setItem('MusicPlayerDb', JSON.stringify('Created'));
             setSongsDB(MusicPlayerDb);
           }

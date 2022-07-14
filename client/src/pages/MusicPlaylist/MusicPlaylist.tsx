@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import type { DropResult } from 'react-beautiful-dnd';
+import jsmediatags from '@priyang/jsmediatags';
 import DropZone from 'react-dropzone';
 import useSongsdb from '../../Hooks/useSongsdb';
 import BgImage from '../../components/BgImage';
@@ -47,11 +48,37 @@ function MusicPlaylist() {
   const onFileChange = (AcceptedFiles: any) => {
     if (AcceptedFiles) {
       AcceptedFiles.forEach((file: any) => {
-        // Store as File for Now later on we will store as blob
-        SongsDB?.add('Songs', file, file.name);
-        setSongs([...songs, file.name]);
+        jsmediatags.read(file, {
+          onSuccess: async (tag: any) => {
+            const { tags } = tag;
+            const { title, artist, album, year, picture } = tags;
+            console.log(title, artist, album, year);
+
+            if (picture) {
+              const { data } = picture;
+              const ImageBlob = new Blob([new Uint8Array(data).buffer]);
+              SongsDB?.add('SongsMeta', ImageBlob, file.name);
+            } else {
+              const ImageBlob = null;
+              SongsDB?.add('SongsMeta', ImageBlob, file.name);
+            }
+
+            SongsDB?.add('Songs', file, file.name);
+            SongsDB?.add(
+              'SongsInfo',
+              {
+                title,
+                artist,
+                album,
+                year,
+              },
+              file.name,
+            );
+            setSongs([...songs, file.name]);
+          },
+        });
       });
-      window.location.reload();
+      // window.location.reload();
     }
   };
 

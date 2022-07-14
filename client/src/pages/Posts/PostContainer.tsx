@@ -78,14 +78,7 @@ function PostContainer({ post }: PropTypes) {
             {post.title}
           </Text>
 
-          <Text>
-            {post.description}Lorem ipsum dolor sit amet consectetur adipisicing
-            elit. Esse fuga tenetur consequatur ea illum necessitatibus sed
-            voluptas minus beatae velit, amet, sint error quisquam iste et nobis
-            ut minima eum fugit id, quasi voluptatibus quae accusantium?
-            Sapiente excepturi odit voluptatibus officiis quis pariatur
-            reiciendis beatae eveniet ut, veniam corporis. Provident?
-          </Text>
+          <Text>{post.description}</Text>
           <Flex justifyContent="space-between" alignItems="center">
             <Flex direction="column">
               <Text

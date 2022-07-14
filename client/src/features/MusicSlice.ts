@@ -4,7 +4,7 @@ const initState = {
   isLoading: false,
   isError: false,
   errorMessage: '',
-  CurrentMusic: 0,
+  CurrentMusic: -1,
   PlayList: [],
 };
 
@@ -29,7 +29,13 @@ const MusicSlice = createSlice({
       state.PlayList = action.payload;
     },
     setCurrentMusic: (state, action) => {
-      state.CurrentMusic = action.payload;
+      if (action.payload > state.PlayList.length - 1) {
+        state.CurrentMusic = 0;
+      } else if (action.payload < 0) {
+        state.CurrentMusic = state.PlayList.length - 1;
+      } else {
+        state.CurrentMusic = action.payload;
+      }
     },
   },
 });
