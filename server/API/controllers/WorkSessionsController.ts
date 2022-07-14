@@ -43,6 +43,24 @@ export const GetWorkSession = asyncHandler(
 );
 
 /**
+ * @route   GET api/WorkSessions/project/:projectId
+ * @desc    Get WorkSessions by projectId
+ * @access  Private
+ * @param   projectId
+ * @returns Promise<WorkSessionsService[]>
+ */
+export const GetProjectWorkSessions = asyncHandler(
+  async (req: Request, res: Response): Promise<any> => {
+    const workSessionsServiceInstance = Container.get(WorkSessionsService);
+    const workSessions = await workSessionsServiceInstance.GetProjectWorkSessions(
+      req.user._id,
+      req.params.projectId
+    );
+    return res.status(200).json(workSessions);
+  }
+);
+
+/**
  * @route   POST api/WorkSessions
  * @desc    Create WorkSessions
  * @access  Private
@@ -59,10 +77,11 @@ export const CreateWorkSession = asyncHandler(
     if (!errors.isEmpty()) {
       return res.status(422).json(errors.array());
     }
+
     const workSessionsServiceInstance = Container.get(WorkSessionsService);
     const workSessions = await workSessionsServiceInstance.CreateWorkSession(
       req.user._id,
-      req.body
+      req.params.projectId
     );
     return res.status(200).json(workSessions);
   }
@@ -87,6 +106,33 @@ export const PushWorkSession = asyncHandler(
     }
     const workSessionsServiceInstance = Container.get(WorkSessionsService);
     const workSessions = await workSessionsServiceInstance.PushWorkSession(
+      req.user._id,
+      req.params.id,
+      req.body
+    );
+    return res.status(200).json(workSessions);
+  }
+);
+
+/**
+ * @route   PATCH api/WorkSessions/:id
+ * @desc    DeleLe One WorkSession
+ * @access  Private
+ * @param   req.body
+ * @returns Promise<WorkSessionsService[]>
+ * @throws 400 - ValidationError
+ * @throws 500 - InternalServerError
+ * @throws 401 - Unauthorized
+ */
+
+export const PullWorkSession = asyncHandler(
+  async (req: Request, res: Response): Promise<any> => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json(errors.array());
+    }
+    const workSessionsServiceInstance = Container.get(WorkSessionsService);
+    const workSessions = await workSessionsServiceInstance.PullWorkSession(
       req.user._id,
       req.params.id,
       req.body
@@ -191,7 +237,7 @@ export const DeleteWorkSessionsOfProject = asyncHandler(
     const workSessionsServiceInstance = Container.get(WorkSessionsService);
     const workSessions = await workSessionsServiceInstance.DeleteAllWorkSessionsForProject(
       req.user._id,
-      req.params.id
+      req.params.projectId
     );
     return res.status(200).json(workSessions);
   }

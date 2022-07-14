@@ -4,15 +4,28 @@ import type { Document } from "mongoose";
 export interface IWorkSessions extends Document {
   user: string;
   project: string;
-  session: Isession[];
+  session: ISession[];
   date: Date;
-  time: number;
+  Time: number;
 }
 
-export interface Isession {
-  start: Date;
-  end: Date;
+export interface ISession {
+  Time: number;
+  CreatedAt: Date;
+  UpdatedAt: Date;
 }
+
+const Session = new Schema(
+  {
+    Time: {
+      type: Number,
+      default: 0,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
 
 const WorkSessionSchema = new Schema({
   user: {
@@ -20,30 +33,19 @@ const WorkSessionSchema = new Schema({
     required: true,
     ref: "User",
   },
-
   project: {
     type: Schema.Types.ObjectId,
     required: true,
     ref: "Project",
   },
-  session: [
-    {
-      start: {
-        type: Date,
-        required: true,
-      },
-      end: {
-        type: Date,
-        required: true,
-      },
-    },
-  ],
+  session: [Session],
   date: {
     type: Date,
     required: true,
   },
-  time: {
+  Time: {
     type: Number,
+    default: 0,
     required: true,
   },
 });

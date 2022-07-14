@@ -46,17 +46,20 @@ export default class UserService {
     const newProject = await this.ProjectModel.create({
       ...project,
       user: userId,
+    }).then((project) => {
+      this.logger.info("Project added");
+      return project;
     });
+    if (!newProject) {
+      this.logger.error("Project not created");
+      throw new Error("Project not created");
+    }
     if (project.roadMap) {
       project.roadMap.forEach(async (roadMap: any) => {
         await this.AddRoadMap(userId, newProject._id, roadMap);
       });
     }
-    if (!newProject) {
-      this.logger.error("Project not created");
-      throw new Error("Project not created");
-    }
-    this.logger.info("Project created");
+    this.logger.info("Project created with RoadMaps");
     return {
       result: true,
       project: newProject,

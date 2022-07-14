@@ -1,7 +1,13 @@
 import { Service, Inject } from "typedi";
 import { LeanDocument, Model } from "mongoose";
 import { Logger } from "winston";
-import { IWorkSessions } from "../models/WorkSessions";
+import { ISession, IWorkSessions } from "../models/WorkSessions";
+import {
+  BulkWriteDeleteManyOperation,
+  BulkWriteDeleteOneOperation,
+  BulkWriteDeleteOperation,
+  DeleteWriteOpResultObject,
+} from "mongodb";
 
 @Service()
 export default class UserService {
@@ -26,10 +32,28 @@ export default class UserService {
 
   public async GetWorkSession(
     userId: string,
+    WorkSessionId: string
+  ): Promise<LeanDocument<IWorkSessions>> {
+    const WorkSessions = await this.WorkSessions.findOne({
+      _id: WorkSessionId,
+      user: userId,
+    })
+      .lean()
+      .exec();
+    if (!WorkSessions) {
+      this.logger.error("WorkSessions not found");
+      throw new Error("WorkSessions not found");
+    }
+    this.logger.info("WorkSessions found");
+    return WorkSessions;
+  }
+
+  public async GetProjectWorkSessions(
+    userId: string,
     ProjectId: string
   ): Promise<LeanDocument<IWorkSessions>> {
     const WorkSessions = await this.WorkSessions.findOne({
-      _id: ProjectId,
+      project: ProjectId,
       user: userId,
     })
       .lean()
@@ -43,11 +67,23 @@ export default class UserService {
   }
   public async CreateWorkSession(
     userId: string,
-    NewWorkSession: IWorkSessions
+    ProjectId: string
   ): Promise<LeanDocument<IWorkSessions>> {
-    const newWorkSessions = this.WorkSessions.create({
-      ...NewWorkSession,
+    const CheckWorkSessions = await this.WorkSessions.findOne({
       user: userId,
+      project: ProjectId,
+    })
+      .lean()
+      .exec();
+    if (CheckWorkSessions) {
+      this.logger.error("WorkSessions already exists");
+      throw new Error("WorkSessions already exists");
+    }
+    const newWorkSessions = this.WorkSessions.create({
+      user: userId,
+      project: ProjectId,
+      session: [],
+      date: Date.now(),
     });
 
     if (!newWorkSessions) {
@@ -57,16 +93,35 @@ export default class UserService {
     this.logger.info("WorkSessions found");
     return newWorkSessions;
   }
+
   public async PushWorkSession(
     userId: string,
-    ProjectId: string,
-    NewWorkSession: IWorkSessions
+    WorkSessionId: string,
+    NewWorkSession: ISession
   ) {
     const newWorkSessions = this.WorkSessions.findOneAndUpdate(
-      { _id: ProjectId, user: userId },
+      { _id: WorkSessionId, user: userId },
       { $push: { session: NewWorkSession } },
       { new: true }
-    );
+    ).select("session");
+    if (!newWorkSessions) {
+      this.logger.error("WorkSessions not found");
+      throw new Error("WorkSessions not found");
+    }
+    this.logger.info("WorkSessions found");
+    return newWorkSessions;
+  }
+
+  public async PullWorkSession(
+    userId: string,
+    WorkSessionId: string,
+    WorkSession: ISession
+  ) {
+    const newWorkSessions = this.WorkSessions.findOneAndUpdate(
+      { _id: WorkSessionId, user: userId },
+      { $pull: { session: WorkSession } },
+      { new: true }
+    ).select("session");
     if (!newWorkSessions) {
       this.logger.error("WorkSessions not found");
       throw new Error("WorkSessions not found");
@@ -94,57 +149,65 @@ export default class UserService {
     this.logger.info("WorkSessions found");
     return updatedWorkSessions;
   }
+
   public async DeleteWorkSession(
     userId: string,
     WordSessionId: string
-  ): Promise<LeanDocument<IWorkSessions>> {
-    const deletedWorkSessions = await this.WorkSessions.findOneAndDelete({
+  ): Promise<DeleteWriteOpResultObject> {
+    const deletedWorkSessions = await this.WorkSessions.deleteOne({
       _id: WordSessionId,
       user: userId,
     })
       .lean()
       .exec();
-    if (!deletedWorkSessions) {
+    console.log(deletedWorkSessions.deletedCount);
+
+    if (!deletedWorkSessions.deletedCount) {
       this.logger.error("WorkSessions not found");
       throw new Error("WorkSessions not found");
     }
     this.logger.info("WorkSessions found");
-    return deletedWorkSessions;
+    return {
+      result: deletedWorkSessions,
+      deletedCount: deletedWorkSessions.deletedCount,
+    };
   }
 
   public async DeleteAllWorkSessions(
     userId: string
-  ): Promise<
-    {
-      ok?: number | undefined;
-      n?: number | undefined;
-    } & {
-      deletedCount?: number | undefined;
-    }
-  > {
+  ): Promise<DeleteWriteOpResultObject> {
     const Delete = await this.WorkSessions.deleteMany({ user: userId })
       .lean()
       .exec();
-    return Delete;
+
+    if (!Delete.deletedCount) {
+      this.logger.error("WorkSessions not found");
+      throw new Error("WorkSessions not found");
+    }
+
+    return {
+      result: Delete,
+      deletedCount: Delete.deletedCount,
+    };
   }
 
   public async DeleteAllWorkSessionsForProject(
     userId: string,
     ProjectId: string
-  ): Promise<
-    {
-      ok?: number | undefined;
-      n?: number | undefined;
-    } & {
-      deletedCount?: number | undefined;
-    }
-  > {
+  ): Promise<DeleteWriteOpResultObject> {
     const Delete = await this.WorkSessions.deleteMany({
       user: userId,
       project: ProjectId,
     })
       .lean()
       .exec();
-    return Delete;
+    if (!Delete.deletedCount) {
+      this.logger.error("WorkSessions not found");
+      throw new Error("WorkSessions not found");
+    }
+    return {
+      result: Delete,
+      deletedCount: Delete.deletedCount,
+    };
   }
 }

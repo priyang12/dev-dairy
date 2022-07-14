@@ -2,7 +2,6 @@ import expressLoader from "./express";
 import dependencyInjectorLoader from "./dependencyInjector";
 import mongooseLoader from "./mongoose";
 import Logger from "./logger";
-// //We have to import at least all the events once so they can be triggered
 
 export default async ({ expressApp }: any) => {
   const { Db: mongoConnection } = await mongooseLoader();
@@ -21,11 +20,14 @@ export default async ({ expressApp }: any) => {
     name: "postModel",
     model: require("../models/Post").default,
   };
+  const workSessionsModel = {
+    name: "workSessionsModel",
+    model: require("../models/WorkSessions").default,
+  };
 
-  // It returns the agenda instance because it's needed in the subsequent loaders
   await dependencyInjectorLoader({
     mongoConnection,
-    models: [userModel, projectModel, postModel],
+    models: [userModel, projectModel, postModel, workSessionsModel],
   });
 
   Logger.info("✌️ Dependency Injector loaded");

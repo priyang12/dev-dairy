@@ -8,7 +8,9 @@ import {
   DeleteWorkSession,
   DeleteWorkSessions,
   DeleteWorkSessionsOfProject,
-} from "../controllers/WorkSessions";
+  GetProjectWorkSessions,
+  PullWorkSession,
+} from "../controllers/WorkSessionsController";
 
 import auth from "../middleware/auth";
 
@@ -16,7 +18,6 @@ export default (app: Router) => {
   app
     .route("/workSession")
     .get(auth, GetWorkSessions)
-    .post(auth, CreateWorkSession)
     .delete(auth, DeleteWorkSessions);
 
   app
@@ -25,8 +26,12 @@ export default (app: Router) => {
     .put(auth, UpdateWorkSession)
     .delete(auth, DeleteWorkSession);
 
-  app.route("/workSession/:id/push").post(auth, PushWorkSession);
+  app.route("/workSession/:id/push").patch(auth, PushWorkSession);
+  app.route("/workSession/:id/pull").patch(auth, PullWorkSession);
+
   app
     .route("/workSession/project/:projectId")
+    .get(auth, GetProjectWorkSessions)
+    .post(auth, CreateWorkSession)
     .delete(auth, DeleteWorkSessionsOfProject);
 };
