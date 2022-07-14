@@ -86,6 +86,24 @@ function MusicPlaylist() {
     dispatch(setCurrentMusic(index));
   };
 
+  const RemoveSong = (song: string, index: number) => {
+    const transaction = SongsDB?.transaction(
+      ['Songs', 'SongsInfo', 'SongsMeta'],
+      'readwrite',
+    );
+    if (transaction) {
+      transaction.objectStore('Songs').delete(song);
+      transaction.objectStore('SongsInfo').delete(song);
+      transaction.objectStore('SongsMeta').delete(song);
+      transaction.oncomplete = (e) => {
+        console.log('Transaction completed');
+        const NewList = songs.filter((s: string) => s !== song);
+        setSongs(NewList);
+        dispatch(setPlayList(NewList));
+      };
+      transaction.commit();
+    }
+  };
   const onDragEnd = (result: DropResult) => {
     if (!result.destination) {
       return;
@@ -123,19 +141,29 @@ function MusicPlaylist() {
             <Heading py={5} textAlign="center">
               Music Playlist
             </Heading>
-            <DragDropContext onDragEnd={onDragEnd}>
-              <Droppable droppableId="droppable">
-                {(provided, snapshot) => (
-                  <div
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                    style={getListStyle(snapshot.isDraggingOver)}
-                  >
-                    <MusicList songs={songs} playSongFN={playSong} />
-                  </div>
-                )}
-              </Droppable>
-            </DragDropContext>
+            {songs.length > 0 ? (
+              <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId="droppable">
+                  {(provided, snapshot) => (
+                    <div
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      style={getListStyle(snapshot.isDraggingOver)}
+                    >
+                      <MusicList
+                        songs={songs}
+                        playSongFN={playSong}
+                        RemoveSong={RemoveSong}
+                      />
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
+            ) : (
+              <Box textAlign="center" p={5}>
+                <Heading>No Songs Why Not Put some Below</Heading>
+              </Box>
+            )}
             <Box mt={5} className="card">
               <DropZone
                 onDrop={onFileChange}
