@@ -1,6 +1,16 @@
 import type { Store } from '@reduxjs/toolkit/';
-import { configureStore, combineReducers } from '@reduxjs/toolkit/';
-import { persistStore, persistReducer } from 'redux-persist';
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist';
+
 import storage from 'redux-persist/lib/storage';
 import AuthApi from './API/AuthAPI';
 import PostApi from './API/PostAPI';
@@ -36,7 +46,11 @@ export const createStoreWithMiddleware = (initialState = {}): Store =>
     preloadedState: initialState,
     devTools: process.env.NODE_ENV !== 'production',
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware()
+      getDefaultMiddleware({
+        serializableCheck: {
+          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+        },
+      })
         .concat(AuthApi.middleware)
         .concat(UserApi.middleware)
         .concat(PostApi.middleware)
