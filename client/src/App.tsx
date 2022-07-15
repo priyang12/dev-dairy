@@ -1,4 +1,4 @@
-import { lazy, useEffect, memo } from 'react';
+import { lazy, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
@@ -23,7 +23,6 @@ import SingleProject from './pages/SingleProject';
 
 // Lazy load  components
 const MusicPlayer = lazy(async () => import('./components/MusicPlayer'));
-const MusicPlayerMemo = memo(MusicPlayer);
 const EditProject = lazy(async () => import('./pages/EditProject'));
 
 const LandingData = {
@@ -52,11 +51,12 @@ function App() {
   if (isLoading) {
     return <Spinner />;
   }
+
   return (
     <BrowserRouter>
       <Navbar />
       <FallBackSuspenseWrapper fallback={false}>
-        <MusicPlayerMemo />
+        <MusicPlayer />
       </FallBackSuspenseWrapper>
       <Routes>
         <Route
