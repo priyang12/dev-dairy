@@ -14,6 +14,8 @@ FirebaseConfig.ts
 
 # production
 /build
+mockServiceWorker.js
+Mock.ts
 
 # misc
 .DS_Store

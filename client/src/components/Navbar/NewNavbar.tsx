@@ -26,7 +26,7 @@ function StyledIcon({ children, isDark, ...props }: any) {
 function MenuToggle({ toggle, isOpen }: any) {
   return (
     <Box display={{ base: 'block', md: 'none' }} onClick={toggle}>
-      {!isOpen ? (
+      {isOpen ? (
         <StyledIcon>
           <CloseIcon />
         </StyledIcon>
@@ -47,6 +47,7 @@ function NavBarContainer({ children, ...props }: any) {
       justify="space-between"
       wrap="wrap"
       w="100%"
+      mb={8}
       p={8}
       bg="primary.900"
       {...props}
@@ -94,7 +95,7 @@ function NavBar() {
     <NavBarContainer>
       <LogoComponent />
       <MenuToggle toggle={toggle} isOpen={isOpen} />
-      <NavLinks isOpen={!isOpen} isAuth={authenticated} />
+      <NavLinks isOpen={isOpen} isAuth={authenticated} />
     </NavBarContainer>
   );
 }

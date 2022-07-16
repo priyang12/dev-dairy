@@ -44,7 +44,7 @@ function NavLinks({ isOpen, isAuth }: { isOpen: boolean; isAuth: boolean }) {
         direction={['column', 'column', 'row', 'row']}
         pt={[4, 4, 0, 0]}
       >
-        {!isAuth ? (
+        {isAuth ? (
           <>
             <MenuItem to="/login" w={['100%', '50%', 'auto']}>
               Log In

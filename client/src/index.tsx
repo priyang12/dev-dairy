@@ -16,8 +16,24 @@ const config = {
   useSystemColorMode: true,
 };
 
+const colors = {
+  primary: {
+    '50': '#2DC0AB',
+    '100': '#2BB8AB',
+    '200': '#27A5A7',
+    '300': '#238997',
+    '400': '#206F86',
+    '500': '#1C5876',
+    '600': '#184465',
+    '700': '#143255',
+    '800': '#102344',
+    '900': '#0D1838',
+  },
+};
+
 const theme = extendTheme({
   config,
+  colors,
 });
 ReactDOM.render(
   <React.StrictMode>

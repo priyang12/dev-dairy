@@ -1,3 +1,5 @@
+import { useSelector } from 'react-redux';
+import { CheckIcon, ExternalLinkIcon } from '@chakra-ui/icons';
 import {
   Accordion,
   AccordionButton,
@@ -18,18 +20,18 @@ import {
   Link,
   Alert,
 } from '@chakra-ui/react';
-import { useSelector } from 'react-redux';
-import { CheckIcon, ExternalLinkIcon } from '@chakra-ui/icons';
-import { parseISO, format } from 'date-fns';
 import { Navigate, useParams, Link as RouterLink } from 'react-router-dom';
+import { parseISO, format } from 'date-fns';
 import invert from 'invert-color';
 import {
   useDeleteProjectMutation,
   useGetProjectIdQuery,
 } from '../../API/ProjectAPI';
+
 import type { AlertState, IRoadMap } from '../../interface';
 import ModalComponent from '../../components/ModalComponent';
 import Spinner from '../../components/spinner';
+
 import RandomColor from '../../utils/RandomColor';
 
 function SingleProject() {
@@ -39,6 +41,7 @@ function SingleProject() {
   const { isFetching, isLoading, isError, data } = useGetProjectIdQuery(id, {
     skip: !id,
   });
+
   const project = data;
   const [DeleteProjectMutation, DeleteResult] = useDeleteProjectMutation();
   const { isOpen, onOpen, onClose } = useDisclosure();

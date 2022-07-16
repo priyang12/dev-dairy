@@ -34,6 +34,9 @@
   "scripts": {
     "start": "react-scripts start",
     "start:test": "env-cmd -f .env.test react-scripts start",
+    "msw": "npx msw init ./public",
+    "msw:cleanup": "rm public/mockServiceWorker.js",
+    "prebuild:ci": "yarn msw:cleanup",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "testAll": "react-scripts test --watchAll",
@@ -43,6 +46,12 @@
     "lint": "eslint src --ext .tsx",
     "lint:fix": "npm run lint -- --fix",
     "prettier-format": "prettier --config .prettierrc 'src/**/*.ts' --write"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   },
   "browserslist": {
     "production": [
