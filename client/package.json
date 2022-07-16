@@ -34,6 +34,7 @@
   "scripts": {
     "start": "react-scripts start",
     "start:test": "env-cmd -f .env.test react-scripts start",
+    "msw": "npx msw init ./public",
     "msw:cleanup": "rm public/mockServiceWorker.js",
     "prebuild:ci": "yarn msw:cleanup",
     "build": "react-scripts build",

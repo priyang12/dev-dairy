@@ -20,14 +20,15 @@ import {
   Link,
   Alert,
 } from '@chakra-ui/react';
-import moment from 'moment';
 import { Navigate, useParams, Link as RouterLink } from 'react-router-dom';
+import { parseISO, format } from 'date-fns';
 import invert from 'invert-color';
 import {
   useDeleteProjectMutation,
   useGetProjectIdQuery,
 } from '../../API/ProjectAPI';
-import type { AlertState, IProject, IRoadMap } from '../../interface';
+
+import type { AlertState, IRoadMap } from '../../interface';
 import ModalComponent from '../../components/ModalComponent';
 import Spinner from '../../components/spinner';
 
@@ -69,7 +70,7 @@ function SingleProject() {
             Title : <span>{project.title}</span>
           </Heading>
           <Text textAlign="right" fontSize="2xl">
-            {moment(project.date).format('D MMM YYYY, h:mm:ss')}
+            {format(parseISO(project.date), "yyyy-MM-dd'T'HH:mm")}
           </Text>
         </Flex>
         <Text

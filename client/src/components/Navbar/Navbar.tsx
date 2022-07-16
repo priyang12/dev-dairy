@@ -23,8 +23,8 @@ import {
 } from '@chakra-ui/icons';
 import { motion } from 'framer-motion';
 import Logo from '../Assets/diary.png';
-import { logout } from '../features/AuthSlice';
-import type { AuthState } from '../interface';
+import { logout } from '../../features/AuthSlice';
+import type { AuthState } from '../../interface';
 
 function Navbar() {
   const location = useLocation();
