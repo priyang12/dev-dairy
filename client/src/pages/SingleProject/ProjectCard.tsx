@@ -7,8 +7,8 @@ import {
   Progress,
   Text,
 } from '@chakra-ui/react';
-import moment from 'moment';
 import { Link as RouterLink } from 'react-router-dom';
+import { format, parseISO } from 'date-fns';
 import RandomColor from '../../utils/RandomColor';
 import type { IProject } from '../../interface';
 
@@ -50,7 +50,7 @@ function ProjectCard({ Project }: { Project: IProject }) {
           </Link>
         </Button>
         <Text textAlign="right">
-          {moment(Project.date).format('D MMM YYYY, h:mm:ss')}
+          {format(parseISO(Project.date), "yyyy-MM-dd'T'HH:mm")}
         </Text>
       </Flex>
     </Box>

@@ -1,6 +1,6 @@
-import moment from 'moment';
 import { rest } from 'msw';
 import { createMemoryHistory } from 'history';
+import { format, parseISO } from 'date-fns';
 import userEvent from '@testing-library/user-event';
 import { Router } from 'react-router-dom';
 import { render, screen, waitForElementToBeRemoved } from '../../test-utils';
@@ -32,7 +32,7 @@ it('render Projects', async () => {
     expect(screen.getByText(project.title)).toBeInTheDocument();
     expect(screen.getByText(project.description)).toBeInTheDocument();
     expect(
-      screen.getByText(moment(project.date).format('D MMM YYYY, h:mm:ss')),
+      screen.getByText(format(parseISO(project.date), "yyyy-MM-dd'T'HH:mm")),
     ).toBeInTheDocument();
     project.technologies.forEach((tech) => {
       expect(screen.getByText(tech)).toBeInTheDocument();

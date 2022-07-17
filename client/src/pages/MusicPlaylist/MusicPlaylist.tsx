@@ -52,8 +52,6 @@ function MusicPlaylist() {
           onSuccess: async (tag: any) => {
             const { tags } = tag;
             const { title, artist, album, year, picture } = tags;
-            console.log(title, artist, album, year);
-
             if (picture) {
               const { data } = picture;
               const ImageBlob = new Blob([new Uint8Array(data).buffer]);
@@ -96,7 +94,6 @@ function MusicPlaylist() {
       transaction.objectStore('SongsInfo').delete(song);
       transaction.objectStore('SongsMeta').delete(song);
       transaction.oncomplete = (e) => {
-        console.log('Transaction completed');
         const NewList = songs.filter((s: string) => s !== song);
         setSongs(NewList);
         dispatch(setPlayList(NewList));
@@ -108,7 +105,6 @@ function MusicPlaylist() {
     if (!result.destination) {
       return;
     }
-    console.log(result);
 
     const NewSongs = reorder(
       songs,

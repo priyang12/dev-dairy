@@ -1,6 +1,6 @@
 import userEvent from '@testing-library/user-event';
-import moment from 'moment';
 import { rest } from 'msw';
+import { format, parseISO } from 'date-fns';
 import { BrowserRouter } from 'react-router-dom';
 import {
   render,
@@ -8,6 +8,7 @@ import {
   waitForElementToBeRemoved,
   waitFor,
 } from '../../test-utils';
+
 import {
   NewPostResponse,
   PostsResponse,
@@ -38,7 +39,7 @@ it('render Posts', async () => {
     expect(screen.getByText(post.title)).toBeInTheDocument();
     expect(screen.getByText(post.description)).toBeInTheDocument();
     expect(
-      screen.getByText(moment(post.date).format('D MMM YYYY, h:mm:ss')),
+      screen.getByText(format(parseISO(post.date), "yyyy-MM-dd'T'HH:mm")),
     ).toBeInTheDocument();
   });
 });

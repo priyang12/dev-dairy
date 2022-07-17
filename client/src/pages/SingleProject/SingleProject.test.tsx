@@ -1,5 +1,5 @@
-import moment from 'moment';
 import { rest } from 'msw';
+import { format, parseISO } from 'date-fns';
 import { Route, Router, Routes } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import userEvent from '@testing-library/user-event';
@@ -36,9 +36,10 @@ it('render Single Project', async () => {
   expect(
     screen.getByText(SingleProjectResponse.description),
   ).toBeInTheDocument();
+
   expect(
     screen.getByText(
-      moment(SingleProjectResponse.date).format('D MMM YYYY, h:mm:ss'),
+      format(parseISO(SingleProjectResponse.date), "yyyy-MM-dd'T'HH:mm"),
     ),
   ).toBeInTheDocument();
   SingleProjectResponse.roadMap.forEach((roadMap: any) => {
