@@ -42,12 +42,15 @@ function MenuToggle({ toggle, isOpen }: any) {
 function NavBarContainer({ children, ...props }: any) {
   return (
     <Flex
+      zIndex={2}
       as="nav"
       align="center"
+      position="sticky"
+      top="0"
+      right="0"
       justify="space-between"
       wrap="wrap"
       w="100%"
-      mb={8}
       p={8}
       bg="primary.900"
       {...props}
@@ -79,7 +82,7 @@ function LogoComponent() {
 }
 
 function NavBar() {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = React.useState(true);
   const toggle = () => setIsOpen(!isOpen);
 
   const location = useLocation();
@@ -95,7 +98,7 @@ function NavBar() {
     <NavBarContainer>
       <LogoComponent />
       <MenuToggle toggle={toggle} isOpen={isOpen} />
-      <NavLinks isOpen={!isOpen} isAuth={authenticated} />
+      <NavLinks isOpen={isOpen} isAuth={authenticated} />
     </NavBarContainer>
   );
 }
