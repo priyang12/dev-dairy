@@ -11,6 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 import { Navigate, Link as ReactLink } from 'react-router-dom';
+import Data from './Data.json';
 import type { AuthState } from '../../interface';
 
 const Arrow = createIcon({
@@ -26,17 +27,7 @@ const Arrow = createIcon({
   ),
 });
 
-function LandingPage({
-  heading,
-  subheading,
-  paragraph,
-  TiltText,
-}: {
-  heading?: string;
-  subheading?: string;
-  paragraph?: string;
-  TiltText?: string;
-}) {
+function LandingPage() {
   const { authenticated }: AuthState = useSelector((state: any) => state.Auth);
 
   if (authenticated) return <Navigate to="/feeds" />;
@@ -113,13 +104,13 @@ function LandingPage({
             lineHeight="110%"
             color="black"
           >
-            {heading} <br />
+            {Data.heading} <br />
             <Text as="span" color="green.400">
-              {subheading}
+              {Data.subheading}
             </Text>
           </Heading>
           <Text color="gray.500" p={5}>
-            {paragraph}
+            {Data.paragraph}
           </Text>
           <Stack
             direction="column"
@@ -170,7 +161,7 @@ function LandingPage({
                 top="-15px"
                 transform="rotate(10deg)"
               >
-                {TiltText}
+                {Data.TiltText}
               </Text>
             </Box>
           </Stack>
@@ -245,13 +236,5 @@ function LandingPage({
     </Box>
   );
 }
-
-LandingPage.defaultProps = {
-  heading: 'Welcome to the community',
-  subheading: 'We are a community of developers who love to share knowledge.',
-  paragraph:
-    'We are a community of developers who love to share knowledge. and Keep it simple and secure.',
-  TiltText: 'Free to join us.',
-};
 
 export default LandingPage;

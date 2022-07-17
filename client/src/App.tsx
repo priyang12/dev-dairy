@@ -22,13 +22,8 @@ import FallBackSuspenseWrapper from './components/FallBackSuspenseWrapper';
 import SingleProject from './pages/SingleProject';
 
 // Lazy load  components
-const MusicPlayer = lazy(async () => import('./components/MusicPlayer'));
+// const MusicPlayer = lazy(async () => import('./components/MusicPlayer'));
 const EditProject = lazy(async () => import('./pages/EditProject'));
-
-const LandingData = {
-  heading: 'Dev Dairy',
-  subheading: 'Mange your projects and share your knowledge with the world',
-};
 
 function App() {
   const dispatch = useDispatch();
@@ -55,19 +50,11 @@ function App() {
   return (
     <BrowserRouter>
       <Navbar />
-      <FallBackSuspenseWrapper fallback={false}>
+      {/* <FallBackSuspenseWrapper fallback={false}>
         <MusicPlayer />
-      </FallBackSuspenseWrapper>
+      </FallBackSuspenseWrapper> */}
       <Routes>
-        <Route
-          path="/"
-          element={
-            <LandingPage
-              subheading={LandingData.subheading}
-              heading={LandingData.heading}
-            />
-          }
-        />
+        <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/Register" element={<Register />} />
         <Route path="/" element={<PrivateOutlet />}>
