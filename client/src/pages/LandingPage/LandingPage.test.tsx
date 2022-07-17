@@ -9,10 +9,7 @@ it('render The Landing Text', () => {
   };
   render(
     <BrowserRouter>
-      <LandingPage
-        heading={LandingData.heading}
-        subheading={LandingData.subheading}
-      />
+      <LandingPage />
     </BrowserRouter>,
   );
 
