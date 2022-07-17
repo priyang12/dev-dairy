@@ -4,8 +4,10 @@ import {
   CreateProject,
   DeleteProject,
   DeleteRoadMap,
+  EditRoadMap,
   GetProjectById,
   GetProjects,
+  GetRoadMapProjectById,
   UpdateProject,
 } from "../controllers/ProjectController";
 
@@ -24,7 +26,8 @@ export default (app: Router) => {
     .delete(auth, DeleteProject);
   app
     .route("/projects/:id/roadMap")
-    .patch(auth, ProjectValidator("AddRoadMap"), AddRoadMap);
-
-  app.route("/projects/:id/roadMap/delete").patch(auth, DeleteRoadMap);
+    .get(auth, GetRoadMapProjectById)
+    .put(auth, ProjectValidator("AddRoadMap"), AddRoadMap)
+    .patch(auth, EditRoadMap)
+    .delete(auth, DeleteRoadMap);
 };
