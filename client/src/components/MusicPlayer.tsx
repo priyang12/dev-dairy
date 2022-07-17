@@ -22,7 +22,7 @@ import {
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 
 import { GoMute, GoUnmute } from 'react-icons/go';
-import { useEffect, useRef, useState, Profiler, memo } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactPlayer from 'react-player/file';
 import Draggable from 'react-draggable';
@@ -31,7 +31,7 @@ import {
   setLoading as MusicLoading,
 } from '../features/MusicSlice';
 import useSongsdb from '../Hooks/useSongsdb';
-import MusicSymbol from '../Assets/music.png';
+import MusicSymbol from '../Assets/Music.webp';
 import BlobToImg from '../utils/BlobToImg';
 import type { MusicState } from '../features/MusicSlice';
 import type { AuthState } from '../interface';

@@ -7,7 +7,7 @@ import jsmediatags from '@priyang/jsmediatags';
 import DropZone from 'react-dropzone';
 import useSongsdb from '../../Hooks/useSongsdb';
 import BgImage from '../../components/BgImage';
-import MusicSymbol from '../../Assets/music.png';
+import MusicSymbol from '../../Assets/Music.webp';
 import MusicList from './MusicList';
 import {
   setCurrentMusic,

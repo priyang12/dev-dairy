@@ -95,7 +95,7 @@ function NavBar() {
     <NavBarContainer>
       <LogoComponent />
       <MenuToggle toggle={toggle} isOpen={isOpen} />
-      <NavLinks isOpen={isOpen} isAuth={authenticated} />
+      <NavLinks isOpen={!isOpen} isAuth={authenticated} />
     </NavBarContainer>
   );
 }

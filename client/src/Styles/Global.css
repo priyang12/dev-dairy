@@ -9,7 +9,7 @@ a:hover {
   text-decoration: none;
 }
 #landing-page {
-  background: url('../Assets/zen.jpeg') repeat center center;
+  background: url('../Assets/zen.webp') repeat center center;
   background-size: cover;
   background-attachment: fixed;
   position: static;
