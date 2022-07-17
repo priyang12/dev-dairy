@@ -24,3 +24,12 @@ a:hover {
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.125);
 }
+
+@keyframes Rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

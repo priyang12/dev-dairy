@@ -45,11 +45,23 @@ function MusicPlaylist() {
     }
   }, [dispatch, songs]);
 
-  const onFileChange = (AcceptedFiles: any) => {
+  const onFileChange = async (AcceptedFiles: any) => {
     if (AcceptedFiles) {
       AcceptedFiles.forEach((file: any) => {
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+          const data = e.target.result;
+
+          SongsDB?.add(
+            'Songs',
+            new Blob([data], { type: file.type }),
+            file.name,
+          );
+        };
+        reader.readAsArrayBuffer(file);
+        setSongs([...songs, file.name]);
         jsmediatags.read(file, {
-          onSuccess: async (tag: any) => {
+          onSuccess: async (tag) => {
             const { tags } = tag;
             const { title, artist, album, year, picture } = tags;
             if (picture) {
@@ -60,8 +72,6 @@ function MusicPlaylist() {
               const ImageBlob = null;
               SongsDB?.add('SongsMeta', ImageBlob, file.name);
             }
-
-            SongsDB?.add('Songs', file, file.name);
             SongsDB?.add(
               'SongsInfo',
               {
@@ -72,7 +82,6 @@ function MusicPlaylist() {
               },
               file.name,
             );
-            setSongs([...songs, file.name]);
           },
         });
       });

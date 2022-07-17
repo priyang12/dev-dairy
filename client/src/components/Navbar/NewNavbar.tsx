@@ -51,7 +51,7 @@ function NavBarContainer({ children, ...props }: any) {
       justify="space-between"
       wrap="wrap"
       w="100%"
-      p={8}
+      p={10}
       bg="primary.900"
       {...props}
     >

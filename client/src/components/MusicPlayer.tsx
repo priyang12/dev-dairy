@@ -132,129 +132,141 @@ function MusicPlayer() {
             </IconButton>
 
             <Box display={Hidden ? 'none' : 'block'}>
-              <ProfilerComponent id="player">
-                <IconButton
-                  bg="#333"
-                  aria-label="MusicCloseButton"
-                  _hover={{
-                    bg: 'red',
-                  }}
-                  onClick={() => {
-                    setPlaying(false);
-                    setClosePlayer((prev) => !prev);
-                  }}
-                >
-                  <AiOutlineCloseCircle />
-                </IconButton>
-                <Img
-                  src={SongImage || MusicSymbol}
-                  alt="album"
-                  rounded="3xl"
-                  my={5}
-                />
-                {CurrentMusic > -1 && (
-                  <Text
-                    fontSize="lg"
-                    fontWeight="bold"
-                    color="white"
-                    textAlign="center"
-                    pb={2}
-                  >
-                    Playing : &nbsp;
-                    {SongInfo?.title ? SongInfo.title : PlayList[CurrentMusic]}
-                  </Text>
+              <IconButton
+                bg="#333"
+                aria-label="MusicCloseButton"
+                _hover={{
+                  bg: 'red',
+                }}
+                onClick={() => {
+                  setPlaying(false);
+                  setClosePlayer((prev) => !prev);
+                }}
+              >
+                <AiOutlineCloseCircle />
+              </IconButton>
+              <Box animation={Playing ? 'Rotation 2s linear infinite' : ''}>
+                {SongImage ? (
+                  <Img
+                    src={SongImage}
+                    alt="album"
+                    rounded="full"
+                    my={5}
+                    h={200}
+                  />
+                ) : (
+                  <Img
+                    src={MusicSymbol}
+                    alt="album"
+                    rounded="full"
+                    my={5}
+                    h={200}
+                  />
                 )}
+              </Box>
 
-                <Flex id="Controllers" w="100%" justifyContent="space-around">
+              {CurrentMusic > -1 && (
+                <Text
+                  fontSize="lg"
+                  fontWeight="bold"
+                  color="white"
+                  textAlign="center"
+                  pb={2}
+                >
+                  Playing : &nbsp;
+                  {SongInfo?.title ? SongInfo.title : PlayList[CurrentMusic]}
+                </Text>
+              )}
+
+              <Flex id="Controllers" w="100%" justifyContent="space-around">
+                <IconButton
+                  bg="transparent"
+                  icon={<FaBackward />}
+                  aria-label="Music"
+                  onClick={() => {
+                    dispatch(setCurrentMusic(CurrentMusic - 1));
+                  }}
+                />
+                {!Playing ? (
                   <IconButton
                     bg="transparent"
-                    icon={<FaBackward />}
-                    aria-label="Music"
-                    onClick={() => {
-                      dispatch(setCurrentMusic(CurrentMusic - 1));
-                    }}
+                    aria-label="Play"
+                    icon={<FaPlay />}
+                    onClick={Toggle}
+                    rounded="3xl"
                   />
-                  {!Playing ? (
+                ) : (
+                  <IconButton
+                    bg="transparent"
+                    aria-label="Pause"
+                    icon={<FaPause />}
+                    onClick={Toggle}
+                  />
+                )}
+                <IconButton
+                  icon={<FaForward />}
+                  aria-label="Music"
+                  bg="transparent"
+                  onClick={() => {
+                    dispatch(setCurrentMusic(CurrentMusic + 1));
+                  }}
+                />
+              </Flex>
+
+              <Flex justifyContent="space-between" mx={2} mt={5}>
+                <Text>
+                  {Start.x}: {Start.y}
+                </Text>
+                <Flex justifyContent="center">
+                  {Mute ? (
                     <IconButton
-                      bg="transparent"
-                      aria-label="Play"
-                      icon={<FaPlay />}
-                      onClick={Toggle}
-                      rounded="3xl"
+                      icon={<GoMute />}
+                      aria-label="Mute"
+                      onClick={() => {
+                        setMute((prev) => !prev);
+                      }}
                     />
                   ) : (
                     <IconButton
-                      bg="transparent"
-                      aria-label="Pause"
-                      icon={<FaPause />}
-                      onClick={Toggle}
+                      icon={<GoUnmute />}
+                      aria-label="Mute"
+                      onClick={() => {
+                        setMute((prev) => !prev);
+                      }}
                     />
                   )}
-                  <IconButton
-                    icon={<FaForward />}
-                    aria-label="Music"
-                    bg="transparent"
-                    onClick={() => {
-                      dispatch(setCurrentMusic(CurrentMusic + 1));
-                    }}
-                  />
                 </Flex>
-
-                <Flex justifyContent="space-between" mx={2} mt={5}>
-                  <Text>
-                    {Start.x}: {Start.y}
-                  </Text>
-                  <Flex justifyContent="center">
-                    {Mute ? (
-                      <IconButton
-                        icon={<GoMute />}
-                        aria-label="Mute"
-                        onClick={() => {
-                          setMute((prev) => !prev);
-                        }}
-                      />
-                    ) : (
-                      <IconButton
-                        icon={<GoUnmute />}
-                        aria-label="Mute"
-                        onClick={() => {
-                          setMute((prev) => !prev);
-                        }}
-                      />
-                    )}
-                  </Flex>
-                  <Text>
-                    {Duration.minutes}: {Duration.seconds}
-                  </Text>
-                </Flex>
-                {/* Need TO Fix Auto Focus  */}
-                <Slider
-                  id="slider"
-                  value={ProgressStates}
-                  min={0}
-                  max={100}
-                  colorScheme="teal"
-                  onChange={(v) => setSliderValue(v)}
-                  onMouseEnter={() => setShowTooltip(true)}
-                  onMouseLeave={() => setShowTooltip(false)}
+                <Text>
+                  {Duration.minutes}: {Duration.seconds}
+                </Text>
+              </Flex>
+              {/* Need TO Fix Auto Focus  */}
+              <Slider
+                id="slider"
+                value={ProgressStates}
+                min={0}
+                max={100}
+                colorScheme="teal"
+                onChange={(v) => setSliderValue(v)}
+                onMouseEnter={() => setShowTooltip(true)}
+                onMouseLeave={() => setShowTooltip(false)}
+              >
+                <SliderTrack>
+                  <SliderFilledTrack />
+                </SliderTrack>
+                <Tooltip
+                  hasArrow
+                  bg="transparent"
+                  color="white"
+                  placement="top"
+                  isOpen={showTooltip}
+                  label={`${sliderValue}%`}
                 >
-                  <SliderTrack>
-                    <SliderFilledTrack />
-                  </SliderTrack>
-                  <Tooltip
-                    hasArrow
-                    bg="transparent"
-                    color="white"
-                    placement="top"
-                    isOpen={showTooltip}
-                    label={`${sliderValue}%`}
-                  >
-                    <SliderThumb boxSize={6}>
-                      <Box color="tomato" as={FaMusic} />
-                    </SliderThumb>
-                  </Tooltip>
-                </Slider>
-              </ProfilerComponent>
+                  <SliderThumb boxSize={6}>
+                    <Box color="tomato" as={FaMusic} />
+                  </SliderThumb>
+                </Tooltip>
+              </Slider>
             </Box>
 
             <ReactPlayer
