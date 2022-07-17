@@ -22,7 +22,7 @@ import {
   ChevronDownIcon,
 } from '@chakra-ui/icons';
 import { motion } from 'framer-motion';
-import Logo from '../Assets/diary.png';
+import Logo from '../Assets/diary.webp';
 import { logout } from '../../features/AuthSlice';
 import type { AuthState } from '../../interface';
 
