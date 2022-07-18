@@ -38,6 +38,7 @@ import type { AuthState } from '../interface';
 import ProfilerComponent from './ProfilerComponent';
 
 function MusicPlayer() {
+  return null;
   const { SongsDB } = useSongsdb();
   const { authenticated }: AuthState = useSelector((state: any) => state.Auth);
   const { CurrentMusic, PlayList }: MusicState = useSelector(
@@ -174,7 +175,7 @@ function MusicPlayer() {
                   pb={2}
                 >
                   Playing : &nbsp;
-                  {SongInfo?.title ? SongInfo.title : PlayList[CurrentMusic]}
+                  {SongInfo ? SongInfo?.title : PlayList[CurrentMusic]}
                 </Text>
               )}
 

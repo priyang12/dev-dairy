@@ -43,6 +43,7 @@ export const GetRoadMapProjectById = asyncHandler(
       req.user._id,
       req.params.id
     );
+
     return res.status(200).json(roadMap);
   }
 );

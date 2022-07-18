@@ -2,6 +2,8 @@ import { rest } from 'msw';
 import API from '../API';
 import {
   AuthResponse,
+  MockedRoadMap,
+  MockedRoadMapResponse,
   NewPostResponse,
   NewProjectResponse,
   PostsResponse,
@@ -67,31 +69,25 @@ const handlers = [
       }),
     ),
   ),
+  rest.get(`${API}/projects/:id/roadMap`, (req, res, ctx) =>
+    res(ctx.json(MockedRoadMap)),
+  ),
+  rest.put(`${API}/projects/:id/roadMap`, (req, res, ctx) =>
+    res(ctx.json(MockedRoadMapResponse)),
+  ),
   rest.patch(`${API}/projects/:id/roadMap`, (req, res, ctx) =>
     res(
       ctx.json({
-        roadmap: {
-          _id: '5f5d8f9b9b9b9b9b9b9b9b9b',
-          result: true,
-          message: 'New RoadMap Added Successfully',
-        },
+        result: true,
+        message: `RoadMap Updated`,
       }),
     ),
   ),
-  rest.patch(`${API}/projects/:id/roadMap/:roadMapId`, (req, res, ctx) =>
-    res(
-      ctx.json({
-        _id: '5f5d8f9b9b9b9b9b9b9b9b9b',
-        result: true,
-        message: 'RoadMap Updated Successfully',
-      }),
-    ),
-  ),
-  rest.delete(`${API}/projects/:id/roadMap/:roadMapId`, (req, res, ctx) =>
+  rest.delete(`${API}/projects/:id/roadMap`, (req, res, ctx) =>
     res(
       ctx.json({
         result: true,
-        message: 'RoadMap Deleted Successfully',
+        message: 'Roadmap from New Projectg is deleted',
       }),
     ),
   ),

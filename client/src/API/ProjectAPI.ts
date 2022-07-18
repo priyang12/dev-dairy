@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import API from '.';
 import { setAlert } from '../features/AlertSlice';
-import type { IProject } from '../interface';
+import type { IProject, IRoadMap } from '../interface';
 import type { RootState } from '../store';
 import type { DeletedProjectAPI, NewProjectAPI } from './interface';
 
@@ -17,7 +17,7 @@ const ProjectApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['projectId'],
+  tagTypes: ['projectId', 'RoadMapsId'],
 
   endpoints: (builder) => ({
     GetProjects: builder.query<IProject[], Partial<string>>({
@@ -132,88 +132,114 @@ const ProjectApi = createApi({
         }
       },
     }),
-    AddRoadMap: builder.mutation({
+    GetRoadMaps: builder.query<IRoadMap[], Partial<string | undefined>>({
+      query: (id) => ({
+        url: `/${id}/roadMap`,
+        method: 'GET',
+      }),
+      providesTags: ['RoadMapsId'],
+    }),
+
+    CreateNewRoadMap: builder.mutation({
       query({ projectId, roadMapData }) {
         return {
           url: `/${projectId}/roadMap`,
-          method: 'PATCH',
+          method: 'PUT',
           body: roadMapData,
         };
       },
-      async onQueryStarted(
-        { projectId, roadMapData },
-        { dispatch, queryFulfilled },
-      ) {
-        const id = Math.random().toString(36);
-
-        const RoadMapResult = dispatch(
-          ProjectApi.util.updateQueryData(
-            'GetProjectId',
-            projectId,
-            (data: IProject) => {
-              data.roadMap.push({ ...roadMapData, progress: 0, _id: id });
-              return data;
-            },
-          ),
-        );
+      async onQueryStarted({ projectId }, { dispatch, queryFulfilled }) {
         try {
           const { data: resData } = await queryFulfilled;
-
           dispatch(
             setAlert({
-              alert: 'New RoadMap Added',
-              result: true,
+              alert: resData.message,
+              result: resData.result,
             }),
           );
 
           dispatch(
             ProjectApi.util.updateQueryData(
-              'GetProjectId',
+              'GetRoadMaps',
               projectId,
-              (data: IProject) => {
-                data.roadMap.map((item: any) => {
-                  if (item._id === id) {
-                    item._id = resData.roadmap._id;
-                  }
-                  return item;
-                });
-                return data;
-              },
+              (data: IRoadMap[]) => [resData.roadmap, ...data],
             ),
           );
         } catch (e: any) {
-          console.log(e);
           setAlert({
             alert: e.error.data.message,
             type: false,
           });
-          RoadMapResult.undo();
         }
       },
     }),
-    RemoveRoadMap: builder.mutation({
-      query({ projectId, RoadMapId }) {
+
+    EditRoadMap: builder.mutation({
+      query({ ProjectID, roadMapData }) {
         return {
-          url: `/${projectId}/roadMap/delete`,
-          method: 'PATCH',
-          body: [RoadMapId],
+          url: `/${ProjectID}/roadMap`,
+          method: 'PUT',
+          body: roadMapData,
+        };
+      },
+
+      async onQueryStarted(
+        { ProjectID, roadMapData },
+        { dispatch, queryFulfilled },
+      ) {
+        const EditedRoadMap = dispatch(
+          ProjectApi.util.updateQueryData(
+            'GetRoadMaps',
+            ProjectID,
+            (data: IRoadMap[]) => {
+              const da = data.map((roadMap) => {
+                if (roadMap._id === roadMapData._id) {
+                  return roadMapData;
+                }
+                return roadMap;
+              });
+              return da;
+            },
+          ),
+        );
+
+        try {
+          const { data: resData } = await queryFulfilled;
+          dispatch(
+            setAlert({
+              alert: resData.message,
+              result: resData.result,
+            }),
+          );
+        } catch (e: any) {
+          EditedRoadMap.undo();
+          dispatch(
+            setAlert({
+              alert: e.error.data.message,
+              result: false,
+            }),
+          );
+        }
+      },
+    }),
+
+    RemoveRoadMap: builder.mutation({
+      query({ projectId, RoadMapIds }) {
+        return {
+          url: `/${projectId}/roadMap`,
+          method: 'DELETE',
+          body: RoadMapIds,
         };
       },
       onQueryStarted({ projectId, RoadMapId }, { dispatch, queryFulfilled }) {
         const deleteResult = dispatch(
           ProjectApi.util.updateQueryData(
-            'GetProjectId',
+            'GetRoadMaps',
             projectId,
-            (data: IProject) => {
-              const NewRoadMap = data.roadMap.filter(
-                (item: any) => item._id !== RoadMapId,
-              );
-              data.roadMap = NewRoadMap;
-              return data;
-            },
+            (data: IRoadMap[]) =>
+              data.filter((item: any) => item._id !== RoadMapId),
           ),
         );
-
         queryFulfilled.catch(() => {
           dispatch(setAlert('Server Error'));
           deleteResult.undo();
@@ -227,11 +253,13 @@ export const {
   useGetProjectsQuery,
   usePrefetch,
   useGetProjectIdQuery,
-  useAddRoadMapMutation,
   useCreateProjectMutation,
   useDeleteProjectMutation,
   useUpdateProjectMutation,
+  useGetRoadMapsQuery,
+  useCreateNewRoadMapMutation,
   useRemoveRoadMapMutation,
+  useEditRoadMapMutation,
 } = ProjectApi;
 
 export default ProjectApi;

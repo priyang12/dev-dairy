@@ -49,27 +49,3 @@ it('Delete Project', async () => {
 
   expect(History.location.pathname).toBe('/projects');
 });
-
-it('Add RoadMap', async () => {
-  setup();
-  await waitForElementToBeRemoved(screen.getByAltText(/loading/));
-  expect(screen.getByText(/Edit Project/)).toBeInTheDocument();
-
-  userEvent.click(screen.getByRole('button', { name: 'Add New RoadMap' }));
-
-  const RoadMapName = screen.getByLabelText('RoadMap Name');
-  // Empty RoadMapName
-  userEvent.type(RoadMapName, '');
-
-  const SubmitRoadmap = screen.getByRole('button', { name: 'Submit RoadMap' });
-  userEvent.click(SubmitRoadmap);
-
-  expect(screen.getByText(/Please enter a RoadMap name/)).toBeInTheDocument();
-
-  userEvent.type(RoadMapName, 'Test RoadMap');
-  userEvent.click(SubmitRoadmap);
-
-  await waitForElementToBeRemoved(screen.getByText('Adding RoadMap'));
-
-  // expect(screen.getByText(/New RoadMap Added/)).toBeInTheDocument();
-});

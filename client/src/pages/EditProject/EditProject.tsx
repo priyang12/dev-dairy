@@ -3,11 +3,6 @@ import { useEffect, useLayoutEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { ArrowForwardIcon } from '@chakra-ui/icons';
 import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
   Alert,
   AlertIcon,
   AlertTitle,
@@ -25,7 +20,6 @@ import {
   NumberInput,
   NumberInputField,
   NumberInputStepper,
-  Progress,
   Slider,
   SliderFilledTrack,
   SliderThumb,
@@ -33,22 +27,16 @@ import {
   Switch,
   Text,
   Textarea,
-  Spinner as ChakraSpinner,
   useDisclosure,
 } from '@chakra-ui/react';
 import { Navigate, useParams } from 'react-router-dom';
-import invert from 'invert-color';
 import {
-  useAddRoadMapMutation,
   useDeleteProjectMutation,
   useGetProjectIdQuery,
-  useRemoveRoadMapMutation,
   useUpdateProjectMutation,
 } from '../../API/ProjectAPI';
 import ModalComponent from '../../components/ModalComponent';
-import RoadMapModal from '../../components/RoadMapModal';
 import Spinner from '../../components/spinner';
-import RandomColor from '../../utils/RandomColor';
 import useForm from '../../Hooks/useForm';
 import { isErrorWithMessage } from '../../utils/helpers';
 import type { AlertState, IProject } from '../../interface';
@@ -68,21 +56,18 @@ function EditProject() {
   } = useGetProjectIdQuery(id, {
     skip: !id,
   });
-  const { FormValues, ErrorsState, HandleChange, SetState, setError } = useForm(
-    {
-      Title: '',
-      Description: '',
-      process: 5,
-      Github: '',
-      Live: false,
-      Website: '',
-      NewTech: '',
-    },
-  );
+  const { FormValues, ErrorsState, HandleChange, SetState } = useForm({
+    Title: '',
+    Description: '',
+    process: 5,
+    Github: '',
+    Live: false,
+    Website: '',
+    NewTech: '',
+  });
   const [DeleteProjectMutation, DeleteResult] = useDeleteProjectMutation();
   const [UpdateProjectMutation, UpdateResult] = useUpdateProjectMutation();
-  const [RoadMapMutate, RoadMapResult] = useAddRoadMapMutation();
-  const [DeleteRoadMap, DeleteMapResult] = useRemoveRoadMapMutation();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const ProcessChange = (value: number | any) => {
@@ -119,12 +104,6 @@ function EditProject() {
       onClose();
     }
   }, [UpdateResult.isSuccess, onClose]);
-
-  useEffect(() => {
-    if (RoadMapResult.isSuccess) {
-      onClose();
-    }
-  }, [RoadMapResult.isSuccess, onClose]);
 
   if (isFetching || isLoading) return <Spinner />;
 
@@ -293,90 +272,18 @@ function EditProject() {
               }}
             />
           </FormControl>
+          {project.github && (
+            <Box mt={5}>
+              <Text>
+                <a href={project.github}>Github Link</a>
+              </Text>
+            </Box>
+          )}
           <Button type="submit" colorScheme="blue" variant="outline">
             Update Project
           </Button>
         </Flex>
-        <Box p={5} my={5} bg="#333">
-          {project.roadMap.length > 0 && (
-            <Box justifyContent="space-between" alignItems="center" mt={5}>
-              {RoadMapResult.isLoading && (
-                <Alert>
-                  <AlertTitle>Adding RoadMap</AlertTitle>
-                  <ChakraSpinner />
-                </Alert>
-              )}
-              <Flex alignItems="center" m={5}>
-                <Heading as="h3" fontSize="2xl">
-                  Road Map
-                </Heading>
-                <RoadMapModal onSubmit={RoadMapMutate} projectId={id} />
-                {/* <DeleteRoadMapModal
-                onSubmit={RoadMapMutate}
-                result={RoadMapResult}
-                projectId={params.id}
-              /> */}
-              </Flex>
 
-              <Accordion allowToggle>
-                {project.roadMap.map((road: any) => (
-                  <AccordionItem key={road._id}>
-                    <AccordionButton>
-                      <Text
-                        key={road.name}
-                        p={2}
-                        bg={`${road.color ? road.color : RandomColor()}`}
-                        color={`${
-                          road.color ? invert(road.color) : RandomColor()
-                        }`}
-                        fontSize={20}
-                        borderRadius={10}
-                        width="100%"
-                      >
-                        {road.name}
-                      </Text>
-                      <AccordionIcon />
-                    </AccordionButton>
-                    <AccordionPanel pb={4}>
-                      <>
-                        Work {road.progress} %
-                        <Progress
-                          colorScheme="green"
-                          height="20px"
-                          size="sm"
-                          mt={4}
-                          borderRadius="10px"
-                          value={road.progress}
-                        />
-                        <Button
-                          colorScheme="red"
-                          mt={5}
-                          isLoading={DeleteMapResult.isLoading}
-                          loadingText="Deleting..."
-                          onClick={() => {
-                            DeleteRoadMap({
-                              projectId: id,
-                              RoadMapId: road._id,
-                            });
-                          }}
-                        >
-                          Delete {road.name}
-                        </Button>
-                      </>
-                    </AccordionPanel>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-              {project.github && (
-                <Box mt={5}>
-                  <Text>
-                    <a href={project.github}>Github Link</a>
-                  </Text>
-                </Box>
-              )}
-            </Box>
-          )}
-        </Box>
         <Container mt={5}>
           <Button
             colorScheme="red"

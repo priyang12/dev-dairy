@@ -54,7 +54,7 @@ function DropDownContainer() {
           onMouseLeave={onClose}
           zIndex={2000}
           fontSize="3xl"
-          bg="transparent"
+          bg="#7957574e"
           className="card"
         >
           <MenuItem>

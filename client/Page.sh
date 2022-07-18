@@ -32,6 +32,12 @@ Test() {
     
 }
 
+index(){
+    # index.tsx
+    echo "import ${1} from './$1';" >>$Path/index.tsx
+    echo "export default ${1};" >>$Path/index.tsx
+}
+
 # if user input is 1 then create Page
 
 if [ "$choice" -eq 1 ]; then
@@ -54,6 +60,7 @@ if [ "$choice" -eq 1 ]; then
             # Write in Page Files
             Rfce $NAME
             Test $NAME
+            index $NAME
 
             echo "Page Created"
         else

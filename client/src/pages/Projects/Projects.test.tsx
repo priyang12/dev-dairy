@@ -30,7 +30,6 @@ it('render Projects', async () => {
   ).toBeInTheDocument();
   ProjectsResponse.forEach((project) => {
     expect(screen.getByText(project.title)).toBeInTheDocument();
-    expect(screen.getByText(project.description)).toBeInTheDocument();
     expect(
       screen.getByText(format(parseISO(project.date), "yyyy-MM-dd'T'HH:mm")),
     ).toBeInTheDocument();

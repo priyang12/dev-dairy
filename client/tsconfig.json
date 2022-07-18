@@ -20,5 +20,5 @@
     }
   },
   "include": ["src", "./react-app-env.d.ts", "./.eslintrc.cjs"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "./jest.config.ts"]
 }

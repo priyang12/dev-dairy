@@ -1,5 +1,12 @@
 import React from 'react';
-import { Link, Box, Flex, Text, Heading, IconButton } from '@chakra-ui/react';
+import {
+  Link,
+  Box,
+  Flex,
+  Container,
+  Heading,
+  IconButton,
+} from '@chakra-ui/react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import { useSelector } from 'react-redux';
@@ -48,14 +55,17 @@ function NavBarContainer({ children, ...props }: any) {
       position="sticky"
       top="0"
       right="0"
-      justify="space-between"
       wrap="wrap"
       w="100%"
       p={10}
       bg="primary.900"
       {...props}
     >
-      {children}
+      <Container maxW="900px">
+        <Flex justifyContent="space-between" alignItems="center">
+          {children}
+        </Flex>
+      </Container>
     </Flex>
   );
 }

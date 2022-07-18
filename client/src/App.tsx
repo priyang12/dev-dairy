@@ -11,6 +11,7 @@ import Login from './pages/login';
 import Register from './pages/register';
 import Posts from './pages/Posts';
 import Projects from './pages/Projects';
+import RoadMap from './pages/RoadMap';
 import NewProject from './pages/NewProject';
 
 // Components
@@ -22,7 +23,7 @@ import FallBackSuspenseWrapper from './components/FallBackSuspenseWrapper';
 import SingleProject from './pages/SingleProject';
 
 // Lazy load  components
-// const MusicPlayer = lazy(async () => import('./components/MusicPlayer'));
+const MusicPlayer = lazy(async () => import('./components/MusicPlayer'));
 const EditProject = lazy(async () => import('./pages/EditProject'));
 
 function App() {
@@ -50,9 +51,9 @@ function App() {
   return (
     <BrowserRouter>
       <Navbar />
-      {/* <FallBackSuspenseWrapper fallback={false}>
+      <FallBackSuspenseWrapper fallback={false}>
         <MusicPlayer />
-      </FallBackSuspenseWrapper> */}
+      </FallBackSuspenseWrapper>
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
@@ -75,6 +76,9 @@ function App() {
               </FallBackSuspenseWrapper>
             }
           />
+        </Route>
+        <Route path="/" element={<PrivateOutlet />}>
+          <Route path="/RoadMap/:id" element={<RoadMap />} />
         </Route>
         <Route path="/" element={<PrivateOutlet />}>
           <Route path="/NewProject" element={<NewProject />} />

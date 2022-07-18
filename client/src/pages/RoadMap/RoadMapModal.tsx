@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 
-import ModalComponent from './ModalComponent';
+import ModalComponent from '../../components/ModalComponent';
 
 interface Props {
   onSubmit: any;
@@ -25,7 +25,6 @@ function RoadMapModal({ onSubmit, projectId }: Props) {
   const FormSubmit = (e: any) => {
     e.preventDefault();
     const { name, color } = e.target.elements;
-
     if (name.value === '') {
       setRoadMapError('Please enter a RoadMap name');
     } else {
