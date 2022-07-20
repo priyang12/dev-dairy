@@ -5,7 +5,7 @@ import { ISession, IWorkSessions } from "../models/WorkSessions";
 import type { DeleteWriteOpResultObject } from "mongodb";
 
 @Service()
-export default class UserService {
+export default class WorkSessionService {
   constructor(
     @Inject("workSessionsModel") private WorkSessions: Model<IWorkSessions>,
     @Inject("logger") private logger: Logger
@@ -15,6 +15,10 @@ export default class UserService {
     userId: string
   ): Promise<LeanDocument<IWorkSessions[]>> {
     const WorkSessions = await this.WorkSessions.find({ user: userId })
+      .populate({
+        path: "project",
+        select: "title process description",
+      })
       .lean()
       .exec();
     if (!WorkSessions) {
