@@ -63,7 +63,7 @@ export interface IProject {
   website: string;
   roadMap: IRoadMap[];
   process: number;
-  live?: string;
+  live?: boolean;
   github?: string;
   date: string;
 }

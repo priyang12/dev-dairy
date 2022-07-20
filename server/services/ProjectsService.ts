@@ -31,7 +31,7 @@ export default class UserService {
       _id: projectId,
       user: userId,
     })
-      .select("-roadMap -__v")
+      .select("-__v")
       .exec();
     if (!project) {
       this.logger.error("Project not found");

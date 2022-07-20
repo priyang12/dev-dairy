@@ -48,6 +48,8 @@ function SingleProject() {
   if (isError || !project) {
     return <div>No Project Found</div>;
   }
+  console.log(project);
+
   if (DeleteResult.isSuccess) {
     return <Navigate to="/projects" />;
   }
@@ -218,19 +220,6 @@ function SingleProject() {
       )}
       <Container mt={5}>
         <Button
-          colorScheme="red"
-          w="100%"
-          variant="outline"
-          onClick={onOpen}
-          _hover={{
-            bg: 'red',
-            color: 'white',
-          }}
-        >
-          Delete Project
-        </Button>
-        <Button
-          mt={5}
           as={RouterLink}
           to={`/EditProject/${project._id}`}
           colorScheme="blue"
@@ -245,6 +234,20 @@ function SingleProject() {
         >
           Edit Project
         </Button>
+        <Button
+          mt={5}
+          colorScheme="red"
+          w="100%"
+          variant="outline"
+          onClick={onOpen}
+          _hover={{
+            bg: 'red',
+            color: 'white',
+          }}
+        >
+          Delete Project
+        </Button>
+
         <ModalComponent
           Title="Delete Project"
           isOpen={isOpen}

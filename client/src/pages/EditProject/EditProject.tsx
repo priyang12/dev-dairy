@@ -1,5 +1,7 @@
 import type { FormEvent } from 'react';
 import { useEffect, useLayoutEffect } from 'react';
+import { Link as RouterLink, Navigate, useParams } from 'react-router-dom';
+
 import { useSelector } from 'react-redux';
 import { ArrowForwardIcon } from '@chakra-ui/icons';
 import {
@@ -28,8 +30,9 @@ import {
   Text,
   Textarea,
   useDisclosure,
+  Link,
 } from '@chakra-ui/react';
-import { Navigate, useParams } from 'react-router-dom';
+
 import {
   useDeleteProjectMutation,
   useGetProjectIdQuery,
@@ -40,6 +43,19 @@ import Spinner from '../../components/spinner';
 import useForm from '../../Hooks/useForm';
 import { isErrorWithMessage } from '../../utils/helpers';
 import type { AlertState, IProject } from '../../interface';
+
+type EditProjectType = Omit<IProject, 'roadMap' | '_id' | 'user'>;
+
+const init: EditProjectType = {
+  title: '',
+  description: '',
+  process: 5,
+  github: '',
+  live: false,
+  website: '',
+  technologies: [],
+  date: '',
+};
 
 function EditProject() {
   const { id } = useParams<{ id: string }>();
@@ -56,23 +72,16 @@ function EditProject() {
   } = useGetProjectIdQuery(id, {
     skip: !id,
   });
-  const { FormValues, ErrorsState, HandleChange, SetState } = useForm({
-    Title: '',
-    Description: '',
-    process: 5,
-    Github: '',
-    Live: false,
-    Website: '',
-    NewTech: '',
-  });
+  const { FormValues, ErrorsState, HandleChange, setFormValues } =
+    useForm(init);
   const [DeleteProjectMutation, DeleteResult] = useDeleteProjectMutation();
   const [UpdateProjectMutation, UpdateResult] = useUpdateProjectMutation();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const ProcessChange = (value: number | any) => {
-    SetState((prevState: any) => ({
-      ...prevState,
+    setFormValues((State: EditProjectType) => ({
+      ...State,
       process: value,
     }));
   };
@@ -89,15 +98,14 @@ function EditProject() {
   useLayoutEffect(() => {
     if (project) {
       const keys = Object.keys(project);
-
       keys.forEach((key: string) => {
-        SetState((prevState: any) => ({
-          ...prevState,
-          [key]: project[key as keyof IProject],
+        setFormValues((State: EditProjectType) => ({
+          ...State,
+          [key]: project[key as keyof EditProjectType],
         }));
       });
     }
-  }, [project, SetState]);
+  }, [project, setFormValues]);
 
   useEffect(() => {
     if (UpdateResult.isSuccess) {
@@ -157,9 +165,9 @@ function EditProject() {
           gap={5}
           onSubmit={UpdateProject}
         >
-          <FormControl isRequired isInvalid={ErrorsState.Title}>
-            {ErrorsState.Title ? (
-              <FormLabel color="red">{ErrorsState.Title}</FormLabel>
+          <FormControl isRequired isInvalid={!!ErrorsState.title}>
+            {ErrorsState.title ? (
+              <FormLabel color="red">{ErrorsState.title}</FormLabel>
             ) : (
               <FormLabel htmlFor="Title">Title : </FormLabel>
             )}
@@ -172,9 +180,9 @@ function EditProject() {
               required
             />
           </FormControl>
-          <FormControl isInvalid={ErrorsState.Description} isRequired>
-            {ErrorsState.Description ? (
-              <FormLabel color="red">{ErrorsState.Description}</FormLabel>
+          <FormControl isInvalid={!!ErrorsState.description} isRequired>
+            {ErrorsState.description ? (
+              <FormLabel color="red">{ErrorsState.description}</FormLabel>
             ) : (
               <FormLabel htmlFor="Description">Description : </FormLabel>
             )}
@@ -226,8 +234,8 @@ function EditProject() {
             </Slider>
           </FormControl>
           <FormControl>
-            {ErrorsState.Github ? (
-              <FormLabel color="red">{ErrorsState.Github}</FormLabel>
+            {ErrorsState.github ? (
+              <FormLabel color="red">{ErrorsState.github}</FormLabel>
             ) : (
               <FormLabel htmlFor="Github">Github : </FormLabel>
             )}
@@ -237,13 +245,13 @@ function EditProject() {
               id="Github"
               type="url"
               placeholder="Github Link"
-              value={FormValues.Github}
+              value={FormValues.github}
               onChange={HandleChange}
             />
           </FormControl>
           <FormControl>
-            {ErrorsState.Website ? (
-              <FormLabel color="red">{ErrorsState.Website}</FormLabel>
+            {ErrorsState.website ? (
+              <FormLabel color="red">{ErrorsState.website}</FormLabel>
             ) : (
               <FormLabel htmlFor="Website">Website : </FormLabel>
             )}
@@ -251,9 +259,9 @@ function EditProject() {
             <Input
               name="Website"
               id="Website"
-              disabled={!FormValues.Live}
+              disabled={!FormValues.live}
               placeholder="Website Link"
-              value={FormValues.Website}
+              value={FormValues.website}
               onChange={HandleChange}
             />
           </FormControl>
@@ -263,11 +271,11 @@ function EditProject() {
             </FormLabel>
             <Switch
               id="Live"
-              value={FormValues.Live}
+              value={FormValues.live ? 1 : 0}
               onChange={(e) => {
-                SetState({
+                setFormValues({
                   ...FormValues,
-                  Live: e.target.checked,
+                  live: e.target.checked,
                 });
               }}
             />
@@ -279,50 +287,24 @@ function EditProject() {
               </Text>
             </Box>
           )}
-          <Button type="submit" colorScheme="blue" variant="outline">
-            Update Project
-          </Button>
-        </Flex>
-
-        <Container mt={5}>
           <Button
-            colorScheme="red"
+            colorScheme="green"
             w="100%"
             variant="outline"
             onClick={onOpen}
             _hover={{
-              bg: 'red',
+              bg: 'green',
               color: 'white',
             }}
           >
-            Delete Project
+            <Link as={RouterLink} to={`/RoadMap/${id}`}>
+              Edit RoadMap
+            </Link>
           </Button>
-          <ModalComponent
-            Title="Confirm Delete Project"
-            isOpen={isOpen}
-            onClose={onClose}
-          >
-            <Box>
-              <Text>Are you sure you want to delete this project?</Text>
-              <Button
-                colorScheme="red"
-                w="100%"
-                variant="outline"
-                _hover={{
-                  bg: 'red',
-                  color: 'white',
-                }}
-                isLoading={DeleteResult.isLoading}
-                loadingText="Deleting..."
-                onClick={() => {
-                  DeleteProjectMutation(project._id);
-                }}
-              >
-                Delete
-              </Button>
-            </Box>
-          </ModalComponent>
-        </Container>
+          <Button type="submit" colorScheme="blue" variant="outline">
+            Update Project
+          </Button>
+        </Flex>
       </Container>
     </Box>
   );

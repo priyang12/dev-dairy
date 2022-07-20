@@ -29,7 +29,7 @@ function Form({ SubmitForm, FormFields, mb = 5, children }: Props) {
     {},
   );
 
-  const { ErrorsState, HandleChange, setErrors } = useForm(InitState);
+  const { ErrorsState, HandleChange, setErrors } = useForm<any>(InitState);
 
   const check = (e: any) => {
     e.preventDefault();

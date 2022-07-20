@@ -98,7 +98,7 @@ function RoadMap() {
                     onClick={() => {
                       DeleteRoadMap({
                         projectId: id,
-                        RoadMapId: road._id,
+                        RoadMapId: [road._id],
                       });
                     }}
                   >

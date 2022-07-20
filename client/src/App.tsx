@@ -21,6 +21,7 @@ import MusicPlaylist from './pages/MusicPlaylist';
 import Navbar from './components/Navbar';
 import FallBackSuspenseWrapper from './components/FallBackSuspenseWrapper';
 import SingleProject from './pages/SingleProject';
+import Sessions from './pages/Sessions';
 
 // Lazy load  components
 const MusicPlayer = lazy(async () => import('./components/MusicPlayer'));
@@ -79,6 +80,9 @@ function App() {
         </Route>
         <Route path="/" element={<PrivateOutlet />}>
           <Route path="/RoadMap/:id" element={<RoadMap />} />
+        </Route>
+        <Route path="/" element={<PrivateOutlet />}>
+          <Route path="/Sessions" element={<Sessions />} />
         </Route>
         <Route path="/" element={<PrivateOutlet />}>
           <Route path="/NewProject" element={<NewProject />} />

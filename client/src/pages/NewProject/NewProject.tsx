@@ -90,10 +90,7 @@ function NewProject() {
     setTechnologies(newTechs);
   };
   const ProcessChange = (value: number | any) => {
-    SetState((prevState: any) => ({
-      ...prevState,
-      process: value,
-    }));
+    SetState({ ...FormValues, process: value });
   };
 
   const AddNewProject = () => {
@@ -143,7 +140,7 @@ function NewProject() {
           gap={10}
         >
           <Flex w="100%" as="form" direction="column" gap={5}>
-            <FormControl isRequired isInvalid={ErrorsState.Title}>
+            <FormControl isRequired isInvalid={!!ErrorsState.Title}>
               {ErrorsState.Title ? (
                 <FormLabel color="red">{ErrorsState.Title}</FormLabel>
               ) : (
@@ -153,12 +150,12 @@ function NewProject() {
               <Input
                 id="Title"
                 placeholder="Pick Good Project Title"
-                value={FormValues.title}
+                value={FormValues.Title}
                 onChange={HandleChange}
                 required
               />
             </FormControl>
-            <FormControl isInvalid={ErrorsState.Description} isRequired>
+            <FormControl isInvalid={!!ErrorsState.Description} isRequired>
               {ErrorsState.Description ? (
                 <FormLabel color="red">{ErrorsState.Description}</FormLabel>
               ) : (
@@ -263,7 +260,7 @@ function NewProject() {
             gap={5}
             direction="column"
           >
-            <FormControl isInvalid={ErrorsState.NewTech}>
+            <FormControl isInvalid={!!ErrorsState.NewTech}>
               {ErrorsState.NewTech ? (
                 <FormLabel color="red">Enter Name</FormLabel>
               ) : (

@@ -1,3 +1,4 @@
+import { current } from '@reduxjs/toolkit';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import API from '.';
 import { setAlert } from '../features/AlertSlice';
@@ -160,6 +161,18 @@ const ProjectApi = createApi({
 
           dispatch(
             ProjectApi.util.updateQueryData(
+              'GetProjectId',
+              projectId,
+              (project: IProject) => {
+                project.roadMap.push(resData.roadmap);
+                console.log(current(project));
+                return project;
+              },
+            ),
+          );
+
+          dispatch(
+            ProjectApi.util.updateQueryData(
               'GetRoadMaps',
               projectId,
               (data: IRoadMap[]) => [resData.roadmap, ...data],
@@ -202,7 +215,6 @@ const ProjectApi = createApi({
             },
           ),
         );
-
         try {
           const { data: resData } = await queryFulfilled;
           dispatch(
@@ -210,6 +222,12 @@ const ProjectApi = createApi({
               alert: resData.message,
               result: resData.result,
             }),
+          );
+
+          dispatch(
+            ProjectApi.util.invalidateTags([
+              { type: 'projectId', id: ProjectID },
+            ]),
           );
         } catch (e: any) {
           EditedRoadMap.undo();
@@ -224,26 +242,32 @@ const ProjectApi = createApi({
     }),
 
     RemoveRoadMap: builder.mutation({
-      query({ projectId, RoadMapIds }) {
+      query({ projectId, RoadMapId }) {
         return {
           url: `/${projectId}/roadMap`,
           method: 'DELETE',
-          body: RoadMapIds,
+          body: RoadMapId,
         };
       },
-      onQueryStarted({ projectId, RoadMapId }, { dispatch, queryFulfilled }) {
+      async onQueryStarted(
+        { projectId, RoadMapId },
+        { dispatch, queryFulfilled },
+      ) {
         const deleteResult = dispatch(
           ProjectApi.util.updateQueryData(
             'GetRoadMaps',
             projectId,
             (data: IRoadMap[]) =>
-              data.filter((item: any) => item._id !== RoadMapId),
+              data.filter((item: any) => item._id !== RoadMapId[0]),
           ),
         );
-        queryFulfilled.catch(() => {
+        try {
+          await queryFulfilled;
+          dispatch(ProjectApi.util.invalidateTags(['projectId']));
+        } catch (error) {
           dispatch(setAlert('Server Error'));
           deleteResult.undo();
-        });
+        }
       },
     }),
   }),
