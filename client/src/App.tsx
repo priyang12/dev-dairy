@@ -13,6 +13,9 @@ import Posts from './pages/Posts';
 import Projects from './pages/Projects';
 import RoadMap from './pages/RoadMap';
 import NewProject from './pages/NewProject';
+import EditProject from './pages/EditProject';
+import SingleProject from './pages/SingleProject';
+import WorkSessions from './pages/WorkSessions';
 
 // Components
 import PrivateOutlet from './components/PrivateRoute';
@@ -20,15 +23,13 @@ import Spinner from './components/spinner';
 import MusicPlaylist from './pages/MusicPlaylist';
 import Navbar from './components/Navbar';
 import FallBackSuspenseWrapper from './components/FallBackSuspenseWrapper';
-import SingleProject from './pages/SingleProject';
-import Sessions from './pages/Sessions';
 
 // Lazy load  components
 const MusicPlayer = lazy(async () => import('./components/MusicPlayer'));
-const EditProject = lazy(async () => import('./pages/EditProject'));
 
 function App() {
   const dispatch = useDispatch();
+  // eslint-disable-next-line no-unused-vars
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
   const { isLoading } = useGetUserQuery(cookies.token, {
     skip: !cookies.token,
@@ -82,7 +83,7 @@ function App() {
           <Route path="/RoadMap/:id" element={<RoadMap />} />
         </Route>
         <Route path="/" element={<PrivateOutlet />}>
-          <Route path="/Sessions" element={<Sessions />} />
+          <Route path="/Sessions" element={<WorkSessions />} />
         </Route>
         <Route path="/" element={<PrivateOutlet />}>
           <Route path="/NewProject" element={<NewProject />} />
