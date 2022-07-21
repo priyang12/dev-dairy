@@ -185,8 +185,8 @@ export const MockedAllWorkSessions = [
     project: {
       _id: '62d458dcbb0be104192d298b',
       process: 1,
-      title: 'New Projectg',
-      description: "MERN stack prototype for maintaing dev's personal dairy",
+      title: 'New Projectg 1',
+      description: " stack prototype for maintaing dev's personal dairy",
     },
     session: [
       {
@@ -246,8 +246,8 @@ export const MockedProjectWorkSessions = {
     {
       Time: 5000,
       _id: '62d818b161a71c7c2abe408b',
-      updatedAt: '2022-07-20T15:01:05.627Z',
-      createdAt: '2022-07-20T15:01:05.627Z',
+      updatedAt: '2022-08-20T15:01:05.627Z',
+      createdAt: '2022-08-20T15:01:05.627Z',
     },
   ],
   date: '2022-07-20T14:59:57.319Z',
@@ -266,8 +266,14 @@ export const MockPushWorkSession = {
     {
       Time: 5000,
       _id: '62d818b161a71c7c2abe408b',
-      updatedAt: '2022-07-20T15:01:05.627Z',
-      createdAt: '2022-07-20T15:01:05.627Z',
+      updatedAt: '2022-08-20T15:01:05.627Z',
+      createdAt: '2022-08-20T15:01:05.627Z',
+    },
+    {
+      Time: 545000,
+      _id: '626818b161a71c7c2abe408b',
+      updatedAt: '2022-09-20T15:01:05.627Z',
+      createdAt: '2022-09-20T15:01:05.627Z',
     },
   ],
 };

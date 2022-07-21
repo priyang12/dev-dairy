@@ -23,6 +23,7 @@ import Spinner from './components/spinner';
 import MusicPlaylist from './pages/MusicPlaylist';
 import Navbar from './components/Navbar';
 import FallBackSuspenseWrapper from './components/FallBackSuspenseWrapper';
+import ProjectSessions from './pages/ProjectSessions';
 
 // Lazy load  components
 const MusicPlayer = lazy(async () => import('./components/MusicPlayer'));
@@ -84,6 +85,9 @@ function App() {
         </Route>
         <Route path="/" element={<PrivateOutlet />}>
           <Route path="/Sessions" element={<WorkSessions />} />
+        </Route>
+        <Route path="/" element={<PrivateOutlet />}>
+          <Route path="/Project/Sessions/:id" element={<ProjectSessions />} />
         </Route>
         <Route path="/" element={<PrivateOutlet />}>
           <Route path="/NewProject" element={<NewProject />} />

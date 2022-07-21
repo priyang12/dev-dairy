@@ -8,12 +8,12 @@ import {
   Button,
 } from '@chakra-ui/react';
 import { parseISO, format } from 'date-fns';
-import { useGetSessionsQuery } from '../../API/WorkSessionsAPI';
+import { useGetSessions } from '../../API/WorkSessionsAPI';
 import Spinner from '../../components/spinner';
 import DeleteWorkSessionModal from './DeleteWorkSessionModal';
 
 function WorkSessions() {
-  const { data, isLoading } = useGetSessionsQuery();
+  const { data, isLoading } = useGetSessions();
   if (isLoading) return <Spinner />;
   return (
     <Container mt={5}>
@@ -30,10 +30,12 @@ function WorkSessions() {
             {ProjectSession.session.length > 0 ? (
               ProjectSession.session.map((session) => (
                 <div key={session._id}>
-                  <h2>{session.Time}</h2>
-                  <Text>
-                    {format(parseISO(session.createdAt), 'yyyy-MM-dd')}
-                  </Text>
+                  <Flex>
+                    <h2>{session.Time}</h2>
+                    <Text>
+                      {format(parseISO(session.createdAt), 'yyyy-MM-dd')}
+                    </Text>
+                  </Flex>
                 </div>
               ))
             ) : (

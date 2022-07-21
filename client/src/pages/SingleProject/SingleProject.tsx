@@ -56,6 +56,11 @@ function SingleProject() {
 
   return (
     <Container maxW="900px" mb={10}>
+      <Flex alignItems="flex-end" justifyContent="flex-end">
+        <Button mt={5} as={RouterLink} to={`/Project/Sessions/${project._id}`}>
+          Work Sessions
+        </Button>
+      </Flex>
       <Flex
         justifyContent="space-between"
         alignItems="center"

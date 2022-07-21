@@ -5,9 +5,10 @@ import WorkSessions from './WorkSessions';
 
 const StepUp = () => render(<WorkSessions />);
 
-it('Render WorkSessions', () => {
+it('Render WorkSessions', async () => {
   StepUp();
-  expect(screen.getByText('WorkSessions')).toBeInTheDocument();
+  await waitForElementToBeRemoved(() => screen.getByAltText('loading...'));
+  expect(screen.getByText('Work Sessions')).toBeInTheDocument();
   MockedAllWorkSessions.forEach((session) => {
     expect(screen.getByText(session.project.title)).toBeInTheDocument();
     expect(screen.getByText(session.project.description)).toBeInTheDocument();
@@ -16,6 +17,7 @@ it('Render WorkSessions', () => {
 
 it('Delete All WorkSessions', async () => {
   StepUp();
+  await waitForElementToBeRemoved(() => screen.getByAltText('loading...'));
   userEvent.click(screen.getByText('Delete All Sessions'));
 
   expect(

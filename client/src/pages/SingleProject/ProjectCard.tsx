@@ -43,11 +43,16 @@ function ProjectCard({ Project }: { Project: IProject }) {
           value={Project.process}
         />
       </Box>
-      <Flex justifyContent="space-between" alignItems="center" mt={5}>
-        <Button>
-          <Link as={RouterLink} to={`/Projects/${Project._id}`}>
-            More
-          </Link>
+      <Flex justifyContent="space-between" gap={5} alignItems="center" mt={5}>
+        <Button as={RouterLink} to={`/Projects/${Project._id}`}>
+          More
+        </Button>
+        <Button
+          flex={1}
+          as={RouterLink}
+          to={`/Project/Sessions/${Project._id}`}
+        >
+          Work Sessions
         </Button>
         <Text textAlign="right">
           {format(parseISO(Project.date), "yyyy-MM-dd'T'HH:mm")}
