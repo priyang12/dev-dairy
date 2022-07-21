@@ -1,4 +1,3 @@
-import { current } from '@reduxjs/toolkit';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import API from '.';
 import { setAlert } from '../features/AlertSlice';
@@ -165,7 +164,6 @@ const ProjectApi = createApi({
               projectId,
               (project: IProject) => {
                 project.roadMap.push(resData.roadmap);
-                console.log(current(project));
                 return project;
               },
             ),

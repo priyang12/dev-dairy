@@ -9,6 +9,7 @@ import {
   PostsResponse,
   ProjectsResponse,
   SingleProjectResponse,
+  MockedAllWorkSessions,
 } from './MockedData';
 
 const handlers = [
@@ -88,6 +89,17 @@ const handlers = [
       ctx.json({
         result: true,
         message: 'Roadmap from New Projectg is deleted',
+      }),
+    ),
+  ),
+  rest.get(`${API}/workSession`, (req, res, ctx) =>
+    res(ctx.json(MockedAllWorkSessions)),
+  ),
+  rest.delete(`${API}/workSession`, (req, res, ctx) =>
+    res(
+      ctx.json({
+        result: true,
+        message: 'Work Session Deleted Successfully',
       }),
     ),
   ),

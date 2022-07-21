@@ -38,7 +38,6 @@ import {
   useGetProjectIdQuery,
   useUpdateProjectMutation,
 } from '../../API/ProjectAPI';
-import ModalComponent from '../../components/ModalComponent';
 import Spinner from '../../components/spinner';
 import useForm from '../../Hooks/useForm';
 import { isErrorWithMessage } from '../../utils/helpers';

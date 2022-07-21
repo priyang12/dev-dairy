@@ -15,7 +15,6 @@ import {
   Box,
 } from '@chakra-ui/react';
 import invert from 'invert-color';
-import { useEffect } from 'react';
 import { useParams, Navigate } from 'react-router-dom';
 import {
   useCreateNewRoadMapMutation,

@@ -4,7 +4,7 @@ import { Router, Routes, Route } from 'react-router-dom';
 import { render, screen, waitForElementToBeRemoved } from '../../test-utils';
 import '@testing-library/jest-dom/extend-expect';
 import RoadMap from './RoadMap';
-import { MockedRoadMap, MockedRoadMapResponse } from '../../mock/MockedData';
+import { MockedRoadMap } from '../../mock/MockedData';
 
 const route = '/EditProject/132';
 const History = createMemoryHistory({ initialEntries: [route] });

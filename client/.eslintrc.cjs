@@ -3,7 +3,7 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  plugins: ['react', '@typescript-eslint', 'prettier'],
+  plugins: ['react', '@typescript-eslint', 'prettier', 'unused-imports'],
   extends: [
     'airbnb',
     'airbnb-typescript',
@@ -11,7 +11,6 @@ module.exports = {
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:@typescript-eslint/eslint-recommended',
     'prettier',
   ],
   parser: '@typescript-eslint/parser',
@@ -29,7 +28,7 @@ module.exports = {
     quotes: 'off',
     'no-underscore-dangle': 'off',
     'no-console': 'off',
-
+    'unused-imports/no-unused-imports': 'error',
     // TypeScript
     'no-param-reassign': 0,
     '@typescript-eslint/consistent-type-imports': 'warn',

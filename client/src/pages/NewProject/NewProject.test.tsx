@@ -1,6 +1,6 @@
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
-import { render, screen, waitFor } from '../../test-utils';
+import { render, screen } from '../../test-utils';
 import NewProject from './NewProject';
 
 function setup() {

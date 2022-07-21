@@ -1,7 +1,6 @@
 import {
   Button,
   useDisclosure,
-  Text,
   Box,
   FormControl,
   FormLabel,

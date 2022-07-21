@@ -177,4 +177,102 @@ export const MockedRoadMapResponse = {
   },
 };
 
-export default AuthResponse;
+export const MockedAllWorkSessions = [
+  {
+    _id: '62d8186d61a71c7c2abe4075',
+    Time: 0,
+    user: '62d4548c0e8927017f86a450',
+    project: {
+      _id: '62d458dcbb0be104192d298b',
+      process: 1,
+      title: 'New Projectg',
+      description: "MERN stack prototype for maintaing dev's personal dairy",
+    },
+    session: [
+      {
+        Time: 5000,
+        _id: '62d814b6fced6d7b83652db1',
+        updatedAt: '2022-07-20T14:44:06.009Z',
+        createdAt: '2022-07-20T14:44:06.009Z',
+      },
+      {
+        Time: 5000,
+        _id: '62d814c3fced6d7b83652db4',
+        updatedAt: '2022-07-20T14:44:19.750Z',
+        createdAt: '2022-07-20T14:44:19.750Z',
+      },
+    ],
+    date: '2022-07-20T14:59:57.319Z',
+    __v: 0,
+  },
+  {
+    _id: '62d98918010440a82de1780f',
+    Time: 0,
+    user: '62d4548c0e8927017f86a450',
+    project: {
+      _id: '62d454a40e8927017f86a454',
+      process: 1,
+      title: 'asdas asuiodhaso',
+      description: "MERN stack prototype for maintaing dev's personal dairy",
+    },
+    session: [],
+    date: '2022-07-21T17:12:56.809Z',
+    __v: 0,
+  },
+];
+
+export const MockedCreateWorkSession = {
+  Time: 0,
+  _id: '62d8186d61a71c7c2abe4075',
+  user: '62d4548c0e8927017f86a450',
+  project: '62d458dcbb0be104192d298b',
+  session: [],
+  date: '2022-07-20T14:59:57.319Z',
+  __v: 0,
+};
+
+export const MockedProjectWorkSessions = {
+  _id: '62d8186d61a71c7c2abe4075',
+  Time: 0,
+  user: '62d4548c0e8927017f86a450',
+  project: '62d458dcbb0be104192d298b',
+  session: [
+    {
+      Time: 5000,
+      _id: '62d818ae61a71c7c2abe4088',
+      updatedAt: '2022-07-20T15:01:02.791Z',
+      createdAt: '2022-07-20T15:01:02.791Z',
+    },
+    {
+      Time: 5000,
+      _id: '62d818b161a71c7c2abe408b',
+      updatedAt: '2022-07-20T15:01:05.627Z',
+      createdAt: '2022-07-20T15:01:05.627Z',
+    },
+  ],
+  date: '2022-07-20T14:59:57.319Z',
+  __v: 0,
+};
+
+export const MockPushWorkSession = {
+  _id: '62d8186d61a71c7c2abe4075',
+  session: [
+    {
+      Time: 5000,
+      _id: '62d818ae61a71c7c2abe4088',
+      updatedAt: '2022-07-20T15:01:02.791Z',
+      createdAt: '2022-07-20T15:01:02.791Z',
+    },
+    {
+      Time: 5000,
+      _id: '62d818b161a71c7c2abe408b',
+      updatedAt: '2022-07-20T15:01:05.627Z',
+      createdAt: '2022-07-20T15:01:05.627Z',
+    },
+  ],
+};
+
+export const MockPullWorkSession = {
+  _id: '62d8186d61a71c7c2abe4075',
+  session: [],
+};

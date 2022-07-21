@@ -92,7 +92,7 @@ function PostContainer({ post }: PropTypes) {
               >
                 {post.status}
               </Text>
-              <Text>{format(parseISO(post.date), "yyyy-MM-dd'T'HH:mm")}</Text>
+              <Text>{format(parseISO(post.date), "yyyy-MM-dd' 'HH:mm")}</Text>
             </Flex>
             <Flex gap={5} direction="column">
               <Button onClick={onOpen} bg="red.500" fontSize="2xl">

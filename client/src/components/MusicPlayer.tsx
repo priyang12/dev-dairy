@@ -35,7 +35,6 @@ import MusicSymbol from '../Assets/Music.webp';
 import BlobToImg from '../utils/BlobToImg';
 import type { MusicState } from '../features/MusicSlice';
 import type { AuthState } from '../interface';
-import ProfilerComponent from './ProfilerComponent';
 
 function MusicPlayer() {
   return null;
