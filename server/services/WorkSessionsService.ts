@@ -95,11 +95,11 @@ export default class WorkSessionService {
 
   public async PushWorkSession(
     userId: string,
-    WorkSessionId: string,
+    ProjectId: string,
     NewWorkSession: ISession
   ) {
     const newWorkSessions = this.WorkSessions.findOneAndUpdate(
-      { _id: WorkSessionId, user: userId },
+      { project: ProjectId, user: userId },
       { $push: { session: NewWorkSession } },
       { new: true }
     ).select("session");
@@ -113,11 +113,11 @@ export default class WorkSessionService {
 
   public async PullWorkSession(
     userId: string,
-    WorkSessionId: string,
+    ProjectId: string,
     WorkSession: ISession
   ) {
     const newWorkSessions = this.WorkSessions.findOneAndUpdate(
-      { _id: WorkSessionId, user: userId },
+      { project: ProjectId, user: userId },
       { $pull: { session: WorkSession } },
       { new: true }
     ).select("session");

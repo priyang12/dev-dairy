@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 import { ChevronUpIcon, ChevronDownIcon } from '@chakra-ui/icons';
 import {
   Link,
@@ -47,7 +46,9 @@ function DropDownContainer() {
           onClick={onOpen}
           onMouseLeave={onClose}
         >
-          <span>{isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}</span>
+          <span>
+            {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+          </span>
         </MenuButton>
         <MenuList
           onMouseEnter={onOpen}
@@ -77,7 +78,8 @@ function DropDownContainer() {
               color="white"
               _hover={{ color: 'red.500' }}
             >
-              <i className="fas fa-sign-out-alt" />{' '}
+              <i className="fas fa-sign-out-alt" />
+              {' '}
               <span className="hide-sm">Logout</span>
             </Link>
           </MenuItem>

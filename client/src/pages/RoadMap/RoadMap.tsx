@@ -35,10 +35,9 @@ function RoadMap() {
     skip: !id,
   });
 
-  const { isFetching: ProjectLoading, data: ProjectData } =
-    useGetProjectIdQuery(id, {
-      skip: !id,
-    });
+  const { isFetching: ProjectLoading, data: ProjectData } = useGetProjectIdQuery(id, {
+    skip: !id,
+  });
 
   const [RoadMapMutate, RoadMapResult] = useCreateNewRoadMapMutation();
   const [DeleteRoadMap, DeleteMapResult] = useRemoveRoadMapMutation();
@@ -79,7 +78,9 @@ function RoadMap() {
                   key={road.name}
                   p={2}
                   bg={`${road.color ? road.color : RandomColor()}`}
-                  color={`${road.color ? invert(road.color) : RandomColor()}`}
+                  color={`${
+                    road.color ? invert(road.color) : RandomColor()
+                  }`}
                   fontSize="3xl"
                   borderRadius={10}
                   width="100%"
@@ -101,11 +102,18 @@ function RoadMap() {
                       });
                     }}
                   >
-                    Delete {road.name}
+                    Delete
+                    {' '}
+                    {road.name}
                   </Button>
                   <EditRoadMap ProjectID={id} RoadMap={road} />
                 </Flex>
-                <Text fontSize="2xl">Work {road.progress} %</Text>
+                <Text fontSize="2xl">
+                  Work
+                  {road.progress}
+                  {' '}
+                  %
+                </Text>
                 <Progress
                   colorScheme="green"
                   height="20px"
@@ -121,7 +129,9 @@ function RoadMap() {
           <Alert status="info" p={10}>
             <AlertTitle fontSize="3xl">No RoadMap</AlertTitle>
 
-            <Text>You can add a new RoadMap by clicking the button Above.</Text>
+            <Text>
+              You can add a new RoadMap by clicking the button Above.
+            </Text>
           </Alert>
         )}
       </Accordion>

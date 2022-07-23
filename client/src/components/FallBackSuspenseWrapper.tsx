@@ -9,7 +9,9 @@ function FallBackSuspenseWrapper({
   fallback?: boolean;
 }) {
   return (
-    <Suspense fallback={fallback ? <Spinner /> : null}>{children}</Suspense>
+    <Suspense fallback={fallback ? <Spinner /> : null}>
+      {children}
+    </Suspense>
   );
 }
 

@@ -3,7 +3,11 @@ import { rest } from 'msw';
 import { BrowserRouter } from 'react-router-dom';
 import API from '../../API';
 import server from '../../mock/server';
-import { render, screen, waitForElementToBeRemoved } from '../../test-utils';
+import {
+  render,
+  screen,
+  waitForElementToBeRemoved,
+} from '../../test-utils';
 
 import Login from './index';
 
@@ -48,9 +52,10 @@ it('Valid input', async () => {
 it('Error message', async () => {
   const { email, password, submit } = setup();
   server.use(
-    rest.post(`${API}/login`, (req, res, ctx) =>
-      res(ctx.status(401), ctx.json({ message: 'Invalid credentials' })),
-    ),
+    rest.post(`${API}/login`, (req, res, ctx) => res(
+      ctx.status(401),
+      ctx.json({ message: 'Invalid credentials' }),
+    )),
   );
 
   userEvent.type(email, 'patel@gmail.com');

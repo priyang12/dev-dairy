@@ -20,7 +20,11 @@ import {
 } from '@chakra-ui/react';
 import { CheckIcon, ExternalLinkIcon } from '@chakra-ui/icons';
 import { useSelector } from 'react-redux';
-import { Navigate, useParams, Link as RouterLink } from 'react-router-dom';
+import {
+  Navigate,
+  useParams,
+  Link as RouterLink,
+} from 'react-router-dom';
 import { parseISO, format } from 'date-fns';
 import invert from 'invert-color';
 import {
@@ -34,9 +38,13 @@ import RandomColor from '../../utils/RandomColor';
 
 function SingleProject() {
   const { id } = useParams<{ id: string }>();
-  const { alert }: AlertState = useSelector((state: any) => state.Alert);
+  const { alert }: AlertState = useSelector(
+    (state: any) => state.Alert,
+  );
 
-  const { isFetching, isLoading, isError, data } = useGetProjectIdQuery(id, {
+  const {
+    isFetching, isLoading, isError, data,
+  } = useGetProjectIdQuery(id, {
     skip: !id,
   });
   const project = data;
@@ -57,7 +65,11 @@ function SingleProject() {
   return (
     <Container maxW="900px" mb={10}>
       <Flex alignItems="flex-end" justifyContent="flex-end">
-        <Button mt={5} as={RouterLink} to={`/Project/Sessions/${project._id}`}>
+        <Button
+          mt={5}
+          as={RouterLink}
+          to={`/Project/Sessions/${project._id}`}
+        >
           Work Sessions
         </Button>
       </Flex>
@@ -70,7 +82,9 @@ function SingleProject() {
         p={5}
       >
         <Heading>
-          Title : <span>{project.title}</span>
+          Title :
+          {' '}
+          <span>{project.title}</span>
         </Heading>
         <Text textAlign="right" fontSize="2xl">
           {format(parseISO(project.date), "yyyy-MM-dd'T'HH:mm")}
@@ -87,7 +101,13 @@ function SingleProject() {
           Description :
         </Text>
 
-        <Text as="span" fontSize="2xl" w="100px" px="2" lineHeight="1px">
+        <Text
+          as="span"
+          fontSize="2xl"
+          w="100px"
+          px="2"
+          lineHeight="1px"
+        >
           {project.description}
         </Text>
       </Text>
@@ -136,7 +156,12 @@ function SingleProject() {
         </Text>
       </Heading>
       {project.website && (
-        <Flex gap={5} fontSize="3xl" borderBottom="4px solid white" py={5}>
+        <Flex
+          gap={5}
+          fontSize="3xl"
+          borderBottom="4px solid white"
+          py={5}
+        >
           <span>Website : </span>
           <Link
             href={project.website}
@@ -153,12 +178,19 @@ function SingleProject() {
             justifyItems="center"
             alignItems="center"
           >
-            Link <ExternalLinkIcon mx="2px" />
+            Link
+            {' '}
+            <ExternalLinkIcon mx="2px" />
           </Link>
         </Flex>
       )}
       {project.github && (
-        <Flex gap={5} fontSize="3xl" borderBottom="4px solid white" py={5}>
+        <Flex
+          gap={5}
+          fontSize="3xl"
+          borderBottom="4px solid white"
+          py={5}
+        >
           <span>Github : </span>
           <Link
             href={project.github}
@@ -175,12 +207,18 @@ function SingleProject() {
             justifyItems="center"
             alignItems="center"
           >
-            Github <ExternalLinkIcon mx="2px" />
+            Github
+            {' '}
+            <ExternalLinkIcon mx="2px" />
           </Link>
         </Flex>
       )}
       {project.roadMap.length > 0 && (
-        <Box justifyContent="space-between" alignItems="center" mt={5}>
+        <Box
+          justifyContent="space-between"
+          alignItems="center"
+          mt={5}
+        >
           <Flex alignItems="center" my={5}>
             <Heading as="h3" fontSize="2xl">
               Road Map
@@ -195,7 +233,9 @@ function SingleProject() {
                     key={road.name}
                     p={2}
                     bg={`${road.color ? road.color : RandomColor()}`}
-                    color={`${road.color ? invert(road.color) : RandomColor()}`}
+                    color={`${
+                      road.color ? invert(road.color) : RandomColor()
+                    }`}
                     fontSize="1.5rem"
                     borderRadius={10}
                     width="100%"
@@ -207,7 +247,11 @@ function SingleProject() {
                 </AccordionButton>
                 <AccordionPanel pb={4}>
                   <>
-                    Work {road.progress} %
+                    Work
+                    {' '}
+                    {road.progress}
+                    {' '}
+                    %
                     <Progress
                       colorScheme="green"
                       height="20px"

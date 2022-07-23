@@ -100,7 +100,9 @@ function NavBar() {
   const isRegister = location.pathname === '/register';
   const LandingPage = location.pathname === '/';
 
-  const { authenticated }: AuthState = useSelector((state: any) => state.Auth);
+  const { authenticated }: AuthState = useSelector(
+    (state: any) => state.Auth,
+  );
 
   if (LandingPage || isLogin || isRegister) return null;
 

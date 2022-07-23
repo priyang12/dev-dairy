@@ -1,4 +1,10 @@
-import { Box, Heading, Spinner, Flex, Button } from '@chakra-ui/react';
+import {
+  Box,
+  Heading,
+  Spinner,
+  Flex,
+  Button,
+} from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
@@ -16,7 +22,11 @@ import {
 } from '../../features/MusicSlice';
 import type { MusicState } from '../../features/MusicSlice';
 
-const reorder = (lists: any[], startIndex: number, endIndex: number) => {
+const reorder = (
+  lists: any[],
+  startIndex: number,
+  endIndex: number,
+) => {
   const result = Array.from(lists);
   const [removed] = result.splice(startIndex, 1);
   result.splice(endIndex, 0, removed);
@@ -31,7 +41,9 @@ function MusicPlaylist() {
   const dispatch = useDispatch();
   const { SongsDB } = useSongsdb();
   const [songs, setSongs] = useState<any>([]);
-  const { isLoading }: MusicState = useSelector((state: any) => state.Music);
+  const { isLoading }: MusicState = useSelector(
+    (state: any) => state.Music,
+  );
 
   useEffect(() => {
     SongsDB?.getAllKeys('Songs').then((dbsongs: any) => {
@@ -63,10 +75,14 @@ function MusicPlaylist() {
         jsmediatags.read(file, {
           onSuccess: async (tag) => {
             const { tags } = tag;
-            const { title, artist, album, year, picture } = tags;
+            const {
+              title, artist, album, year, picture,
+            } = tags;
             if (picture) {
               const { data } = picture;
-              const ImageBlob = new Blob([new Uint8Array(data).buffer]);
+              const ImageBlob = new Blob([
+                new Uint8Array(data).buffer,
+              ]);
               SongsDB?.add('SongsMeta', ImageBlob, file.name);
             } else {
               const ImageBlob = null;
@@ -179,7 +195,11 @@ function MusicPlaylist() {
               >
                 {({ getRootProps, getInputProps }) => (
                   <Box m={2}>
-                    <Flex justifyContent="center" p={5} {...getRootProps()}>
+                    <Flex
+                      justifyContent="center"
+                      p={5}
+                      {...getRootProps()}
+                    >
                       <Box
                         as="input"
                         type="file"
@@ -189,7 +209,9 @@ function MusicPlaylist() {
                         multiple
                         {...getInputProps()}
                       />
-                      <Button w="fit-content">Drop Your Music Here</Button>
+                      <Button w="fit-content">
+                        Drop Your Music Here
+                      </Button>
                     </Flex>
                   </Box>
                 )}

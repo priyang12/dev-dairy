@@ -37,7 +37,6 @@ import type { MusicState } from '../features/MusicSlice';
 import type { AuthState } from '../interface';
 
 function MusicPlayer() {
-  return null;
   const { SongsDB } = useSongsdb();
   const { authenticated }: AuthState = useSelector((state: any) => state.Auth);
   const { CurrentMusic, PlayList }: MusicState = useSelector(
@@ -82,9 +81,7 @@ function MusicPlayer() {
         });
         SongsDB?.get('SongsMeta', PlayList[CurrentMusic]).then(
           async (songImage: any) => {
-            const Image =
-              (songImage && ((await BlobToImg(songImage)) as string)) || null;
-
+            const Image = (songImage && ((await BlobToImg(songImage)) as string)) || null;
             setSongImage(Image);
           },
         );
@@ -131,7 +128,12 @@ function MusicPlayer() {
               <FaMusic />
             </IconButton>
 
-            <Box display={Hidden ? 'none' : 'block'}>
+            <Box
+              display={Hidden ? 'none' : 'block'}
+              onTransitionEnd={() => {
+                console.log('transition end');
+              }}
+            >
               <IconButton
                 bg="#333"
                 aria-label="MusicCloseButton"
@@ -215,7 +217,9 @@ function MusicPlayer() {
 
               <Flex justifyContent="space-between" mx={2} mt={5}>
                 <Text>
-                  {Start.x}: {Start.y}
+                  {Start.x}
+                  :
+                  {Start.y}
                 </Text>
                 <Flex justifyContent="center">
                   {Mute ? (
@@ -237,7 +241,9 @@ function MusicPlayer() {
                   )}
                 </Flex>
                 <Text>
-                  {Duration.minutes}: {Duration.seconds}
+                  {Duration.minutes}
+                  :
+                  {Duration.seconds}
                 </Text>
               </Flex>
               {/* Need TO Fix Auto Focus  */}

@@ -37,7 +37,9 @@ function Projects() {
     <Container>
       <AlertComponent />
       <Heading m={5} ml={0} textAlign="center">
-        Total Projects {data.length}
+        Total Projects
+        {' '}
+        {data.length}
       </Heading>
       <Button
         to="/NewProject"

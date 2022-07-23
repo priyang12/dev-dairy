@@ -5,7 +5,8 @@ import LandingPage from './index';
 it('render The Landing Text', () => {
   const LandingData = {
     heading: 'Dev Dairy',
-    subheading: 'Mange your projects and share your knowledge with the world',
+    subheading:
+      'Mange your projects and share your knowledge with the world',
   };
   render(
     <BrowserRouter>

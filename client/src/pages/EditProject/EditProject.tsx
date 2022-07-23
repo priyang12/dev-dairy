@@ -1,6 +1,10 @@
 import type { FormEvent } from 'react';
 import { useEffect, useLayoutEffect } from 'react';
-import { Link as RouterLink, Navigate, useParams } from 'react-router-dom';
+import {
+  Link as RouterLink,
+  Navigate,
+  useParams,
+} from 'react-router-dom';
 
 import { useSelector } from 'react-redux';
 import { ArrowForwardIcon } from '@chakra-ui/icons';
@@ -71,8 +75,9 @@ function EditProject() {
   } = useGetProjectIdQuery(id, {
     skip: !id,
   });
-  const { FormValues, ErrorsState, HandleChange, setFormValues } =
-    useForm(init);
+  const {
+    FormValues, ErrorsState, HandleChange, setFormValues,
+  } = useForm(init);
   const [DeleteProjectMutation, DeleteResult] = useDeleteProjectMutation();
   const [UpdateProjectMutation, UpdateResult] = useUpdateProjectMutation();
 
@@ -179,11 +184,19 @@ function EditProject() {
               required
             />
           </FormControl>
-          <FormControl isInvalid={!!ErrorsState.description} isRequired>
+          <FormControl
+            isInvalid={!!ErrorsState.description}
+            isRequired
+          >
             {ErrorsState.description ? (
-              <FormLabel color="red">{ErrorsState.description}</FormLabel>
+              <FormLabel color="red">
+                {ErrorsState.description}
+              </FormLabel>
             ) : (
-              <FormLabel htmlFor="Description">Description : </FormLabel>
+              <FormLabel htmlFor="Description">
+                Description :
+                {' '}
+              </FormLabel>
             )}
 
             <Textarea

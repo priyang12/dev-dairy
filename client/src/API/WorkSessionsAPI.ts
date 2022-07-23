@@ -26,29 +26,28 @@ const WorkSessionsApi = createApi({
     }),
 
     GetSessionsByProject: builder.query<
-      IWorkSessions,
-      Partial<string | undefined>
+    IWorkSessions,
+    Partial<string | undefined>
     >({
       query: (projectId) => ({
         url: `/project/${projectId}`,
         method: 'GET',
       }),
-      providesTags: (result, error, arg) =>
-        result
-          ? [
-              {
-                type: 'ProjectSessions',
-                id: arg,
-              },
-            ]
-          : ['ProjectSessions'],
+      providesTags: (result, error, arg) => (result
+        ? [
+          {
+            type: 'ProjectSessions',
+            id: arg,
+          },
+        ]
+        : ['ProjectSessions']),
     }),
     PushSession: builder.mutation<
-      Partial<Pick<IWorkSessions, '_id' | 'session'>>,
-      Partial<{
-        ProjectId: string;
-        session: Pick<ISession, 'Time'>;
-      }>
+    Partial<Pick<IWorkSessions, '_id' | 'session'>>,
+    Partial<{
+      ProjectId: string;
+      session: Pick<ISession, 'Time'>;
+    }>
     >({
       query: ({ session, ProjectId }) => ({
         url: `/${ProjectId}/push`,
@@ -67,12 +66,10 @@ const WorkSessionsApi = createApi({
             WorkSessionsApi.util.updateQueryData(
               'GetSessionsByProject',
               ProjectId,
-              (sessions: any) => {
-                return {
-                  ...sessions,
-                  session: NewSessions.session,
-                };
-              },
+              (sessions: any) => ({
+                ...sessions,
+                session: NewSessions.session,
+              }),
             ),
           );
         } catch (error: any) {
@@ -86,11 +83,11 @@ const WorkSessionsApi = createApi({
       },
     }),
     PullSessions: builder.mutation<
-      Partial<Pick<IWorkSessions, '_id' | 'session'>>,
-      Partial<{
-        ProjectId: string;
-        ArgSessions: any;
-      }>
+    Partial<Pick<IWorkSessions, '_id' | 'session'>>,
+    Partial<{
+      ProjectId: string;
+      ArgSessions: any;
+    }>
     >({
       query: ({ ProjectId, ArgSessions }) => ({
         url: `/${ProjectId}/pull`,
@@ -130,8 +127,8 @@ const WorkSessionsApi = createApi({
       },
     }),
     DeleteAllProjectSessions: builder.mutation<
-      Partial<any>,
-      Partial<{ projectId: string }>
+    Partial<any>,
+    Partial<{ projectId: string }>
     >({
       query: ({ projectId }) => ({
         url: `/project/${projectId}`,
@@ -143,11 +140,11 @@ const WorkSessionsApi = createApi({
     }),
 
     DeleteAll: builder.mutation<
-      {
-        result: boolean;
-        message: string;
-      },
-      Partial<void>
+    {
+      result: boolean;
+      message: string;
+    },
+    Partial<void>
     >({
       query: () => ({
         url: '',

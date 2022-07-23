@@ -110,15 +110,30 @@ function EditRoadMap({
 
   return (
     <div>
-      <Button colorScheme="green" variant="outline" onClick={onOpen} ml={5}>
-        Edit {RoadMap.name}
+      <Button
+        colorScheme="green"
+        variant="outline"
+        onClick={onOpen}
+        ml={5}
+      >
+        Edit
+        {' '}
+        {RoadMap.name}
       </Button>
-      <ModalComponent Title="Edit RoadMap" isOpen={isOpen} onClose={onClose}>
+      <ModalComponent
+        Title="Edit RoadMap"
+        isOpen={isOpen}
+        onClose={onClose}
+      >
         <Box>
           <form onSubmit={FormSubmit}>
             <FormControl mb={5} isInvalid={!!roadMapError}>
               <FormLabel htmlFor="name">RoadMap Name</FormLabel>
-              <Input id="name" type="text" defaultValue={RoadMap.name} />
+              <Input
+                id="name"
+                type="text"
+                defaultValue={RoadMap.name}
+              />
               <FormHelperText>
                 Give Abstracted name to RoadMap like frontend, backend
               </FormHelperText>
@@ -126,9 +141,16 @@ function EditRoadMap({
             </FormControl>
             <FormControl mb={5}>
               <FormLabel htmlFor="color">Pick a Good Color</FormLabel>
-              <Input id="color" type="color" defaultValue={RoadMap.color} />
+              <Input
+                id="color"
+                type="color"
+                defaultValue={RoadMap.color}
+              />
             </FormControl>
-            <ProgressInput ProcessChange={ProcessChange} progress={Progress} />
+            <ProgressInput
+              ProcessChange={ProcessChange}
+              progress={Progress}
+            />
             <ModalFooter>
               <Button
                 type="submit"

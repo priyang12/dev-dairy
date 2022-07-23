@@ -22,7 +22,11 @@ function DeleteWorkSessionModal() {
 
   return (
     <div>
-      <Button onClick={onOpen} loadingText="Deleting..." isLoading={isLoading}>
+      <Button
+        onClick={onOpen}
+        loadingText="Deleting..."
+        isLoading={isLoading}
+      >
         Delete Work Session
       </Button>
       <Modal onClose={onClose} isOpen={isOpen} isCentered>

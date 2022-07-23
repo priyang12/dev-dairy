@@ -1,9 +1,17 @@
-import { Stack, Box, Link, Flex } from '@chakra-ui/react';
+import {
+  Stack, Box, Link, Flex,
+} from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { Link as RouterLink } from 'react-router-dom';
 import DropDownContainer from './DropDownContainer';
 
-function MenuItem({ children, isDark, isLast, to = '/', ...rest }: any) {
+function MenuItem({
+  children,
+  isDark,
+  isLast,
+  to = '/',
+  ...rest
+}: any) {
   return (
     <Link
       as={RouterLink}
@@ -24,7 +32,13 @@ function MenuItem({ children, isDark, isLast, to = '/', ...rest }: any) {
   );
 }
 
-function NavLinks({ isOpen, isAuth }: { isOpen: boolean; isAuth: boolean }) {
+function NavLinks({
+  isOpen,
+  isAuth,
+}: {
+  isOpen: boolean;
+  isAuth: boolean;
+}) {
   return (
     <Box
       // Look more
@@ -50,7 +64,8 @@ function NavLinks({ isOpen, isAuth }: { isOpen: boolean; isAuth: boolean }) {
               Log In
             </MenuItem>
             <MenuItem to="/register" w={['100%', '50%', 'auto']}>
-              Register{' '}
+              Register
+              {' '}
             </MenuItem>
           </>
         ) : (

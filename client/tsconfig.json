@@ -19,6 +19,6 @@
       "@priyang/jsmediatags": ["./node_modules/@types/jsmediatags"]
     }
   },
-  "include": ["src", "./react-app-env.d.ts", "./.eslintrc.cjs"],
+  "include": ["src", "./react-app-env.d.ts"],
   "exclude": ["node_modules", "./jest.config.ts"]
 }

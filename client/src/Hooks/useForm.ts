@@ -3,14 +3,14 @@ import { useCallback, useState } from 'react';
 const useForm = <T>(
   initialState: T,
 ): {
-  FormValues: T;
-  HandleChange: (event: React.ChangeEvent<any>) => void;
-  setFormValues: React.Dispatch<React.SetStateAction<T>>;
-  SetState: (FormValues: T) => void;
-  ErrorsState: T;
-  setErrors: (ErrorsState: T) => void;
-  setError: any;
-} => {
+    FormValues: T;
+    HandleChange: (event: React.ChangeEvent<any>) => void;
+    setFormValues: React.Dispatch<React.SetStateAction<T>>;
+    SetState: (FormValues: T) => void;
+    ErrorsState: T;
+    setErrors: (ErrorsState: T) => void;
+    setError: any;
+  } => {
   const [FormValues, setFormValues] = useState(initialState);
   const [ErrorsState, setErrorsState] = useState(initialState);
 

@@ -28,7 +28,9 @@ const Arrow = createIcon({
 });
 
 function LandingPage() {
-  const { authenticated }: AuthState = useSelector((state: any) => state.Auth);
+  const { authenticated }: AuthState = useSelector(
+    (state: any) => state.Auth,
+  );
 
   if (authenticated) return <Navigate to="/feeds" />;
 
@@ -51,7 +53,13 @@ function LandingPage() {
               <feGaussianBlur stdDeviation="50" />
             </filter>
           </defs>
-          <circle cx="71" cy="61" r="111" fill="#F56565" filter="url(#blur)" />
+          <circle
+            cx="71"
+            cy="61"
+            r="111"
+            fill="#F56565"
+            filter="url(#blur)"
+          />
           <circle
             cx="244"
             cy="106"
@@ -59,7 +67,12 @@ function LandingPage() {
             fill="#ED64A6"
             filter="url(#blur)"
           />
-          <circle cy="291" r="139" fill="#ED64A6" filter="url(#blur)" />
+          <circle
+            cy="291"
+            r="139"
+            fill="#ED64A6"
+            filter="url(#blur)"
+          />
           <circle
             cx="80.5"
             cy="189.5"
@@ -104,7 +117,9 @@ function LandingPage() {
             lineHeight="110%"
             color="black"
           >
-            {Data.heading} <br />
+            {Data.heading}
+            {' '}
+            <br />
             <Text as="span" color="green.400">
               {Data.subheading}
             </Text>

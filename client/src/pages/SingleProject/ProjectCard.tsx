@@ -18,7 +18,11 @@ function ProjectCard({ Project }: { Project: IProject }) {
       <Heading fontSize="xl">{Project.title}</Heading>
       <Text mt={4}>{Project.description}</Text>
 
-      <Flex gap={['4', '5', '10']} mt={5} direction={['column', 'row']}>
+      <Flex
+        gap={['4', '5', '10']}
+        mt={5}
+        direction={['column', 'row']}
+      >
         {Project.technologies.map((tech) => (
           <Text
             key={tech}
@@ -43,7 +47,12 @@ function ProjectCard({ Project }: { Project: IProject }) {
           value={Project.process}
         />
       </Box>
-      <Flex justifyContent="space-between" gap={5} alignItems="center" mt={5}>
+      <Flex
+        justifyContent="space-between"
+        gap={5}
+        alignItems="center"
+        mt={5}
+      >
         <Button as={RouterLink} to={`/Projects/${Project._id}`}>
           More
         </Button>

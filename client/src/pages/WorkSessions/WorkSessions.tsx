@@ -24,16 +24,30 @@ function WorkSessions() {
 
       <Stack spacing={10} direction="column">
         {data?.map((ProjectSession) => (
-          <Box key={ProjectSession._id} shadow="md" borderWidth="1px" p={6}>
-            <h3>Project : {ProjectSession.project.title}</h3>
-            <h3>Description : {ProjectSession.project.description}</h3>
+          <Box
+            key={ProjectSession._id}
+            shadow="md"
+            borderWidth="1px"
+            p={6}
+          >
+            <h3>
+              Project :
+              {ProjectSession.project.title}
+            </h3>
+            <h3>
+              Description :
+              {ProjectSession.project.description}
+            </h3>
             {ProjectSession.session.length > 0 ? (
               ProjectSession.session.map((session) => (
                 <div key={session._id}>
                   <Flex>
                     <h2>{session.Time}</h2>
                     <Text>
-                      {format(parseISO(session.createdAt), 'yyyy-MM-dd')}
+                      {format(
+                        parseISO(session.createdAt),
+                        'yyyy-MM-dd',
+                      )}
                     </Text>
                   </Flex>
                 </div>

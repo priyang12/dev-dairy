@@ -23,7 +23,9 @@ type Props = {
   children: React.ReactNode;
 };
 
-function Form({ SubmitForm, FormFields, mb = 5, children }: Props) {
+function Form({
+  SubmitForm, FormFields, mb = 5, children,
+}: Props) {
   const InitState = FormFields.reduce(
     (acc, curr) => ({ ...acc, [curr.fieldName]: '' }),
     {},
@@ -52,7 +54,8 @@ function Form({ SubmitForm, FormFields, mb = 5, children }: Props) {
             p={5}
           >
             <FormLabel htmlFor={field.fieldName} fontSize="2xl">
-              {field.fieldName[0].toUpperCase() + field.fieldName.slice(1)}
+              {field.fieldName[0].toUpperCase()
+                + field.fieldName.slice(1)}
             </FormLabel>
             <Input
               id={field.fieldName}
@@ -67,7 +70,9 @@ function Form({ SubmitForm, FormFields, mb = 5, children }: Props) {
                 {ErrorsState[`${field.fieldName}`]}
               </FormErrorMessage>
             ) : (
-              <FormHelperText fontSize="xl">{field.placeholder}</FormHelperText>
+              <FormHelperText fontSize="xl">
+                {field.placeholder}
+              </FormHelperText>
             )}
           </FormControl>
         ))}

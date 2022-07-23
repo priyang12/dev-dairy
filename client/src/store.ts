@@ -42,23 +42,21 @@ const RootReducers = combineReducers({
 
 const persistedReducer = persistReducer(persistConfig, RootReducers);
 
-export const createStoreWithMiddleware = (initialState = {}): Store =>
-  configureStore({
-    reducer: persistedReducer,
-    preloadedState: initialState,
-    devTools: process.env.NODE_ENV !== 'production',
-    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware({
-        serializableCheck: {
-          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-        },
-      })
-        .concat(AuthApi.middleware)
-        .concat(UserApi.middleware)
-        .concat(PostApi.middleware)
-        .concat(ProjectApi.middleware)
-        .concat(WorkSessionApi.middleware),
-  });
+export const createStoreWithMiddleware = (initialState = {}): Store => configureStore({
+  reducer: persistedReducer,
+  preloadedState: initialState,
+  devTools: process.env.NODE_ENV !== 'production',
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+    serializableCheck: {
+      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+    },
+  })
+    .concat(AuthApi.middleware)
+    .concat(UserApi.middleware)
+    .concat(PostApi.middleware)
+    .concat(ProjectApi.middleware)
+    .concat(WorkSessionApi.middleware),
+});
 
 export const store = createStoreWithMiddleware();
 

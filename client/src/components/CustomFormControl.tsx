@@ -35,7 +35,8 @@ function CustomFormControl({
       {...rest}
     >
       <FormLabel htmlFor="Description" color={field && 'red'}>
-        Description :{' '}
+        Description :
+        {' '}
       </FormLabel>
       {childrenArray.map((child: any) => {
         if (child.type === FormHelperText) {

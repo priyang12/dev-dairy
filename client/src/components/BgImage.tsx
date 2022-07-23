@@ -17,7 +17,9 @@ function BgImage({ BgImageData, children, ...rest }: ComponentProps) {
       width="100%"
       style={{
         backgroundImage: `url(${
-          BgImageData.ImageFile ? BgImageData.ImageFile : BgImageData.url
+          BgImageData.ImageFile
+            ? BgImageData.ImageFile
+            : BgImageData.url
         })`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',

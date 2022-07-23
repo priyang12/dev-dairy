@@ -40,10 +40,19 @@ function RoadMapModal({ onSubmit, projectId }: Props) {
 
   return (
     <div>
-      <Button colorScheme="blue" variant="outline" onClick={onOpen} ml={5}>
+      <Button
+        colorScheme="blue"
+        variant="outline"
+        onClick={onOpen}
+        ml={5}
+      >
         Add New RoadMap
       </Button>
-      <ModalComponent Title="Add New RoadMap" isOpen={isOpen} onClose={onClose}>
+      <ModalComponent
+        Title="Add New RoadMap"
+        isOpen={isOpen}
+        onClose={onClose}
+      >
         <Box>
           <form onSubmit={FormSubmit}>
             <FormControl mb={5} isInvalid={!!roadMapError}>
@@ -59,7 +68,11 @@ function RoadMapModal({ onSubmit, projectId }: Props) {
               <Input id="color" type="color" />
             </FormControl>
             <ModalFooter>
-              <Button type="submit" colorScheme="blue" variant="solid">
+              <Button
+                type="submit"
+                colorScheme="blue"
+                variant="solid"
+              >
                 Submit RoadMap
               </Button>
             </ModalFooter>

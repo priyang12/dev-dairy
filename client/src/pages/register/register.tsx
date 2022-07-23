@@ -41,7 +41,8 @@ function Register() {
     {
       fieldType: 'password',
       fieldName: 'password',
-      placeholder: 'Enter a Strong Password with at least 6 characters',
+      placeholder:
+        'Enter a Strong Password with at least 6 characters',
     },
     {
       fieldType: 'password',
@@ -61,7 +62,9 @@ function Register() {
   ) => {
     e.preventDefault();
 
-    const { email, name, password, ConfirmPassword } = e.target
+    const {
+      email, name, password, ConfirmPassword,
+    } = e.target
       .elements as typeof e.target.elements & FormData;
 
     const UsernameError = ValidateTitle(name.value);
@@ -72,7 +75,12 @@ function Register() {
       ConfirmPassword.value,
     );
 
-    if (!UsernameError && !EmailError && !PasswordError && !ConfirmError) {
+    if (
+      !UsernameError
+      && !EmailError
+      && !PasswordError
+      && !ConfirmError
+    ) {
       registerUser({
         username: name.value,
         email: email.value,
@@ -116,7 +124,10 @@ function Register() {
             {Auth.error}
           </Alert>
         )}
-        <CustomForm FormFields={RegisterFields} SubmitForm={RegisterUser}>
+        <CustomForm
+          FormFields={RegisterFields}
+          SubmitForm={RegisterUser}
+        >
           <Button
             backdropFilter="auto"
             backdropBlur="10px"

@@ -15,7 +15,10 @@ import {
 import type { FormField } from '../../components/CustomForm';
 import type { AuthState } from '../../interface';
 import { useLoginUserMutation } from '../../API/AuthAPI';
-import { ValidateEmail, ValidatePassword } from '../../utils/Validation';
+import {
+  ValidateEmail,
+  ValidatePassword,
+} from '../../utils/Validation';
 import CustomForm from '../../components/CustomForm';
 
 function Login() {
@@ -85,7 +88,11 @@ function Login() {
 
           <Text as="p" fontSize="xl">
             Don&lsquo;t have an account?
-            <Link as={RouterLink} to="/register" _hover={{ color: 'green' }}>
+            <Link
+              as={RouterLink}
+              to="/register"
+              _hover={{ color: 'green' }}
+            >
               <span>&nbsp;</span>
               Sign up
             </Link>
