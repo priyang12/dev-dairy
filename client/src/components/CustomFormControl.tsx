@@ -1,9 +1,4 @@
-import {
-  FormControl,
-  FormHelperText,
-  FormLabel,
-  Text,
-} from '@chakra-ui/react';
+import { FormControl, FormHelperText, FormLabel, Text } from '@chakra-ui/react';
 import React, { useState } from 'react';
 
 function CustomFormControl({

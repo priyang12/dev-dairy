@@ -105,7 +105,10 @@ function RoadMap() {
                   </Button>
                   <EditRoadMap ProjectID={id} RoadMap={road} />
                 </Flex>
-                <Text fontSize="2xl">Work {road.progress} %</Text>
+                <Text fontSize="2xl">
+                  Work
+                  {road.progress} %
+                </Text>
                 <Progress
                   colorScheme="green"
                   height="20px"

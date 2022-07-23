@@ -24,7 +24,6 @@ function ProjectSessions() {
   const [PullCall, PullResult] = usePullSessions();
   const [DeleteCheck, setDeleteCheck] = useState(false);
   const [DeleteList, setDeleteList] = useState<Set<string>>(new Set());
-  console.log(DeleteList);
 
   const PushNewSession = () => {
     PushCall({
@@ -62,9 +61,9 @@ function ProjectSessions() {
         )}
       </Flex>
 
-      <Text>Total Time : {ProjectSession?.Time}</Text>
-      <Text>Total Sessions : {ProjectSession?.session.length}</Text>
-
+      <Text>Total Time :{ProjectSession?.Time}</Text>
+      <Text>Total Sessions :{ProjectSession?.session.length}</Text>
+      {PullResult.isLoading && <Text>Deleting sessions...</Text>}
       <Flex justifyContent="space-around" my={5}>
         {!DeleteCheck ? (
           <>

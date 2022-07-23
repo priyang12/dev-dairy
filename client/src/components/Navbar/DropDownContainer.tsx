@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 import { ChevronUpIcon, ChevronDownIcon } from '@chakra-ui/icons';
 import {
   Link,

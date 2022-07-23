@@ -57,7 +57,9 @@ function Navbar() {
           px={4}
           borderRadius={5}
           _hover={{ bg: isDark ? '#102344' : 'black' }}
-          _focus={{ border: `2px solid${isDark ? 'gray.700' : 'gray.100'}` }}
+          _focus={{
+            border: `2px solid${isDark ? 'gray.700' : 'gray.100'}`,
+          }}
           aria-label="Courses"
           fontWeight="normal"
           onClick={onOpen}

@@ -37,12 +37,16 @@ it('Delete Project', async () => {
   setup();
   await waitForElementToBeRemoved(screen.getByAltText(/loading/));
   expect(screen.getByText(/Edit Project/)).toBeInTheDocument();
-  const deleteButton = screen.getByRole('button', { name: 'Delete Project' });
+  const deleteButton = screen.getByRole('button', {
+    name: 'Delete Project',
+  });
   userEvent.click(deleteButton);
   await waitFor(() => {
     expect(screen.getByText(/Confirm Delete Project/)).toBeInTheDocument();
   });
-  const confirmButton = screen.getByRole('button', { name: 'Delete' });
+  const confirmButton = screen.getByRole('button', {
+    name: 'Delete',
+  });
   userEvent.click(confirmButton);
 
   await waitForElementToBeRemoved(screen.getByText('Deleting...'));

@@ -84,7 +84,7 @@ const handlers = [
     res(
       ctx.json({
         result: true,
-        message: `RoadMap Updated`,
+        message: 'RoadMap Updated',
       }),
     ),
   ),

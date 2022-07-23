@@ -67,12 +67,10 @@ const WorkSessionsApi = createApi({
             WorkSessionsApi.util.updateQueryData(
               'GetSessionsByProject',
               ProjectId,
-              (sessions: any) => {
-                return {
-                  ...sessions,
-                  session: NewSessions.session,
-                };
-              },
+              (sessions: any) => ({
+                ...sessions,
+                session: NewSessions.session,
+              }),
             ),
           );
         } catch (error: any) {

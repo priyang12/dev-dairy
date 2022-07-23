@@ -86,7 +86,9 @@ it('Delete Project', async () => {
   expect(screen.getByAltText('loading...')).toBeInTheDocument();
   await waitForElementToBeRemoved(screen.getByAltText('loading...'));
   // Delete Project
-  const deleteButton = screen.getByRole('button', { name: 'Delete Project' });
+  const deleteButton = screen.getByRole('button', {
+    name: 'Delete Project',
+  });
   userEvent.click(deleteButton);
   expect(
     screen.getByText('Are you sure you want to delete this project?'),
@@ -119,7 +121,9 @@ it('Server Error on Delete', async () => {
   await waitForElementToBeRemoved(screen.getByAltText('loading...'));
   // Delete Project
 
-  const deleteButton = screen.getByRole('button', { name: 'Delete Project' });
+  const deleteButton = screen.getByRole('button', {
+    name: 'Delete Project',
+  });
   userEvent.click(deleteButton);
   expect(
     screen.getByText('Are you sure you want to delete this project?'),
