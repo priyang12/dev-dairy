@@ -8,6 +8,24 @@ import PostService from "../../services/PostService";
 import Container from "typedi";
 
 // @route   GET api/posts
+// @desc    Fetch User Posts
+// @access  Private
+export const GetPostsWithPagination = asyncHandler(
+  async (req: Request, res: Response): Promise<any> => {
+    const { page, limit } = req.query as any;
+    const pageVal = Number(page) || 1;
+    const projectServiceInstance = Container.get(PostService);
+    const projects = await projectServiceInstance.GetPostsWithPagination(
+      req.user._id,
+      pageVal,
+      parseInt(limit)
+    );
+
+    return res.status(200).json(projects);
+  }
+);
+
+// @route   GET api/posts?
 // @desc    Fetch User Projects
 // @access  Private
 export const GetPosts = asyncHandler(

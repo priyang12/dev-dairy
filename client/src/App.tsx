@@ -1,4 +1,4 @@
-import { lazy, useEffect, memo } from 'react';
+import { lazy, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
@@ -11,7 +11,11 @@ import Login from './pages/login';
 import Register from './pages/register';
 import Posts from './pages/Posts';
 import Projects from './pages/Projects';
+import RoadMap from './pages/RoadMap';
 import NewProject from './pages/NewProject';
+import EditProject from './pages/EditProject';
+import SingleProject from './pages/SingleProject';
+import WorkSessions from './pages/WorkSessions';
 
 // Components
 import PrivateOutlet from './components/PrivateRoute';
@@ -19,20 +23,16 @@ import Spinner from './components/spinner';
 import MusicPlaylist from './pages/MusicPlaylist';
 import Navbar from './components/Navbar';
 import FallBackSuspenseWrapper from './components/FallBackSuspenseWrapper';
+import ProjectSessions from './pages/ProjectSessions';
 
 // Lazy load  components
-const MusicPlayer = lazy(async () => import('./components/MusicPlayer'));
-const MusicPlayerMemo = memo(MusicPlayer);
-const EditProject = lazy(async () => import('./pages/EditProject'));
-const SingleProject = lazy(async () => import('./pages/SingleProject'));
-
-const LandingData = {
-  heading: 'Dev Dairy',
-  subheading: 'Mange your projects and share your knowledge with the world',
-};
+const MusicPlayer = lazy(
+  async () => import('./components/MusicPlayer'),
+);
 
 function App() {
   const dispatch = useDispatch();
+  // eslint-disable-next-line no-unused-vars
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
   const { isLoading } = useGetUserQuery(cookies.token, {
     skip: !cookies.token,
@@ -52,22 +52,15 @@ function App() {
   if (isLoading) {
     return <Spinner />;
   }
+
   return (
     <BrowserRouter>
       <Navbar />
       <FallBackSuspenseWrapper fallback={false}>
-        <MusicPlayerMemo />
+        <MusicPlayer />
       </FallBackSuspenseWrapper>
       <Routes>
-        <Route
-          path="/"
-          element={
-            <LandingPage
-              subheading={LandingData.subheading}
-              heading={LandingData.heading}
-            />
-          }
-        />
+        <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/Register" element={<Register />} />
         <Route path="/" element={<PrivateOutlet />}>
@@ -77,23 +70,28 @@ function App() {
           <Route path="/Projects" element={<Projects />} />
         </Route>
         <Route path="/" element={<PrivateOutlet />}>
-          <Route
-            path="/Projects/:id"
-            element={
-              <FallBackSuspenseWrapper>
-                <SingleProject />
-              </FallBackSuspenseWrapper>
-            }
-          />
+          <Route path="/Projects/:id" element={<SingleProject />} />
         </Route>
         <Route path="/" element={<PrivateOutlet />}>
           <Route
             path="/EditProject/:id"
-            element={
+            element={(
               <FallBackSuspenseWrapper>
                 <EditProject />
               </FallBackSuspenseWrapper>
-            }
+            )}
+          />
+        </Route>
+        <Route path="/" element={<PrivateOutlet />}>
+          <Route path="/RoadMap/:id" element={<RoadMap />} />
+        </Route>
+        <Route path="/" element={<PrivateOutlet />}>
+          <Route path="/Sessions" element={<WorkSessions />} />
+        </Route>
+        <Route path="/" element={<PrivateOutlet />}>
+          <Route
+            path="/Project/Sessions/:id"
+            element={<ProjectSessions />}
           />
         </Route>
         <Route path="/" element={<PrivateOutlet />}>

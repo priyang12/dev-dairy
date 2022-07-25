@@ -30,13 +30,31 @@ export default class UserService {
     const project = await this.ProjectModel.findOne({
       _id: projectId,
       user: userId,
-    }).exec();
+    })
+      .select("-__v")
+      .exec();
     if (!project) {
       this.logger.error("Project not found");
       throw new Error("Project not found");
     }
     this.logger.info("Project found");
     return project;
+  }
+
+  public async GetRoadMaps(userId: string, projectId: string): Promise<any> {
+    const roadMaps = await this.ProjectModel.findOne({
+      _id: projectId,
+      user: userId,
+    }).select("roadMap");
+
+    if (!roadMaps) {
+      this.logger.error("RoadMaps not found");
+      throw new Error("No RoadMaps Found in Users");
+    }
+
+    this.logger.info("RoadMaps Found");
+
+    return roadMaps;
   }
 
   public async PostProject(
@@ -109,6 +127,34 @@ export default class UserService {
       result: true,
       message: `New RoadMap Added to ${updatedProject.title}`,
       roadmap: roadMap,
+    };
+  }
+
+  public async EditRoadMap(
+    userId: string,
+    projectId: string,
+    roadMap: IRoadMap
+  ) {
+    console.log(roadMap._id);
+
+    const updatedRoadMap = await this.ProjectModel.findOneAndUpdate(
+      { _id: projectId, user: userId, "roadMap._id": roadMap._id },
+      {
+        $set: {
+          "roadMap.$": roadMap,
+        },
+      },
+      { new: true }
+    ).exec();
+
+    if (!updatedRoadMap) {
+      this.logger.error("Roadmap not Updated");
+      throw new Error("Roadmap not Updated");
+    }
+    this.logger.info("Roadmap Updated");
+    return {
+      result: true,
+      message: `RoadMap Updated`,
     };
   }
 

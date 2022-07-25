@@ -6,13 +6,14 @@ import {
   GetProjectPosts,
   GetPost,
   UpdatePost,
+  GetPostsWithPagination,
 } from "../controllers/PostController";
 
 import auth from "../middleware/auth";
 
 export default (app: Router) => {
-  app.route("/posts").get(auth, GetPosts).post(auth, CreatePost);
-
+  app.route("/posts").get(auth, GetPostsWithPagination).post(auth, CreatePost);
+  app.route("/posts/all").get(auth, GetPosts);
   app
     .route("/posts/:id")
     .get(auth, GetPost)

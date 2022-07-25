@@ -1,4 +1,4 @@
-import { Suspense, lazy } from 'react';
+import { Suspense } from 'react';
 import Spinner from './spinner';
 
 function FallBackSuspenseWrapper({
@@ -9,7 +9,9 @@ function FallBackSuspenseWrapper({
   fallback?: boolean;
 }) {
   return (
-    <Suspense fallback={fallback ? <Spinner /> : null}>{children}</Suspense>
+    <Suspense fallback={fallback ? <Spinner /> : null}>
+      {children}
+    </Suspense>
   );
 }
 

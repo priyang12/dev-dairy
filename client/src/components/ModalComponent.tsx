@@ -19,16 +19,14 @@ function ModalComponent({
   children: React.ReactNode;
 }) {
   return (
-    <div>
-      <Modal onClose={onClose} isOpen={isOpen} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>{Title}</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>{children}</ModalBody>
-        </ModalContent>
-      </Modal>
-    </div>
+    <Modal onClose={onClose} isOpen={isOpen} isCentered>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>{Title}</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>{children}</ModalBody>
+      </ModalContent>
+    </Modal>
   );
 }
 

@@ -5,7 +5,7 @@ import { ISession, IWorkSessions } from "../models/WorkSessions";
 import type { DeleteWriteOpResultObject } from "mongodb";
 
 @Service()
-export default class UserService {
+export default class WorkSessionService {
   constructor(
     @Inject("workSessionsModel") private WorkSessions: Model<IWorkSessions>,
     @Inject("logger") private logger: Logger
@@ -15,6 +15,10 @@ export default class UserService {
     userId: string
   ): Promise<LeanDocument<IWorkSessions[]>> {
     const WorkSessions = await this.WorkSessions.find({ user: userId })
+      .populate({
+        path: "project",
+        select: "title process description",
+      })
       .lean()
       .exec();
     if (!WorkSessions) {
@@ -91,11 +95,11 @@ export default class UserService {
 
   public async PushWorkSession(
     userId: string,
-    WorkSessionId: string,
+    ProjectId: string,
     NewWorkSession: ISession
   ) {
     const newWorkSessions = this.WorkSessions.findOneAndUpdate(
-      { _id: WorkSessionId, user: userId },
+      { project: ProjectId, user: userId },
       { $push: { session: NewWorkSession } },
       { new: true }
     ).select("session");
@@ -109,11 +113,11 @@ export default class UserService {
 
   public async PullWorkSession(
     userId: string,
-    WorkSessionId: string,
+    ProjectId: string,
     WorkSession: ISession
   ) {
     const newWorkSessions = this.WorkSessions.findOneAndUpdate(
-      { _id: WorkSessionId, user: userId },
+      { project: ProjectId, user: userId },
       { $pull: { session: WorkSession } },
       { new: true }
     ).select("session");

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 import { ChevronUpIcon, ChevronDownIcon } from '@chakra-ui/icons';
 import {
   Link,
@@ -54,7 +53,7 @@ function DropDownContainer() {
           onMouseLeave={onClose}
           zIndex={2000}
           fontSize="3xl"
-          bg="transparent"
+          bg="#7957574e"
           className="card"
         >
           <MenuItem>

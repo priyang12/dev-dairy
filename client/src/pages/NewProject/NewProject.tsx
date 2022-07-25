@@ -1,4 +1,8 @@
-import { AddIcon, ArrowForwardIcon, DeleteIcon } from '@chakra-ui/icons';
+import {
+  AddIcon,
+  ArrowForwardIcon,
+  DeleteIcon,
+} from '@chakra-ui/icons';
 import {
   Box,
   Container,
@@ -67,8 +71,13 @@ function NewProject() {
     color: '#000',
   });
   const [RoadMaps, setRoadMaps] = useState<RoadMap[]>([]);
-  const { FormValues, ErrorsState, HandleChange, SetState, setError } =
-    useForm(init);
+  const {
+    FormValues,
+    ErrorsState,
+    HandleChange,
+    SetState,
+    setError,
+  } = useForm(init);
 
   const AddNewTech = () => {
     if (!ErrorsState.NewTech) {
@@ -90,18 +99,20 @@ function NewProject() {
     setTechnologies(newTechs);
   };
   const ProcessChange = (value: number | any) => {
-    SetState((prevState: any) => ({
-      ...prevState,
-      process: value,
-    }));
+    SetState({ ...FormValues, process: value });
   };
 
   const AddNewProject = () => {
-    const { Title, Description, process, Github, Live, Website } = FormValues;
+    const {
+      Title, Description, process, Github, Live, Website,
+    } = FormValues;
     const newRoadMaps = [...RoadMaps];
     const newTechs = [...Technologies];
 
-    const TitleError = setError('Title', ValidateTitle(Title, 'Title'));
+    const TitleError = setError(
+      'Title',
+      ValidateTitle(Title, 'Title'),
+    );
     const DescriptionError = setError(
       'Description',
       ValidateDescription(Description, 'Description'),
@@ -112,7 +123,10 @@ function NewProject() {
       GithubError = setError('Github', 'Enter Valid Github Link');
     }
     if (Website && !CheckURL(Website)) {
-      WebsiteError = setError('Website', 'Enter Valid URL for Website');
+      WebsiteError = setError(
+        'Website',
+        'Enter Valid URL for Website',
+      );
     }
     const newProject: IProject | any = {
       title: Title,
@@ -125,7 +139,12 @@ function NewProject() {
       technologies: newTechs,
     };
 
-    if (!TitleError || !DescriptionError || !GithubError || !WebsiteError) {
+    if (
+      !TitleError
+      || !DescriptionError
+      || !GithubError
+      || !WebsiteError
+    ) {
       CreateProject(newProject);
     }
   };
@@ -143,7 +162,7 @@ function NewProject() {
           gap={10}
         >
           <Flex w="100%" as="form" direction="column" gap={5}>
-            <FormControl isRequired isInvalid={ErrorsState.Title}>
+            <FormControl isRequired isInvalid={!!ErrorsState.Title}>
               {ErrorsState.Title ? (
                 <FormLabel color="red">{ErrorsState.Title}</FormLabel>
               ) : (
@@ -153,16 +172,24 @@ function NewProject() {
               <Input
                 id="Title"
                 placeholder="Pick Good Project Title"
-                value={FormValues.title}
+                value={FormValues.Title}
                 onChange={HandleChange}
                 required
               />
             </FormControl>
-            <FormControl isInvalid={ErrorsState.Description} isRequired>
+            <FormControl
+              isInvalid={!!ErrorsState.Description}
+              isRequired
+            >
               {ErrorsState.Description ? (
-                <FormLabel color="red">{ErrorsState.Description}</FormLabel>
+                <FormLabel color="red">
+                  {ErrorsState.Description}
+                </FormLabel>
               ) : (
-                <FormLabel htmlFor="Description">Description : </FormLabel>
+                <FormLabel htmlFor="Description">
+                  Description :
+                  {' '}
+                </FormLabel>
               )}
 
               <Textarea
@@ -212,7 +239,9 @@ function NewProject() {
             </FormControl>
             <FormControl>
               {ErrorsState.Github ? (
-                <FormLabel color="red">{ErrorsState.Github}</FormLabel>
+                <FormLabel color="red">
+                  {ErrorsState.Github}
+                </FormLabel>
               ) : (
                 <FormLabel htmlFor="Github">Github : </FormLabel>
               )}
@@ -228,7 +257,9 @@ function NewProject() {
             </FormControl>
             <FormControl>
               {ErrorsState.Website ? (
-                <FormLabel color="red">{ErrorsState.Website}</FormLabel>
+                <FormLabel color="red">
+                  {ErrorsState.Website}
+                </FormLabel>
               ) : (
                 <FormLabel htmlFor="Website">Website : </FormLabel>
               )}
@@ -263,11 +294,14 @@ function NewProject() {
             gap={5}
             direction="column"
           >
-            <FormControl isInvalid={ErrorsState.NewTech}>
+            <FormControl isInvalid={!!ErrorsState.NewTech}>
               {ErrorsState.NewTech ? (
                 <FormLabel color="red">Enter Name</FormLabel>
               ) : (
-                <FormLabel htmlFor="NewTech">Technologies : </FormLabel>
+                <FormLabel htmlFor="NewTech">
+                  Technologies :
+                  {' '}
+                </FormLabel>
               )}
               <Flex gap={5}>
                 <Input
@@ -343,7 +377,11 @@ function NewProject() {
               {RoadMaps.map((roadMap: RoadMap, index: number) => (
                 // eslint-disable-next-line react/no-array-index-key
                 <Flex alignItems="center" gap={5} key={index}>
-                  <Input bg={roadMap.color} disabled value={roadMap.title} />
+                  <Input
+                    bg={roadMap.color}
+                    disabled
+                    value={roadMap.title}
+                  />
                   <DeleteIcon
                     color="red.700"
                     _hover={{

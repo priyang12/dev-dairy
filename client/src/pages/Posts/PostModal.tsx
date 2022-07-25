@@ -16,7 +16,10 @@ import {
 } from '../../API/ProjectAPI';
 import type { INewPost, IPost, IProject } from '../../interface';
 import ModalComponent from '../../components/ModalComponent';
-import { ValidateDescription, ValidateTitle } from '../../utils/Validation';
+import {
+  ValidateDescription,
+  ValidateTitle,
+} from '../../utils/Validation';
 
 interface Props {
   action: string;
@@ -52,17 +55,18 @@ function PostModal({
 }: Props) {
   const [RoadMapColor, setRoadMapColor] = useState('');
   const [ErrorState, setErrorState] = useState<PostFields>(init);
-  const [proId, setproId] = useState(post?.project ? post.project._id : '');
+  const [proId, setproId] = useState(
+    post?.project ? post.project._id : '',
+  );
   const { data: Projects, isLoading: LoadingProject } = useGetProjectsQuery('');
 
-  const { data: RoadMap, isFetching: RoadMapFetching } = useGetProjectIdQuery(
-    proId,
-    {
-      skip: !proId,
-    },
-  );
+  const { data: RoadMap, isFetching: RoadMapFetching } = useGetProjectIdQuery(proId, {
+    skip: !proId,
+  });
 
-  const ChangeRoadMapSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const ChangeRoadMapSelect = (
+    e: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
     setproId(e.target.value);
   };
   const RoadMapChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -78,16 +82,16 @@ function PostModal({
   const submit = (e: React.FormEvent<HTMLFormElement> | any) => {
     e.preventDefault();
 
-    const { title, description, Project, status, roadMap } = e.target
+    const {
+      title, description, Project, status, roadMap,
+    } = e.target
       .elements as typeof e.target.elements & PostFields;
 
     const ErrorTitle = ValidateTitle(title.value, 'Title');
     const ErrorDes = ValidateDescription(description.value);
 
-    const ErrorProject =
-      Project.value === 'Select Project' ? 'Project is Required' : '';
-    const ErrorRoadMap =
-      roadMap.value === 'Select RoadMap' ? 'RoadMap is Required' : '';
+    const ErrorProject = Project.value === 'Select Project' ? 'Project is Required' : '';
+    const ErrorRoadMap = roadMap.value === 'Select RoadMap' ? 'RoadMap is Required' : '';
 
     if (ErrorTitle || ErrorDes || ErrorProject || ErrorRoadMap) {
       setErrorState({
@@ -117,7 +121,11 @@ function PostModal({
   };
 
   return (
-    <ModalComponent Title={`${action} Log`} isOpen={isOpen} onClose={onClose}>
+    <ModalComponent
+      Title={`${action} Log`}
+      isOpen={isOpen}
+      onClose={onClose}
+    >
       <form onSubmit={submit}>
         <FormControl isInvalid={!!ErrorState.title}>
           <FormLabel htmlFor="title" spellCheck>
@@ -140,7 +148,9 @@ function PostModal({
             id="description"
             defaultValue={post?.description}
           />
-          <FormErrorMessage>{ErrorState.description}</FormErrorMessage>
+          <FormErrorMessage>
+            {ErrorState.description}
+          </FormErrorMessage>
         </FormControl>
         <FormControl isInvalid={!!ErrorState.Project}>
           <FormLabel htmlFor="Project">Project</FormLabel>
@@ -187,7 +197,10 @@ function PostModal({
             >
               <option>Select RoadMap</option>
               {RoadMap?.roadMap.map((roadMap: any) => (
-                <option key={roadMap._id} value={[roadMap._id, roadMap.color]}>
+                <option
+                  key={roadMap._id}
+                  value={[roadMap._id, roadMap.color]}
+                >
                   {roadMap.name}
                 </option>
               ))}
@@ -197,7 +210,12 @@ function PostModal({
         </FormControl>
         <FormControl>
           <FormLabel htmlFor="status">status</FormLabel>
-          <Select mb={2} name="status" id="status" defaultValue={post?.status}>
+          <Select
+            mb={2}
+            name="status"
+            id="status"
+            defaultValue={post?.status}
+          >
             <option value="Not Started">Not Started</option>
             <option value="In-Process">In-Process</option>
             <option value="Started">Started</option>

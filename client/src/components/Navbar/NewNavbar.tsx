@@ -1,5 +1,12 @@
 import React from 'react';
-import { Link, Box, Flex, Text, Heading, IconButton } from '@chakra-ui/react';
+import {
+  Link,
+  Box,
+  Flex,
+  Container,
+  Heading,
+  IconButton,
+} from '@chakra-ui/react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import { useSelector } from 'react-redux';
@@ -26,7 +33,7 @@ function StyledIcon({ children, isDark, ...props }: any) {
 function MenuToggle({ toggle, isOpen }: any) {
   return (
     <Box display={{ base: 'block', md: 'none' }} onClick={toggle}>
-      {!isOpen ? (
+      {isOpen ? (
         <StyledIcon>
           <CloseIcon />
         </StyledIcon>
@@ -48,14 +55,17 @@ function NavBarContainer({ children, ...props }: any) {
       position="sticky"
       top="0"
       right="0"
-      justify="space-between"
       wrap="wrap"
       w="100%"
-      p={8}
+      p={10}
       bg="primary.900"
       {...props}
     >
-      {children}
+      <Container maxW="900px">
+        <Flex justifyContent="space-between" alignItems="center">
+          {children}
+        </Flex>
+      </Container>
     </Flex>
   );
 }
@@ -90,7 +100,9 @@ function NavBar() {
   const isRegister = location.pathname === '/register';
   const LandingPage = location.pathname === '/';
 
-  const { authenticated }: AuthState = useSelector((state: any) => state.Auth);
+  const { authenticated }: AuthState = useSelector(
+    (state: any) => state.Auth,
+  );
 
   if (LandingPage || isLogin || isRegister) return null;
 

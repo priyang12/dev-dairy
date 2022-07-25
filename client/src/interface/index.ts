@@ -40,13 +40,6 @@ export interface IPost extends INewPost {
   date: string;
 }
 
-export interface PostState {
-  posts: IPost[];
-  post: IPost;
-  error: null | string;
-  alert: null | IAlert;
-}
-
 export interface IRoadMap {
   _id: string;
   name: string;
@@ -63,14 +56,23 @@ export interface IProject {
   website: string;
   roadMap: IRoadMap[];
   process: number;
-  live?: string;
+  live?: boolean;
   github?: string;
   date: string;
 }
 
-export interface ProjectState {
-  projects: IProject[];
-  project: IProject | null;
-  error: null | string;
-  alert: null | IAlert;
+export interface ISession {
+  _id: string;
+  Time: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IWorkSessions {
+  _id: string;
+  Time: number;
+  user: string;
+  project: Pick<IProject, '_id' | 'process' | 'title' | 'description'>;
+  session: ISession[];
+  date: string;
 }

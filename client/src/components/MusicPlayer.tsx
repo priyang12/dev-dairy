@@ -68,7 +68,6 @@ function MusicPlayer() {
     seconds: 0,
   });
   const [ProgressStates, setProgressStates] = useState(0);
-  console.log(SongInfo?.title);
 
   useEffect(() => {
     if (CurrentMusic >= 0) {
@@ -82,9 +81,7 @@ function MusicPlayer() {
         });
         SongsDB?.get('SongsMeta', PlayList[CurrentMusic]).then(
           async (songImage: any) => {
-            const Image =
-              (songImage && ((await BlobToImg(songImage)) as string)) || null;
-
+            const Image = (songImage && ((await BlobToImg(songImage)) as string)) || null;
             setSongImage(Image);
           },
         );
@@ -131,7 +128,12 @@ function MusicPlayer() {
               <FaMusic />
             </IconButton>
 
-            <Box display={Hidden ? 'none' : 'block'}>
+            <Box
+              display={Hidden ? 'none' : 'block'}
+              onTransitionEnd={() => {
+                console.log('transition end');
+              }}
+            >
               <IconButton
                 bg="#333"
                 aria-label="MusicCloseButton"
@@ -145,12 +147,26 @@ function MusicPlayer() {
               >
                 <AiOutlineCloseCircle />
               </IconButton>
-              <Img
-                src={SongImage || MusicSymbol}
-                alt="album"
-                rounded="3xl"
-                my={5}
-              />
+              <Box animation={Playing ? 'Rotation 2s linear infinite' : ''}>
+                {SongImage ? (
+                  <Img
+                    src={SongImage}
+                    alt="album"
+                    rounded="full"
+                    my={5}
+                    h={200}
+                  />
+                ) : (
+                  <Img
+                    src={MusicSymbol}
+                    alt="album"
+                    rounded="full"
+                    my={5}
+                    h={200}
+                  />
+                )}
+              </Box>
+
               {CurrentMusic > -1 && (
                 <Text
                   fontSize="lg"
@@ -160,7 +176,7 @@ function MusicPlayer() {
                   pb={2}
                 >
                   Playing : &nbsp;
-                  {SongInfo?.title ? SongInfo.title : PlayList[CurrentMusic]}
+                  {SongInfo ? SongInfo?.title : PlayList[CurrentMusic]}
                 </Text>
               )}
 
@@ -201,7 +217,9 @@ function MusicPlayer() {
 
               <Flex justifyContent="space-between" mx={2} mt={5}>
                 <Text>
-                  {Start.x}: {Start.y}
+                  {Start.x}
+                  :
+                  {Start.y}
                 </Text>
                 <Flex justifyContent="center">
                   {Mute ? (
@@ -223,7 +241,9 @@ function MusicPlayer() {
                   )}
                 </Flex>
                 <Text>
-                  {Duration.minutes}: {Duration.seconds}
+                  {Duration.minutes}
+                  :
+                  {Duration.seconds}
                 </Text>
               </Flex>
               {/* Need TO Fix Auto Focus  */}

@@ -3,7 +3,11 @@ import { rest } from 'msw';
 import { BrowserRouter } from 'react-router-dom';
 import API from '../../API';
 import server from '../../mock/server';
-import { render, screen, waitForElementToBeRemoved } from '../../test-utils';
+import {
+  render,
+  screen,
+  waitForElementToBeRemoved,
+} from '../../test-utils';
 
 import Register from './index';
 
@@ -22,7 +26,9 @@ const setup = (): any => {
   };
 };
 it('Render Register Page', () => {
-  const { name, email, password, password2, submit } = setup();
+  const {
+    name, email, password, password2, submit,
+  } = setup();
   expect(screen.getByText(/Register Page/)).toBeInTheDocument();
   expect(name).toBeInTheDocument();
   expect(email).toBeInTheDocument();
@@ -32,7 +38,9 @@ it('Render Register Page', () => {
 });
 
 it('Invalided input', () => {
-  const { email, password, name, password2, submit } = setup();
+  const {
+    email, password, name, password2, submit,
+  } = setup();
   userEvent.type(name, 'prg');
   userEvent.type(email, 'test');
   userEvent.type(password, 'test');
@@ -42,15 +50,21 @@ it('Invalided input', () => {
     screen.getByText(/Name must be between 4 and 30 characters/),
   ).toBeInTheDocument();
 
-  expect(screen.getByText(/Please enter a valid email/)).toBeInTheDocument();
+  expect(
+    screen.getByText(/Please enter a valid email/),
+  ).toBeInTheDocument();
   expect(
     screen.getByText(/Password must be at least 6 characters/),
   ).toBeInTheDocument();
-  expect(screen.getByText(/Passwords do not match/)).toBeInTheDocument();
+  expect(
+    screen.getByText(/Passwords do not match/),
+  ).toBeInTheDocument();
 });
 
 it('Valid input', async () => {
-  const { email, password, name, password2, submit } = setup();
+  const {
+    email, password, name, password2, submit,
+  } = setup();
   userEvent.type(name, 'priyang');
   userEvent.type(email, 'test@gmail.com');
   userEvent.type(password, 'test123');
@@ -61,14 +75,14 @@ it('Valid input', async () => {
 });
 
 it('Error message', async () => {
-  const { email, password, name, password2, submit } = setup();
+  const {
+    email, password, name, password2, submit,
+  } = setup();
   server.use(
-    rest.post(`${API}/register`, (req, res, ctx) =>
-      res(
-        ctx.status(501),
-        ctx.json({ message: 'Server Error Please try again later' }),
-      ),
-    ),
+    rest.post(`${API}/register`, (req, res, ctx) => res(
+      ctx.status(501),
+      ctx.json({ message: 'Server Error Please try again later' }),
+    )),
   );
 
   userEvent.type(name, 'priyang');

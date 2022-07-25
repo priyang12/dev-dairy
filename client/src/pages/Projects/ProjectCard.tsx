@@ -8,6 +8,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
+import { format, parseISO } from 'date-fns';
 import RandomColor from '../../utils/RandomColor';
 import type { IProject } from '../../interface';
 
@@ -17,7 +18,11 @@ function ProjectCard({ Project }: { Project: IProject }) {
       <Heading fontSize="xl">{Project.title}</Heading>
       <Text mt={4}>{Project.description}</Text>
 
-      <Flex gap={['4', '5', '10']} mt={5} direction={['column', 'row']}>
+      <Flex
+        gap={['4', '5', '10']}
+        mt={5}
+        direction={['column', 'row']}
+      >
         {Project.technologies.map((tech) => (
           <Text
             key={tech}
@@ -42,14 +47,24 @@ function ProjectCard({ Project }: { Project: IProject }) {
           value={Project.process}
         />
       </Box>
-      <Flex justifyContent="space-between" alignItems="center" mt={5}>
-        <Button>
-          <Link as={RouterLink} to={`/Projects/${Project._id}`}>
-            More
-          </Link>
+      <Flex
+        justifyContent="space-between"
+        gap={5}
+        alignItems="center"
+        mt={5}
+      >
+        <Button as={RouterLink} to={`/Projects/${Project._id}`}>
+          More
+        </Button>
+        <Button
+          flex={1}
+          as={RouterLink}
+          to={`/Project/Sessions/${Project._id}`}
+        >
+          Work Sessions
         </Button>
         <Text textAlign="right">
-          {/* {moment(Project.date).format('D MMM YYYY, h:mm:ss')} */}
+          {format(parseISO(Project.date), "yyyy-MM-dd'T'HH:mm")}
         </Text>
       </Flex>
     </Box>

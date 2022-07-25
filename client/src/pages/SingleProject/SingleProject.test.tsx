@@ -1,5 +1,5 @@
-import moment from 'moment';
 import { rest } from 'msw';
+import { format, parseISO } from 'date-fns';
 import { Route, Router, Routes } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import userEvent from '@testing-library/user-event';
@@ -32,17 +32,25 @@ it('render Single Project', async () => {
   expect(screen.getByAltText('loading...')).toBeInTheDocument();
   await waitForElementToBeRemoved(screen.getByAltText('loading...'));
 
-  expect(screen.getByText(SingleProjectResponse.title)).toBeInTheDocument();
+  expect(
+    screen.getByText(SingleProjectResponse.title),
+  ).toBeInTheDocument();
   expect(
     screen.getByText(SingleProjectResponse.description),
   ).toBeInTheDocument();
+
   expect(
     screen.getByText(
-      moment(SingleProjectResponse.date).format('D MMM YYYY, h:mm:ss'),
+      format(
+        parseISO(SingleProjectResponse.date),
+        "yyyy-MM-dd'T'HH:mm",
+      ),
     ),
   ).toBeInTheDocument();
   SingleProjectResponse.roadMap.forEach((roadMap: any) => {
-    expect(screen.getByText(roadMap.name.toUpperCase())).toBeInTheDocument();
+    expect(
+      screen.getByText(roadMap.name.toUpperCase()),
+    ).toBeInTheDocument();
   });
 
   SingleProjectResponse.technologies.forEach((tech: any) => {
@@ -51,9 +59,7 @@ it('render Single Project', async () => {
 });
 it('render Empty Project', async () => {
   server.use(
-    rest.get(`${API}/projects/:id`, (req, res, ctx) =>
-      res(ctx.status(404), ctx.json({ message: 'No Project Found' })),
-    ),
+    rest.get(`${API}/projects/:id`, (req, res, ctx) => res(ctx.status(404), ctx.json({ message: 'No Project Found' }))),
   );
   setup();
   await waitForElementToBeRemoved(screen.getByAltText('loading...'));
@@ -63,16 +69,14 @@ it('render Empty Project', async () => {
 
 it('Render Different Values', async () => {
   server.use(
-    rest.get(`${API}/projects/:id`, (req, res, ctx) =>
-      res(
-        ctx.status(200),
-        ctx.json({
-          ...SingleProjectResponse,
-          live: false,
-          website: '',
-        }),
-      ),
-    ),
+    rest.get(`${API}/projects/:id`, (req, res, ctx) => res(
+      ctx.status(200),
+      ctx.json({
+        ...SingleProjectResponse,
+        live: false,
+        website: '',
+      }),
+    )),
   );
   setup();
   expect(screen.getByAltText('loading...')).toBeInTheDocument();
@@ -85,7 +89,9 @@ it('Delete Project', async () => {
   expect(screen.getByAltText('loading...')).toBeInTheDocument();
   await waitForElementToBeRemoved(screen.getByAltText('loading...'));
   // Delete Project
-  const deleteButton = screen.getByRole('button', { name: 'Delete Project' });
+  const deleteButton = screen.getByRole('button', {
+    name: 'Delete Project',
+  });
   userEvent.click(deleteButton);
   expect(
     screen.getByText('Are you sure you want to delete this project?'),
@@ -108,9 +114,7 @@ it('Click on Edit Project', async () => {
 
 it('Server Error on Delete', async () => {
   server.use(
-    rest.delete(`${API}/projects/:id`, (req, res, ctx) =>
-      res(ctx.status(401), ctx.json({ message: 'Server Error' })),
-    ),
+    rest.delete(`${API}/projects/:id`, (req, res, ctx) => res(ctx.status(401), ctx.json({ message: 'Server Error' }))),
   );
 
   setup();
@@ -118,7 +122,9 @@ it('Server Error on Delete', async () => {
   await waitForElementToBeRemoved(screen.getByAltText('loading...'));
   // Delete Project
 
-  const deleteButton = screen.getByRole('button', { name: 'Delete Project' });
+  const deleteButton = screen.getByRole('button', {
+    name: 'Delete Project',
+  });
   userEvent.click(deleteButton);
   expect(
     screen.getByText('Are you sure you want to delete this project?'),

@@ -20,10 +20,10 @@ function render(
     ...renderOptions
   }: ReduxRenderOptions = {},
 ): RenderResult {
-  // eslint-disable-next-line react/require-default-props
-  function Wrapper({ children }: { children?: ReactNode }): ReactElement {
+  function Wrapper({ children }: { children?: any }): ReactElement {
     return <Provider store={store}>{children}</Provider>;
   }
+
   return rtlRender(ui, { wrapper: Wrapper, ...renderOptions });
 }
 

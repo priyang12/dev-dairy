@@ -27,15 +27,14 @@ function PostContainer({ post }: PropTypes) {
   const [mutation] = useDeletePostMutation();
   const [UpdateMutate, UpdateResult] = useUpdatePostMutation();
   const { data: Projects } = useGetProjectsQuery('');
-  const postProject =
-    typeof post.project === 'string' &&
-    Projects &&
-    Projects.find((project: any) => project._id === post.project);
+  const postProject = typeof post.project === 'string'
+    ? post.project
+    : Projects?.find((project: any) => project._id === post.project);
 
   const deletePost = () => {
     mutation(post._id);
   };
-
+  if (typeof postProject === 'string') return null;
   return (
     <GridItem
       bgColor="gray.500"
@@ -59,7 +58,7 @@ function PostContainer({ post }: PropTypes) {
       <Box as="article" position="relative">
         <Heading textAlign="center" mb={5}>
           Project : &nbsp;
-          {postProject ? postProject.title : post.project.title}
+          {postProject?.title ? postProject.title : post.project.title}
         </Heading>
         <Box fontSize="2xl" w="100%" bg="#333" py={3} px={2} borderRadius={10}>
           Process : &nbsp;
@@ -92,7 +91,7 @@ function PostContainer({ post }: PropTypes) {
               >
                 {post.status}
               </Text>
-              <Text>{format(parseISO(post.date), "yyyy-MM-dd'T'HH:mm")}</Text>
+              <Text>{format(parseISO(post.date), "yyyy-MM-dd' 'HH:mm")}</Text>
             </Flex>
             <Flex gap={5} direction="column">
               <Button onClick={onOpen} bg="red.500" fontSize="2xl">

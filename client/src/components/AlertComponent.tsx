@@ -1,9 +1,4 @@
-import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  AlertTitle,
-} from '@chakra-ui/react';
+import { Alert, AlertIcon, AlertTitle } from '@chakra-ui/react';
 
 import { useSelector } from 'react-redux';
 import type { AlertState } from '../interface';

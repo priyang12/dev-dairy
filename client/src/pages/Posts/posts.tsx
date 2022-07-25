@@ -6,7 +6,10 @@ import {
   Heading,
   useDisclosure,
 } from '@chakra-ui/react';
-import { useGetPostsQuery, useNewPostMutation } from '../../API/PostAPI';
+import {
+  useGetPostsQuery,
+  useNewPostMutation,
+} from '../../API/PostAPI';
 import PostContainer from './PostContainer';
 import Spinner from '../../components/spinner';
 import MarginContainer from '../../components/MarginContainer';
@@ -15,7 +18,11 @@ import BgImage from '../../components/BgImage';
 
 function Feeds() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { isLoading, isFetching, data: Posts } = useGetPostsQuery(null);
+  const {
+    isLoading,
+    isFetching,
+    data: Posts,
+  } = useGetPostsQuery(null);
 
   const [AddNewPost, NewPostMutaion] = useNewPostMutation();
 
@@ -33,10 +40,18 @@ function Feeds() {
         }}
       >
         <MarginContainer display="flex" flexDir="column">
-          <Button onClick={onOpen} fontSize="3xl" p={10} m="auto" my={5}>
+          <Button
+            onClick={onOpen}
+            fontSize="3xl"
+            p={10}
+            m="auto"
+            my={5}
+          >
             Create New Entry
           </Button>
-          {NewPostMutaion.isLoading && <Alert>Creating New Entry</Alert>}
+          {NewPostMutaion.isLoading && (
+            <Alert>Creating New Entry</Alert>
+          )}
           <PostModal
             onClose={onClose}
             isOpen={isOpen}

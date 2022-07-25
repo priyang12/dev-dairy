@@ -1,6 +1,6 @@
 import userEvent from '@testing-library/user-event';
-import moment from 'moment';
 import { rest } from 'msw';
+import { format, parseISO } from 'date-fns';
 import { BrowserRouter } from 'react-router-dom';
 import {
   render,
@@ -8,6 +8,7 @@ import {
   waitForElementToBeRemoved,
   waitFor,
 } from '../../test-utils';
+
 import {
   NewPostResponse,
   PostsResponse,
@@ -30,29 +31,35 @@ const setup = (): any => {
 it('render Posts', async () => {
   setup();
   expect(screen.getByAltText('loading...')).toBeInTheDocument();
-  await waitForElementToBeRemoved(screen.queryByAltText('loading...'), {
-    timeout: 2100,
-  });
+  await waitForElementToBeRemoved(
+    screen.queryByAltText('loading...'),
+    {
+      timeout: 2100,
+    },
+  );
   expect(screen.getByText('Dairy Log')).toBeInTheDocument();
   PostsResponse.forEach((post) => {
     expect(screen.getByText(post.title)).toBeInTheDocument();
     expect(screen.getByText(post.description)).toBeInTheDocument();
     expect(
-      screen.getByText(moment(post.date).format('D MMM YYYY, h:mm:ss')),
+      screen.getByText(
+        format(parseISO(post.date), "yyyy-MM-dd'T'HH:mm"),
+      ),
     ).toBeInTheDocument();
   });
 });
 it('render with no Posts', async () => {
   server.use(
-    rest.get(`${API}/posts`, (req, res, ctx) =>
-      res(ctx.delay(2000), ctx.json([])),
-    ),
+    rest.get(`${API}/posts`, (req, res, ctx) => res(ctx.delay(2000), ctx.json([]))),
   );
   setup();
   expect(screen.getByAltText('loading...')).toBeInTheDocument();
-  await waitForElementToBeRemoved(screen.queryByAltText('loading...'), {
-    timeout: 2100,
-  });
+  await waitForElementToBeRemoved(
+    screen.queryByAltText('loading...'),
+    {
+      timeout: 2100,
+    },
+  );
   expect(screen.getByText('Dairy Log')).toBeInTheDocument();
   expect(screen.queryByText('No posts yet')).toBeInTheDocument();
 });
@@ -60,9 +67,12 @@ it('render with no Posts', async () => {
 it('Delete Post', async () => {
   setup();
   expect(screen.getByAltText('loading...')).toBeInTheDocument();
-  await waitForElementToBeRemoved(screen.queryByAltText('loading...'), {
-    timeout: 2100,
-  });
+  await waitForElementToBeRemoved(
+    screen.queryByAltText('loading...'),
+    {
+      timeout: 2100,
+    },
+  );
   expect(screen.getByText('Dairy Log')).toBeInTheDocument();
   const post = screen.getByText(PostsResponse[0].title);
   expect(post).toBeInTheDocument();
@@ -77,16 +87,21 @@ it('Delete Post', async () => {
 it('Post Field Validation', async () => {
   setup();
   expect(screen.getByAltText('loading...')).toBeInTheDocument();
-  await waitForElementToBeRemoved(screen.queryByAltText('loading...'), {
-    timeout: 2100,
-  });
+  await waitForElementToBeRemoved(
+    screen.queryByAltText('loading...'),
+    {
+      timeout: 2100,
+    },
+  );
   expect(screen.getByText('Dairy Log')).toBeInTheDocument();
 
   userEvent.click(screen.getByText('Create New Entry'));
 
   expect(screen.getByText('New Log')).toBeInTheDocument();
 
-  await waitForElementToBeRemoved(screen.queryByText('Loading Projects'));
+  await waitForElementToBeRemoved(
+    screen.queryByText('Loading Projects'),
+  );
 
   userEvent.click(screen.getByText('Create Log'));
 
@@ -99,21 +114,31 @@ it('Post Field Validation', async () => {
 it('Add New Post', async () => {
   setup();
   expect(screen.getByAltText('loading...')).toBeInTheDocument();
-  await waitForElementToBeRemoved(screen.queryByAltText('loading...'), {
-    timeout: 2100,
-  });
+  await waitForElementToBeRemoved(
+    screen.queryByAltText('loading...'),
+    {
+      timeout: 2100,
+    },
+  );
   expect(screen.getByText('Dairy Log')).toBeInTheDocument();
 
   userEvent.click(screen.getByText('Create New Entry'));
 
   expect(screen.getByText('New Log')).toBeInTheDocument();
   userEvent.type(screen.getByLabelText('Title'), 'New Title');
-  userEvent.type(screen.getByLabelText('Description'), 'New Description');
+  userEvent.type(
+    screen.getByLabelText('Description'),
+    'New Description',
+  );
 
-  await waitForElementToBeRemoved(screen.queryByText('Loading Projects'));
+  await waitForElementToBeRemoved(
+    screen.queryByText('Loading Projects'),
+  );
   const ProjectSelect = screen.getByLabelText('Project');
 
-  userEvent.selectOptions(ProjectSelect, [`${ProjectsResponse[0]._id}`]);
+  userEvent.selectOptions(ProjectSelect, [
+    `${ProjectsResponse[0]._id}`,
+  ]);
   await waitFor(() => {
     screen.getByText('Select RoadMap');
   });
@@ -129,27 +154,40 @@ it('Add New Post', async () => {
 
   userEvent.click(screen.getByText('Create Log'));
 
-  await waitForElementToBeRemoved(screen.queryByText('Creating New Entry'), {
-    timeout: 2100,
-  });
-  expect(screen.getByText(NewPostResponse.post.title)).toBeInTheDocument();
+  await waitForElementToBeRemoved(
+    screen.queryByText('Creating New Entry'),
+    {
+      timeout: 2100,
+    },
+  );
+  expect(
+    screen.getByText(NewPostResponse.post.title),
+  ).toBeInTheDocument();
 });
 
 it('Update Post', async () => {
   setup();
   expect(screen.getByAltText('loading...')).toBeInTheDocument();
-  await waitForElementToBeRemoved(screen.queryByAltText('loading...'), {
-    timeout: 2100,
-  });
+  await waitForElementToBeRemoved(
+    screen.queryByAltText('loading...'),
+    {
+      timeout: 2100,
+    },
+  );
   expect(screen.getByText('Dairy Log')).toBeInTheDocument();
   const UpdateButton = screen.getAllByText('Update Post');
   userEvent.click(UpdateButton[0]);
   expect(screen.getByText('Update New Log')).toBeInTheDocument();
 
-  await waitForElementToBeRemoved(screen.queryByText('Loading RoadMap'));
+  await waitForElementToBeRemoved(
+    screen.queryByText('Loading RoadMap'),
+  );
 
   userEvent.type(screen.getByLabelText('Title'), 'New Title');
-  userEvent.type(screen.getByLabelText('Description'), 'New Description');
+  userEvent.type(
+    screen.getByLabelText('Description'),
+    'New Description',
+  );
   const RoadMapSelect = screen.getByLabelText('RoadMap');
 
   userEvent.selectOptions(RoadMapSelect, [

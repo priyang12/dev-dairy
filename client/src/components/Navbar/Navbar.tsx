@@ -57,13 +57,17 @@ function Navbar() {
           px={4}
           borderRadius={5}
           _hover={{ bg: isDark ? '#102344' : 'black' }}
-          _focus={{ border: `2px solid${isDark ? 'gray.700' : 'gray.100'}` }}
+          _focus={{
+            border: `2px solid${isDark ? 'gray.700' : 'gray.100'}`,
+          }}
           aria-label="Courses"
           fontWeight="normal"
           onClick={onOpen}
           onMouseLeave={onClose}
         >
-          <span>{isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}</span>
+          <span>
+            {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+          </span>
         </MenuButton>
         <MenuList
           onMouseEnter={onOpen}
@@ -108,7 +112,8 @@ function Navbar() {
               to="/login"
               _hover={{ color: isDark ? 'red.500' : 'gray.100' }}
             >
-              <i className="fas fa-sign-out-alt" />{' '}
+              <i className="fas fa-sign-out-alt" />
+              {' '}
               <span className="hide-sm">Logout</span>
             </Link>
           </MenuItem>
@@ -181,7 +186,10 @@ function Navbar() {
         </Flex>
       </Link>
       <Flex align="center">
-        <Flex display={['none', 'none', 'flex', 'flex']} fontSize="2xl">
+        <Flex
+          display={['none', 'none', 'flex', 'flex']}
+          fontSize="2xl"
+        >
           {Auth.authenticated ? AuthLinks : UnAuthLinks}
         </Flex>
 
@@ -214,7 +222,12 @@ function Navbar() {
         height={`${isOpen ? '70vh' : 'fit-content'}`}
         overflowY="auto"
         flexDir="column"
-        justifyContent={['flex-start', 'flex-start', 'center', 'center']}
+        justifyContent={[
+          'flex-start',
+          'flex-start',
+          'center',
+          'center',
+        ]}
       >
         <Flex justify="space-between" alignItems="center" py={5}>
           <Link

@@ -1,4 +1,10 @@
-import { Box, Heading, Spinner, Flex, Button } from '@chakra-ui/react';
+import {
+  Box,
+  Heading,
+  Spinner,
+  Flex,
+  Button,
+} from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
@@ -16,7 +22,11 @@ import {
 } from '../../features/MusicSlice';
 import type { MusicState } from '../../features/MusicSlice';
 
-const reorder = (lists: any[], startIndex: number, endIndex: number) => {
+const reorder = (
+  lists: any[],
+  startIndex: number,
+  endIndex: number,
+) => {
   const result = Array.from(lists);
   const [removed] = result.splice(startIndex, 1);
   result.splice(endIndex, 0, removed);
@@ -31,7 +41,9 @@ function MusicPlaylist() {
   const dispatch = useDispatch();
   const { SongsDB } = useSongsdb();
   const [songs, setSongs] = useState<any>([]);
-  const { isLoading }: MusicState = useSelector((state: any) => state.Music);
+  const { isLoading }: MusicState = useSelector(
+    (state: any) => state.Music,
+  );
 
   useEffect(() => {
     SongsDB?.getAllKeys('Songs').then((dbsongs: any) => {
@@ -45,25 +57,37 @@ function MusicPlaylist() {
     }
   }, [dispatch, songs]);
 
-  const onFileChange = (AcceptedFiles: any) => {
+  const onFileChange = async (AcceptedFiles: any) => {
     if (AcceptedFiles) {
       AcceptedFiles.forEach((file: any) => {
-        jsmediatags.read(file, {
-          onSuccess: async (tag: any) => {
-            const { tags } = tag;
-            const { title, artist, album, year, picture } = tags;
-            console.log(title, artist, album, year);
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+          const data = e.target.result;
 
+          SongsDB?.add(
+            'Songs',
+            new Blob([data], { type: file.type }),
+            file.name,
+          );
+        };
+        reader.readAsArrayBuffer(file);
+        setSongs([...songs, file.name]);
+        jsmediatags.read(file, {
+          onSuccess: async (tag) => {
+            const { tags } = tag;
+            const {
+              title, artist, album, year, picture,
+            } = tags;
             if (picture) {
               const { data } = picture;
-              const ImageBlob = new Blob([new Uint8Array(data).buffer]);
+              const ImageBlob = new Blob([
+                new Uint8Array(data).buffer,
+              ]);
               SongsDB?.add('SongsMeta', ImageBlob, file.name);
             } else {
               const ImageBlob = null;
               SongsDB?.add('SongsMeta', ImageBlob, file.name);
             }
-
-            SongsDB?.add('Songs', file, file.name);
             SongsDB?.add(
               'SongsInfo',
               {
@@ -74,7 +98,6 @@ function MusicPlaylist() {
               },
               file.name,
             );
-            setSongs([...songs, file.name]);
           },
         });
       });
@@ -86,11 +109,27 @@ function MusicPlaylist() {
     dispatch(setCurrentMusic(index));
   };
 
+  const RemoveSong = (song: string, index: number) => {
+    const transaction = SongsDB?.transaction(
+      ['Songs', 'SongsInfo', 'SongsMeta'],
+      'readwrite',
+    );
+    if (transaction) {
+      transaction.objectStore('Songs').delete(song);
+      transaction.objectStore('SongsInfo').delete(song);
+      transaction.objectStore('SongsMeta').delete(song);
+      transaction.oncomplete = (e) => {
+        const NewList = songs.filter((s: string) => s !== song);
+        setSongs(NewList);
+        dispatch(setPlayList(NewList));
+      };
+      transaction.commit();
+    }
+  };
   const onDragEnd = (result: DropResult) => {
     if (!result.destination) {
       return;
     }
-    console.log(result);
 
     const NewSongs = reorder(
       songs,
@@ -123,19 +162,29 @@ function MusicPlaylist() {
             <Heading py={5} textAlign="center">
               Music Playlist
             </Heading>
-            <DragDropContext onDragEnd={onDragEnd}>
-              <Droppable droppableId="droppable">
-                {(provided, snapshot) => (
-                  <div
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                    style={getListStyle(snapshot.isDraggingOver)}
-                  >
-                    <MusicList songs={songs} playSongFN={playSong} />
-                  </div>
-                )}
-              </Droppable>
-            </DragDropContext>
+            {songs.length > 0 ? (
+              <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId="droppable">
+                  {(provided, snapshot) => (
+                    <div
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      style={getListStyle(snapshot.isDraggingOver)}
+                    >
+                      <MusicList
+                        songs={songs}
+                        playSongFN={playSong}
+                        RemoveSong={RemoveSong}
+                      />
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
+            ) : (
+              <Box textAlign="center" p={5}>
+                <Heading>No Songs Why Not Put some Below</Heading>
+              </Box>
+            )}
             <Box mt={5} className="card">
               <DropZone
                 onDrop={onFileChange}
@@ -146,7 +195,11 @@ function MusicPlaylist() {
               >
                 {({ getRootProps, getInputProps }) => (
                   <Box m={2}>
-                    <Flex justifyContent="center" p={5} {...getRootProps()}>
+                    <Flex
+                      justifyContent="center"
+                      p={5}
+                      {...getRootProps()}
+                    >
                       <Box
                         as="input"
                         type="file"
@@ -156,7 +209,9 @@ function MusicPlaylist() {
                         multiple
                         {...getInputProps()}
                       />
-                      <Button w="fit-content">Drop Your Music Here</Button>
+                      <Button w="fit-content">
+                        Drop Your Music Here
+                      </Button>
                     </Flex>
                   </Box>
                 )}

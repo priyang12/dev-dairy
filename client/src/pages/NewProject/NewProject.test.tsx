@@ -1,6 +1,6 @@
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
-import { render, screen, waitFor } from '../../test-utils';
+import { render, screen } from '../../test-utils';
 import NewProject from './NewProject';
 
 function setup() {
@@ -87,17 +87,25 @@ it('Check Field Inputs and validation', () => {
     screen.getByText(/Title must be between 4 and 30 characters/),
   ).toBeInTheDocument();
   expect(
-    screen.getByText(/Description must be between 10 and 400 characters/),
+    screen.getByText(
+      /Description must be between 10 and 400 characters/,
+    ),
   ).toBeInTheDocument();
 
-  expect(screen.getByText(/Enter Valid Github Link/)).toBeInTheDocument();
-  expect(screen.getByText(/Enter Valid URL for Website/)).toBeInTheDocument();
+  expect(
+    screen.getByText(/Enter Valid Github Link/),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByText(/Enter Valid URL for Website/),
+  ).toBeInTheDocument();
 
   // check for Empty Title Message
   userEvent.clear(Title);
   userEvent.clear(Description);
   expect(screen.getByText(/TITLE is required/)).toBeInTheDocument();
-  expect(screen.getByText(/DESCRIPTION is required/)).toBeInTheDocument();
+  expect(
+    screen.getByText(/DESCRIPTION is required/),
+  ).toBeInTheDocument();
 });
 it('Valid Input With Api Call', () => {
   const {

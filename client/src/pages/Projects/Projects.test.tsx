@@ -1,9 +1,13 @@
-import moment from 'moment';
 import { rest } from 'msw';
 import { createMemoryHistory } from 'history';
+import { format, parseISO } from 'date-fns';
 import userEvent from '@testing-library/user-event';
 import { Router } from 'react-router-dom';
-import { render, screen, waitForElementToBeRemoved } from '../../test-utils';
+import {
+  render,
+  screen,
+  waitForElementToBeRemoved,
+} from '../../test-utils';
 import { ProjectsResponse } from '../../mock/MockedData';
 import Projects from './Projects';
 import server from '../../mock/server';
@@ -30,9 +34,10 @@ it('render Projects', async () => {
   ).toBeInTheDocument();
   ProjectsResponse.forEach((project) => {
     expect(screen.getByText(project.title)).toBeInTheDocument();
-    expect(screen.getByText(project.description)).toBeInTheDocument();
     expect(
-      screen.getByText(moment(project.date).format('D MMM YYYY, h:mm:ss')),
+      screen.getByText(
+        format(parseISO(project.date), "yyyy-MM-dd'T'HH:mm"),
+      ),
     ).toBeInTheDocument();
     project.technologies.forEach((tech) => {
       expect(screen.getByText(tech)).toBeInTheDocument();

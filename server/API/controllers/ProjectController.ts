@@ -6,6 +6,7 @@ import type { Request, Response } from "express";
 
 import ProjectService from "../../services/ProjectsService";
 import Container from "typedi";
+import { IProject } from "../../models/Project";
 
 // @route   GET api/projects
 // @desc    Fetch User Projects
@@ -31,6 +32,22 @@ export const GetProjectById = asyncHandler(
     return res.status(200).json(project);
   }
 );
+
+// @router GET api/projects/:id/roadMap
+// @desc Get project by id
+// @access Private
+export const GetRoadMapProjectById = asyncHandler(
+  async (req: any, res: Response): Promise<any> => {
+    const projectServiceInstance = Container.get(ProjectService);
+    const { roadMap }: IProject = await projectServiceInstance.GetRoadMaps(
+      req.user._id,
+      req.params.id
+    );
+
+    return res.status(200).json(roadMap);
+  }
+);
+
 // @router POST api/projects
 // @desc Create Project
 // @access Private
@@ -83,7 +100,26 @@ export const AddRoadMap = asyncHandler(
   }
 );
 
-// @router DELETE api/projects/:id/roadMap
+// @router PATCH api/projects/:id/roadMap
+// @desc Add  New RoadMap
+// @access Private
+export const EditRoadMap = asyncHandler(
+  async (req: any, res: Response): Promise<any> => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json(errors.array());
+    }
+    const projectServiceInstance = Container.get(ProjectService);
+    const message = await projectServiceInstance.EditRoadMap(
+      req.user._id,
+      req.params.id,
+      req.body
+    );
+    return res.status(200).json(message);
+  }
+);
+
+// @router DELETE api/projects/:id/roadMap/delete
 // @desc delete  New RoadMap
 // @access Private
 export const DeleteRoadMap = asyncHandler(

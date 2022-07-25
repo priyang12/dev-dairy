@@ -1,11 +1,8 @@
 import {
   FormControl,
-  FormErrorMessage,
   FormHelperText,
   FormLabel,
-  Input,
   Text,
-  Textarea,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 
@@ -38,7 +35,8 @@ function CustomFormControl({
       {...rest}
     >
       <FormLabel htmlFor="Description" color={field && 'red'}>
-        Description :{' '}
+        Description :
+        {' '}
       </FormLabel>
       {childrenArray.map((child: any) => {
         if (child.type === FormHelperText) {
