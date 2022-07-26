@@ -102,6 +102,10 @@ export default class PostService {
       .limit(limit)
       .sort({
         date: -1,
+      })
+      .populate({
+        path: "project",
+        select: "title process",
       });
 
     if (!Posts) {

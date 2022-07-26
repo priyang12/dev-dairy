@@ -24,7 +24,9 @@ function Feeds() {
   if (NewPostMutaion.isSuccess) {
     //  Alert
   }
+
   if (!Posts) return <div>No Posts</div>;
+
   return (
     <Box>
       <BgImage

@@ -26,16 +26,13 @@ function PostContainer({ post }: PropTypes) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [mutation] = useDeletePostMutation();
   const [UpdateMutate, UpdateResult] = useUpdatePostMutation();
-  const { data: Projects } = useGetProjectsQuery('');
-  const postProject =
-    typeof post.project === 'string'
-      ? post.project
-      : Projects?.find((project: any) => project._id === post.project);
 
   const deletePost = () => {
     mutation(post._id);
   };
-  if (typeof postProject === 'string') return null;
+
+  if (!post) return null;
+
   return (
     <GridItem
       bgColor="gray.500"
@@ -59,18 +56,18 @@ function PostContainer({ post }: PropTypes) {
       <Box as="article" position="relative">
         <Heading textAlign="center" mb={5}>
           Project : &nbsp;
-          {postProject?.title ? postProject.title : post.project.title}
+          {/* {post.project.title} */}
         </Heading>
         <Box fontSize="2xl" w="100%" bg="#333" py={3} px={2} borderRadius={10}>
           Process : &nbsp;
-          {postProject ? postProject.process : post.project.process}
+          {/* {post.project.process} */}
           <Progress
             colorScheme="green"
             height="10px"
             size="sm"
             mt={4}
             borderRadius="10px"
-            value={postProject ? postProject.process : post.project.process}
+            // value={post.project.process}
           />
         </Box>
         <Flex direction="column" p={5} fontSize="xl" pl={0}>

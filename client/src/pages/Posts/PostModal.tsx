@@ -153,7 +153,7 @@ function PostModal({
               mb={2}
               name="Project"
               id="Project"
-              value={post?.project?._id}
+              value={post?.project._id}
               onChange={ChangeRoadMapSelect}
             >
               <option>Select Project</option>

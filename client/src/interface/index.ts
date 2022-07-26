@@ -30,7 +30,11 @@ export interface IAlert {
 export interface INewPost {
   title: string;
   description: string;
-  project: any;
+  project: {
+    _id: string;
+    title: string;
+    process: number;
+  };
   status: string;
   roadMap: any;
 }

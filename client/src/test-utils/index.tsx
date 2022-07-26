@@ -23,6 +23,7 @@ function render(
   function Wrapper({
     children = null,
   }: {
+    // eslint-disable-next-line react/require-default-props
     children?: ReactNode;
   }): ReactElement {
     return <Provider store={store}>{children}</Provider>;
