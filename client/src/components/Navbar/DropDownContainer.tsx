@@ -1,19 +1,36 @@
 import { ChevronUpIcon, ChevronDownIcon } from '@chakra-ui/icons';
-import {
-  Link,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { Link, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../features/AuthSlice';
 
+function LinkItem({
+  children,
+  isDark,
+}: {
+  children: React.ReactNode;
+  isDark: boolean;
+}) {
+  return (
+    <MenuItem
+      _hover={{
+        borderTop: '2px solid',
+        borderBottom: '2px solid',
+        borderColor: isDark ? 'white' : 'gray.100',
+      }}
+      _focus={{
+        borderColor: isDark ? 'white' : 'gray.100',
+        borderTop: '2px solid',
+        borderBottom: '2px solid',
+      }}
+    >
+      {children}
+    </MenuItem>
+  );
+}
+
 function DropDownContainer() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
   const dispatch = useDispatch();
 
@@ -26,63 +43,74 @@ function DropDownContainer() {
     window.location.reload();
   };
   return (
-    <div>
-      <Menu isOpen={isOpen}>
-        <MenuButton
-          mx={5}
-          px={5}
-          py={4}
-          border="2px solid"
-          borderColor="primary.700"
-          borderRadius={5}
-          rounded="full"
-          _hover={{ bg: isDark ? 'primary.800' : 'primary.300' }}
-          _focus={{
-            borderWidth: '4px',
-            borderColor: isDark ? 'primary.800' : 'primary.300',
-          }}
-          aria-label="Courses"
-          fontWeight="normal"
-          onClick={onOpen}
-          onMouseLeave={onClose}
-        >
-          <span>{isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}</span>
-        </MenuButton>
-        <MenuList
-          onMouseEnter={onOpen}
-          onMouseLeave={onClose}
-          zIndex={2000}
-          fontSize="3xl"
-          bg="#7957574e"
-          className="card"
-        >
-          <MenuItem>
-            <Link
-              as={RouterLink}
-              to="/Projects"
-              color="white"
-              _hover={{ color: 'blue.500' }}
+    <>
+      <Menu>
+        {({ isOpen }) => (
+          <>
+            <MenuButton
+              mx={5}
+              px={5}
+              py={4}
+              border="2px solid"
+              borderColor="primary.700"
+              borderRadius={5}
+              h="fit-content"
+              rounded="full"
+              _hover={{ bg: isDark ? 'primary.800' : 'primary.300' }}
+              _focus={{
+                borderColor: isDark ? 'primary.200' : 'primary.300',
+              }}
+              aria-label="Courses"
+              fontWeight="normal"
             >
-              <span className="hide-sm">Projects</span>
-            </Link>
-          </MenuItem>
+              <span>{isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}</span>
+            </MenuButton>
+            <MenuList
+              zIndex={2000}
+              fontSize="3xl"
+              bg="transparent"
+              className="card"
+            >
+              <Link
+                as={RouterLink}
+                to="/Projects"
+                color="white"
+                _hover={{ color: 'blue.500' }}
+              >
+                <LinkItem isDark={isDark}>
+                  <span className="hide-sm">Projects</span>
+                </LinkItem>
+              </Link>
 
-          <div className="dropdown-divider" />
-          <MenuItem>
-            <Link
-              as={RouterLink}
-              onClick={onLogout}
-              to="/login"
-              color="white"
-              _hover={{ color: 'red.500' }}
-            >
-              <i className="fas fa-sign-out-alt" />{' '}
-              <span className="hide-sm">Logout</span>
-            </Link>
-          </MenuItem>
-        </MenuList>
+              <Link
+                as={RouterLink}
+                to="/Sessions"
+                _hover={{ color: isDark ? 'green.500' : 'gray.100' }}
+              >
+                <LinkItem isDark={isDark}>
+                  <span className="hide-sm">WorkSessions</span>
+                </LinkItem>
+              </Link>
+
+              <div className="dropdown-divider" />
+
+              <Link
+                as={RouterLink}
+                onClick={onLogout}
+                to="/login"
+                color="white"
+                _hover={{ color: 'red.500' }}
+              >
+                <LinkItem isDark={isDark}>
+                  <i className="fas fa-sign-out-alt" />
+                  <span className="hide-sm">Logout</span>
+                </LinkItem>
+              </Link>
+            </MenuList>
+          </>
+        )}
       </Menu>
-    </div>
+    </>
   );
 }
 

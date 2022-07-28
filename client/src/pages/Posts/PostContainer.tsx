@@ -14,7 +14,6 @@ import {
   useUpdatePostMutation,
 } from '../../API/PostAPI';
 import PostModal from './PostModal';
-import { useGetProjectsQuery } from '../../API/ProjectAPI';
 import { GetTaskColor } from '../../utils/GetStatusColor';
 import type { IPost } from '../../interface';
 
@@ -35,7 +34,7 @@ function PostContainer({ post }: PropTypes) {
 
   return (
     <GridItem
-      bgColor="gray.500"
+      bgColor="primary.500"
       color="#fff"
       position="relative"
       p={5}
@@ -56,18 +55,18 @@ function PostContainer({ post }: PropTypes) {
       <Box as="article" position="relative">
         <Heading textAlign="center" mb={5}>
           Project : &nbsp;
-          {/* {post.project.title} */}
+          {post.project.title}
         </Heading>
         <Box fontSize="2xl" w="100%" bg="#333" py={3} px={2} borderRadius={10}>
           Process : &nbsp;
-          {/* {post.project.process} */}
+          {post.project.process}
           <Progress
             colorScheme="green"
             height="10px"
             size="sm"
             mt={4}
             borderRadius="10px"
-            // value={post.project.process}
+            value={post.project.process}
           />
         </Box>
         <Flex direction="column" p={5} fontSize="xl" pl={0}>

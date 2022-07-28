@@ -6,6 +6,7 @@ import {
   Container,
   Heading,
   IconButton,
+  Grid,
 } from '@chakra-ui/react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
@@ -62,7 +63,11 @@ function NavBarContainer({ children, ...props }: any) {
       {...props}
     >
       <Container maxW="900px">
-        <Flex justifyContent="space-between" alignItems="center">
+        <Flex
+          justifyContent="space-between"
+          alignItems="center"
+          flexWrap={['wrap', 'wrap', 'nowrap', 'nowrap']}
+        >
           {children}
         </Flex>
       </Container>

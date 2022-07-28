@@ -2,34 +2,45 @@ import { Box, Button, Flex, IconButton, Text } from '@chakra-ui/react';
 import { format, parseISO } from 'date-fns';
 import { useState } from 'react';
 import { AiFillDelete } from 'react-icons/ai';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useGetProjectIdQuery } from '../../API/ProjectAPI';
 import {
   useDeleteAllProjectSessions,
   useGetSessionsByProject,
   usePullSessions,
-  usePushSession,
 } from '../../API/WorkSessionsAPI';
 import Container from '../../components/Container';
 import Spinner from '../../components/spinner';
+import { setProject } from '../../features/WorkSessionSlice';
+import { ReducerState } from '../../store';
 
 function ProjectSessions() {
   const { id } = useParams<{
     id: any;
   }>();
+  const Dispatch = useDispatch();
+  const { Project: SessionProject } = useSelector(
+    (state: ReducerState) => state.WorkSession,
+  );
   const { data: Project, isLoading, isFetching } = useGetProjectIdQuery(id);
   const { data: ProjectSession } = useGetSessionsByProject(id);
   const [DeleteMutate, DeleteResult] = useDeleteAllProjectSessions();
-  const [PushCall, PushResult] = usePushSession();
   const [PullCall, PullResult] = usePullSessions();
   const [DeleteCheck, setDeleteCheck] = useState(false);
   const [DeleteList, setDeleteList] = useState<Set<string>>(new Set());
 
-  const PushNewSession = () => {
-    PushCall({
-      ProjectId: id,
-      session: { Time: 5000 },
-    });
+  const StartSession = () => {
+    if (SessionProject.id) {
+      // Put Alert here
+    } else {
+      Dispatch(
+        setProject({
+          id: id,
+          name: Project?.title,
+        }),
+      );
+    }
   };
 
   const RemoveLists = () => {
@@ -47,8 +58,12 @@ function ProjectSessions() {
 
   return (
     <Container mt={10}>
-      {PushResult.isLoading && <Text>Creating new session...</Text>}
-      <Flex mt={10} justifyContent="space-around">
+      <Flex
+        justifyContent="space-around"
+        direction={['column', 'column', 'row', 'row']}
+        gap={5}
+        mb={5}
+      >
         <h1>{Project?.title} Work Sessions</h1>
         {ProjectSession?.session.length > 0 && (
           <Button
@@ -66,9 +81,9 @@ function ProjectSessions() {
       {PullResult.isLoading && <Text>Deleting sessions...</Text>}
       <Flex justifyContent="space-around" my={5}>
         {!DeleteCheck ? (
-          <>
-            <Button>Start Session</Button>
-            <Button onClick={PushNewSession}>Add Session</Button>
+          <Flex direction={['column', 'row', 'row']} gap={5}>
+            <Button onClick={StartSession}>Start Session</Button>
+
             <Button
               onClick={() => {
                 setDeleteCheck(true);
@@ -76,7 +91,7 @@ function ProjectSessions() {
             >
               Delete Session
             </Button>
-          </>
+          </Flex>
         ) : (
           <>
             <Button onClick={RemoveLists}>Delete Selected Sessions</Button>

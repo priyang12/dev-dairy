@@ -10,10 +10,7 @@ import {
   FormErrorMessage,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import {
-  useGetProjectIdQuery,
-  useGetProjectsQuery,
-} from '../../API/ProjectAPI';
+import { useGetProjectsQuery, useGetRoadMapsQuery } from '../../API/ProjectAPI';
 import type { INewPost, IPost, IProject } from '../../interface';
 import ModalComponent from '../../components/ModalComponent';
 import { ValidateDescription, ValidateTitle } from '../../utils/Validation';
@@ -52,10 +49,10 @@ function PostModal({
 }: Props) {
   const [RoadMapColor, setRoadMapColor] = useState('');
   const [ErrorState, setErrorState] = useState<PostFields>(init);
-  const [proId, setproId] = useState(post?.project ? post.project._id : '');
+  const [proId, setproId] = useState(post?.project._id);
   const { data: Projects, isLoading: LoadingProject } = useGetProjectsQuery('');
 
-  const { data: RoadMap, isFetching: RoadMapFetching } = useGetProjectIdQuery(
+  const { data: RoadMap, isFetching: RoadMapFetching } = useGetRoadMapsQuery(
     proId,
     {
       skip: !proId,
@@ -186,8 +183,11 @@ function PostModal({
               onChange={RoadMapChange}
             >
               <option>Select RoadMap</option>
-              {RoadMap?.roadMap.map((roadMap: any) => (
-                <option key={roadMap._id} value={[roadMap._id, roadMap.color]}>
+              {RoadMap?.map((roadMap) => (
+                <option
+                  key={roadMap._id}
+                  value={[roadMap._id, roadMap.color ? roadMap.color : '#333']}
+                >
                   {roadMap.name}
                 </option>
               ))}

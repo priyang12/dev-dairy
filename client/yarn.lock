@@ -2293,6 +2293,13 @@
     "@types/jsmediatags" "^3.9.3"
     xhr2 "^0.1.4"
 
+"@priyang/react-component-lib@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@priyang/react-component-lib/-/react-component-lib-0.1.0.tgz#c8a103fcff85bb9a17d5b96fc0e211c8bc83051e"
+  integrity sha512-oMTka6cSh3G14G8dRSwoR6vMppmk9O4rE2XceeHGqXM7iSDa7171tO7RkOQQN0W59oeGee8N4eEwn9+ecyk2bA==
+  dependencies:
+    lodash.debounce "^4.0.8"
+
 "@reach/alert@0.13.2":
   version "0.13.2"
   resolved "https://registry.npmjs.org/@reach/alert/-/alert-0.13.2.tgz"

@@ -21,6 +21,7 @@ import AuthReducer from './features/AuthSlice';
 import UserReducer from './features/UserSlice';
 import AlertReducer from './features/AlertSlice';
 import MusicReducer from './features/MusicSlice';
+import WorkSessionReducer from './features/WorkSessionSlice';
 
 const persistConfig = {
   key: 'root',
@@ -38,7 +39,10 @@ const RootReducers = combineReducers({
   User: UserReducer,
   Alert: AlertReducer,
   Music: MusicReducer,
+  WorkSession: WorkSessionReducer,
 });
+
+export type ReducerState = ReturnType<typeof RootReducers>;
 
 const persistedReducer = persistReducer(persistConfig, RootReducers);
 
@@ -63,5 +67,4 @@ export const createStoreWithMiddleware = (initialState = {}): Store =>
 export const store = createStoreWithMiddleware();
 
 export const Persister = persistStore(store);
-
 export type RootState = ReturnType<typeof store.getState>;

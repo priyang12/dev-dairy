@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { useState } from 'react';
@@ -92,6 +91,7 @@ function Navbar() {
               <span className="hide-sm">feeds</span>
             </Link>
           </MenuItem>
+
           <MenuItem>
             <Link
               as={RouterLink}

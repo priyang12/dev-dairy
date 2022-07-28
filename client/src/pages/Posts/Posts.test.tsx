@@ -39,7 +39,7 @@ it('render Posts', async () => {
     expect(screen.getByText(post.title)).toBeInTheDocument();
     expect(screen.getByText(post.description)).toBeInTheDocument();
     expect(
-      screen.getByText(format(parseISO(post.date), "yyyy-MM-dd'T'HH:mm")),
+      screen.getByText(format(parseISO(post.date), "yyyy-MM-dd' 'HH:mm")),
     ).toBeInTheDocument();
   });
 });
