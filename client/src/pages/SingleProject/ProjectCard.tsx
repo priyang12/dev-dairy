@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Heading,
-  Link,
-  Progress,
-  Text,
-} from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, Progress, Text } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 import { format, parseISO } from 'date-fns';
 import RandomColor from '../../utils/RandomColor';

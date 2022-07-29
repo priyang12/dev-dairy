@@ -10,7 +10,6 @@ import {
 } from '../../test-utils';
 
 import {
-  NewPostResponse,
   PostsResponse,
   ProjectsResponse,
   SingleProjectResponse,

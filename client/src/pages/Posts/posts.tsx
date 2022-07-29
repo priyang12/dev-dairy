@@ -20,7 +20,7 @@ function Feeds() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isLoading, isFetching, data: Posts } = useGetPostsQuery(null);
 
-  const [AddNewPost, { isSuccess, isLoading: CreatingPost, isError, error }] =
+  const [AddNewPost, { isSuccess, isLoading: CreatingPost, isError }] =
     useNewPostMutation();
 
   useEffect(() => {

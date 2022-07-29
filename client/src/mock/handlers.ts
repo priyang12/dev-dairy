@@ -11,7 +11,6 @@ import {
   SingleProjectResponse,
   MockedAllWorkSessions,
   MockedProjectWorkSessions,
-  MockedCreateWorkSession,
   MockPushWorkSession,
   MockPullWorkSession,
 } from './MockedData';

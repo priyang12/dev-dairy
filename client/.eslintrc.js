@@ -3,7 +3,7 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  plugins: ['react', '@typescript-eslint', 'prettier'],
+  plugins: ['react', '@typescript-eslint', 'prettier', 'unused-imports'],
   extends: [
     'airbnb',
     'airbnb-typescript',
@@ -38,7 +38,18 @@ module.exports = {
     'no-param-reassign': 0,
     allowSyntheticDefaultImports: 'off',
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
-
     'react/jsx-props-no-spreading': 'off',
+
+    '@typescript-eslint/no-unused-vars': 'off',
+    'unused-imports/no-unused-imports': 'error',
+    'unused-imports/no-unused-vars': [
+      'warn',
+      {
+        vars: 'all',
+        varsIgnorePattern: '^_',
+        args: 'after-used',
+        argsIgnorePattern: '^_',
+      },
+    ],
   },
 };

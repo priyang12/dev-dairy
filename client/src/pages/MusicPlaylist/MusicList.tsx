@@ -46,7 +46,7 @@ function MusicList({ songs, playSongFN, RemoveSong }: any) {
                     color: '#000',
                   }}
                   onClick={() => {
-                    playSongFN(song, index);
+                    playSongFN(index);
                   }}
                 >
                   {song}
@@ -54,7 +54,7 @@ function MusicList({ songs, playSongFN, RemoveSong }: any) {
                 <IconButton
                   icon={<MdDeleteForever />}
                   onClick={() => {
-                    RemoveSong(song, index);
+                    RemoveSong(song);
                   }}
                   aria-label="DeleteMusic"
                 />

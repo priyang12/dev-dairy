@@ -17,7 +17,6 @@ import {
   Link,
 } from '@chakra-ui/react';
 import { CheckIcon, ExternalLinkIcon } from '@chakra-ui/icons';
-import { useSelector } from 'react-redux';
 import { Navigate, useParams, Link as RouterLink } from 'react-router-dom';
 import { parseISO, format } from 'date-fns';
 import invert from 'invert-color';
@@ -25,8 +24,7 @@ import {
   useDeleteProjectMutation,
   useGetProjectIdQuery,
 } from '../../API/ProjectAPI';
-import type { AlertState, IRoadMap } from '../../interface';
-import ModalComponent from '../../components/ModalComponent';
+import type { IRoadMap } from '../../interface';
 import Spinner from '../../components/spinner';
 import RandomColor from '../../utils/RandomColor';
 import ConfirmationModal from '../../components/ConfirmationModal';

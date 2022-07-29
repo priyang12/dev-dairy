@@ -31,6 +31,7 @@ function LinkItem({
 }
 
 function DropDownContainer() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
   const dispatch = useDispatch();
 

@@ -24,7 +24,7 @@ type PropTypes = {
 function PostContainer({ post }: PropTypes) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [mutation] = useDeletePostMutation();
-  const [UpdateMutate, UpdateResult] = useUpdatePostMutation();
+  const [UpdateMutate, { isLoading: UpdatingPost }] = useUpdatePostMutation();
 
   const deletePost = () => {
     mutation(post._id);

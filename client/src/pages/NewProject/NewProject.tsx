@@ -72,7 +72,7 @@ function NewProject() {
 
   const AddNewTech = () => {
     if (!ErrorsState.NewTech) {
-      setTechnologies([...Technologies, FormValues.NewTech]);
+      setTechnologies([...Technologies, NewTech]);
       setNewTech('');
       SetState({ ...FormValues, NewTech: '' });
     }

@@ -6,7 +6,6 @@ import {
   Container,
   Heading,
   IconButton,
-  Grid,
 } from '@chakra-ui/react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';

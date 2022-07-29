@@ -88,12 +88,12 @@ function MusicPlaylist() {
     }
   };
 
-  const playSong = (song: string, index: number) => {
+  const playSong = (index: number) => {
     dispatch(MusicSliceLoading(true));
     dispatch(setCurrentMusic(index));
   };
 
-  const RemoveSong = (song: string, index: number) => {
+  const RemoveSong = (song: string) => {
     const transaction = SongsDB?.transaction(
       ['Songs', 'SongsInfo', 'SongsMeta'],
       'readwrite',
@@ -102,7 +102,7 @@ function MusicPlaylist() {
       transaction.objectStore('Songs').delete(song);
       transaction.objectStore('SongsInfo').delete(song);
       transaction.objectStore('SongsMeta').delete(song);
-      transaction.oncomplete = (e) => {
+      transaction.oncomplete = () => {
         const NewList = songs.filter((s: string) => s !== song);
         setSongs(NewList);
         dispatch(setPlayList(NewList));
