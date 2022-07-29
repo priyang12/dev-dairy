@@ -30,8 +30,6 @@ function PostContainer({ post }: PropTypes) {
     mutation(post._id);
   };
 
-  if (!post) return null;
-
   return (
     <GridItem
       bgColor="primary.500"
@@ -75,7 +73,11 @@ function PostContainer({ post }: PropTypes) {
           </Text>
 
           <Text>{post.description}</Text>
-          <Flex justifyContent="space-between" alignItems="center">
+          <Flex
+            justifyContent="space-between"
+            alignItems="center"
+            direction={['column', 'row']}
+          >
             <Flex direction="column">
               <Text
                 bg={GetTaskColor(post.status)}
@@ -108,7 +110,6 @@ function PostContainer({ post }: PropTypes) {
             action="Update"
             post={post}
             actionSubmit={UpdateMutate}
-            actionResult={UpdateResult}
           />
         )}
       </Box>

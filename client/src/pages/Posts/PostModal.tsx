@@ -19,7 +19,6 @@ interface Props {
   action: string;
   post?: IPost;
   actionSubmit: (data: any) => void;
-  actionResult: any;
   onClose: () => void;
   isOpen: boolean;
 }
@@ -39,14 +38,7 @@ const init = {
   roadMap: '',
   status: '',
 };
-function PostModal({
-  action,
-  post,
-  actionSubmit,
-  actionResult,
-  onClose,
-  isOpen,
-}: Props) {
+function PostModal({ action, post, actionSubmit, onClose, isOpen }: Props) {
   const [RoadMapColor, setRoadMapColor] = useState('');
   const [ErrorState, setErrorState] = useState<PostFields>(init);
   const [proId, setproId] = useState(post?.project._id);
@@ -205,13 +197,7 @@ function PostModal({
           </Select>
         </FormControl>
         <ModalFooter>
-          <Button
-            isLoading={actionResult.isLoading}
-            type="submit"
-            loadingText="Wait just for it..."
-            colorScheme="blue"
-            variant="solid"
-          >
+          <Button type="submit" colorScheme="blue" variant="solid">
             {action === 'New' ? 'Create Log' : 'Update New Log'}
           </Button>
         </ModalFooter>

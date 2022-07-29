@@ -31,6 +31,7 @@ import type { AlertState, IRoadMap } from '../../interface';
 import ModalComponent from '../../components/ModalComponent';
 import Spinner from '../../components/spinner';
 import RandomColor from '../../utils/RandomColor';
+import ConfirmationModal from '../../components/ConfirmationModal';
 
 function SingleProject() {
   const { id } = useParams<{ id: string }>();
@@ -41,7 +42,6 @@ function SingleProject() {
   });
   const project = data;
   const [DeleteProjectMutation, DeleteResult] = useDeleteProjectMutation();
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
   if (isFetching || isLoading) return <Spinner />;
 
@@ -231,7 +231,6 @@ function SingleProject() {
           w="100%"
           p={5}
           variant="outline"
-          onClick={onOpen}
           _hover={{
             bg: 'blue',
             color: 'white',
@@ -239,21 +238,26 @@ function SingleProject() {
         >
           Edit Project
         </Button>
-        <Button
-          mt={5}
-          colorScheme="red"
-          w="100%"
-          variant="outline"
-          onClick={onOpen}
-          _hover={{
-            bg: 'red',
-            color: 'white',
-          }}
-        >
-          Delete Project
-        </Button>
 
-        <ModalComponent
+        <ConfirmationModal
+          Action={() => DeleteProjectMutation(project._id)}
+          Result={DeleteResult}
+          Title={`${project.title}`}
+        >
+          <Button
+            mt={5}
+            colorScheme="red"
+            w="100%"
+            variant="outline"
+            _hover={{
+              bg: 'red',
+              color: 'white',
+            }}
+          >
+            Delete Project
+          </Button>
+        </ConfirmationModal>
+        {/* <ModalComponent
           Title="Delete Project"
           isOpen={isOpen}
           onClose={onClose}
@@ -278,7 +282,7 @@ function SingleProject() {
               Delete
             </Button>
           </Box>
-        </ModalComponent>
+        </ModalComponent> */}
       </Container>
     </Container>
   );

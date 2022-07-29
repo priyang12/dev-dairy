@@ -1,11 +1,12 @@
 import {
-  Alert,
   Box,
   Button,
   Grid,
   Heading,
   useDisclosure,
+  Spinner as ChakraSpinner,
 } from '@chakra-ui/react';
+import toast from 'react-hot-toast';
 import { useGetPostsQuery, useNewPostMutation } from '../../API/PostAPI';
 import PostContainer from './PostContainer';
 import Spinner from '../../components/spinner';
@@ -13,19 +14,36 @@ import MarginContainer from '../../components/MarginContainer';
 import PostModal from './PostModal';
 import BgImage from '../../components/BgImage';
 import { Ring } from '@priyang/react-component-lib';
+import { useEffect } from 'react';
 
 function Feeds() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isLoading, isFetching, data: Posts } = useGetPostsQuery(null);
 
-  const [AddNewPost, NewPostMutaion] = useNewPostMutation();
+  const [AddNewPost, { isSuccess, isLoading: CreatingPost, isError, error }] =
+    useNewPostMutation();
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success('Successfully created!');
+    }
+  }, [isSuccess]);
+  useEffect(() => {
+    if (CreatingPost) {
+      toast.loading('Creating Post...', {
+        icon: <ChakraSpinner />,
+        duration: 5000,
+      });
+    }
+  }, [CreatingPost]);
+
+  useEffect(() => {
+    if (isError) {
+      toast.error('Error creating post!');
+    }
+  }, [isError]);
 
   if (isLoading || isFetching) return <Spinner />;
-
-  if (NewPostMutaion.isSuccess) {
-    //  Alert
-  }
-
   if (!Posts) return <div>No Posts</div>;
 
   return (
@@ -47,13 +65,11 @@ function Feeds() {
               Create New Entry
             </Button>
           </Ring>
-          {NewPostMutaion.isLoading && <Alert>Creating New Entry</Alert>}
           <PostModal
             onClose={onClose}
             isOpen={isOpen}
             action="New"
             actionSubmit={AddNewPost}
-            actionResult={NewPostMutaion}
           />
 
           <Heading size="4xl" textAlign="center" mb={5}>

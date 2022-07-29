@@ -28,6 +28,7 @@ import SessionWidget from './components/SessionWidget';
 
 // Lazy load  components
 const MusicPlayer = lazy(async () => import('./components/MusicPlayer'));
+const CustomToaster = lazy(async () => import('./components/CustomToaster'));
 
 function App() {
   const dispatch = useDispatch();
@@ -55,6 +56,9 @@ function App() {
   return (
     <BrowserRouter>
       <Navbar />
+      <FallBackSuspenseWrapper fallback={false}>
+        <CustomToaster />
+      </FallBackSuspenseWrapper>
       <FallBackSuspenseWrapper fallback={false}>
         <MusicPlayer />
       </FallBackSuspenseWrapper>
