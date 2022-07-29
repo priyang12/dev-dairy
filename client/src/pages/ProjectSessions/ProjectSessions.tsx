@@ -36,7 +36,7 @@ function ProjectSessions() {
     } else {
       Dispatch(
         setProject({
-          id: id,
+          id,
           name: Project?.title,
         }),
       );

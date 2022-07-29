@@ -29,7 +29,7 @@ module.exports = {
   },
   rules: {
     quotes: 'off',
-    'no-console': 'off',
+    'no-console': 'error',
     'prettier/prettier': 'error',
     'react/react-in-jsx-scope': 'off',
     'no-underscore-dangle': ['error', { allow: ['_id'] }],

@@ -77,11 +77,12 @@ function Bar({ setDisplay }: { setDisplay: (State: boolean) => void }) {
         <GridItem>
           <Text fontSize="3xl">Project : {Project.name}</Text>
 
-          {Start ? (
+          {Start && (
             <Button variant="secondary-border" onClick={PushNewSession}>
               Add Session
             </Button>
-          ) : !Initialized ? (
+          )}
+          {!Initialized ? (
             <Text>Start The Timer</Text>
           ) : (
             <Text>Stop the timer to add a new session </Text>

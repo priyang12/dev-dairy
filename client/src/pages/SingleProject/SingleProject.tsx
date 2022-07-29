@@ -12,11 +12,9 @@ import {
   Icon,
   Progress,
   Text,
-  useDisclosure,
   Grid,
   GridItem,
   Link,
-  Alert,
 } from '@chakra-ui/react';
 import { CheckIcon, ExternalLinkIcon } from '@chakra-ui/icons';
 import { useSelector } from 'react-redux';
@@ -35,8 +33,6 @@ import ConfirmationModal from '../../components/ConfirmationModal';
 
 function SingleProject() {
   const { id } = useParams<{ id: string }>();
-  const { alert }: AlertState = useSelector((state: any) => state.Alert);
-
   const { isFetching, isLoading, isError, data } = useGetProjectIdQuery(id, {
     skip: !id,
   });
@@ -48,7 +44,6 @@ function SingleProject() {
   if (isError || !project) {
     return <div>No Project Found</div>;
   }
-  console.log(project);
 
   if (DeleteResult.isSuccess) {
     return <Navigate to="/projects" />;

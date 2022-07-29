@@ -87,7 +87,7 @@ function MusicPlayer() {
           },
         );
       } catch (error) {
-        console.log('error', error);
+        // Add Error Alert
       } finally {
         dispatch(MusicLoading(false));
       }
@@ -129,12 +129,7 @@ function MusicPlayer() {
               <FaMusic />
             </IconButton>
 
-            <Box
-              display={Hidden ? 'none' : 'block'}
-              onTransitionEnd={() => {
-                console.log('transition end');
-              }}
-            >
+            <Box display={Hidden ? 'none' : 'block'} onTransitionEnd={() => {}}>
               <IconButton
                 bg="#333"
                 aria-label="MusicCloseButton"

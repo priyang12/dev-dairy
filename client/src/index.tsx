@@ -8,6 +8,7 @@ import worker from './mock/browser';
 import './Styles/Global.css';
 // Need Fix Styling import in Component Library
 import '@priyang/react-component-lib/dist/react-component-lib.cjs.development.css';
+import 'react-toastify/dist/ReactToastify.css';
 import App from './App';
 
 if (process.env.REACT_APP_ENVIRONMENT === 'test') {

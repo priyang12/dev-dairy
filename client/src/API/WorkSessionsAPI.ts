@@ -61,7 +61,6 @@ const WorkSessionsApi = createApi({
       ) {
         try {
           const { data: NewSessions } = await queryFulfilled;
-          console.log(NewSessions.session?.length);
 
           dispatch(
             WorkSessionsApi.util.updateQueryData(

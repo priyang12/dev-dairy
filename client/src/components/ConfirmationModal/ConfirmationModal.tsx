@@ -35,21 +35,20 @@ function ConfirmationModal({ Title, Action, Result, children }: Prop) {
     e.preventDefault();
     const FormValues = e.target.elements;
     const { Confirm } = FormValues;
-    console.log(Confirm.value);
 
     if (Confirm.value === `${Title} Confirm`) {
       Action();
     } else {
-      alert('Wrong Confirmation');
+      // alert('Wrong Confirmation');
     }
   };
   return (
     <>
-      {React.Children.map(children, (child: any) => {
-        return React.cloneElement(child, {
+      {React.Children.map(children, (child: any) =>
+        React.cloneElement(child, {
           onClick: onOpen,
-        });
-      })}
+        }),
+      )}
       <Modal
         closeOnOverlayClick={false}
         onClose={onClose}

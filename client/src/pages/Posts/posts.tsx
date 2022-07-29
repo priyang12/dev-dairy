@@ -6,15 +6,15 @@ import {
   useDisclosure,
   Spinner as ChakraSpinner,
 } from '@chakra-ui/react';
-import toast from 'react-hot-toast';
+import { toast } from 'react-toastify';
+import { Ring } from '@priyang/react-component-lib';
+import { useEffect } from 'react';
 import { useGetPostsQuery, useNewPostMutation } from '../../API/PostAPI';
 import PostContainer from './PostContainer';
 import Spinner from '../../components/spinner';
 import MarginContainer from '../../components/MarginContainer';
 import PostModal from './PostModal';
 import BgImage from '../../components/BgImage';
-import { Ring } from '@priyang/react-component-lib';
-import { useEffect } from 'react';
 
 function Feeds() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -32,7 +32,6 @@ function Feeds() {
     if (CreatingPost) {
       toast.loading('Creating Post...', {
         icon: <ChakraSpinner />,
-        duration: 5000,
       });
     }
   }, [CreatingPost]);
