@@ -1,7 +1,7 @@
 import { Box, Collapse, IconButton } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { HiChevronDoubleDown } from 'react-icons/hi';
+import { HiChevronDoubleDown, HiChevronDoubleUp } from 'react-icons/hi';
 import Bar from './Bar';
 
 function SessionWidget() {
@@ -12,6 +12,7 @@ function SessionWidget() {
       <IconButton
         position="absolute"
         left="20%"
+        top="-50%"
         aria-label="Drop"
         border="3px solid"
         borderColor="secondary.500"
@@ -36,6 +37,20 @@ function SessionWidget() {
             show: { y: 0, opacity: 1 },
           }}
         >
+          <IconButton
+            position="absolute"
+            left="20%"
+            bottom="10%"
+            aria-label="Drop"
+            border="3px solid"
+            borderColor="secondary.500"
+            bg="black"
+            color="red"
+            onClick={() => setDisplay((State) => !State)}
+            rotate={Display ? 180 : 0}
+          >
+            <HiChevronDoubleUp />
+          </IconButton>
           <Bar setDisplay={setDisplay} />
         </Box>
       </Collapse>

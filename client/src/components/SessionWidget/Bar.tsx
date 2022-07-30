@@ -1,13 +1,15 @@
 import { Grid, GridItem, Heading, Text } from '@chakra-ui/react';
 import { ButtonGroup, Button } from '@priyang/react-component-lib';
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { usePushSession } from '../../API/WorkSessionsAPI';
+import { setProject } from '../../features/WorkSessionSlice';
 import { useTimer } from '../../Hooks/useTimer';
 import { ReducerState } from '../../store';
 import Container from '../Container';
 
 function Bar({ setDisplay }: { setDisplay: (State: boolean) => void }) {
+  const Dispatch = useDispatch();
   const { Project } = useSelector((state: ReducerState) => state.WorkSession);
   const [PushCall, PushResult] = usePushSession();
 
@@ -45,7 +47,14 @@ function Bar({ setDisplay }: { setDisplay: (State: boolean) => void }) {
       session: { Time: CountTotalTime() },
     });
   };
-
+  const RemoveSession = () => {
+    Dispatch(
+      setProject({
+        id: '',
+        name: '',
+      }),
+    );
+  };
   return (
     <Container MW="1200px">
       <Grid
@@ -64,6 +73,7 @@ function Bar({ setDisplay }: { setDisplay: (State: boolean) => void }) {
           <Text fontSize="4xl" w={['200px', '300px', '500px']}>
             Hour : {Hour} Minute : {Minute} Second : {seconds}
           </Text>
+          <Button onClick={RemoveSession}>Remove</Button>
         </GridItem>
         <GridItem>
           <ButtonGroup className="primary-border" bg="secondary.300">
