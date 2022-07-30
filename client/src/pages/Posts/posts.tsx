@@ -1,53 +1,35 @@
-import {
-  Box,
-  Button,
-  Grid,
-  Heading,
-  useDisclosure,
-  Spinner as ChakraSpinner,
-} from '@chakra-ui/react';
-import { toast } from 'react-toastify';
+import { Box, Button, Grid, Heading, useDisclosure } from '@chakra-ui/react';
+import { Id, toast } from 'react-toastify';
 import { Ring } from '@priyang/react-component-lib';
-import { useEffect } from 'react';
-import { useGetPostsQuery, useNewPostMutation } from '../../API/PostAPI';
+import { useEffect, useState } from 'react';
+import { useGetPostsQuery, useNewPost } from '../../API/PostAPI';
 import PostContainer from './PostContainer';
 import Spinner from '../../components/spinner';
 import MarginContainer from '../../components/MarginContainer';
 import PostModal from './PostModal';
 import BgImage from '../../components/BgImage';
+import { useApiToast } from '../../Hooks/useApiToast';
 
 function Feeds() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { isLoading, isFetching, data: Posts } = useGetPostsQuery(null);
+  const {
+    isLoading: LoadingPosts,
+    isFetching,
+    data: Posts,
+  } = useGetPostsQuery(null);
+  const [AddNewPost, Result] = useNewPost();
 
-  const [AddNewPost, { isSuccess, isLoading: CreatingPost, isError }] =
-    useNewPostMutation();
-
-  useEffect(() => {
-    if (isSuccess) {
-      toast.success('Successfully created!');
-    }
-  }, [isSuccess]);
-  useEffect(() => {
-    if (CreatingPost) {
-      toast.loading('Creating Post...', {
-        icon: <ChakraSpinner />,
-      });
-    }
-  }, [CreatingPost]);
-
-  useEffect(() => {
-    if (isError) {
-      toast.error('Error creating post!');
-    }
-  }, [isError]);
-
-  if (isLoading || isFetching) return <Spinner />;
-  if (!Posts) return <div>No Posts</div>;
+  useApiToast({
+    Result,
+    loadingMessage: 'Adding new post...',
+    successMessage: 'New post added successfully',
+  });
+  if (LoadingPosts || isFetching || !Posts) return <Spinner />;
 
   return (
     <Box>
       <BgImage
+        minH="100vh"
         BgImageData={{
           url: 'https://source.unsplash.com/random/?dark-nature',
         }}
@@ -82,7 +64,7 @@ function Feeds() {
               ))}
             </Grid>
           ) : (
-            <h1>No posts yet</h1>
+            <Heading textAlign="center">No posts yet</Heading>
           )}
         </MarginContainer>
       </BgImage>

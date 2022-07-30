@@ -1,6 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { toast } from 'react-toastify';
 import API from '.';
 import { setAlert } from '../features/AlertSlice';
+import { useApiToast } from '../Hooks/useApiToast';
 import type { IPost } from '../interface';
 import type { RootState } from '../store';
 import type { DeletedPostAPI, NewPostAPI, UpdatePostAPI } from './interface';
@@ -87,6 +89,7 @@ const PostApi = createApi({
           body: data,
         };
       },
+
       onQueryStarted(data, { dispatch, queryFulfilled }) {
         const UpdateResult = dispatch(
           PostApi.util.updateQueryData('GetPosts', null, (posts) =>
@@ -100,7 +103,15 @@ const PostApi = createApi({
           ),
         );
 
-        queryFulfilled.catch(UpdateResult.undo);
+        queryFulfilled
+          .then(({ data: UpdatePost }) => {
+            toast.success(`${UpdatePost.message} Updated Successfully`);
+          })
+          .catch((error: any) => {
+            let errorMessage = error.error.data.msg || 'server Error';
+            toast.dark(errorMessage);
+            UpdateResult.undo;
+          });
       },
     }),
     DeletePost: builder.mutation<DeletedPostAPI, Partial<string>>({
@@ -118,7 +129,15 @@ const PostApi = createApi({
             return newData;
           }),
         );
-        queryFulfilled.catch(deleteResult.undo);
+        queryFulfilled
+          .then(({ data: DeleteRes }) => {
+            toast.warning(`${DeleteRes.message}`);
+          })
+          .catch((error: any) => {
+            let errorMessage = error.error.data.msg || 'server Error';
+            toast.dark(errorMessage);
+            deleteResult.undo;
+          });
       },
     }),
   }),
@@ -128,9 +147,9 @@ export const {
   useGetPostsQuery,
   useGetPostQuery,
   useGetPostByProjectQuery,
-  useNewPostMutation,
+  useNewPostMutation: useNewPost,
   useUpdatePostMutation,
-  useDeletePostMutation,
+  useDeletePostMutation: useDeletePost,
 } = PostApi;
 
 export default PostApi;

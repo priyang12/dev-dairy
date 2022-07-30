@@ -9,13 +9,11 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { parseISO, format } from 'date-fns';
-import {
-  useDeletePostMutation,
-  useUpdatePostMutation,
-} from '../../API/PostAPI';
+import { useDeletePost, useUpdatePostMutation } from '../../API/PostAPI';
 import PostModal from './PostModal';
 import { GetTaskColor } from '../../utils/GetStatusColor';
 import type { IPost } from '../../interface';
+import { useApiToast } from '../../Hooks/useApiToast';
 
 type PropTypes = {
   post: IPost;
@@ -23,8 +21,8 @@ type PropTypes = {
 
 function PostContainer({ post }: PropTypes) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [mutation] = useDeletePostMutation();
-  const [UpdateMutate, { isLoading: UpdatingPost }] = useUpdatePostMutation();
+  const [mutation] = useDeletePost();
+  const [UpdateMutate, UpdateResult] = useUpdatePostMutation();
 
   const deletePost = () => {
     mutation(post._id);
