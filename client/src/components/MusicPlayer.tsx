@@ -27,6 +27,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ReactPlayer from 'react-player/file';
 import Draggable from 'react-draggable';
 import {
+  resetPlayer,
   setCurrentMusic,
   setLoading as MusicLoading,
 } from '../features/MusicSlice';
@@ -97,8 +98,9 @@ function MusicPlayer() {
   const Toggle = () => {
     setPlaying((prev) => !prev);
   };
+  console.log(CurrentMusic);
 
-  if (!authenticated) return null;
+  if (CurrentMusic < 0) return null;
 
   return (
     <Draggable defaultPosition={{ x: 1000, y: 0 }} grid={[25, 25]}>
@@ -139,6 +141,7 @@ function MusicPlayer() {
                 onClick={() => {
                   setPlaying(false);
                   setClosePlayer((prev) => !prev);
+                  dispatch(resetPlayer());
                 }}
               >
                 <AiOutlineCloseCircle />

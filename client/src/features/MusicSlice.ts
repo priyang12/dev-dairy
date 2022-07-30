@@ -21,6 +21,9 @@ const MusicSlice = createSlice({
       state.isError = action.payload;
       state.errorMessage = action.payload;
     },
+    resetPlayer: (state) => {
+      state.CurrentMusic = -1;
+    },
     clearError: (state) => {
       state.isError = false;
       state.errorMessage = '';
@@ -47,6 +50,7 @@ export const {
   setPlayList,
   setError,
   clearError,
+  resetPlayer,
 } = MusicSlice.actions;
 
 export default MusicSlice.reducer;
