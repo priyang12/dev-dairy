@@ -123,7 +123,6 @@ it('Server Error on Delete', async () => {
     ),
   );
 
-  setup();
   expect(screen.getByAltText('loading...')).toBeInTheDocument();
   await waitForElementToBeRemoved(screen.getByAltText('loading...'));
 

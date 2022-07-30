@@ -21,14 +21,8 @@ import WorkSessions from './pages/WorkSessions';
 import PrivateOutlet from './components/PrivateRoute';
 import Spinner from './components/spinner';
 import MusicPlaylist from './pages/MusicPlaylist';
-import Navbar from './components/Navbar';
 import FallBackSuspenseWrapper from './components/FallBackSuspenseWrapper';
 import ProjectSessions from './pages/ProjectSessions';
-import SessionWidget from './components/SessionWidget';
-
-// Lazy load  components
-const MusicPlayer = lazy(async () => import('./components/MusicPlayer'));
-const CustomToaster = lazy(async () => import('./components/CustomToaster'));
 
 function App() {
   const dispatch = useDispatch();
@@ -55,14 +49,6 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Navbar />
-      <FallBackSuspenseWrapper fallback={false}>
-        <CustomToaster />
-      </FallBackSuspenseWrapper>
-      <FallBackSuspenseWrapper fallback={false}>
-        <MusicPlayer />
-      </FallBackSuspenseWrapper>
-      <SessionWidget />
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />

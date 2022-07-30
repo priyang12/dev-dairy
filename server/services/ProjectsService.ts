@@ -68,15 +68,12 @@ export default class UserService {
       this.logger.info("Project added");
       return project;
     });
+
     if (!newProject) {
       this.logger.error("Project not created");
       throw new Error("Project not created");
     }
-    if (project.roadMap) {
-      project.roadMap.forEach(async (roadMap: any) => {
-        await this.AddRoadMap(userId, newProject._id, roadMap);
-      });
-    }
+
     this.logger.info("Project created with RoadMaps");
     return {
       result: true,

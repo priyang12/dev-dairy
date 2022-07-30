@@ -23,20 +23,15 @@ import {
 import { useState } from 'react';
 import { Navigate as Redirect } from 'react-router-dom';
 import Container from '../../components/Container';
-import { useCreateProjectMutation } from '../../API/ProjectAPI';
-import type { IProject } from '../../interface';
+import { useCreateProject } from '../../API/ProjectAPI';
+import type { IRoadMap } from '../../interface';
 import useForm from '../../Hooks/useForm';
 import {
   CheckURL,
   ValidateDescription,
   ValidateTitle,
 } from '../../utils/Validation';
-
-interface RoadMap {
-  title: string;
-  color: string;
-}
-
+import { v4 as uuIdv4 } from 'uuid';
 interface NewProjectInterface {
   Title: string;
   Description: string;
@@ -58,14 +53,15 @@ const init: NewProjectInterface = {
 };
 
 function NewProject() {
-  const [CreateProject, CreateProjectResult] = useCreateProjectMutation();
-  const [NewTech, setNewTech] = useState('');
+  const [CreateProject, CreateProjectResult] = useCreateProject();
   const [Technologies, setTechnologies] = useState<any[]>([]);
   const [NewRoadMap, setNewRoadMap] = useState<any>({
-    title: '',
+    name: '',
     color: '#000',
   });
-  const [RoadMaps, setRoadMaps] = useState<RoadMap[]>([]);
+  console.log(NewRoadMap);
+
+  const [RoadMaps, setRoadMaps] = useState<IRoadMap[]>([]);
   const { FormValues, ErrorsState, HandleChange, SetState, setError } =
     useForm(init);
 
@@ -78,7 +74,7 @@ function NewProject() {
   const AddNewRoadMap = () => {
     setRoadMaps([...RoadMaps, NewRoadMap]);
     setNewRoadMap({
-      title: '',
+      name: '',
       color: '',
     });
   };
@@ -109,20 +105,18 @@ function NewProject() {
     if (Website && !CheckURL(Website)) {
       WebsiteError = setError('Website', 'Enter Valid URL for Website');
     }
-    const newProject: IProject | any = {
-      title: Title,
-      description: Description,
-      process,
-      github: Github,
-      live: Live,
-      website: Website,
-      RoadMaps: newRoadMaps,
-      technologies: newTechs,
-    };
-    console.log(TitleError, DescriptionError, GithubError, WebsiteError);
 
     if (!TitleError && !DescriptionError && !GithubError && !WebsiteError) {
-      CreateProject(newProject);
+      CreateProject({
+        title: Title,
+        description: Description,
+        process,
+        github: Github,
+        live: Live,
+        website: Website,
+        roadMap: newRoadMaps,
+        technologies: newTechs,
+      });
     }
   };
 
@@ -305,19 +299,19 @@ function NewProject() {
                   type="text"
                   id="RoadMap"
                   name="RoadMap"
-                  value={NewRoadMap.title}
+                  value={NewRoadMap.name}
                   onChange={(e) => {
                     setNewRoadMap({
                       ...NewRoadMap,
-                      title: e.target.value,
+                      name: e.target.value,
                     });
                   }}
                 />
-                <FormLabel htmlFor="Color" hidden>
+                <FormLabel htmlFor="color" hidden>
                   Color
                 </FormLabel>
                 <Input
-                  id="Color"
+                  id="color"
                   type="color"
                   w="30%"
                   onChange={(e) => {
@@ -337,10 +331,9 @@ function NewProject() {
                   <AddIcon color="white" />
                 </Button>
               </Flex>
-              {RoadMaps.map((roadMap: RoadMap, index: number) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <Flex alignItems="center" gap={5} key={index}>
-                  <Input bg={roadMap.color} disabled value={roadMap.title} />
+              {RoadMaps.map((roadMap, index) => (
+                <Flex alignItems="center" gap={5} key={uuIdv4()}>
+                  <Input bg={roadMap.color} disabled value={roadMap.name} />
                   <DeleteIcon
                     color="red.700"
                     _hover={{

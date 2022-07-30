@@ -49,7 +49,7 @@ const ProjectApi = createApi({
         method: 'get',
       }),
     }),
-    CreateProject: builder.mutation<NewProjectAPI, IProject>({
+    CreateProject: builder.mutation<NewProjectAPI, Partial<IProject>>({
       query(data) {
         return {
           url: '',
@@ -210,7 +210,7 @@ const ProjectApi = createApi({
       query({ ProjectID, roadMapData }) {
         return {
           url: `/${ProjectID}/roadMap`,
-          method: 'PUT',
+          method: 'PATCH',
           body: roadMapData,
         };
       },
@@ -296,7 +296,7 @@ export const {
   useGetProjectsQuery,
   usePrefetch,
   useGetProjectIdQuery,
-  useCreateProjectMutation,
+  useCreateProjectMutation: useCreateProject,
   useDeleteProjectMutation,
   useUpdateProjectMutation,
   useGetRoadMapsQuery,

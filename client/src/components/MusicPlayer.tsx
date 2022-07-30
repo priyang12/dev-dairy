@@ -18,9 +18,7 @@ import {
   FaPause,
   FaPlay,
 } from 'react-icons/fa';
-
 import { AiOutlineCloseCircle } from 'react-icons/ai';
-
 import { GoMute, GoUnmute } from 'react-icons/go';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -35,11 +33,9 @@ import useSongsdb from '../Hooks/useSongsdb';
 import MusicSymbol from '../Assets/Music.webp';
 import BlobToImg from '../utils/BlobToImg';
 import type { MusicState } from '../features/MusicSlice';
-import type { AuthState } from '../interface';
 
 function MusicPlayer() {
   const { SongsDB } = useSongsdb();
-  const { authenticated }: AuthState = useSelector((state: any) => state.Auth);
   const { CurrentMusic, PlayList }: MusicState = useSelector(
     (state: any) => state.Music,
   );
@@ -98,7 +94,6 @@ function MusicPlayer() {
   const Toggle = () => {
     setPlaying((prev) => !prev);
   };
-  console.log(CurrentMusic);
 
   if (CurrentMusic < 0) return null;
 

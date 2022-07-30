@@ -98,16 +98,7 @@ function LogoComponent() {
 function NavBar() {
   const [isOpen, setIsOpen] = React.useState(true);
   const toggle = () => setIsOpen(!isOpen);
-
-  const location = useLocation();
-  const isLogin = location.pathname === '/login';
-  const isRegister = location.pathname === '/register';
-  const LandingPage = location.pathname === '/';
-
   const { authenticated }: AuthState = useSelector((state: any) => state.Auth);
-
-  if (LandingPage || isLogin || isRegister) return null;
-
   return (
     <NavBarContainer>
       <LogoComponent />
