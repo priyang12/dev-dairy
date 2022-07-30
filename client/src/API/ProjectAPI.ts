@@ -1,8 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { toast } from 'react-toastify';
 import API from '.';
 import { setAlert } from '../features/AlertSlice';
 import type { IProject, IRoadMap } from '../interface';
 import type { RootState } from '../store';
+import { CheckError } from '../utils/helpers';
 import type { DeletedProjectAPI, NewProjectAPI } from './interface';
 
 const ProjectApi = createApi({
@@ -17,6 +19,7 @@ const ProjectApi = createApi({
       return headers;
     },
   }),
+
   tagTypes: ['projectId', 'RoadMapsId'],
 
   endpoints: (builder) => ({
@@ -57,6 +60,10 @@ const ProjectApi = createApi({
       async onQueryStarted(data, { dispatch, queryFulfilled }) {
         try {
           const { data: NewProject } = await queryFulfilled;
+          toast('Project created successfully', {
+            type: 'success',
+            autoClose: 5000,
+          });
           dispatch(
             ProjectApi.util.updateQueryData(
               'GetProjects',
@@ -65,11 +72,18 @@ const ProjectApi = createApi({
             ),
           );
         } catch (error: any) {
-          dispatch(setAlert(error.data.message));
+          let errorMessage = CheckError(error);
+          toast.error(errorMessage);
         }
       },
     }),
-    UpdateProject: builder.mutation<NewProjectAPI, Partial<IProject>>({
+    UpdateProject: builder.mutation<
+      Partial<{
+        result: boolean;
+        message: string;
+      }>,
+      Partial<IProject>
+    >({
       query(data) {
         return {
           url: `/${data._id}`,
@@ -79,22 +93,26 @@ const ProjectApi = createApi({
       },
       async onQueryStarted(data, { dispatch, queryFulfilled }) {
         try {
-          const { data: UpdatedProject } = await queryFulfilled;
+          await queryFulfilled;
 
           dispatch(
-            ProjectApi.util.updateQueryData(
-              'GetProjects',
-              '',
-              (projects: IProject[]) =>
-                projects.map((project) =>
-                  project._id === UpdatedProject.project._id
-                    ? UpdatedProject.project
-                    : project,
-                ),
+            ProjectApi.util.updateQueryData('GetProjects', '', (projects) =>
+              projects.map((project) => {
+                if (project._id === data._id) {
+                  return { ...project, ...data };
+                }
+                return project;
+              }),
             ),
           );
         } catch (error: any) {
-          dispatch(setAlert(error.data.message));
+          let errorMessage = CheckError(error);
+          dispatch(
+            setAlert({
+              Type: 'error',
+              alert: errorMessage,
+            }),
+          );
         }
       },
       invalidatesTags: ['projectId'],
@@ -118,15 +136,18 @@ const ProjectApi = createApi({
           dispatch(
             setAlert({
               alert: 'Project Deleted Successfully',
+              Type: 'warning',
               result: true,
             }),
           );
         } catch (e: any) {
           deleteResult.undo();
+          const errorMessage = CheckError(e);
           dispatch(
             setAlert({
-              alert: e.error.data.message,
-              result: false,
+              alert: errorMessage,
+              Type: 'error',
+              result: true,
             }),
           );
         }

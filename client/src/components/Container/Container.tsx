@@ -3,7 +3,6 @@ import { Container as CustomContainer } from '@chakra-ui/react';
 
 interface ContainerProps extends BoxProps {
   children: React.ReactNode;
-  // eslint-disable-next-line react/require-default-props
   MW?: string;
 }
 

@@ -36,6 +36,7 @@ export const useApiToast = ({
         render: ErrorMessage,
         type: 'error',
         autoClose: 3000,
+        isLoading: false,
       });
     }
     () => {

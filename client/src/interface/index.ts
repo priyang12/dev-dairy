@@ -19,6 +19,7 @@ export interface UserState {
 
 export interface AlertState {
   alert: string;
+  Type: 'success' | 'error' | 'info' | 'warning';
   result: boolean;
 }
 

@@ -3,6 +3,7 @@ import type { AlertState } from '../interface';
 
 const initState: AlertState = {
   alert: '',
+  Type: 'info',
   result: false,
 };
 
@@ -13,22 +14,16 @@ const AlertSlice = createSlice({
     setAlert: (state, action) => {
       state.alert = action.payload.alert;
       state.result = action.payload.result;
-    },
-    setTemporaryAlert: (state, action) => {
-      state.alert = action.payload;
-      state.result = false;
-      setTimeout(() => {
-        state.alert = '';
-        state.result = false;
-      }, 3000);
+      state.Type = action.payload.Type;
     },
     clearAlert: (state) => {
       state.alert = '';
+      state.Type = 'info';
       state.result = false;
     },
   },
 });
 
-export const { setAlert } = AlertSlice.actions;
+export const { setAlert, clearAlert } = AlertSlice.actions;
 
 export default AlertSlice.reducer;

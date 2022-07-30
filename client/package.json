@@ -42,6 +42,7 @@
     "prebuild:ci": "yarn msw:cleanup",
     "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
     "test": "react-scripts test",
+    "test:debug": "DEBUG_PRINT_LIMIT=10000 react-scripts test",
     "testAll": "react-scripts test --watchAll",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "coverage": "react-scripts test --watchAll --coverage",

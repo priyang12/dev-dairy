@@ -54,11 +54,19 @@ const handlers = [
   rest.get(`${API}/projects/:id`, (req, res, ctx) =>
     res(ctx.json(SingleProjectResponse)),
   ),
-  rest.post(`${API}/projects`, (req, res, ctx) =>
-    res(ctx.json(NewProjectResponse)),
+  rest.post(
+    `${API}/projects`,
+    (req, res, ctx) => res(ctx.json(NewProjectResponse)),
+    // Error: "Project already exists"
+    // res(ctx.status(402), ctx.json({ message: 'Project already exists' })),
   ),
   rest.put(`${API}/projects/:id`, (req, res, ctx) =>
     res(
+      // ctx.status(403),
+      // ctx.json({
+      //   result: false,
+      //   message: 'Server Error',
+      // }),
       ctx.json({
         result: true,
         message: 'Project Updated Successfully',

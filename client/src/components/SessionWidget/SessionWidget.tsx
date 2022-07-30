@@ -11,7 +11,7 @@ function SessionWidget() {
     <Box position="sticky" top="20%" right="0" bg="primary.800" zIndex={1}>
       <IconButton
         position="absolute"
-        left="20%"
+        right="10%"
         top="-50%"
         aria-label="Drop"
         border="3px solid"
@@ -39,7 +39,7 @@ function SessionWidget() {
         >
           <IconButton
             position="absolute"
-            left="20%"
+            right="10%"
             bottom="10%"
             aria-label="Drop"
             border="3px solid"

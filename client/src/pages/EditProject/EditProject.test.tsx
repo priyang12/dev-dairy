@@ -1,7 +1,10 @@
 import userEvent from '@testing-library/user-event';
 import { createMemoryHistory } from 'history';
+import { rest } from 'msw';
 import { Route, Router, Routes } from 'react-router-dom';
+import API from '../../API';
 import { SingleProjectResponse } from '../../mock/MockedData';
+import server from '../../mock/server';
 
 import {
   render,
@@ -14,7 +17,7 @@ import EditProject from './EditProject';
 const route = '/EditProject/132';
 const History = createMemoryHistory({ initialEntries: [route] });
 
-const setup = () =>
+const Render = () =>
   render(
     <Router location={route} navigator={History}>
       <Routes>
@@ -23,33 +26,117 @@ const setup = () =>
     </Router>,
   );
 
-it('Render EditProject', async () => {
-  setup();
+const setup = async () => {
+  Render();
   await waitForElementToBeRemoved(screen.getByAltText(/loading/));
   expect(screen.getByText(/Edit Project/)).toBeInTheDocument();
+  const Title = screen.getByLabelText(/Title/);
+  const Description = screen.getByLabelText(/Description/);
+  const Process = screen.getByLabelText(/Process/);
+  const Github = screen.getByLabelText(/Github/);
+  const Live = screen.getByLabelText(/Live/);
+  const Website = screen.getByLabelText(/Website/);
+  const updateButton = screen.getByText(/Update Project/);
+  return {
+    Title,
+    Description,
+    Process,
+    Github,
+    Live,
+    Website,
+    updateButton,
+  };
+};
+
+it('Render EditProject', async () => {
+  await setup();
   expect(
-    screen.getByText(SingleProjectResponse.description),
+    screen.getByDisplayValue(SingleProjectResponse.title),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByDisplayValue(SingleProjectResponse.description),
+  ).toBeInTheDocument();
+  expect(screen.getByLabelText(/Process/).getAttribute('value')).toBe(
+    SingleProjectResponse.process.toString(),
+  );
+  expect(
+    screen.getByDisplayValue(SingleProjectResponse.github),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByDisplayValue(SingleProjectResponse.website),
   ).toBeInTheDocument();
 });
 
-// Need to test delete project and add/delete roadMap
-it('Delete Project', async () => {
-  setup();
-  await waitForElementToBeRemoved(screen.getByAltText(/loading/));
-  expect(screen.getByText(/Edit Project/)).toBeInTheDocument();
-  const deleteButton = screen.getByRole('button', {
-    name: 'Delete Project',
-  });
-  userEvent.click(deleteButton);
+it('Field Validation', async () => {
+  const { Title, Description, Process, Github, Live, Website, updateButton } =
+    await setup();
+  userEvent.clear(Title);
+  userEvent.clear(Description);
+  userEvent.clear(Github);
+  userEvent.click(Live);
+  userEvent.clear(Website);
+  userEvent.click(updateButton);
+
+  // expect(screen.getByText(/Title is required/)).toBeInTheDocument();
+  expect(screen.getByText(/DESCRIPTION is required/)).toBeInTheDocument();
+  expect(screen.getByText(/WEBSITE is required/)).toBeInTheDocument();
+  expect(screen.getByText(/GITHUB is required/)).toBeInTheDocument();
+});
+
+it('Update Edit Project', async () => {
+  const { Title, Description, Process, Github, Live, Website, updateButton } =
+    await setup();
+
+  userEvent.type(Title, 'New Title');
+  userEvent.type(Description, 'New Description');
+  userEvent.type(Process, '10');
+  userEvent.type(Github, 'New Github');
+  userEvent.click(Live);
+  userEvent.type(Website, 'New Website');
+
+  userEvent.click(updateButton);
+
   await waitFor(() => {
-    expect(screen.getByText(/Confirm Delete Project/)).toBeInTheDocument();
+    screen.getByText(/Updating Project/);
   });
-  const confirmButton = screen.getByRole('button', {
-    name: 'Delete',
+  await waitFor(() => {
+    screen.getByText(/Project Updated Successfully/);
   });
-  userEvent.click(confirmButton);
+});
 
-  await waitForElementToBeRemoved(screen.getByText('Deleting...'));
+it('Test Edit Project Put Request', async () => {
+  server.use(
+    rest.put(`${API}/projects/:id`, (req, res, ctx) =>
+      res(
+        ctx.status(403),
+        ctx.json({
+          result: false,
+          message: 'Server Error',
+        }),
+      ),
+    ),
+  );
+  const { updateButton } = await setup();
+  userEvent.click(updateButton);
+  await waitFor(() => {
+    screen.getByText(/Server Error/);
+  });
+});
 
-  expect(History.location.pathname).toBe('/projects');
+it('Test Edit Project Get Error', async () => {
+  server.use(
+    rest.get(`${API}/projects/:id`, (req, res, ctx) =>
+      res(
+        ctx.status(403),
+        ctx.json({
+          result: false,
+          message: 'Server Error',
+        }),
+      ),
+    ),
+  );
+  Render();
+  await waitFor(() => {
+    screen.getByText(/Something went wrong/);
+  });
 });

@@ -4,7 +4,7 @@ function CustomToaster() {
   return (
     <ToastContainer
       autoClose={false}
-      draggableDirection="y"
+      draggableDirection="x"
       draggable={true}
       draggablePercent={60}
       style={{

@@ -1,7 +1,6 @@
 import { AddIcon, ArrowForwardIcon, DeleteIcon } from '@chakra-ui/icons';
 import {
   Box,
-  Container,
   FormControl,
   FormHelperText,
   FormLabel,
@@ -21,9 +20,9 @@ import {
   NumberInputStepper,
   Switch,
 } from '@chakra-ui/react';
-
 import { useState } from 'react';
 import { Navigate as Redirect } from 'react-router-dom';
+import Container from '../../components/Container';
 import { useCreateProjectMutation } from '../../API/ProjectAPI';
 import type { IProject } from '../../interface';
 import useForm from '../../Hooks/useForm';
@@ -72,8 +71,7 @@ function NewProject() {
 
   const AddNewTech = () => {
     if (!ErrorsState.NewTech) {
-      setTechnologies([...Technologies, NewTech]);
-      setNewTech('');
+      setTechnologies((Technologies) => [...Technologies, FormValues.NewTech]);
       SetState({ ...FormValues, NewTech: '' });
     }
   };
@@ -121,17 +119,19 @@ function NewProject() {
       RoadMaps: newRoadMaps,
       technologies: newTechs,
     };
+    console.log(TitleError, DescriptionError, GithubError, WebsiteError);
 
-    if (!TitleError || !DescriptionError || !GithubError || !WebsiteError) {
+    if (!TitleError && !DescriptionError && !GithubError && !WebsiteError) {
       CreateProject(newProject);
     }
   };
+
   if (CreateProjectResult.isSuccess) {
     return <Redirect to="/Projects" />;
   }
   return (
-    <Box>
-      <Container className="top" maxW="1000px" pb={10}>
+    <Container MW="900px">
+      <Box py={10}>
         <Heading size="lg">New Project</Heading>
         <Flex
           mt={5}
@@ -287,7 +287,7 @@ function NewProject() {
             </FormControl>
             {Technologies.map((tech: any, index) => (
               <Flex alignItems="center" gap={5} key={tech}>
-                <Input defaultValue={tech} bg="blue.800" disabled />
+                <Input defaultValue={tech} bg="primary.200" />
                 <DeleteIcon
                   color="red"
                   data-testid={`delete-tech-${index}`}
@@ -369,8 +369,8 @@ function NewProject() {
         >
           Create Project
         </Button>
-      </Container>
-    </Box>
+      </Box>
+    </Container>
   );
 }
 

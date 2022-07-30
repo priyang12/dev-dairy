@@ -5,6 +5,7 @@ import { render as rtlRender } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { createStoreWithMiddleware } from '../store';
 import type { RootState } from '../store';
+import CustomToaster from '../components/CustomToaster';
 
 type ReduxRenderOptions = {
   preloadedState?: RootState;
@@ -26,7 +27,14 @@ function render(
     // eslint-disable-next-line react/require-default-props
     children?: ReactNode;
   }): ReactElement {
-    return <Provider store={store}>{children}</Provider>;
+    return (
+      <Provider store={store}>
+        <div>
+          <CustomToaster />
+          {children}
+        </div>
+      </Provider>
+    );
   }
 
   return rtlRender(ui, { wrapper: Wrapper, ...renderOptions });

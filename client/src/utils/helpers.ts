@@ -1,5 +1,20 @@
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
+export const CheckError = (error: any) => {
+  let errorMessage = 'Something went wrong';
+  if ('error' in error) {
+    const errMsg =
+      'status' in error.error
+        ? error.error.data.message
+        : JSON.stringify(error.data);
+
+    console.log(errMsg);
+
+    errorMessage = errMsg;
+  }
+  return errorMessage;
+};
+
 export function isFetchBaseQueryError(
   error: unknown,
 ): error is FetchBaseQueryError {
