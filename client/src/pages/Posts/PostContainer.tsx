@@ -13,7 +13,6 @@ import { useDeletePost, useUpdatePostMutation } from '../../API/PostAPI';
 import PostModal from './PostModal';
 import { GetTaskColor } from '../../utils/GetStatusColor';
 import type { IPost } from '../../interface';
-import { useApiToast } from '../../Hooks/useApiToast';
 
 type PropTypes = {
   post: IPost;
@@ -22,11 +21,7 @@ type PropTypes = {
 function PostContainer({ post }: PropTypes) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [mutation] = useDeletePost();
-  const [UpdateMutate, UpdateResult] = useUpdatePostMutation();
-
-  const deletePost = () => {
-    mutation(post._id);
-  };
+  const [UpdateMutate] = useUpdatePostMutation();
 
   return (
     <GridItem
@@ -94,7 +89,13 @@ function PostContainer({ post }: PropTypes) {
               <Button onClick={onOpen} bg="red.500" fontSize="2xl">
                 Update Post
               </Button>
-              <Button bg="blue.500" onClick={deletePost} fontSize="2xl">
+              <Button
+                bg="blue.500"
+                onClick={() => {
+                  mutation(post._id);
+                }}
+                fontSize="2xl"
+              >
                 Delete Post
               </Button>
             </Flex>

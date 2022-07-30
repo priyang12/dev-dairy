@@ -70,8 +70,6 @@ it('Delete Post', async () => {
   const deleteButton = screen.getAllByText('Delete Post');
   userEvent.click(deleteButton[0]);
   expect(post).not.toBeInTheDocument();
-
-  // expect(screen.getByText('Post Deleted')).toBeInTheDocument();
 });
 
 it('Post Field Validation', async () => {
