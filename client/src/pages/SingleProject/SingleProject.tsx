@@ -31,10 +31,15 @@ import ConfirmationModal from '../../components/ConfirmationModal';
 
 function SingleProject() {
   const { id } = useParams<{ id: string }>();
-  const { isFetching, isLoading, isError, data } = useGetProjectIdQuery(id, {
+  const {
+    isFetching,
+    isLoading,
+    isError,
+    data: project,
+  } = useGetProjectIdQuery(id, {
     skip: !id,
   });
-  const project = data;
+
   const [DeleteProjectMutation, DeleteResult] = useDeleteProjectMutation();
 
   if (isFetching || isLoading) return <Spinner />;
@@ -250,32 +255,6 @@ function SingleProject() {
             Delete Project
           </Button>
         </ConfirmationModal>
-        {/* <ModalComponent
-          Title="Delete Project"
-          isOpen={isOpen}
-          onClose={onClose}
-        >
-          <Box>
-            {alert && <Alert>{alert}</Alert>}
-            <Text>Are you sure you want to delete this project?</Text>
-            <Button
-              colorScheme="red"
-              w="100%"
-              variant="outline"
-              _hover={{
-                bg: 'red',
-                color: 'white',
-              }}
-              isLoading={DeleteResult.isLoading}
-              loadingText="Deleting..."
-              onClick={() => {
-                DeleteProjectMutation(project._id);
-              }}
-            >
-              Delete
-            </Button>
-          </Box>
-        </ModalComponent> */}
       </Container>
     </Container>
   );

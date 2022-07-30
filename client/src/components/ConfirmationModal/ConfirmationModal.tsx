@@ -14,6 +14,7 @@ import {
   Input,
 } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 type Prop = {
   Title: string;
@@ -39,7 +40,7 @@ function ConfirmationModal({ Title, Action, Result, children }: Prop) {
     if (Confirm.value === `${Title} Confirm`) {
       Action();
     } else {
-      // alert('Wrong Confirmation');
+      toast.error('Please confirm the title');
     }
   };
   return (
@@ -67,6 +68,7 @@ function ConfirmationModal({ Title, Action, Result, children }: Prop) {
                   <Text>Are you sure you want to delete {Title}?</Text>
                 </FormLabel>
                 <Input
+                  data-testid="confirm-input"
                   my={5}
                   type="text"
                   name="Confirm"

@@ -3,12 +3,7 @@ import { format, parseISO } from 'date-fns';
 import { Route, Router, Routes } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import userEvent from '@testing-library/user-event';
-import {
-  render,
-  screen,
-  waitFor,
-  waitForElementToBeRemoved,
-} from '../../test-utils';
+import { render, screen, waitForElementToBeRemoved } from '../../test-utils';
 import { SingleProjectResponse } from '../../mock/MockedData';
 import SingleProject from './index';
 import server from '../../mock/server';
@@ -81,6 +76,17 @@ it('Render Different Values', async () => {
 
   expect(screen.getByText('Not Yet Deployed')).toBeInTheDocument();
 });
+
+it('Click on Edit Project', async () => {
+  setup();
+  expect(screen.getByAltText('loading...')).toBeInTheDocument();
+  await waitForElementToBeRemoved(screen.getByAltText('loading...'));
+  // Edit Project
+  const editButton = screen.getByText('Edit Project');
+  userEvent.click(editButton);
+  expect(History.location.pathname).toMatch(/EditProject/);
+});
+
 it('Delete Project', async () => {
   setup();
   expect(screen.getByAltText('loading...')).toBeInTheDocument();
@@ -91,22 +97,23 @@ it('Delete Project', async () => {
   });
   userEvent.click(deleteButton);
   expect(
-    screen.getByText('Are you sure you want to delete this project?'),
+    screen.getByText(/Are you sure you want to delete/),
   ).toBeInTheDocument();
-  const cancelButton = screen.getByRole('button', { name: 'Delete' });
-  userEvent.click(cancelButton);
-  await waitForElementToBeRemoved(screen.getByText('Deleting...'));
+
+  const ConfirmButton = screen.getByRole('button', { name: 'Delete' });
+
+  userEvent.click(ConfirmButton);
+
+  const ConfirmInput = screen.getByTestId('confirm-input');
+  userEvent.type(ConfirmInput, `${SingleProjectResponse.title} Confirm`);
+
+  const SubmitButton = screen.getByRole('button', { name: 'Delete' });
+
+  userEvent.click(SubmitButton);
+
+  await waitForElementToBeRemoved(ConfirmButton);
 
   expect(History.location.pathname).toBe('/projects');
-});
-it('Click on Edit Project', async () => {
-  setup();
-  expect(screen.getByAltText('loading...')).toBeInTheDocument();
-  await waitForElementToBeRemoved(screen.getByAltText('loading...'));
-  // Edit Project
-  const editButton = screen.getByText('Edit Project');
-  userEvent.click(editButton);
-  expect(History.location.pathname).toMatch(/EditProject/);
 });
 
 it('Server Error on Delete', async () => {
@@ -119,19 +126,26 @@ it('Server Error on Delete', async () => {
   setup();
   expect(screen.getByAltText('loading...')).toBeInTheDocument();
   await waitForElementToBeRemoved(screen.getByAltText('loading...'));
-  // Delete Project
 
+  // Delete Project
   const deleteButton = screen.getByRole('button', {
     name: 'Delete Project',
   });
   userEvent.click(deleteButton);
   expect(
-    screen.getByText('Are you sure you want to delete this project?'),
+    screen.getByText(/Are you sure you want to delete/),
   ).toBeInTheDocument();
-  const cancelButton = screen.getByRole('button', { name: 'Delete' });
-  userEvent.click(cancelButton);
 
-  await waitFor(() => {
-    expect(screen.getByText('Server Error')).toBeInTheDocument();
-  });
+  const ConfirmButton = screen.getByRole('button', { name: 'Delete' });
+
+  userEvent.click(ConfirmButton);
+
+  const ConfirmInput = screen.getByTestId('confirm-input');
+  userEvent.type(ConfirmInput, `${SingleProjectResponse.title} Confirm`);
+
+  const SubmitButton = screen.getByRole('button', { name: 'Delete' });
+
+  userEvent.click(SubmitButton);
+
+  expect(History.location.pathname).toBe(route);
 });
