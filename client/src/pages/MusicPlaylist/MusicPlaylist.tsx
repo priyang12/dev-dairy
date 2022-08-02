@@ -5,6 +5,7 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import type { DropResult } from 'react-beautiful-dnd';
 import jsmediatags from '@priyang/jsmediatags';
 import DropZone from 'react-dropzone';
+import { toast } from 'react-toastify';
 import useSongsdb from '../../Hooks/useSongsdb';
 import BgImage from '../../components/BgImage';
 import MusicSymbol from '../../Assets/Music.webp';
@@ -24,13 +25,14 @@ const reorder = (lists: any[], startIndex: number, endIndex: number) => {
   return result;
 };
 const getListStyle = (isDraggingOver: any) => ({
-  background: isDraggingOver ? 'blue' : 'transparent',
+  // background: isDraggingOver ? 'blue' : 'transparent',
 });
 
 function MusicPlaylist() {
   const dispatch = useDispatch();
   const { SongsDB } = useSongsdb();
   const [songs, setSongs] = useState<any>([]);
+  const [AddingNewSongs, setAddingNewSongs] = useState(false);
   const { isLoading }: MusicState = useSelector((state: any) => state.Music);
 
   useEffect(() => {
@@ -47,6 +49,7 @@ function MusicPlaylist() {
 
   const onFileChange = async (AcceptedFiles: any) => {
     if (AcceptedFiles) {
+      setAddingNewSongs(true);
       AcceptedFiles.forEach((file: any) => {
         const reader = new FileReader();
         reader.onload = (e: any) => {
@@ -85,6 +88,7 @@ function MusicPlaylist() {
           },
         });
       });
+      setAddingNewSongs(false);
     }
   };
 
@@ -108,13 +112,15 @@ function MusicPlaylist() {
         dispatch(setPlayList(NewList));
       };
       transaction.commit();
+      toast.success('Song Removed', {
+        autoClose: 2000,
+      });
     }
   };
   const onDragEnd = (result: DropResult) => {
     if (!result.destination) {
       return;
     }
-
     const NewSongs = reorder(
       songs,
       result.source.index,
@@ -125,14 +131,14 @@ function MusicPlaylist() {
 
   return (
     <BgImage
-      height={['100%', '100%', '150vh']}
+      minH={['100%', '80vh', '120vh']}
       pt={10}
       BgImageData={{
         ImageFile: MusicSymbol,
       }}
     >
       <Box mx="auto" w="70vw" minW="350px">
-        {isLoading && <Spinner />}
+        {(isLoading || AddingNewSongs) && <Spinner />}
         <Flex
           direction={['column', 'column', 'column', 'row']}
           justifyContent="space-between"

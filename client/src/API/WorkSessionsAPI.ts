@@ -61,7 +61,6 @@ const WorkSessionsApi = createApi({
       ) {
         try {
           const { data: NewSessions } = await queryFulfilled;
-
           dispatch(
             WorkSessionsApi.util.updateQueryData(
               'GetSessionsByProject',
@@ -94,10 +93,7 @@ const WorkSessionsApi = createApi({
         method: 'PATCH',
         body: ArgSessions,
       }),
-      async onQueryStarted(
-        { ProjectId, ArgSessions },
-        { dispatch, queryFulfilled },
-      ) {
+      onQueryStarted({ ProjectId, ArgSessions }, { dispatch, queryFulfilled }) {
         // Optimistic update
         const OptimisticDelete = dispatch(
           WorkSessionsApi.util.updateQueryData(
@@ -112,18 +108,7 @@ const WorkSessionsApi = createApi({
             }),
           ),
         );
-        try {
-          const { data: resData } = await queryFulfilled;
-          // dispatch(
-          //   setAlert({
-          //     alert: resData.message,
-          //     result: resData.result,
-          //   }),
-          // );
-        } catch (error: any) {
-          OptimisticDelete.undo();
-          // dispatch(setAlert('Server Error'));
-        }
+        queryFulfilled.catch(OptimisticDelete.undo);
       },
     }),
     DeleteAllProjectSessions: builder.mutation<

@@ -40,7 +40,7 @@ function SessionWidget() {
           <IconButton
             position="absolute"
             right="10%"
-            bottom="10%"
+            bottom="5%"
             aria-label="Drop"
             border="3px solid"
             borderColor="secondary.500"

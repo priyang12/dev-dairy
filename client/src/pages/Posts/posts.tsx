@@ -32,7 +32,7 @@ function Feeds() {
           url: 'https://source.unsplash.com/random/?dark-nature',
         }}
       >
-        <MarginContainer display="flex" flexDir="column">
+        <MarginContainer display="flex" flexDir="column" py={5}>
           <Ring
             radius="15px"
             ringColor="#080808"

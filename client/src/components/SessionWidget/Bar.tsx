@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { usePushSession } from '../../API/WorkSessionsAPI';
 import { setProject } from '../../features/WorkSessionSlice';
+import { useApiToast } from '../../Hooks/useApiToast';
 import { useTimer } from '../../Hooks/useTimer';
 import { StoreState } from '../../store';
 import Container from '../Container';
@@ -12,6 +13,12 @@ function Bar({ setDisplay }: { setDisplay: (State: boolean) => void }) {
   const Dispatch = useDispatch();
   const { Project } = useSelector((state: StoreState) => state.WorkSession);
   const [PushCall, PushResult] = usePushSession();
+
+  useApiToast({
+    Result: PushResult,
+    successMessage: 'Session Created',
+    ErrorMessage: 'Error Creating Session',
+  });
 
   const {
     Initialized,
@@ -87,11 +94,12 @@ function Bar({ setDisplay }: { setDisplay: (State: boolean) => void }) {
         <GridItem>
           <Text fontSize="3xl">Project : {Project.name}</Text>
 
-          {Start && (
-            <Button variant="secondary-border" onClick={PushNewSession}>
-              Add Session
-            </Button>
-          )}
+          {!Start ||
+            (Initialized && (
+              <Button variant="success" onClick={PushNewSession}>
+                Add Session
+              </Button>
+            ))}
           {!Initialized ? (
             <Text>Start The Timer</Text>
           ) : (

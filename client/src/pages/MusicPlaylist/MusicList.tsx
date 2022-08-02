@@ -12,7 +12,12 @@ const getItemStyle = (draggableStyle: any, isDragging: any) => ({
 
 function MusicList({ songs, playSongFN, RemoveSong }: any) {
   return (
-    <Flex direction="column" gap={1} h={['80vh', '100vh']} overflowY="scroll">
+    <Flex
+      direction="column"
+      gap={1}
+      maxH={['80vh', '100vh']}
+      overflowY="scroll"
+    >
       {[...songs].map((song: string, index) => (
         <Draggable index={index} draggableId={song} key={`${song}-${uuidv4()}`}>
           {(provided: any, snapshot: any) => (
@@ -25,6 +30,8 @@ function MusicList({ songs, playSongFN, RemoveSong }: any) {
               {...provided.dragHandleProps}
             >
               <Flex
+                w="100%"
+                minW={['50vw', '70vw']}
                 key={song}
                 border="1px solid #fff"
                 p={[2, 2, 2, 4]}

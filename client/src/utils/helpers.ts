@@ -11,8 +11,6 @@ export const CheckError = (
         ? error.error.data.message
         : JSON.stringify(error.data);
 
-    console.log(errMsg);
-
     errorMessage = errMsg;
   }
   return errorMessage;

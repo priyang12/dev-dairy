@@ -60,7 +60,6 @@ function NewProject() {
     name: '',
     color: '#000',
   });
-  console.log(NewRoadMap);
 
   const [RoadMaps, setRoadMaps] = useState<IRoadMap[]>([]);
   const { FormValues, ErrorsState, HandleChange, SetState, setError } =
@@ -68,7 +67,10 @@ function NewProject() {
 
   const AddNewTech = () => {
     if (!ErrorsState.NewTech) {
-      setTechnologies((Technologies) => [...Technologies, FormValues.NewTech]);
+      setTechnologies((PrevTechnologies) => [
+        ...PrevTechnologies,
+        FormValues.NewTech,
+      ]);
       SetState({ ...FormValues, NewTech: '' });
     }
   };

@@ -109,7 +109,7 @@ const PostApi = createApi({
           .catch((error: any) => {
             const errorMessage = error.error.data.msg || 'server Error';
             toast.dark(errorMessage);
-            UpdateResult.undo;
+            UpdateResult.undo();
           });
       },
     }),
@@ -135,7 +135,7 @@ const PostApi = createApi({
           .catch((error: any) => {
             const errorMessage = error.error.data.msg || 'server Error';
             toast.dark(errorMessage);
-            deleteResult.undo;
+            deleteResult.undo();
           });
       },
     }),

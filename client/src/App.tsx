@@ -21,11 +21,11 @@ import WorkSessions from './pages/WorkSessions';
 import PrivateOutlet from './components/PrivateRoute';
 import Spinner from './components/spinner';
 import MusicPlaylist from './pages/MusicPlaylist';
-import FallBackSuspenseWrapper from './components/FallBackSuspenseWrapper';
 import ProjectSessions from './pages/ProjectSessions';
 
 function App() {
   const dispatch = useDispatch();
+
   // eslint-disable-next-line no-unused-vars
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
   const { isLoading } = useGetUserQuery(cookies.token, {
@@ -54,37 +54,14 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/Register" element={<Register />} />
         <Route path="/" element={<PrivateOutlet />}>
-          <Route path="/feeds" element={<Posts />} />
-        </Route>
-        <Route path="/" element={<PrivateOutlet />}>
+          <Route path="/Posts" element={<Posts />} />
           <Route path="/Projects" element={<Projects />} />
-        </Route>
-        <Route path="/" element={<PrivateOutlet />}>
           <Route path="/Projects/:id" element={<SingleProject />} />
-        </Route>
-        <Route path="/" element={<PrivateOutlet />}>
-          <Route
-            path="/EditProject/:id"
-            element={
-              <FallBackSuspenseWrapper>
-                <EditProject />
-              </FallBackSuspenseWrapper>
-            }
-          />
-        </Route>
-        <Route path="/" element={<PrivateOutlet />}>
+          <Route path="/EditProject/:id" element={<EditProject />} />
           <Route path="/RoadMap/:id" element={<RoadMap />} />
-        </Route>
-        <Route path="/" element={<PrivateOutlet />}>
           <Route path="/Sessions" element={<WorkSessions />} />
-        </Route>
-        <Route path="/" element={<PrivateOutlet />}>
           <Route path="/Project/Sessions/:id" element={<ProjectSessions />} />
-        </Route>
-        <Route path="/" element={<PrivateOutlet />}>
           <Route path="/NewProject" element={<NewProject />} />
-        </Route>
-        <Route path="/" element={<PrivateOutlet />}>
           <Route path="/MusicPlaylist" element={<MusicPlaylist />} />
         </Route>
       </Routes>

@@ -28,6 +28,7 @@ function AuthContainer({ children }: { children: React.ReactNode }) {
 
 function PrivateOutlet() {
   const Auth: AuthState = useSelector((state: any) => state.Auth);
+
   return Auth.authenticated ? (
     <AuthContainer>
       <Outlet />
