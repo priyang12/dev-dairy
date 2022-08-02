@@ -1,4 +1,4 @@
-import { lazy, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useCookies } from 'react-cookie';

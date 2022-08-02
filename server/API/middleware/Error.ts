@@ -8,12 +8,14 @@ export const notFound = (req: Request, res: Response, next: NextFunction) => {
 
 // Fix err for express-async-errors
 export const errorHandler = (
-  err: Error,
+  err: any,
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  res.status(401);
+  console.log(err);
+
+  res.status(err.status || 500);
   return res.json({
     message: err.message,
     stack:

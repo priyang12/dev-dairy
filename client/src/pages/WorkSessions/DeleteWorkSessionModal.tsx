@@ -1,53 +1,53 @@
-import {
-  Button,
-  Flex,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalHeader,
-  ModalOverlay,
-  Text,
-  useDisclosure,
-} from '@chakra-ui/react';
-import { useEffect } from 'react';
+import { Button } from '@chakra-ui/react';
+import { toast } from 'react-toastify';
 import { useDeleteAll } from '../../API/WorkSessionsAPI';
+import { useApiToast } from '../../Hooks/useApiToast';
+import ConfirmationModal from '../../components/ConfirmationModal';
 
 function DeleteWorkSessionModal() {
-  const { isOpen, onClose, onOpen } = useDisclosure();
-  const [DeleteAll, { isLoading, isSuccess }] = useDeleteAll();
-  useEffect(() => {
-    if (isSuccess) onClose();
-  }, [isSuccess]);
+  const [DeleteAll, DeleteResult] = useDeleteAll();
 
+  useApiToast({
+    Result: DeleteResult,
+    ErrorMessage: 'Error deleting work sessions',
+    successMessage: 'Work sessions deleted',
+    loadingMessage: 'Deleting work sessions',
+  });
+
+  const ConfirmDelete = (e: any) => {
+    e.preventDefault();
+    const FormValues = e.target.elements;
+    const { Confirm } = FormValues;
+
+    if (Confirm.value === `Sure`) {
+      DeleteAll();
+    } else {
+      toast.error('Please confirm the title', {
+        autoClose: 2000,
+      });
+    }
+  };
   return (
     <div>
-      <Button onClick={onOpen} loadingText="Deleting..." isLoading={isLoading}>
-        Delete Work Session
-      </Button>
-      <Modal onClose={onClose} isOpen={isOpen} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Delete All Sessions</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Text fontSize="3xl" pb={5}>
-              Are you sure you want to delete all sessions?
-            </Text>
-            <Flex gap={5}>
-              <Button onClick={onClose}>Cancel</Button>
-              <Button
-                colorScheme="red"
-                onClick={() => {
-                  DeleteAll();
-                }}
-              >
-                Delete
-              </Button>
-            </Flex>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+      <ConfirmationModal
+        OnSubmit={ConfirmDelete}
+        placeholder="Type Sure"
+        Result={DeleteResult}
+        Title="Delete All Work Sessions"
+      >
+        <Button
+          mt={5}
+          colorScheme="red"
+          w="100%"
+          variant="outline"
+          _hover={{
+            bg: 'red',
+            color: 'white',
+          }}
+        >
+          Delete All Work Session
+        </Button>
+      </ConfirmationModal>
     </div>
   );
 }

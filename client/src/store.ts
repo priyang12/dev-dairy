@@ -42,7 +42,7 @@ const RootReducers = combineReducers({
   WorkSession: WorkSessionReducer,
 });
 
-export type ReducerState = ReturnType<typeof RootReducers>;
+export type StoreState = ReturnType<typeof RootReducers>;
 
 const persistedReducer = persistReducer(persistConfig, RootReducers);
 

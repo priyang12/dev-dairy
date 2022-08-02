@@ -20,6 +20,7 @@ import { CheckIcon, ExternalLinkIcon } from '@chakra-ui/icons';
 import { Navigate, useParams, Link as RouterLink } from 'react-router-dom';
 import { parseISO, format } from 'date-fns';
 import invert from 'invert-color';
+import { toast } from 'react-toastify';
 import {
   useDeleteProjectMutation,
   useGetProjectIdQuery,
@@ -51,6 +52,17 @@ function SingleProject() {
   if (DeleteResult.isSuccess) {
     return <Navigate to="/projects" />;
   }
+  const ConfirmDelete = (e: any) => {
+    e.preventDefault();
+    const FormValues = e.target.elements;
+    const { Confirm } = FormValues;
+
+    if (Confirm.value === `${project.title} Confirm`) {
+      DeleteProjectMutation(project._id);
+    } else {
+      toast.error('Please confirm the title');
+    }
+  };
 
   return (
     <Container maxW="900px" mb={10}>
@@ -238,7 +250,7 @@ function SingleProject() {
         </Button>
 
         <ConfirmationModal
-          Action={() => DeleteProjectMutation(project._id)}
+          OnSubmit={ConfirmDelete}
           Result={DeleteResult}
           Title={`${project.title}`}
         >

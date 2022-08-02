@@ -13,36 +13,32 @@ import {
   FormLabel,
   Input,
 } from '@chakra-ui/react';
+
 import React, { useEffect } from 'react';
-import { toast } from 'react-toastify';
 
 type Prop = {
   Title: string;
-  Action: any;
+  OnSubmit: any;
   Result: any;
+  placeholder?: string;
   children: React.ReactNode;
 };
 
-function ConfirmationModal({ Title, Action, Result, children }: Prop) {
+function ConfirmationModal({
+  Title,
+  placeholder,
+  OnSubmit,
+  Result,
+  children,
+}: Prop) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
-    if (Result.success) {
+    if (Result.isSuccess) {
       onClose();
     }
   }, [Result]);
 
-  const Submit = (e: any) => {
-    e.preventDefault();
-    const FormValues = e.target.elements;
-    const { Confirm } = FormValues;
-
-    if (Confirm.value === `${Title} Confirm`) {
-      Action();
-    } else {
-      toast.error('Please confirm the title');
-    }
-  };
   return (
     <>
       {React.Children.map(children, (child: any) =>
@@ -59,10 +55,10 @@ function ConfirmationModal({ Title, Action, Result, children }: Prop) {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>{Title} Confirm</ModalHeader>
+          <ModalHeader>Confirm {Title}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <form onSubmit={Submit}>
+            <form onSubmit={OnSubmit}>
               <FormControl>
                 <FormLabel htmlFor="Confirm">
                   <Text>Are you sure you want to delete {Title}?</Text>
@@ -73,7 +69,7 @@ function ConfirmationModal({ Title, Action, Result, children }: Prop) {
                   type="text"
                   name="Confirm"
                   id="Confirm"
-                  placeholder={`Type ${Title} Confirm`}
+                  placeholder={placeholder || `Type ${Title} Confirm`}
                 />
               </FormControl>
               <Button

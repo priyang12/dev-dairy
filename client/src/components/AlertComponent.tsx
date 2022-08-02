@@ -23,7 +23,7 @@ function AlertComponent() {
 
   return (
     <Alert
-      status={Type ? Type : 'info'}
+      status={Type || 'info'}
       variant="subtle"
       flexDirection="column"
       alignItems="center"

@@ -5,12 +5,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { usePushSession } from '../../API/WorkSessionsAPI';
 import { setProject } from '../../features/WorkSessionSlice';
 import { useTimer } from '../../Hooks/useTimer';
-import { ReducerState } from '../../store';
+import { StoreState } from '../../store';
 import Container from '../Container';
 
 function Bar({ setDisplay }: { setDisplay: (State: boolean) => void }) {
   const Dispatch = useDispatch();
-  const { Project } = useSelector((state: ReducerState) => state.WorkSession);
+  const { Project } = useSelector((state: StoreState) => state.WorkSession);
   const [PushCall, PushResult] = usePushSession();
 
   const {

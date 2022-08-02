@@ -7,7 +7,7 @@ import {
   Heading,
   IconButton,
 } from '@chakra-ui/react';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import { useSelector } from 'react-redux';
 import Logo from '../../Assets/diary.png';

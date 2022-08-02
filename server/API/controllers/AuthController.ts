@@ -1,5 +1,5 @@
 import asyncHandler from "express-async-handler";
-
+import createError from "http-errors";
 import { validationResult } from "express-validator";
 
 import type { Request, Response } from "express";
@@ -23,16 +23,22 @@ export const GetUser = asyncHandler(
 // @desc Register User
 // @access public
 export const registerUser = asyncHandler(
-  async (req, res): Promise<any> => {
+  async (req, res, next): Promise<any> => {
     const errors = validationResult(req);
+    try {
+      if (!errors.isEmpty()) {
+        res.status(406).json({ errors: errors.array() });
+        return;
+      }
+      const authServiceInstance = Container.get(AuthService);
+      const { user, token } = await authServiceInstance.SignUp(req.body);
+      return res.status(201).json({ user, token });
+    } catch (error) {
+      // next(error);
+      return next(createError(403, "Please login to view this page."));
 
-    if (!errors.isEmpty()) {
-      res.status(422).json({ errors: errors.array() });
-      return;
+      // return createError(404, "This video does not exist!");
     }
-    const authServiceInstance = Container.get(AuthService);
-    const { user, token } = await authServiceInstance.SignUp(req.body);
-    return res.status(201).json({ user, token });
   }
 );
 

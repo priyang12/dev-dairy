@@ -1,7 +1,5 @@
 import { Box, Button, Grid, Heading, useDisclosure } from '@chakra-ui/react';
-import { Id, toast } from 'react-toastify';
 import { Ring } from '@priyang/react-component-lib';
-import { useEffect, useState } from 'react';
 import { useGetPostsQuery, useNewPost } from '../../API/PostAPI';
 import PostContainer from './PostContainer';
 import Spinner from '../../components/spinner';

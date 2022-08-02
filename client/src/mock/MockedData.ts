@@ -185,8 +185,8 @@ export const MockedAllWorkSessions = [
     project: {
       _id: '62d458dcbb0be104192d298b',
       process: 1,
-      title: 'New Projectg 1',
-      description: " stack prototype for maintaing dev's personal dairy",
+      title: 'New Project 1',
+      description: " stack prototype for maintaing dev's personal dairy 1",
     },
     session: [
       {
@@ -212,8 +212,8 @@ export const MockedAllWorkSessions = [
     project: {
       _id: '62d454a40e8927017f86a454',
       process: 1,
-      title: 'asdas asuiodhaso',
-      description: "MERN stack prototype for maintaing dev's personal dairy",
+      title: 'New Project 2',
+      description: "MERN stack prototype for maintaing dev's personal dairy 2",
     },
     session: [],
     date: '2022-07-21T17:12:56.809Z',

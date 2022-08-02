@@ -14,13 +14,13 @@ import {
 } from '@chakra-ui/react';
 import type { FormField } from '../../components/CustomForm';
 import type { AuthState } from '../../interface';
-import { useLoginUserMutation } from '../../API/AuthAPI';
+import { useLogin } from '../../API/AuthAPI';
 import { ValidateEmail, ValidatePassword } from '../../utils/Validation';
 import CustomForm from '../../components/CustomForm';
 
 function Login() {
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
-  const [loginUser, result] = useLoginUserMutation();
+  const [loginUser, result] = useLogin();
   const navigate = useNavigate();
   const Auth: AuthState = useSelector((state: any) => state.Auth);
 

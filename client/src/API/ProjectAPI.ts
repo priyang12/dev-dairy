@@ -72,7 +72,7 @@ const ProjectApi = createApi({
             ),
           );
         } catch (error: any) {
-          let errorMessage = CheckError(error);
+          const errorMessage = CheckError(error);
           toast.error(errorMessage);
         }
       },
@@ -106,7 +106,7 @@ const ProjectApi = createApi({
             ),
           );
         } catch (error: any) {
-          let errorMessage = CheckError(error);
+          const errorMessage = CheckError(error);
           dispatch(
             setAlert({
               Type: 'error',

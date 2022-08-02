@@ -20,13 +20,16 @@ import {
   ValidateTitle,
   ValidatePassword,
 } from '../../utils/Validation';
-import { useRegisterUserMutation } from '../../API/AuthAPI';
+import { useRegister } from '../../API/AuthAPI';
 import type { AuthState } from '../../interface';
+import { StoreState } from '../../store';
 
 function Register() {
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
-  const [registerUser, result] = useRegisterUserMutation();
-  const Auth: AuthState = useSelector((state: any) => state.Auth);
+  const [registerUser, result] = useRegister();
+  const { authenticated, token, error }: AuthState = useSelector(
+    (state: StoreState) => state.Auth,
+  );
   const RegisterFields: FormField[] = [
     {
       fieldType: 'text',
@@ -89,12 +92,12 @@ function Register() {
     }
   };
   useEffect(() => {
-    if (Auth.authenticated) {
+    if (authenticated) {
       <Navigate to="/Projects" />;
     }
-  }, [Auth.authenticated]);
-  if (Auth.authenticated) {
-    setCookie('token', Auth.token, { path: '/' });
+  }, [authenticated]);
+  if (authenticated) {
+    setCookie('token', token, { path: '/' });
   }
   return (
     <Box
@@ -110,10 +113,10 @@ function Register() {
         justifyContent="space-between"
         flexDir={['column', 'column', 'row']}
       >
-        {Auth.error && (
+        {error && (
           <Alert status="error" borderRadius={10} mb={5}>
             <AlertIcon />
-            {Auth.error}
+            {error}
           </Alert>
         )}
         <CustomForm FormFields={RegisterFields} SubmitForm={RegisterUser}>

@@ -2,7 +2,6 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { toast } from 'react-toastify';
 import API from '.';
 import { setAlert } from '../features/AlertSlice';
-import { useApiToast } from '../Hooks/useApiToast';
 import type { IPost } from '../interface';
 import type { RootState } from '../store';
 import type { DeletedPostAPI, NewPostAPI, UpdatePostAPI } from './interface';
@@ -108,7 +107,7 @@ const PostApi = createApi({
             toast.success(`${UpdatePost.message} Updated Successfully`);
           })
           .catch((error: any) => {
-            let errorMessage = error.error.data.msg || 'server Error';
+            const errorMessage = error.error.data.msg || 'server Error';
             toast.dark(errorMessage);
             UpdateResult.undo;
           });
@@ -134,7 +133,7 @@ const PostApi = createApi({
             toast.warning(`${DeleteRes.message}`);
           })
           .catch((error: any) => {
-            let errorMessage = error.error.data.msg || 'server Error';
+            const errorMessage = error.error.data.msg || 'server Error';
             toast.dark(errorMessage);
             deleteResult.undo;
           });

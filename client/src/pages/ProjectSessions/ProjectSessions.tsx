@@ -13,7 +13,7 @@ import {
 import Container from '../../components/Container';
 import Spinner from '../../components/spinner';
 import { setProject } from '../../features/WorkSessionSlice';
-import { ReducerState } from '../../store';
+import type { StoreState } from '../../store';
 
 function ProjectSessions() {
   const { id } = useParams<{
@@ -21,7 +21,7 @@ function ProjectSessions() {
   }>();
   const Dispatch = useDispatch();
   const { Project: SessionProject } = useSelector(
-    (state: ReducerState) => state.WorkSession,
+    (state: StoreState) => state.WorkSession,
   );
   const { data: Project, isLoading, isFetching } = useGetProjectIdQuery(id);
   const { data: ProjectSession } = useGetSessionsByProject(id);

@@ -17,10 +17,18 @@ import {
 
 const handlers = [
   rest.post(`${API}/login`, (req, res, ctx) => res(ctx.json(AuthResponse))),
-  rest.post(`${API}/register`, (req, res, ctx) => res(ctx.json(AuthResponse))),
+  rest.post(`${API}/register`, (req, res, ctx) =>
+    res(
+      ctx.status(401),
+      ctx.json({}),
+      // ctx.json(AuthResponse);
+    ),
+  ),
   rest.get(`${API}/user/me`, (req, res, ctx) =>
     res(ctx.json(AuthResponse.user)),
   ),
+
+  // Posts
   rest.post(`${API}/posts`, (req, res, ctx) =>
     res(ctx.delay(1000), ctx.json(NewPostResponse)),
   ),
@@ -103,6 +111,7 @@ const handlers = [
       }),
     ),
   ),
+  // WorkSessions
   rest.get(`${API}/workSession`, (req, res, ctx) =>
     res(ctx.json(MockedAllWorkSessions)),
   ),
@@ -127,6 +136,7 @@ const handlers = [
   ),
   rest.delete(`${API}/workSession`, (req, res, ctx) =>
     res(
+      ctx.delay(5000),
       ctx.json({
         result: true,
         message: 'Work Session Deleted Successfully',
