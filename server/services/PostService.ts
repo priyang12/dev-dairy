@@ -21,8 +21,8 @@ export default class PostService {
       });
 
     if (!Posts) {
-      this.logger.error("Posts not found");
-      throw new Error("No Posts Found in Users");
+      this.logger.error("Posts Not Found");
+      throw new Error("Posts Not Found");
     }
     this.logger.info("Posts Found");
     return Posts;
@@ -73,8 +73,8 @@ export default class PostService {
     ]);
 
     if (!Posts) {
-      this.logger.error("Posts not found");
-      throw new Error("No Posts Found in Users");
+      this.logger.error("Posts Not Found");
+      throw new Error("Posts Not Found");
     }
 
     this.logger.info("Posts Found");
@@ -85,8 +85,8 @@ export default class PostService {
   public async GetAllPostByProject(projectId: string): Promise<IPost[]> {
     const Posts = await this.PostModel.find({ project: projectId });
     if (!Posts) {
-      this.logger.error("Posts not found");
-      throw new Error("No Posts Found in Users");
+      this.logger.error("Posts Not Found");
+      throw new Error("Posts Not Found");
     }
     this.logger.info("Posts Found");
     return Posts;
@@ -109,8 +109,8 @@ export default class PostService {
       });
 
     if (!Posts) {
-      this.logger.error("Posts not found");
-      throw new Error("No Posts Found in Users");
+      this.logger.error("Posts Not Found");
+      throw new Error("Posts Not Found");
     }
     this.logger.info("Posts Found");
     return Posts;
@@ -119,10 +119,10 @@ export default class PostService {
   public async GetPost(UserId: string, PostId: string): Promise<IPost> {
     const post = await this.PostModel.findById({ _id: PostId, user: UserId });
     if (!post) {
-      this.logger.error("post not found");
-      throw new Error("No post Found");
+      this.logger.error("Post Not Found");
+      throw new Error("Post Not Found");
     }
-    this.logger.info("post Found");
+    this.logger.info("Post Not Found");
     return post;
   }
   public async CreatePost(
@@ -137,10 +137,14 @@ export default class PostService {
       ...post,
       user: userId,
     });
-    this.logger.info("post Created");
+    this.logger.info("Post Created");
+    if (!newPost) {
+      this.logger.error("CRUD Error: Post Not Created");
+      throw new Error("CRUD Error: Post Not Created");
+    }
     return {
       result: true,
-      message: "post Created Successfully",
+      message: "Post Created Successfully",
       post: newPost,
     };
   }
@@ -158,13 +162,13 @@ export default class PostService {
       { new: true }
     );
     if (!updatedPost) {
-      this.logger.error("post not found");
-      throw new Error("No post Found");
+      this.logger.error("CRUD Error: Post Not Found");
+      throw new Error("CRUD Error: Post Not Updated");
     }
-    this.logger.info("post Updated");
+    this.logger.info("Post Updated");
     return {
       result: true,
-      message: "post Updated Successfully",
+      message: "Post Updated Successfully",
     };
   }
   public async DeletePost(
@@ -179,8 +183,8 @@ export default class PostService {
       user: userId,
     });
     if (!deletedPost) {
-      this.logger.error("Post not found");
-      throw new Error("No Post Found");
+      this.logger.error("CRUD Error: Post Not Deleted");
+      throw new Error("CRUD Error: Post Not Deleted");
     }
     this.logger.info("Post Deleted");
     return {

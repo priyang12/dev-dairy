@@ -16,9 +16,10 @@ export default class UserService {
     const Projects = await this.ProjectModel.find({ user: userId }).select(
       "title description process technologies date"
     );
+
     if (!Projects) {
-      this.logger.error("Projects not found");
-      throw new Error("No Projects Found in Users");
+      this.logger.error("Projects Not Found");
+      throw new Error("User's Projects Not Found");
     }
     this.logger.info("Projects Found");
     return Projects;
@@ -34,8 +35,8 @@ export default class UserService {
       .select("-__v")
       .exec();
     if (!project) {
-      this.logger.error("Project not found");
-      throw new Error("Project not found");
+      this.logger.error("Project Not Found");
+      throw new Error("Project Not Found");
     }
     this.logger.info("Project found");
     return project;
@@ -48,8 +49,8 @@ export default class UserService {
     }).select("roadMap");
 
     if (!roadMaps) {
-      this.logger.error("RoadMaps not found");
-      throw new Error("No RoadMaps Found in Users");
+      this.logger.error("RoadMaps Not Found");
+      throw new Error("RoadMaps Not Found");
     }
 
     this.logger.info("RoadMaps Found");
@@ -70,8 +71,8 @@ export default class UserService {
     });
 
     if (!newProject) {
-      this.logger.error("Project not created");
-      throw new Error("Project not created");
+      this.logger.error("Project Not Created");
+      throw new Error("CRUD Error: Project Not Created");
     }
 
     this.logger.info("Project created with RoadMaps");
@@ -92,8 +93,8 @@ export default class UserService {
       { new: true }
     ).exec();
     if (!updatedProject) {
-      this.logger.error("Project not updated");
-      throw new Error("Project not updated");
+      this.logger.error("CRUD Error: Project not Updated");
+      throw new Error("CRUD Error: Project not Updated");
     }
     this.logger.info("Project updated");
     return {
@@ -113,10 +114,10 @@ export default class UserService {
     ).exec();
 
     if (!updatedProject) {
-      this.logger.error("Roadmap not added");
-      throw new Error("Roadmap not added");
+      this.logger.error("CRUD Error: RoadMap not added");
+      throw new Error("CRUD Error: RoadMap not added");
     }
-    this.logger.info("Roadmap added");
+    this.logger.info("RoadMap added");
     const roadMap = updatedProject?.roadMap
       ? updatedProject.roadMap[updatedProject.roadMap.length - 1]
       : null;
@@ -145,8 +146,8 @@ export default class UserService {
     ).exec();
 
     if (!updatedRoadMap) {
-      this.logger.error("Roadmap not Updated");
-      throw new Error("Roadmap not Updated");
+      this.logger.error("CRUD Error: RoadMap not Updated");
+      throw new Error("CRUD Error: RoadMap not Updated");
     }
     this.logger.info("Roadmap Updated");
     return {
@@ -167,8 +168,8 @@ export default class UserService {
     ).exec();
 
     if (!updatedProject) {
-      this.logger.error("Roadmap not deleted");
-      throw new Error("Roadmap not deleted");
+      this.logger.error("CRUD Error: RoadMap not deleted");
+      throw new Error("CRUD Error: RoadMap not deleted");
     }
     this.logger.info("Roadmap deleted");
 
@@ -182,7 +183,6 @@ export default class UserService {
     userId: string,
     projectId: string
   ): Promise<{ message: string; result: boolean }> {
-    //
     const deletedProject = await this.ProjectModel.findOneAndDelete({
       _id: projectId,
       user: userId,
@@ -194,8 +194,8 @@ export default class UserService {
     }).exec();
 
     if (!deletedProject || !deletedPosts) {
-      this.logger.error("Project not deleted");
-      throw new Error("Project not deleted");
+      this.logger.error("CRUD Error: Project Not Deleted");
+      throw new Error("CRUD Error: Project Not Deleted");
     }
     this.logger.info("Project deleted");
     return {

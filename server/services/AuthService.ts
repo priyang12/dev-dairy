@@ -5,6 +5,7 @@ import { IUser } from "../models/User";
 import { Logger } from "winston";
 import jwt from "jsonwebtoken";
 import argon2 from "argon2";
+import createHttpError from "http-errors";
 @Service()
 export default class AuthService {
   constructor(
@@ -20,7 +21,7 @@ export default class AuthService {
       email: userInputDTO.email,
     });
     if (emailExists) {
-      throw new Error("User already exists");
+      throw new Error("CRUD Error: User already exists");
     }
     const salt = randomBytes(32);
     const hashedPassword = await argon2.hash(userInputDTO.password, { salt });
@@ -30,8 +31,9 @@ export default class AuthService {
       password: hashedPassword,
     });
     this.logger.silly(`User created: ${userRecord}`);
+
     if (!userRecord) {
-      throw new Error("User cannot be created");
+      throw new Error("CRUD Error: User cannot be created");
     }
     const token = this.generateToken(userRecord);
 
@@ -53,7 +55,7 @@ export default class AuthService {
   ): Promise<{ user: any; token: string }> {
     const userRecord = await this.userModel.findOne({ email });
     if (!userRecord) {
-      throw Error("User not registered");
+      throw Error("CRUD Error: User not registered");
     }
     /**
      * We use verify from argon2 to prevent 'timing based' attacks
@@ -68,7 +70,7 @@ export default class AuthService {
 
       return { user, token };
     } else {
-      throw new Error("Invalid Password");
+      throw new Error("Invalid Input: Invalid Password");
     }
   }
 
