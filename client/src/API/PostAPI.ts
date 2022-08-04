@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { toast } from 'react-toastify';
 import API from '.';
-import { setAlert } from '../features/AlertSlice';
 import type { IPost } from '../interface';
 import type { RootState } from '../store';
 import type { DeletedPostAPI, NewPostAPI, UpdatePostAPI } from './interface';
@@ -63,19 +62,7 @@ const PostApi = createApi({
               ...posts,
             ]),
           );
-          dispatch(
-            setAlert({
-              alert: `${NewPost.post.title} Created Successfully`,
-              result: true,
-            }),
-          );
         } catch (error: any) {
-          dispatch(
-            setAlert({
-              alert: error.error.data.msg || 'server Error',
-              result: false,
-            }),
-          );
           dispatch(PostApi.util.invalidateTags(['Posts']));
         }
       },

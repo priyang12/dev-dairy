@@ -39,7 +39,7 @@ export const useApiToast = ({
         isLoading: false,
       });
     }
-    () => {
+    return () => {
       if (ToastId) {
         toast.dismiss(ToastId);
         setToastId(null);
