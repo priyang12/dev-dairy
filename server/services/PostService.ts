@@ -92,20 +92,60 @@ export default class PostService {
     return Posts;
   }
 
+  public async GetPostsWithFilter(
+    userId: string,
+    status: any,
+    page: number,
+    limit: number,
+    Select?: string,
+    ProjectSelect?: string,
+    Sort?: string
+  ) {
+    const Posts = await this.PostModel.find({
+      user: userId,
+      status,
+    })
+      .skip(limit * (page - 1))
+      .limit(limit)
+      .select(Select)
+      .sort(
+        Sort || {
+          date: -1,
+        }
+      )
+      .populate({
+        path: "project",
+        select: ProjectSelect || "title process",
+      });
+
+    if (!Posts) {
+      this.logger.error("Posts Not Found");
+      throw new Error("Posts Not Found");
+    }
+    this.logger.info("Posts Found");
+    return Posts;
+  }
+
   public async GetPostsWithPagination(
     userId: string,
     page: number,
-    limit: number
+    limit: number,
+    Select?: string,
+    ProjectSelect?: string,
+    Sort?: string
   ): Promise<IPost[]> {
     const Posts = await this.PostModel.find({ user: userId })
       .skip(limit * (page - 1))
       .limit(limit)
-      .sort({
-        date: -1,
-      })
+      .select(Select)
+      .sort(
+        Sort || {
+          date: -1,
+        }
+      )
       .populate({
         path: "project",
-        select: "title process",
+        select: ProjectSelect || "title process",
       });
 
     if (!Posts) {

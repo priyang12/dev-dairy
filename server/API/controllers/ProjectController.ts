@@ -13,8 +13,13 @@ import { IProject } from "../../models/Project";
 // @access  Private
 export const GetProjects = asyncHandler(
   async (req: any, res: Response): Promise<any> => {
+    const { Select } = req.query;
+
     const projectServiceInstance = Container.get(ProjectService);
-    const projects = await projectServiceInstance.GetUserProjects(req.user._id);
+    const projects = await projectServiceInstance.GetUserProjects(
+      req.user._id,
+      Select
+    );
     return res.status(200).json(projects);
   }
 );
@@ -24,10 +29,12 @@ export const GetProjects = asyncHandler(
 // @access Private
 export const GetProjectById = asyncHandler(
   async (req: any, res: Response): Promise<any> => {
+    const { Select } = req.query;
     const projectServiceInstance = Container.get(ProjectService);
     const project = await projectServiceInstance.GetProject(
       req.user._id,
-      req.params.id
+      req.params.id,
+      Select
     );
     return res.status(200).json(project);
   }

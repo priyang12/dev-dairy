@@ -224,7 +224,9 @@ function ProjectSessions() {
               </Flex>
             ))
           ) : (
-            <Text>No sessions yet</Text>
+            <Text fontSize="6xl" textAlign="center">
+              No sessions yet
+            </Text>
           ))}
       </Flex>
     </Container>

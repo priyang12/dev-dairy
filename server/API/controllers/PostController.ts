@@ -12,13 +12,39 @@ import Container from "typedi";
 // @access  Private
 export const GetPostsWithPagination = asyncHandler(
   async (req: Request, res: Response): Promise<any> => {
-    const { page, limit } = req.query as any;
+    const { page, limit, Select, ProjectSelect, Sort } = req.query as any;
     const pageVal = Number(page) || 1;
     const projectServiceInstance = Container.get(PostService);
     const projects = await projectServiceInstance.GetPostsWithPagination(
       req.user._id,
       pageVal,
-      parseInt(limit)
+      parseInt(limit),
+      Select,
+      ProjectSelect,
+      Sort
+    );
+
+    return res.status(200).json(projects);
+  }
+);
+
+// @route   GET api/posts/filter
+// @desc    Fetch User Posts with filter
+// @access  Private
+export const GetPostsWithFilter = asyncHandler(
+  async (req: Request, res: Response): Promise<any> => {
+    const { page, limit, Select, ProjectSelect, Sort, status } =
+      req.query as any;
+    const pageVal = Number(page) || 1;
+    const projectServiceInstance = Container.get(PostService);
+    const projects = await projectServiceInstance.GetPostsWithFilter(
+      req.user._id,
+      status,
+      pageVal,
+      parseInt(limit),
+      Select,
+      ProjectSelect,
+      Sort
     );
 
     return res.status(200).json(projects);

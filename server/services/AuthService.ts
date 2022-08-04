@@ -5,7 +5,6 @@ import { IUser } from "../models/User";
 import { Logger } from "winston";
 import jwt from "jsonwebtoken";
 import argon2 from "argon2";
-import createHttpError from "http-errors";
 @Service()
 export default class AuthService {
   constructor(

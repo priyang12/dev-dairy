@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "build/index.js",
   "scripts": {
-    "start": "ts-node --transpile-only server.ts",
-    "server": "nodemon  --transpile-only server.ts",
+    "start": "ts-node --transpile-only index.ts",
+    "server": "nodemon  --transpile-only index.ts",
     "start:prod": "node build/index.js",
     "build": "tsc -p ./",
     "build:remove": "rm -rf build"

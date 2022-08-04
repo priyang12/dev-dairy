@@ -96,13 +96,14 @@ export default class WorkSessionService {
   public async PushWorkSession(
     userId: string,
     ProjectId: string,
-    NewWorkSession: ISession
+    NewWorkSession: ISession,
+    Select?: string
   ) {
     const newWorkSessions = this.WorkSessions.findOneAndUpdate(
       { project: ProjectId, user: userId },
       { $push: { session: NewWorkSession } },
       { new: true }
-    ).select("session");
+    ).select(Select?.concat("session") || "session");
     if (!newWorkSessions) {
       this.logger.error("WorkSessions Not Found");
       throw new Error("WorkSessions Not Found");
@@ -114,13 +115,14 @@ export default class WorkSessionService {
   public async PullWorkSession(
     userId: string,
     ProjectId: string,
-    WorkSession: ISession
+    WorkSession: ISession,
+    Select?: string
   ) {
     const newWorkSessions = this.WorkSessions.findOneAndUpdate(
       { project: ProjectId, user: userId },
       { $pull: { session: WorkSession } },
       { new: true }
-    ).select("session");
+    ).select(Select?.concat("session") || "session");
     if (!newWorkSessions) {
       this.logger.error("WorkSessions Not Found");
       throw new Error("WorkSessions Not Found");

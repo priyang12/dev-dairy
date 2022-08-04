@@ -52,10 +52,11 @@ export const GetWorkSession = asyncHandler(
 export const GetProjectWorkSessions = asyncHandler(
   async (req: Request, res: Response): Promise<any> => {
     const workSessionsServiceInstance = Container.get(WorkSessionsService);
-    const workSessions = await workSessionsServiceInstance.GetProjectWorkSessions(
-      req.user._id,
-      req.params.projectId
-    );
+    const workSessions =
+      await workSessionsServiceInstance.GetProjectWorkSessions(
+        req.user._id,
+        req.params.projectId
+      );
     return res.status(200).json(workSessions);
   }
 );
@@ -100,15 +101,23 @@ export const CreateWorkSession = asyncHandler(
 
 export const PushWorkSession = asyncHandler(
   async (req: Request, res: Response): Promise<any> => {
+    const { Select } = req.query;
+    if (Select && typeof Select !== "string") {
+      return res.status(422).json({
+        message: "Select must be a string",
+      });
+    }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(422).json(errors.array());
     }
+
     const workSessionsServiceInstance = Container.get(WorkSessionsService);
     const workSessions = await workSessionsServiceInstance.PushWorkSession(
       req.user._id,
       req.params.id,
-      req.body
+      req.body,
+      Select
     );
     return res.status(200).json(workSessions);
   }
@@ -132,10 +141,19 @@ export const PullWorkSession = asyncHandler(
       return res.status(422).json(errors.array());
     }
     const workSessionsServiceInstance = Container.get(WorkSessionsService);
+
+    const { Select } = req.query;
+    if (Select && typeof Select !== "string") {
+      return res.status(422).json({
+        message: "Select must be a string",
+      });
+    }
+
     const workSessions = await workSessionsServiceInstance.PullWorkSession(
       req.user._id,
       req.params.id,
-      req.body
+      req.body,
+      Select
     );
     return res.status(200).json(workSessions);
   }
@@ -210,9 +228,8 @@ export const DeleteWorkSessions = asyncHandler(
       return res.status(422).json(errors.array());
     }
     const workSessionsServiceInstance = Container.get(WorkSessionsService);
-    const workSessions = await workSessionsServiceInstance.DeleteAllWorkSessions(
-      req.user._id
-    );
+    const workSessions =
+      await workSessionsServiceInstance.DeleteAllWorkSessions(req.user._id);
     return res.status(200).json(workSessions);
   }
 );
@@ -235,10 +252,11 @@ export const DeleteWorkSessionsOfProject = asyncHandler(
       return res.status(422).json(errors.array());
     }
     const workSessionsServiceInstance = Container.get(WorkSessionsService);
-    const workSessions = await workSessionsServiceInstance.DeleteAllWorkSessionsForProject(
-      req.user._id,
-      req.params.projectId
-    );
+    const workSessions =
+      await workSessionsServiceInstance.DeleteAllWorkSessionsForProject(
+        req.user._id,
+        req.params.projectId
+      );
     return res.status(200).json(workSessions);
   }
 );

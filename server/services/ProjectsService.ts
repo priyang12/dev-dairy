@@ -3,18 +3,25 @@ import { Model } from "mongoose";
 import { IProject, IRoadMap } from "../models/Project";
 import { Logger } from "winston";
 import { IPost } from "../models/Post";
+import { IWorkSessions } from "../models/WorkSessions";
 
 @Service()
 export default class UserService {
   constructor(
     @Inject("projectModel") private ProjectModel: Model<IProject>,
     @Inject("postModel") private PostModel: Model<IPost>,
+    @Inject("workSessionsModel") private WorkSessionModel: Model<IWorkSessions>,
     @Inject("logger") private logger: Logger
   ) {}
 
-  public async GetUserProjects(userId: string): Promise<IProject[]> {
+  public async GetUserProjects(
+    userId: string,
+    Select: string
+  ): Promise<IProject[]> {
+    console.log(Select);
+
     const Projects = await this.ProjectModel.find({ user: userId }).select(
-      "title description process technologies date"
+      Select?.concat(" -__v") || "-__v"
     );
 
     if (!Projects) {
@@ -24,15 +31,17 @@ export default class UserService {
     this.logger.info("Projects Found");
     return Projects;
   }
+
   public async GetProject(
     userId: string,
-    projectId: string
+    projectId: string,
+    Select: string
   ): Promise<IProject> {
     const project = await this.ProjectModel.findOne({
       _id: projectId,
       user: userId,
     })
-      .select("-__v")
+      .select(Select?.concat(" -__v") || "-__v")
       .exec();
     if (!project) {
       this.logger.error("Project Not Found");
@@ -65,12 +74,15 @@ export default class UserService {
     const newProject = await this.ProjectModel.create({
       ...project,
       user: userId,
-    }).then((project) => {
-      this.logger.info("Project added");
-      return project;
+    });
+    const WorkSession = await this.WorkSessionModel.create({
+      project: newProject._id,
+      user: userId,
+      session: [],
+      date: new Date(),
     });
 
-    if (!newProject) {
+    if (!newProject || !WorkSession) {
       this.logger.error("Project Not Created");
       throw new Error("CRUD Error: Project Not Created");
     }
