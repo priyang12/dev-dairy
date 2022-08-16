@@ -74,6 +74,25 @@ export const PostsResponse = [
   },
 ];
 
+export const Page2PostsResponse = [
+  {
+    _id: '628516b505524527385f7e3c',
+    title: 'Second Post the Post',
+    description: 'New Post as asdihasd description',
+    project: {
+      process: 50,
+
+      _id: '62d454a40e8927017f86a454',
+      title: 'Dev-Dairy',
+    },
+    status: 'Done',
+    roadMap: '6285167905524527385df72f',
+    user: '62812edf18f5ba45b7667f2e',
+    date: '2022-03-18T15:54:29.864Z',
+    __v: 0,
+  },
+];
+
 export const NewProjectResponse = {
   result: true,
   message: 'Project Created Successfully',

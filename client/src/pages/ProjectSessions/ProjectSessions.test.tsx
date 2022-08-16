@@ -1,7 +1,7 @@
-import { render, screen, waitForElementToBeRemoved } from '../../test-utils';
 import { BrowserRouter } from 'react-router-dom';
 import { format, parseISO } from 'date-fns';
 import userEvent from '@testing-library/user-event';
+import { render, screen, waitForElementToBeRemoved } from '../../test-utils';
 import '@testing-library/jest-dom/extend-expect';
 import ProjectSessions from './ProjectSessions';
 import {

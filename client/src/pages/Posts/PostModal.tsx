@@ -21,6 +21,7 @@ interface Props {
   actionSubmit: (data: any) => void;
   onClose: () => void;
   isOpen: boolean;
+  page: number;
 }
 
 interface PostFields {
@@ -38,7 +39,14 @@ const init = {
   roadMap: '',
   status: '',
 };
-function PostModal({ action, post, actionSubmit, onClose, isOpen }: Props) {
+function PostModal({
+  action,
+  page,
+  post,
+  actionSubmit,
+  onClose,
+  isOpen,
+}: Props) {
   const [RoadMapColor, setRoadMapColor] = useState('');
   const [ErrorState, setErrorState] = useState<PostFields>(init);
   const [proId, setproId] = useState(post?.project._id);
@@ -99,7 +107,10 @@ function PostModal({ action, post, actionSubmit, onClose, isOpen }: Props) {
         data._id = post?._id;
       }
 
-      actionSubmit(data);
+      actionSubmit({
+        UpdatedPost: data,
+        page: page,
+      });
 
       ResetModal();
     }

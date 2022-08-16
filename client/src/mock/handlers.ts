@@ -13,6 +13,7 @@ import {
   MockedProjectWorkSessions,
   MockPushWorkSession,
   MockPullWorkSession,
+  Page2PostsResponse,
 } from './MockedData';
 
 const handlers = [
@@ -29,12 +30,19 @@ const handlers = [
   ),
 
   // Posts
+  rest.get(`${API}/posts`, (req, res, ctx) => {
+    const page = req.url.searchParams.get('page');
+
+    if (page === '1' || !page) {
+      return res(ctx.delay(1000), ctx.json(PostsResponse));
+    }
+    return res(ctx.delay(1000), ctx.json(Page2PostsResponse));
+  }),
+
   rest.post(`${API}/posts`, (req, res, ctx) =>
     res(ctx.delay(1000), ctx.json(NewPostResponse)),
   ),
-  rest.get(`${API}/posts`, (req, res, ctx) =>
-    res(ctx.delay(1000), ctx.json(PostsResponse)),
-  ),
+
   rest.get(`${API}/posts/:id`, (req, res, ctx) =>
     res(ctx.json(PostsResponse[0])),
   ),

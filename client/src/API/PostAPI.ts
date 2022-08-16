@@ -20,11 +20,15 @@ const PostApi = createApi({
   tagTypes: ['Posts'],
 
   endpoints: (builder) => ({
-    GetPosts: builder.query<IPost[], null>({
-      query() {
+    GetPosts: builder.query<IPost[], any>({
+      query({ page, limit }) {
         return {
           url: '',
           method: 'get',
+          params: {
+            page,
+            limit,
+          },
         };
       },
       providesTags: ['Posts'],
@@ -57,35 +61,51 @@ const PostApi = createApi({
         try {
           const { data: NewPost } = await queryFulfilled;
           dispatch(
-            PostApi.util.updateQueryData('GetPosts', null, (posts: IPost[]) => [
-              NewPost.post,
-              ...posts,
-            ]),
+            PostApi.util.updateQueryData(
+              'GetPosts',
+              {
+                page: 1,
+                limit: 10,
+              },
+              (posts: IPost[]) => [NewPost.post, ...posts],
+            ),
           );
         } catch (error: any) {
           dispatch(PostApi.util.invalidateTags(['Posts']));
         }
       },
     }),
-    UpdatePost: builder.mutation<UpdatePostAPI, Partial<IPost>>({
-      query(data) {
+    UpdatePost: builder.mutation<
+      UpdatePostAPI,
+      {
+        UpdatedPost: IPost;
+        page: number;
+      }
+    >({
+      query({ UpdatedPost }) {
         return {
-          url: `/${data._id}`,
+          url: `/${UpdatedPost._id}`,
           method: 'put',
-          body: data,
+          body: UpdatedPost,
         };
       },
 
-      onQueryStarted(data, { dispatch, queryFulfilled }) {
+      onQueryStarted({ UpdatedPost, page }, { dispatch, queryFulfilled }) {
         const UpdateResult = dispatch(
-          PostApi.util.updateQueryData('GetPosts', null, (posts) =>
-            posts.map((post) => {
-              if (post._id === data._id) {
-                data.date = post.date;
-                return data as IPost;
-              }
-              return post;
-            }),
+          PostApi.util.updateQueryData(
+            'GetPosts',
+            {
+              page: page,
+              limit: 10,
+            },
+            (posts) =>
+              posts.map((post) => {
+                if (post._id === UpdatedPost._id) {
+                  UpdatedPost.date = post.date;
+                  return UpdatedPost as IPost;
+                }
+                return post;
+              }),
           ),
         );
 
@@ -100,20 +120,33 @@ const PostApi = createApi({
           });
       },
     }),
-    DeletePost: builder.mutation<DeletedPostAPI, Partial<string>>({
-      query(id) {
+    DeletePost: builder.mutation<
+      DeletedPostAPI,
+      {
+        id: string;
+        page: number;
+      }
+    >({
+      query({ id }) {
         return {
           url: `/${id}`,
           method: 'delete',
         };
       },
 
-      onQueryStarted(id, { dispatch, queryFulfilled }) {
+      onQueryStarted({ id, page }, { dispatch, queryFulfilled }) {
         const deleteResult = dispatch(
-          PostApi.util.updateQueryData('GetPosts', null, (data: IPost[]) => {
-            const newData = data.filter((item: IPost) => item._id !== id);
-            return newData;
-          }),
+          PostApi.util.updateQueryData(
+            'GetPosts',
+            {
+              page: page - 1,
+              limit: 10,
+            },
+            (data: IPost[]) => {
+              const newData = data.filter((item: IPost) => item._id !== id);
+              return newData;
+            },
+          ),
         );
         queryFulfilled
           .then(({ data: DeleteRes }) => {
@@ -131,6 +164,7 @@ const PostApi = createApi({
 
 export const {
   useGetPostsQuery,
+  useLazyGetPostsQuery: useLazyGetPosts,
   useGetPostQuery,
   useGetPostByProjectQuery,
   useNewPostMutation: useNewPost,

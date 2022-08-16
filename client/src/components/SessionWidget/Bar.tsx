@@ -35,7 +35,6 @@ function Bar({ setDisplay }: { setDisplay: (State: boolean) => void }) {
   useEffect(() => {
     if (PushResult.isSuccess) {
       resetTimer();
-      setDisplay(false);
     }
   }, [PushResult]);
 
@@ -72,17 +71,24 @@ function Bar({ setDisplay }: { setDisplay: (State: boolean) => void }) {
       >
         {PushResult.isLoading && <Text>Creating new session...</Text>}
         <GridItem
-          px={5}
           bg="primary.800"
           rounded="2xl"
           rowSpan={[1, 1, 2, 2, 2]}
+          order={[3, 3, 1]}
         >
           <Text fontSize="4xl" w={['200px', '300px', '500px']}>
             Hour : {Hour} Minute : {Minute} Second : {seconds}
           </Text>
+
+          {Start ||
+            (seconds > 0 && (
+              <Button variant="success" mr={5} onClick={PushNewSession}>
+                Add Session
+              </Button>
+            ))}
           <Button onClick={RemoveSession}>Remove</Button>
         </GridItem>
-        <GridItem>
+        <GridItem order={[2, 2]}>
           <ButtonGroup className="primary-border" bg="secondary.300">
             <Button onClick={startTimer}>Start</Button>
             <Button variant="primary-border" onClick={stopTimer}>
@@ -91,15 +97,9 @@ function Bar({ setDisplay }: { setDisplay: (State: boolean) => void }) {
             <Button onClick={resetTimer}>Reset</Button>
           </ButtonGroup>
         </GridItem>
-        <GridItem>
+        <GridItem order={[1, 1, 3]}>
           <Text fontSize="3xl">Project : {Project.name}</Text>
 
-          {!Start ||
-            (Initialized && (
-              <Button variant="success" onClick={PushNewSession}>
-                Add Session
-              </Button>
-            ))}
           {!Initialized ? (
             <Text>Start The Timer</Text>
           ) : (

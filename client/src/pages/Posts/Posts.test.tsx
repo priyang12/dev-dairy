@@ -67,9 +67,16 @@ it('Delete Post', async () => {
   const post = screen.getByText(PostsResponse[0].title);
   expect(post).toBeInTheDocument();
 
-  const deleteButton = screen.getAllByText('Delete Post');
-  userEvent.click(deleteButton[0]);
+  const deleteButton = screen.getByTestId(
+    `delete-post-${PostsResponse[0]._id}`,
+  );
+
+  userEvent.click(deleteButton);
+
   expect(post).not.toBeInTheDocument();
+  await waitFor(() => screen.getByText(/Post Deleted Successfully/), {
+    timeout: 2100,
+  });
 });
 
 it('Post Field Validation', async () => {
@@ -83,8 +90,6 @@ it('Post Field Validation', async () => {
   userEvent.click(screen.getByText('Create New Entry'));
 
   expect(screen.getByText('New Log')).toBeInTheDocument();
-
-  await waitForElementToBeRemoved(screen.queryByText('Loading Projects'));
 
   userEvent.click(screen.getByText('Create Log'));
 
@@ -108,7 +113,6 @@ it('Add New Post', async () => {
   userEvent.type(screen.getByLabelText('Title'), 'New Title');
   userEvent.type(screen.getByLabelText('Description'), 'New Description');
 
-  await waitForElementToBeRemoved(screen.queryByText('Loading Projects'));
   const ProjectSelect = screen.getByLabelText('Project');
 
   userEvent.selectOptions(ProjectSelect, [`${ProjectsResponse[0]._id}`]);
@@ -126,13 +130,12 @@ it('Add New Post', async () => {
   userEvent.selectOptions(ProcessSelect, ['Started']);
 
   userEvent.click(screen.getByText('Create Log'));
-  // Need to Find a way for Adding Toast api
-  // await waitForElementToBeRemoved(screen.queryByText(/Create Log/));
 
-  // await waitFor(() => screen.findByText(/Creating Post/));
-  // await waitForElementToBeRemoved(screen.queryByText(/Creating Post/));
+  await waitForElementToBeRemoved(screen.queryByText(/Create Log/));
 
-  // expect(screen.getByText(NewPostResponse.post.title)).toBeInTheDocument();
+  await waitFor(() => screen.findByText(/New post added successfully/), {
+    timeout: 2100,
+  });
 });
 
 it('Update Post', async () => {

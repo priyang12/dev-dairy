@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux';
 import { Navigate, Outlet } from 'react-router-dom';
 import type { AuthState } from '../interface';
 import Navbar from './Navbar';
-import SessionWidget from './SessionWidget';
 import FallBackSuspenseWrapper from './FallBackSuspenseWrapper';
+import SessionWidget from './SessionWidget';
 
 // Lazy load  components
 const MusicPlayer = lazy(async () => import('./MusicPlayer'));

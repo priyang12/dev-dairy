@@ -1,12 +1,13 @@
 import { Box, Button, Grid, Heading, useDisclosure } from '@chakra-ui/react';
 import { Ring } from '@priyang/react-component-lib';
-import { useGetPostsQuery, useNewPost } from '../../API/PostAPI';
+import { useNewPost } from '../../API/PostAPI';
 import PostContainer from './PostContainer';
 import Spinner from '../../components/spinner';
 import MarginContainer from '../../components/MarginContainer';
 import PostModal from './PostModal';
 import BgImage from '../../components/BgImage';
 import { useApiToast } from '../../Hooks/useApiToast';
+import { useInfinitePosts } from '../../Hooks/useInfinitePosts';
 
 function Feeds() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -14,7 +15,11 @@ function Feeds() {
     isLoading: LoadingPosts,
     isFetching,
     data: Posts,
-  } = useGetPostsQuery(null);
+    CurrentPage,
+    isLastPage,
+    fetchNextPage,
+  } = useInfinitePosts();
+
   const [AddNewPost, Result] = useNewPost();
 
   useApiToast({
@@ -22,12 +27,15 @@ function Feeds() {
     loadingMessage: 'Adding new post...',
     successMessage: 'New post added successfully',
   });
-  if (LoadingPosts || isFetching || !Posts) return <Spinner />;
+
+  if (LoadingPosts || !Posts) return <Spinner />;
 
   return (
     <Box>
       <BgImage
         minH="100vh"
+        backgroundSize="cover"
+        backgroundRepeat="repeat"
         BgImageData={{
           url: 'https://source.unsplash.com/random/?dark-nature',
         }}
@@ -44,7 +52,9 @@ function Feeds() {
               Create New Entry
             </Button>
           </Ring>
+
           <PostModal
+            page={1}
             onClose={onClose}
             isOpen={isOpen}
             action="New"
@@ -55,15 +65,32 @@ function Feeds() {
             Dairy Log
           </Heading>
 
-          {Posts.length > 0 ? (
-            <Grid gridTemplateColumns={['2']} gap={10}>
-              {Posts.map((post: any) => (
-                <PostContainer key={post._id} post={post} />
-              ))}
-            </Grid>
-          ) : (
-            <Heading textAlign="center">No posts yet</Heading>
+          {Posts.length > 0 && (
+            <>
+              <Grid gridTemplateColumns={['2']} gap={10}>
+                {Posts.map((post: any) => (
+                  <PostContainer
+                    key={post._id}
+                    post={post}
+                    page={CurrentPage}
+                  />
+                ))}
+              </Grid>
+              {!isLastPage && (
+                <Button
+                  loadingText="Loading..."
+                  isLoading={isFetching}
+                  m={5}
+                  onClick={() => {
+                    fetchNextPage();
+                  }}
+                >
+                  Load More
+                </Button>
+              )}
+            </>
           )}
+          {isLastPage && <Heading textAlign="center">No posts yet</Heading>}
         </MarginContainer>
       </BgImage>
     </Box>
