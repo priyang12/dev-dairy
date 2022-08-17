@@ -38,6 +38,9 @@ const handlers = [
     }
     return res(ctx.delay(1000), ctx.json(Page2PostsResponse));
   }),
+  rest.get(`${API}/posts/filter`, (req, res, ctx) =>
+    res(ctx.delay(1000), ctx.json(PostsResponse)),
+  ),
 
   rest.post(`${API}/posts`, (req, res, ctx) =>
     res(ctx.delay(1000), ctx.json(NewPostResponse)),

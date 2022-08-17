@@ -16,12 +16,13 @@ import NewProject from './pages/NewProject';
 import EditProject from './pages/EditProject';
 import SingleProject from './pages/SingleProject';
 import WorkSessions from './pages/WorkSessions';
+import MusicPlaylist from './pages/MusicPlaylist';
+import ProjectSessions from './pages/ProjectSessions';
+import FilterPosts from './pages/FilterPosts';
 
 // Components
 import PrivateOutlet from './components/PrivateRoute';
 import Spinner from './components/spinner';
-import MusicPlaylist from './pages/MusicPlaylist';
-import ProjectSessions from './pages/ProjectSessions';
 
 function App() {
   const dispatch = useDispatch();
@@ -55,6 +56,7 @@ function App() {
         <Route path="/Register" element={<Register />} />
         <Route path="/" element={<PrivateOutlet />}>
           <Route path="/Posts" element={<Posts />} />
+          <Route path="/Posts/filter" element={<FilterPosts />} />
           <Route path="/Projects" element={<Projects />} />
           <Route path="/Projects/:id" element={<SingleProject />} />
           <Route path="/EditProject/:id" element={<EditProject />} />

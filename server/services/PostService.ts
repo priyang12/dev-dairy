@@ -94,17 +94,32 @@ export default class PostService {
 
   public async GetPostsWithFilter(
     userId: string,
-    status: any,
+    status: string,
+    title: string,
+    project: string,
     page: number,
     limit: number,
     Select?: string,
     ProjectSelect?: string,
     Sort?: string
   ) {
-    const Posts = await this.PostModel.find({
-      user: userId,
-      status,
-    })
+    const Filter = project
+      ? {
+          user: userId,
+          status: status,
+          project: project,
+          title: title
+            ? { $regex: title, $options: "i" }
+            : { $regex: "", $options: "i" },
+        }
+      : {
+          user: userId,
+          status: status,
+          title: title
+            ? { $regex: title, $options: "i" }
+            : { $regex: "", $options: "i" },
+        };
+    const Posts = await this.PostModel.find(Filter)
       .skip(limit * (page - 1))
       .limit(limit)
       .select(Select)

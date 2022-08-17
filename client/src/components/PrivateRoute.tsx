@@ -4,7 +4,6 @@ import { Navigate, Outlet } from 'react-router-dom';
 import type { AuthState } from '../interface';
 import Navbar from './Navbar';
 import FallBackSuspenseWrapper from './FallBackSuspenseWrapper';
-import SessionWidget from './SessionWidget';
 
 // Lazy load  components
 const MusicPlayer = lazy(async () => import('./MusicPlayer'));
@@ -20,7 +19,7 @@ function AuthContainer({ children }: { children: React.ReactNode }) {
       <FallBackSuspenseWrapper fallback={false}>
         <MusicPlayer />
       </FallBackSuspenseWrapper>
-      <SessionWidget />
+      {/* <SessionWidget /> */}
       {children}
     </>
   );

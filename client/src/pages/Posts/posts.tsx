@@ -1,5 +1,14 @@
-import { Box, Button, Grid, Heading, useDisclosure } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Grid,
+  Heading,
+  IconButton,
+  useDisclosure,
+} from '@chakra-ui/react';
 import { Ring } from '@priyang/react-component-lib';
+import { Link as RouterLink } from 'react-router-dom';
+import { BsFillFilterCircleFill } from 'react-icons/bs';
 import { useNewPost } from '../../API/PostAPI';
 import PostContainer from './PostContainer';
 import Spinner from '../../components/spinner';
@@ -36,9 +45,11 @@ function Feeds() {
         minH="100vh"
         backgroundSize="cover"
         backgroundRepeat="repeat"
-        BgImageData={{
-          url: 'https://source.unsplash.com/random/?dark-nature',
-        }}
+        BgImageData={
+          {
+            // url: 'https://source.unsplash.com/random/?dark-nature',
+          }
+        }
       >
         <MarginContainer display="flex" flexDir="column" py={5}>
           <Ring
@@ -52,6 +63,17 @@ function Feeds() {
               Create New Entry
             </Button>
           </Ring>
+
+          <IconButton
+            as={RouterLink}
+            aria-label="Filter"
+            w="fit-content"
+            ml="auto"
+            fontSize="3xl"
+            to="/posts/filter"
+          >
+            <BsFillFilterCircleFill />
+          </IconButton>
 
           <PostModal
             page={1}

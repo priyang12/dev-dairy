@@ -23,10 +23,11 @@ const ProjectApi = createApi({
   tagTypes: ['projectId', 'RoadMapsId'],
 
   endpoints: (builder) => ({
-    GetProjects: builder.query<IProject[], Partial<string>>({
-      query: () => ({
+    GetProjects: builder.query<IProject[], any>({
+      query: (params: any) => ({
         url: '',
         method: 'GET',
+        params,
       }),
     }),
 

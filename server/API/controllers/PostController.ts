@@ -33,13 +33,16 @@ export const GetPostsWithPagination = asyncHandler(
 // @access  Private
 export const GetPostsWithFilter = asyncHandler(
   async (req: Request, res: Response): Promise<any> => {
-    const { page, limit, Select, ProjectSelect, Sort, status } =
+    const { page, limit, Select, ProjectSelect, Sort, status, title, project } =
       req.query as any;
+
     const pageVal = Number(page) || 1;
     const projectServiceInstance = Container.get(PostService);
     const projects = await projectServiceInstance.GetPostsWithFilter(
       req.user._id,
       status,
+      title,
+      project,
       pageVal,
       parseInt(limit),
       Select,

@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { toast } from 'react-toastify';
+import { CheckError } from '../utils/helpers';
 import API from '.';
 import type { IPost } from '../interface';
 import type { RootState } from '../store';
@@ -17,7 +18,7 @@ const PostApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['Posts'],
+  tagTypes: ['Posts', 'FilteredPosts'],
 
   endpoints: (builder) => ({
     GetPosts: builder.query<IPost[], any>({
@@ -48,6 +49,16 @@ const PostApi = createApi({
           method: 'get',
         };
       },
+      providesTags: ['Posts'],
+    }),
+    GetFilteredPosts: builder.query<IPost[], string>({
+      query(filter) {
+        return {
+          url: `/filter${filter}`,
+          method: 'GET',
+        };
+      },
+      providesTags: ['FilteredPosts'],
     }),
     NewPost: builder.mutation<NewPostAPI, Partial<IPost>>({
       query(data) {
@@ -71,6 +82,8 @@ const PostApi = createApi({
             ),
           );
         } catch (error: any) {
+          const errorMessage = CheckError(error);
+          toast.error(errorMessage);
           dispatch(PostApi.util.invalidateTags(['Posts']));
         }
       },
@@ -95,7 +108,7 @@ const PostApi = createApi({
           PostApi.util.updateQueryData(
             'GetPosts',
             {
-              page: page,
+              page: page - 1,
               limit: 10,
             },
             (posts) =>
@@ -114,7 +127,7 @@ const PostApi = createApi({
             toast.success(`${UpdatePost.message} Updated Successfully`);
           })
           .catch((error: any) => {
-            const errorMessage = error.error.data.msg || 'server Error';
+            const errorMessage = CheckError(error);
             toast.dark(errorMessage);
             UpdateResult.undo();
           });
@@ -153,7 +166,84 @@ const PostApi = createApi({
             toast.warning(`${DeleteRes.message}`);
           })
           .catch((error: any) => {
-            const errorMessage = error.error.data.msg || 'server Error';
+            const errorMessage = CheckError(error);
+            toast.dark(errorMessage);
+            deleteResult.undo();
+          });
+      },
+    }),
+    UpdateFilterPost: builder.mutation<
+      UpdatePostAPI,
+      {
+        UpdatedPost: IPost;
+        filter: string;
+      }
+    >({
+      query({ UpdatedPost }) {
+        return {
+          url: `/${UpdatedPost._id}`,
+          method: 'put',
+          body: UpdatedPost,
+        };
+      },
+
+      onQueryStarted({ UpdatedPost, filter }, { dispatch, queryFulfilled }) {
+        const UpdateResult = dispatch(
+          PostApi.util.updateQueryData('GetFilteredPosts', filter, (posts) =>
+            posts.map((post) => {
+              if (post._id === UpdatedPost._id) {
+                UpdatedPost.date = post.date;
+                return UpdatedPost as IPost;
+              }
+              return post;
+            }),
+          ),
+        );
+
+        queryFulfilled
+          .then(({ data: UpdatePost }) => {
+            dispatch(PostApi.util.invalidateTags(['Posts']));
+            toast.success(`${UpdatePost.message} Updated Successfully`);
+          })
+          .catch((error: any) => {
+            const errorMessage = CheckError(error);
+            toast.dark(errorMessage);
+            UpdateResult.undo();
+          });
+      },
+    }),
+    DeleteFilterPost: builder.mutation<
+      DeletedPostAPI,
+      {
+        id: string;
+        filter: string;
+      }
+    >({
+      query({ id }) {
+        return {
+          url: `/${id}`,
+          method: 'delete',
+        };
+      },
+
+      onQueryStarted({ id, filter }, { dispatch, queryFulfilled }) {
+        const deleteResult = dispatch(
+          PostApi.util.updateQueryData(
+            'GetFilteredPosts',
+            filter,
+            (data: IPost[]) => {
+              const newData = data.filter((item: IPost) => item._id !== id);
+              return newData;
+            },
+          ),
+        );
+        queryFulfilled
+          .then(({ data: DeleteRes }) => {
+            dispatch(PostApi.util.invalidateTags(['Posts']));
+            toast.warning(`${DeleteRes.message}`);
+          })
+          .catch((error: any) => {
+            const errorMessage = CheckError(error);
             toast.dark(errorMessage);
             deleteResult.undo();
           });
@@ -164,12 +254,15 @@ const PostApi = createApi({
 
 export const {
   useGetPostsQuery,
+  useGetFilteredPostsQuery: useGetFilteredPosts,
   useLazyGetPostsQuery: useLazyGetPosts,
   useGetPostQuery,
   useGetPostByProjectQuery,
   useNewPostMutation: useNewPost,
   useUpdatePostMutation,
+  useUpdateFilterPostMutation: useUpdateFilterPost,
   useDeletePostMutation: useDeletePost,
+  useDeleteFilterPostMutation: useDeleteFilterPost,
 } = PostApi;
 
 export default PostApi;

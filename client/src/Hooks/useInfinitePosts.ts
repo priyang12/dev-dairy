@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, useMemo } from 'react';
-import { useGetPostsQuery, useLazyGetPosts } from '../API/PostAPI';
+import { useLazyGetPosts } from '../API/PostAPI';
 
 export const useInfinitePosts = () => {
   const shouldReset = useRef(true);
