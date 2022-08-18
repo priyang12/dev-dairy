@@ -38,6 +38,7 @@ function Feeds() {
   });
 
   if (LoadingPosts || !Posts) return <Spinner />;
+  console.log(localStorage.getItem('PostImage'));
 
   return (
     <Box>
@@ -45,11 +46,11 @@ function Feeds() {
         minH="100vh"
         backgroundSize="cover"
         backgroundRepeat="repeat"
-        BgImageData={
-          {
-            // url: 'https://source.unsplash.com/random/?dark-nature',
-          }
-        }
+        BgImageData={{
+          url:
+            localStorage.getItem('PostImage') ||
+            'https://source.unsplash.com/aiKyJ6rHCP4',
+        }}
       >
         <MarginContainer display="flex" flexDir="column" py={5}>
           <Ring

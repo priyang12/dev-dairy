@@ -46,6 +46,7 @@
     "test:debug": "DEBUG_PRINT_LIMIT=10000 react-scripts test",
     "testAll": "react-scripts test --watchAll",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
+    "Page": "sh Page.sh",
     "coverage": "react-scripts test --watchAll --coverage",
     "eject": "react-scripts eject",
     "lint": "eslint src --ext .tsx,.ts",

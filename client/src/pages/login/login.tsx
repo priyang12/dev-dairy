@@ -67,7 +67,10 @@ function Login() {
   return (
     <Box
       p={10}
-      backgroundImage="url('https://source.unsplash.com/random/?nature')"
+      backgroundImage={`url(${
+        localStorage.getItem('AuthImage') ||
+        'https://source.unsplash.com/npwjNTG_SQA'
+      })`}
       backgroundPosition="center"
       backgroundSize="cover"
       backgroundRepeat="no-repeat"

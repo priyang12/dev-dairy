@@ -19,7 +19,9 @@ import WorkSessions from './pages/WorkSessions';
 import MusicPlaylist from './pages/MusicPlaylist';
 import ProjectSessions from './pages/ProjectSessions';
 import FilterPosts from './pages/FilterPosts';
-
+import Settings from './pages/Settings';
+import PreferenceSettings from './pages/PreferenceSettings';
+import ProfileSettings from './pages/ProfileSettings';
 // Components
 import PrivateOutlet from './components/PrivateRoute';
 import Spinner from './components/spinner';
@@ -55,16 +57,20 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/Register" element={<Register />} />
         <Route path="/" element={<PrivateOutlet />}>
-          <Route path="/Posts" element={<Posts />} />
-          <Route path="/Posts/filter" element={<FilterPosts />} />
-          <Route path="/Projects" element={<Projects />} />
-          <Route path="/Projects/:id" element={<SingleProject />} />
-          <Route path="/EditProject/:id" element={<EditProject />} />
-          <Route path="/RoadMap/:id" element={<RoadMap />} />
-          <Route path="/Sessions" element={<WorkSessions />} />
-          <Route path="/Project/Sessions/:id" element={<ProjectSessions />} />
-          <Route path="/NewProject" element={<NewProject />} />
-          <Route path="/MusicPlaylist" element={<MusicPlaylist />} />
+          <Route path="Posts" element={<Posts />} />
+          <Route path="Posts/filter" element={<FilterPosts />} />
+          <Route path="Projects" element={<Projects />} />
+          <Route path="Projects/:id" element={<SingleProject />} />
+          <Route path="EditProject/:id" element={<EditProject />} />
+          <Route path="RoadMap/:id" element={<RoadMap />} />
+          <Route path="Sessions" element={<WorkSessions />} />
+          <Route path="Project/Sessions/:id" element={<ProjectSessions />} />
+          <Route path="NewProject" element={<NewProject />} />
+          <Route path="MusicPlaylist" element={<MusicPlaylist />} />
+          <Route path="Settings" element={<Settings />}>
+            <Route path="Preference" element={<PreferenceSettings />} />
+            <Route path="Profile" element={<ProfileSettings />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>

@@ -98,6 +98,15 @@ function DropDownContainer() {
                 <span className="hide-sm">MusicPlaylist</span>
               </LinkItem>
             </Link>
+            <Link
+              as={RouterLink}
+              to="/Settings/Preference"
+              _hover={{ color: isDark ? 'green.500' : 'gray.100' }}
+            >
+              <LinkItem isDark={isDark}>
+                <span className="hide-sm">Settings</span>
+              </LinkItem>
+            </Link>
 
             <div className="dropdown-divider" />
 

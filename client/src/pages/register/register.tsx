@@ -10,7 +10,6 @@ import {
   Flex,
   Heading,
   Text,
-  Link,
 } from '@chakra-ui/react';
 import type { FormField } from '../../components/CustomForm';
 import CustomForm from '../../components/CustomForm';
@@ -103,7 +102,10 @@ function Register() {
     <Box
       pt={15}
       px={10}
-      backgroundImage="url('https://source.unsplash.com/random/?nature')"
+      backgroundImage={`url(${
+        localStorage.getItem('AuthImage') ||
+        'https://source.unsplash.com/npwjNTG_SQA'
+      })`}
       backgroundPosition="center"
       backgroundSize="cover"
       backgroundRepeat="no-repeat"
@@ -138,14 +140,14 @@ function Register() {
           <Text>Sign up for your DevConnector account</Text>
           <Text>Already have an account?</Text>
           <Button
+            as={RouterLink}
+            to="/login"
             colorScheme="green"
             variant="outline"
             backdropFilter="auto"
             backdropBlur="10px"
           >
-            <Link as={RouterLink} to="/login">
-              Login
-            </Link>
+            Login
           </Button>
         </Box>
       </Flex>
