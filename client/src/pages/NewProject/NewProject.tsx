@@ -78,7 +78,7 @@ function NewProject() {
     setRoadMaps([...RoadMaps, NewRoadMap]);
     setNewRoadMap({
       name: '',
-      color: '',
+      color: '#000',
     });
   };
   const DeleteTech = (index: number) => {
@@ -94,6 +94,7 @@ function NewProject() {
     const { Title, Description, process, Github, Live, Website } = FormValues;
     const newRoadMaps = [...RoadMaps];
     const newTechs = [...Technologies];
+    console.log(newRoadMaps);
 
     const TitleError = setError('Title', ValidateTitle(Title, 'Title'));
     const DescriptionError = setError(
@@ -110,16 +111,16 @@ function NewProject() {
     }
 
     if (!TitleError && !DescriptionError && !GithubError && !WebsiteError) {
-      CreateProject({
-        title: Title,
-        description: Description,
-        process,
-        github: Github,
-        live: Live,
-        website: Website,
-        roadMap: newRoadMaps,
-        technologies: newTechs,
-      });
+      // CreateProject({
+      //   title: Title,
+      //   description: Description,
+      //   process,
+      //   github: Github,
+      //   live: Live,
+      //   website: Website,
+      //   roadMap: newRoadMaps,
+      //   technologies: newTechs,
+      // });
     }
   };
 
