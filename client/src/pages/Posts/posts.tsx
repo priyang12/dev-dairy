@@ -38,7 +38,6 @@ function Feeds() {
   });
 
   if (LoadingPosts || !Posts) return <Spinner />;
-  console.log(localStorage.getItem('PostImage'));
 
   return (
     <Box>
