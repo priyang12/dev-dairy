@@ -195,21 +195,26 @@ export default class UserService {
     userId: string,
     projectId: string
   ): Promise<{ message: string; result: boolean }> {
-    const deletedProject = await this.ProjectModel.findOneAndDelete({
-      _id: projectId,
-      user: userId,
-    }).exec();
+    const [deletedProject, deletedPosts, deletedWorkSessions] =
+      await Promise.all([
+        this.ProjectModel.findOneAndDelete({
+          _id: projectId,
+          user: userId,
+        }).exec(),
+        this.PostModel.deleteMany({ project: projectId, user: userId }).exec(),
+        this.WorkSessionModel.findOneAndDelete({
+          project: projectId,
+          user: userId,
+        }).exec(),
+      ]);
 
-    const deletedPosts = await this.PostModel.deleteMany({
-      project: projectId,
-      user: userId,
-    }).exec();
-
-    if (!deletedProject || !deletedPosts) {
+    if (!deletedProject || !deletedPosts || !deletedWorkSessions) {
       this.logger.error("CRUD Error: Project Not Deleted");
       throw new Error("CRUD Error: Project Not Deleted");
     }
+
     this.logger.info("Project deleted");
+
     return {
       result: true,
       message: `Project ${deletedProject.title} deleted`,
