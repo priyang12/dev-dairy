@@ -3,16 +3,15 @@ import '@testing-library/jest-dom/extend-expect';
 import Settings from './Settings';
 import { BrowserRouter } from 'react-router-dom';
 
-const SetUp = () => {
-  return render(
+const SetUp = () =>
+  render(
     <BrowserRouter>
       <Settings />
     </BrowserRouter>,
   );
-};
 it('should render without crashing', () => {
   SetUp();
-  screen.getByText('Settings');
+  screen.getAllByText('Settings');
   screen.getByText('Profile');
-  screen.getByText('Preferences');
+  screen.getByText('Preference');
 });

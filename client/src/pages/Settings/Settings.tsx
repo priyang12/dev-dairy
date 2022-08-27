@@ -1,9 +1,9 @@
+import { SettingsIcon } from '@chakra-ui/icons';
 import { Box, Button, Flex, Heading, IconButton, Text } from '@chakra-ui/react';
 import { AiFillSetting } from 'react-icons/ai';
 import { CgProfile } from 'react-icons/cg';
 import { ImMenu } from 'react-icons/im';
-import { Link } from 'react-router-dom';
-import { Outlet } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 import Container from '../../components/Container';
 
 function SideBarButton({
@@ -53,7 +53,7 @@ function Settings() {
           <ImMenu />
         </IconButton>
         <Heading display={['block', 'none']} fontSize="5xl" textAlign="center">
-          Settings
+          Settings <SettingsIcon />
         </Heading>
       </Flex>
       <Flex justifyContent="flex-start" alignItems="flex-start">

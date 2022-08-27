@@ -17,9 +17,7 @@ const SetUp = async () => {
     </BrowserRouter>,
   );
   await waitForElementToBeRemoved(() => screen.getByAltText(/loading/));
-  expect(
-    screen.getByText(`${SingleProjectResponse.title} 's`),
-  ).toBeInTheDocument();
+  expect(screen.getByText(SingleProjectResponse.title)).toBeInTheDocument();
   const DeleteAll = screen.getByRole('button', {
     name: 'Delete All Work Session',
   });

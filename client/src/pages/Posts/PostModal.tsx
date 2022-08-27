@@ -95,6 +95,7 @@ function PostModal({
         status: '',
       });
     } else {
+      const ProjectData = Projects?.find((val) => val._id === Project.value);
       const data: INewPost | any = {
         title: title.value,
         description: description.value,
@@ -105,12 +106,18 @@ function PostModal({
 
       if (action !== 'New') {
         data._id = post?._id;
+        actionSubmit({
+          UpdatedPost: data,
+          page,
+          ProjectData: {
+            _id: ProjectData?._id,
+            title: ProjectData?.title,
+            process: ProjectData?.process,
+          },
+        });
+      } else {
+        actionSubmit(data);
       }
-
-      actionSubmit({
-        UpdatedPost: data,
-        page,
-      });
 
       ResetModal();
     }

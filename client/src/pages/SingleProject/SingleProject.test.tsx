@@ -1,8 +1,8 @@
+import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
 import { format, parseISO } from 'date-fns';
 import { Route, Router, Routes } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
-import userEvent from '@testing-library/user-event';
 import { render, screen, waitForElementToBeRemoved } from '../../test-utils';
 import { SingleProjectResponse } from '../../mock/MockedData';
 import SingleProject from './index';
@@ -123,8 +123,11 @@ it('Server Error on Delete', async () => {
     ),
   );
 
-  expect(screen.getByAltText('loading...')).toBeInTheDocument();
-  await waitForElementToBeRemoved(screen.getByAltText('loading...'));
+  setup();
+
+  await waitForElementToBeRemoved(screen.getByAltText('loading...'), {
+    timeout: 2000,
+  });
 
   // Delete Project
   const deleteButton = screen.getByRole('button', {
@@ -146,5 +149,5 @@ it('Server Error on Delete', async () => {
 
   userEvent.click(SubmitButton);
 
-  expect(History.location.pathname).toBe(route);
+  expect(History.location.pathname).toBe('/projects');
 });

@@ -88,7 +88,8 @@ function ProjectSessions() {
           my={5}
         >
           <Heading>
-            <span>{Project?.title} &lsquo;s</span>
+            <span>{Project?.title}</span>
+            <span>&lsquo;s</span>
             &nbsp;
             <Text as="span" fontSize="2xl">
               Work Sessions
@@ -108,7 +109,7 @@ function ProjectSessions() {
                 DeleteAllSessions(id);
               }}
             >
-              Delete All Sessions{' '}
+              Delete All Sessions
             </Button>
           )}
         </Flex>
@@ -213,7 +214,6 @@ function ProjectSessions() {
                       }}
                       onClick={() => {
                         DeleteList.delete(session._id);
-
                         const NewList = new Set(DeleteList);
                         setDeleteList(NewList);
                       }}

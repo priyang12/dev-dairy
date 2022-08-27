@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { toast } from 'react-toastify';
 import { CheckError } from '../utils/helpers';
 import API from '.';
-import type { IPost } from '../interface';
+import type { IPost, IProject } from '../interface';
 import type { RootState } from '../store';
 import type { DeletedPostAPI, NewPostAPI, UpdatePostAPI } from './interface';
 
@@ -93,6 +93,7 @@ const PostApi = createApi({
       {
         UpdatedPost: IPost;
         page: number;
+        ProjectData: Pick<IProject, '_id' | 'title' | 'process'>;
       }
     >({
       query({ UpdatedPost }) {
@@ -103,7 +104,10 @@ const PostApi = createApi({
         };
       },
 
-      onQueryStarted({ UpdatedPost, page }, { dispatch, queryFulfilled }) {
+      onQueryStarted(
+        { UpdatedPost, page, ProjectData },
+        { dispatch, queryFulfilled },
+      ) {
         const UpdateResult = dispatch(
           PostApi.util.updateQueryData(
             'GetPosts',
@@ -114,6 +118,7 @@ const PostApi = createApi({
             (posts) =>
               posts.map((post) => {
                 if (post._id === UpdatedPost._id) {
+                  UpdatedPost.project = ProjectData;
                   UpdatedPost.date = post.date;
                   return UpdatedPost as IPost;
                 }
@@ -128,7 +133,7 @@ const PostApi = createApi({
           })
           .catch((error: any) => {
             const errorMessage = CheckError(error);
-            toast.dark(errorMessage);
+            toast.warning(errorMessage);
             UpdateResult.undo();
           });
       },
@@ -177,6 +182,7 @@ const PostApi = createApi({
       {
         UpdatedPost: IPost;
         filter: string;
+        ProjectData: Pick<IProject, '_id' | 'title' | 'process'>;
       }
     >({
       query({ UpdatedPost }) {
@@ -186,12 +192,15 @@ const PostApi = createApi({
           body: UpdatedPost,
         };
       },
-
-      onQueryStarted({ UpdatedPost, filter }, { dispatch, queryFulfilled }) {
+      onQueryStarted(
+        { UpdatedPost, filter, ProjectData },
+        { dispatch, queryFulfilled },
+      ) {
         const UpdateResult = dispatch(
           PostApi.util.updateQueryData('GetFilteredPosts', filter, (posts) =>
             posts.map((post) => {
               if (post._id === UpdatedPost._id) {
+                UpdatedPost.project = ProjectData;
                 UpdatedPost.date = post.date;
                 return UpdatedPost as IPost;
               }
@@ -244,7 +253,7 @@ const PostApi = createApi({
           })
           .catch((error: any) => {
             const errorMessage = CheckError(error);
-            toast.dark(errorMessage);
+            toast.error(errorMessage);
             deleteResult.undo();
           });
       },

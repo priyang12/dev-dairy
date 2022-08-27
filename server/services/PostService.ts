@@ -103,23 +103,28 @@ export default class PostService {
     ProjectSelect?: string,
     Sort?: string
   ) {
-    const Filter = project
-      ? {
-          user: userId,
-          status: status,
-          project: project,
-          title: title
-            ? { $regex: title, $options: "i" }
-            : { $regex: "", $options: "i" },
-        }
-      : {
-          user: userId,
-          status: status,
-          title: title
-            ? { $regex: title, $options: "i" }
-            : { $regex: "", $options: "i" },
+    const filter = {
+      user: userId,
+    } as Partial<
+      Pick<IPost, "status" | "project"> & {
+        title: {
+          $regex: string;
+          $options: string;
         };
-    const Posts = await this.PostModel.find(Filter)
+      }
+    >;
+
+    if (status) {
+      filter["status"] = status;
+    }
+    if (title) {
+      filter["title"] = { $regex: title, $options: "i" };
+    }
+    if (project) {
+      filter["project"] = project;
+    }
+
+    const Posts = await this.PostModel.find(filter)
       .skip(limit * (page - 1))
       .limit(limit)
       .select(Select)

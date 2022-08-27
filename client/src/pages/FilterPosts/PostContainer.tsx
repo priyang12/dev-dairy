@@ -9,8 +9,8 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { parseISO, format } from 'date-fns';
-import { useSearchParams } from 'react-router-dom';
-import { useDeleteFilterPost, useUpdatePostMutation } from '../../API/PostAPI';
+import { useLocation } from 'react-router-dom';
+import { useDeleteFilterPost, useUpdateFilterPost } from '../../API/PostAPI';
 import PostModal from './PostModal';
 import { GetTaskColor } from '../../utils/GetStatusColor';
 import type { IPost } from '../../interface';
@@ -20,10 +20,10 @@ type PropTypes = {
 };
 
 function PostContainer({ post }: PropTypes) {
-  const [search, setSearch] = useSearchParams();
+  const { search } = useLocation();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [mutation, { isLoading }] = useDeleteFilterPost();
-  const [UpdateMutate] = useUpdatePostMutation();
+  const [UpdateMutate] = useUpdateFilterPost();
 
   return (
     <GridItem
@@ -99,7 +99,7 @@ function PostContainer({ post }: PropTypes) {
                 onClick={() => {
                   mutation({
                     id: post._id,
-                    filter: search.get('status') || '',
+                    filter: search || '',
                   });
                 }}
                 fontSize="2xl"
@@ -112,8 +112,8 @@ function PostContainer({ post }: PropTypes) {
 
         {isOpen && (
           <PostModal
-            page={1}
             onClose={onClose}
+            filter={search || ''}
             isOpen={isOpen}
             action="Update"
             post={post}

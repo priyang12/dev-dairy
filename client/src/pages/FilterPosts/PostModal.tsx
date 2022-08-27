@@ -21,7 +21,7 @@ interface Props {
   actionSubmit: (data: any) => void;
   onClose: () => void;
   isOpen: boolean;
-  page: number;
+  filter: string;
 }
 
 interface PostFields {
@@ -41,7 +41,7 @@ const init = {
 };
 function PostModal({
   action,
-  page,
+  filter,
   post,
   actionSubmit,
   onClose,
@@ -74,13 +74,10 @@ function PostModal({
   };
   const submit = (e: React.FormEvent<HTMLFormElement> | any) => {
     e.preventDefault();
-
     const { title, description, Project, status, roadMap } = e.target
       .elements as typeof e.target.elements & PostFields;
-
     const ErrorTitle = ValidateTitle(title.value, 'Title');
     const ErrorDes = ValidateDescription(description.value);
-
     const ErrorProject =
       Project.value === 'Select Project' ? 'Project is Required' : '';
     const ErrorRoadMap =
@@ -95,6 +92,7 @@ function PostModal({
         status: '',
       });
     } else {
+      const ProjectData = Projects?.find((val) => val._id === Project.value);
       const data: INewPost | any = {
         title: title.value,
         description: description.value,
@@ -102,16 +100,18 @@ function PostModal({
         status: status.value,
         roadMap: roadMap.value.split(',')[0],
       };
-
       if (action !== 'New') {
         data._id = post?._id;
       }
-
       actionSubmit({
         UpdatedPost: data,
-        page,
+        filter,
+        ProjectData: {
+          _id: ProjectData?._id,
+          title: ProjectData?.title,
+          process: ProjectData?.process,
+        },
       });
-
       ResetModal();
     }
   };
