@@ -14,12 +14,14 @@ const WorkSessionSlice = createSlice({
   name: 'WorkSessionSlice',
   initialState: initState,
   reducers: {
-    setLoading: (state, action) => {
-      state.isLoading = action.payload;
-    },
-    setProject: (state, action) => {
-      state.Project = action.payload;
-    },
+    setLoading: (state, action) => ({
+      ...state,
+      isLoading: action.payload,
+    }),
+    setProject: (state, action) => ({
+      ...state,
+      Project: action.payload,
+    }),
   },
 });
 

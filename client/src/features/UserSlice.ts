@@ -7,17 +7,16 @@ const userAuthSlice = createSlice({
     error: null,
   },
   reducers: {
-    setUser: (state, action) => {
-      state.user = action.payload;
-    },
-    setError: (state, action) => {
-      state.error = action.payload;
-    },
+    setUser: (state, action) => ({
+      ...state,
+      user: action.payload,
+    }),
+    setError: (state, action) => ({
+      ...state,
+      error: action.payload,
+    }),
   },
 });
-
-// Exporting data for selectors
-export const isAuthenticated = (state: any) => state.authenticated;
 
 export const { setUser, setError } = userAuthSlice.actions;
 

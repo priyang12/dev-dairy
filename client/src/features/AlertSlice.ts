@@ -11,16 +11,18 @@ const AlertSlice = createSlice({
   name: 'AlertSlice',
   initialState: initState,
   reducers: {
-    setAlert: (state, action) => {
-      state.alert = action.payload.alert;
-      state.result = action.payload.result;
-      state.Type = action.payload.Type;
-    },
-    clearAlert: (state) => {
-      state.alert = '';
-      state.Type = 'info';
-      state.result = false;
-    },
+    setAlert: (state, action) => ({
+      ...state,
+      alert: action.payload.alert,
+      Type: action.payload.Type,
+      result: action.payload.result,
+    }),
+    clearAlert: (state) => ({
+      ...state,
+      alert: '',
+      Type: 'info',
+      result: false,
+    }),
   },
 });
 
