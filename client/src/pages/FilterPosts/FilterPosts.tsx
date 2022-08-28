@@ -18,13 +18,15 @@ import FilterMenu from './FilterMenu';
 function Feeds() {
   const { search } = useLocation();
   const { isOpen, onClose, onToggle } = useDisclosure();
-  const { isLoading: LoadingPosts, data: Posts } = useGetFilteredPosts(search);
+  const { isLoading: LoadingPosts, data: Posts } = useGetFilteredPosts(search, {
+    skip: !search,
+  });
 
   useEffect(() => {
     onToggle();
   }, []);
 
-  if (LoadingPosts || !Posts) return <Spinner />;
+  if (LoadingPosts) return <Spinner />;
 
   return (
     <Box>
@@ -57,14 +59,14 @@ function Feeds() {
               No Filter Applied
             </Heading>
           )}
-          {Posts.length > 0 ? (
+          {Posts && Posts.length > 0 ? (
             <Grid gridTemplateColumns={['2']} gap={10}>
               {Posts.map((post: any) => (
                 <PostContainer key={post._id} post={post} />
               ))}
             </Grid>
           ) : (
-            <Heading textAlign="center">No posts yet</Heading>
+            search && <Heading textAlign="center">No posts yet</Heading>
           )}
         </MarginContainer>
       </BgImage>

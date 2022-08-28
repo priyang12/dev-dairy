@@ -36,7 +36,15 @@ const ProjectApi = createApi({
         url: `/${id}`,
         method: 'GET',
       }),
-      providesTags: ['projectId'],
+      providesTags: (result, error, arg) =>
+        result
+          ? [
+              {
+                type: 'projectId',
+                id: arg,
+              },
+            ]
+          : ['projectId'],
     }),
     GetProjectRoadMap: builder.query<
       IProject,
@@ -283,7 +291,18 @@ const ProjectApi = createApi({
         );
         try {
           await queryFulfilled;
-          dispatch(ProjectApi.util.invalidateTags(['projectId']));
+          dispatch(
+            ProjectApi.util.updateQueryData(
+              'GetProjectId',
+              projectId,
+              (project: IProject) => {
+                project.roadMap = project.roadMap.filter(
+                  (roadMap) => roadMap._id !== RoadMapId[0],
+                );
+                return project;
+              },
+            ),
+          );
         } catch (error) {
           dispatch(setAlert('Server Error'));
           deleteResult.undo();

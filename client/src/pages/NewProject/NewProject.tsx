@@ -19,6 +19,7 @@ import {
   NumberInputField,
   NumberInputStepper,
   Switch,
+  IconButton,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { Navigate as Redirect } from 'react-router-dom';
@@ -94,7 +95,6 @@ function NewProject() {
     const { Title, Description, process, Github, Live, Website } = FormValues;
     const newRoadMaps = [...RoadMaps];
     const newTechs = [...Technologies];
-    console.log(newRoadMaps);
 
     const TitleError = setError('Title', ValidateTitle(Title, 'Title'));
     const DescriptionError = setError(
@@ -111,16 +111,16 @@ function NewProject() {
     }
 
     if (!TitleError && !DescriptionError && !GithubError && !WebsiteError) {
-      // CreateProject({
-      //   title: Title,
-      //   description: Description,
-      //   process,
-      //   github: Github,
-      //   live: Live,
-      //   website: Website,
-      //   roadMap: newRoadMaps,
-      //   technologies: newTechs,
-      // });
+      CreateProject({
+        title: Title,
+        description: Description,
+        process,
+        github: Github,
+        live: Live,
+        website: Website,
+        roadMap: newRoadMaps,
+        technologies: newTechs,
+      });
     }
   };
 
@@ -286,14 +286,16 @@ function NewProject() {
             {Technologies.map((tech: any, index) => (
               <Flex alignItems="center" gap={5} key={tech}>
                 <Input defaultValue={tech} bg="primary.200" />
-                <DeleteIcon
-                  color="red"
-                  data-testid={`delete-tech-${index}`}
-                  cursor="pointer"
-                  onClick={() => {
-                    DeleteTech(index);
-                  }}
-                />
+                <IconButton aria-label="Delete-Tech">
+                  <DeleteIcon
+                    color="red"
+                    data-testid={`delete-tech-${index}`}
+                    cursor="pointer"
+                    onClick={() => {
+                      DeleteTech(index);
+                    }}
+                  />
+                </IconButton>
               </Flex>
             ))}
             <Flex direction="column" as={FormControl} gap={5}>
