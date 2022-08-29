@@ -98,6 +98,30 @@ function MusicPlayer() {
     }
   }, [CurrentMusic, PlayList, SongsDB, dispatch]);
 
+  useEffect(() => {
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: SongInfo.title || 'Title Not Found',
+        artist: SongInfo.artist || 'Artist Not Found',
+        album: SongInfo.album || 'Album Not Found',
+        artwork: [
+          {
+            // need to fix image
+            sizes: '320x180',
+            src: 'https://i.ytimg.com/vi/u1xDX1OUnd8/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDYF2l5wIC_G8O_FviFDNlJC-XSHQ',
+            type: 'image/png',
+          },
+        ],
+      });
+      navigator.mediaSession.setActionHandler('previoustrack', function () {
+        dispatch(setCurrentMusic(CurrentMusic - 1));
+      });
+      navigator.mediaSession.setActionHandler('nexttrack', function () {
+        dispatch(setCurrentMusic(CurrentMusic + 1));
+      });
+    }
+  }, [SongInfo]);
+
   const Toggle = () => {
     setPlaying((prev) => !prev);
   };
