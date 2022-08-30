@@ -62,10 +62,24 @@ const colors = {
   },
 };
 
+const space = {
+  xs: '0.25rem',
+  sm: '0.5rem',
+  md: '1rem',
+  lg: '2rem',
+  xl: '4rem',
+  '2xl': '8rem',
+  '3xl': '12rem',
+  '4xl': '16rem',
+  '5xl': '24rem',
+};
+
 const theme = extendTheme({
   config,
   colors,
+  space,
 });
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={Store}>

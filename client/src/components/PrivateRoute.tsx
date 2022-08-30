@@ -9,6 +9,7 @@ import SessionWidget from './SessionWidget';
 // Lazy load  components
 const MusicPlayer = lazy(async () => import('./MusicPlayer'));
 const CustomToaster = lazy(async () => import('./CustomToaster'));
+const YoutubePlayer = lazy(async () => import('./YoutubePlayer'));
 
 function AuthContainer({ children }: { children: React.ReactNode }) {
   return (
@@ -22,6 +23,9 @@ function AuthContainer({ children }: { children: React.ReactNode }) {
       </FallBackSuspenseWrapper>
       <SessionWidget />
       {children}
+      <FallBackSuspenseWrapper fallback={false}>
+        <YoutubePlayer />
+      </FallBackSuspenseWrapper>
     </>
   );
 }

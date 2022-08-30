@@ -113,10 +113,10 @@ function MusicPlayer() {
           },
         ],
       });
-      navigator.mediaSession.setActionHandler('previoustrack', function () {
+      navigator.mediaSession.setActionHandler('previoustrack', () => {
         dispatch(setCurrentMusic(CurrentMusic - 1));
       });
-      navigator.mediaSession.setActionHandler('nexttrack', function () {
+      navigator.mediaSession.setActionHandler('nexttrack', () => {
         dispatch(setCurrentMusic(CurrentMusic + 1));
       });
     }
