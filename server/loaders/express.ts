@@ -33,7 +33,6 @@ export default ({ app }: { app: express.Application }) => {
   app.use(config.api.prefix, routes());
 
   //static for Browser
-  const _dirname = path.resolve();
   let staticPath = "/client/build";
 
   if (process.env.NODE_ENV === "development") {
@@ -43,6 +42,7 @@ export default ({ app }: { app: express.Application }) => {
     process.env.NODE_ENV === "production" ||
     process.env.NODE_ENV === "development"
   ) {
+    const _dirname = path.resolve();
     app.use(express.static(path.join(_dirname, staticPath)));
 
     app.get("*", (req, res) =>
