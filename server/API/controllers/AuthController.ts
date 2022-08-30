@@ -1,5 +1,5 @@
 import asyncHandler from "express-async-handler";
-
+import createError from "http-errors";
 import { validationResult } from "express-validator";
 
 import type { Request, Response } from "express";
@@ -23,11 +23,11 @@ export const GetUser = asyncHandler(
 // @desc Register User
 // @access public
 export const registerUser = asyncHandler(
-  async (req, res): Promise<any> => {
+  async (req, res, next): Promise<any> => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      res.status(422).json({ errors: errors.array() });
+      res.status(406).json({ errors: errors.array() });
       return;
     }
     const authServiceInstance = Container.get(AuthService);

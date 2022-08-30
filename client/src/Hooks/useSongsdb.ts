@@ -17,10 +17,6 @@ const useSongsdb = () => {
             },
           });
           if (MusicPlayerDb.objectStoreNames.contains('Songs')) {
-            console.log('SongsDB created');
-
-            console.log(MusicPlayerDb.objectStoreNames.contains('Songs'));
-
             localStorage.setItem('MusicPlayerDb', JSON.stringify('Created'));
             setSongsDB(MusicPlayerDb);
           }
@@ -29,7 +25,7 @@ const useSongsdb = () => {
           setSongsDB(MusicPlayerDb);
         }
       } catch (error) {
-        console.log('Error opening MusicPlayerDb in useSongsdb.ts: ');
+        // Add Error Handling
       } finally {
         setLoading(false);
       }

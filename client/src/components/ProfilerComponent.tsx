@@ -10,8 +10,8 @@ const onRenderCallback: ProfilerOnRenderCallback = (
   commitTime,
   interactions,
 ) => {
-  // console.log(phase, actualDuration, baseDuration, startTime, commitTime);
-  console.log(phase);
+  console.log(phase, actualDuration, baseDuration, startTime, commitTime);
+  console.log(interactions);
 
   console.log(
     'XxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxX',

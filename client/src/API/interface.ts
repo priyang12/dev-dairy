@@ -18,7 +18,10 @@ export interface NewPostAPI {
 
 export type UpdatePostAPI = NewPostAPI;
 
-export type DeletedPostAPI = AlertState;
+export type DeletedPostAPI = {
+  result: boolean;
+  message: string;
+};
 
 export interface NewProjectAPI {
   result: boolean;

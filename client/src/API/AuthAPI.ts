@@ -4,6 +4,7 @@ import { setUser } from '../features/UserSlice';
 import type { IUser } from '../interface';
 import type { AuthUserResponse } from './interface';
 import API from '.';
+import { CheckError } from '../utils/helpers';
 
 const AuthApi = createApi({
   reducerPath: 'AuthAPI',
@@ -27,8 +28,7 @@ const AuthApi = createApi({
           dispatch(setToken(data.token));
           dispatch(setUser(data.user));
         } catch (error: any) {
-          const ErrorMessage = error.error.data.message || 'Server Error';
-
+          const ErrorMessage = CheckError(error);
           dispatch(setError(ErrorMessage));
         }
       },
@@ -50,7 +50,7 @@ const AuthApi = createApi({
           dispatch(setToken(data.token));
           dispatch(setUser(data.user));
         } catch (error: any) {
-          const ErrorMessage = error.error.data.message || 'Server Error';
+          const ErrorMessage = CheckError(error);
           dispatch(setError(ErrorMessage));
         }
       },
@@ -58,5 +58,8 @@ const AuthApi = createApi({
   }),
 });
 
-export const { useLoginUserMutation, useRegisterUserMutation } = AuthApi;
+export const {
+  useLoginUserMutation: useLogin,
+  useRegisterUserMutation: useRegister,
+} = AuthApi;
 export default AuthApi;

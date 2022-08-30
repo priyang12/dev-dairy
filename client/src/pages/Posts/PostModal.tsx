@@ -10,24 +10,18 @@ import {
   FormErrorMessage,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import {
-  useGetProjectIdQuery,
-  useGetProjectsQuery,
-} from '../../API/ProjectAPI';
+import { useGetProjectsQuery, useGetRoadMapsQuery } from '../../API/ProjectAPI';
 import type { INewPost, IPost, IProject } from '../../interface';
 import ModalComponent from '../../components/ModalComponent';
-import {
-  ValidateDescription,
-  ValidateTitle,
-} from '../../utils/Validation';
+import { ValidateDescription, ValidateTitle } from '../../utils/Validation';
 
 interface Props {
   action: string;
   post?: IPost;
   actionSubmit: (data: any) => void;
-  actionResult: any;
   onClose: () => void;
   isOpen: boolean;
+  page: number;
 }
 
 interface PostFields {
@@ -47,26 +41,25 @@ const init = {
 };
 function PostModal({
   action,
+  page,
   post,
   actionSubmit,
-  actionResult,
   onClose,
   isOpen,
 }: Props) {
   const [RoadMapColor, setRoadMapColor] = useState('');
   const [ErrorState, setErrorState] = useState<PostFields>(init);
-  const [proId, setproId] = useState(
-    post?.project ? post.project._id : '',
-  );
+  const [proId, setproId] = useState(post?.project._id);
   const { data: Projects, isLoading: LoadingProject } = useGetProjectsQuery('');
 
-  const { data: RoadMap, isFetching: RoadMapFetching } = useGetProjectIdQuery(proId, {
-    skip: !proId,
-  });
+  const { data: RoadMap, isFetching: RoadMapFetching } = useGetRoadMapsQuery(
+    proId,
+    {
+      skip: !proId,
+    },
+  );
 
-  const ChangeRoadMapSelect = (
-    e: React.ChangeEvent<HTMLSelectElement>,
-  ) => {
+  const ChangeRoadMapSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setproId(e.target.value);
   };
   const RoadMapChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -82,16 +75,16 @@ function PostModal({
   const submit = (e: React.FormEvent<HTMLFormElement> | any) => {
     e.preventDefault();
 
-    const {
-      title, description, Project, status, roadMap,
-    } = e.target
+    const { title, description, Project, status, roadMap } = e.target
       .elements as typeof e.target.elements & PostFields;
 
     const ErrorTitle = ValidateTitle(title.value, 'Title');
     const ErrorDes = ValidateDescription(description.value);
 
-    const ErrorProject = Project.value === 'Select Project' ? 'Project is Required' : '';
-    const ErrorRoadMap = roadMap.value === 'Select RoadMap' ? 'RoadMap is Required' : '';
+    const ErrorProject =
+      Project.value === 'Select Project' ? 'Project is Required' : '';
+    const ErrorRoadMap =
+      roadMap.value === 'Select RoadMap' ? 'RoadMap is Required' : '';
 
     if (ErrorTitle || ErrorDes || ErrorProject || ErrorRoadMap) {
       setErrorState({
@@ -102,6 +95,7 @@ function PostModal({
         status: '',
       });
     } else {
+      const ProjectData = Projects?.find((val) => val._id === Project.value);
       const data: INewPost | any = {
         title: title.value,
         description: description.value,
@@ -112,20 +106,25 @@ function PostModal({
 
       if (action !== 'New') {
         data._id = post?._id;
+        actionSubmit({
+          UpdatedPost: data,
+          page,
+          ProjectData: {
+            _id: ProjectData?._id,
+            title: ProjectData?.title,
+            process: ProjectData?.process,
+          },
+        });
+      } else {
+        actionSubmit(data);
       }
-
-      actionSubmit(data);
 
       ResetModal();
     }
   };
 
   return (
-    <ModalComponent
-      Title={`${action} Log`}
-      isOpen={isOpen}
-      onClose={onClose}
-    >
+    <ModalComponent Title={`${action} Log`} isOpen={isOpen} onClose={onClose}>
       <form onSubmit={submit}>
         <FormControl isInvalid={!!ErrorState.title}>
           <FormLabel htmlFor="title" spellCheck>
@@ -148,9 +147,7 @@ function PostModal({
             id="description"
             defaultValue={post?.description}
           />
-          <FormErrorMessage>
-            {ErrorState.description}
-          </FormErrorMessage>
+          <FormErrorMessage>{ErrorState.description}</FormErrorMessage>
         </FormControl>
         <FormControl isInvalid={!!ErrorState.Project}>
           <FormLabel htmlFor="Project">Project</FormLabel>
@@ -163,7 +160,7 @@ function PostModal({
               mb={2}
               name="Project"
               id="Project"
-              value={post?.project?._id}
+              value={post?.project._id}
               onChange={ChangeRoadMapSelect}
             >
               <option>Select Project</option>
@@ -196,10 +193,10 @@ function PostModal({
               onChange={RoadMapChange}
             >
               <option>Select RoadMap</option>
-              {RoadMap?.roadMap.map((roadMap: any) => (
+              {RoadMap?.map((roadMap) => (
                 <option
                   key={roadMap._id}
-                  value={[roadMap._id, roadMap.color]}
+                  value={[roadMap._id, roadMap.color ? roadMap.color : '#333']}
                 >
                   {roadMap.name}
                 </option>
@@ -210,12 +207,7 @@ function PostModal({
         </FormControl>
         <FormControl>
           <FormLabel htmlFor="status">status</FormLabel>
-          <Select
-            mb={2}
-            name="status"
-            id="status"
-            defaultValue={post?.status}
-          >
+          <Select mb={2} name="status" id="status" defaultValue={post?.status}>
             <option value="Not Started">Not Started</option>
             <option value="In-Process">In-Process</option>
             <option value="Started">Started</option>
@@ -223,13 +215,7 @@ function PostModal({
           </Select>
         </FormControl>
         <ModalFooter>
-          <Button
-            isLoading={actionResult.isLoading}
-            type="submit"
-            loadingText="Wait just for it..."
-            colorScheme="blue"
-            variant="solid"
-          >
+          <Button type="submit" colorScheme="blue" variant="solid">
             {action === 'New' ? 'Create Log' : 'Update New Log'}
           </Button>
         </ModalFooter>

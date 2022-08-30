@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { StatusCode } from "../middleware/FindStatusCode";
 
 export const notFound = (req: Request, res: Response, next: NextFunction) => {
   const error = new Error(`Not Found -${req.originalUrl}`);
@@ -6,16 +7,21 @@ export const notFound = (req: Request, res: Response, next: NextFunction) => {
   next(error);
 };
 
-// Fix err for express-async-errors
 export const errorHandler = (
-  err: Error,
+  err: any,
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  res.status(401);
-  return res.json({
-    message: err.message,
+  let code = 500;
+  let message = "Internal Server Error";
+  if (err instanceof Error) {
+    const { statusCode, message: NewErrorMessage } = StatusCode(err);
+    code = statusCode;
+    message = NewErrorMessage;
+  }
+  return res.status(code).json({
+    message: message,
     stack:
       process.env.NODE_ENV === "production" ? "Server Error 😱" : err.stack,
   });

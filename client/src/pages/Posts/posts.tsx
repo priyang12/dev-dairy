@@ -1,78 +1,118 @@
 import {
-  Alert,
   Box,
   Button,
   Grid,
   Heading,
+  IconButton,
   useDisclosure,
 } from '@chakra-ui/react';
-import {
-  useGetPostsQuery,
-  useNewPostMutation,
-} from '../../API/PostAPI';
+import { Ring } from '@priyang/react-component-lib';
+import { Link as RouterLink } from 'react-router-dom';
+import { BsFillFilterCircleFill } from 'react-icons/bs';
+import { useNewPost } from '../../API/PostAPI';
 import PostContainer from './PostContainer';
 import Spinner from '../../components/spinner';
 import MarginContainer from '../../components/MarginContainer';
 import PostModal from './PostModal';
 import BgImage from '../../components/BgImage';
+import { useApiToast } from '../../Hooks/useApiToast';
+import { useInfinitePosts } from '../../Hooks/useInfinitePosts';
 
 function Feeds() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
-    isLoading,
+    isLoading: LoadingPosts,
     isFetching,
     data: Posts,
-  } = useGetPostsQuery(null);
+    CurrentPage,
+    isLastPage,
+    fetchNextPage,
+  } = useInfinitePosts();
 
-  const [AddNewPost, NewPostMutaion] = useNewPostMutation();
+  const [AddNewPost, Result] = useNewPost();
 
-  if (isLoading || isFetching) return <Spinner />;
+  useApiToast({
+    Result,
+    loadingMessage: 'Adding new post...',
+    successMessage: 'New post added successfully',
+  });
 
-  if (NewPostMutaion.isSuccess) {
-    //  Alert
-  }
-  if (!Posts) return <div>No Posts</div>;
+  if (LoadingPosts || !Posts) return <Spinner />;
+
   return (
     <Box>
       <BgImage
+        minH="100vh"
+        backgroundSize="cover"
+        backgroundRepeat="repeat"
         BgImageData={{
-          url: 'https://source.unsplash.com/random/?nature',
+          url:
+            localStorage.getItem('PostImage') ||
+            'https://source.unsplash.com/aiKyJ6rHCP4',
         }}
       >
-        <MarginContainer display="flex" flexDir="column">
-          <Button
-            onClick={onOpen}
-            fontSize="3xl"
-            p={10}
+        <MarginContainer display="flex" flexDir="column" py={5}>
+          <Ring
+            radius="15px"
+            ringColor="#080808"
+            w="fit-content"
             m="auto"
-            my={5}
+            my={10}
           >
-            Create New Entry
-          </Button>
-          {NewPostMutaion.isLoading && (
-            <Alert>Creating New Entry</Alert>
-          )}
+            <Button onClick={onOpen} fontSize="3xl" p={10}>
+              Create New Entry
+            </Button>
+          </Ring>
+
+          <IconButton
+            as={RouterLink}
+            aria-label="Filter"
+            w="fit-content"
+            ml="auto"
+            fontSize="3xl"
+            to="/posts/filter"
+          >
+            <BsFillFilterCircleFill />
+          </IconButton>
+
           <PostModal
+            page={1}
             onClose={onClose}
             isOpen={isOpen}
             action="New"
             actionSubmit={AddNewPost}
-            actionResult={NewPostMutaion}
           />
 
           <Heading size="4xl" textAlign="center" mb={5}>
             Dairy Log
           </Heading>
 
-          {Posts.length > 0 ? (
-            <Grid gridTemplateColumns={['2']} gap={10}>
-              {Posts.map((post: any) => (
-                <PostContainer key={post._id} post={post} />
-              ))}
-            </Grid>
-          ) : (
-            <h1>No posts yet</h1>
+          {Posts.length > 0 && (
+            <>
+              <Grid gridTemplateColumns={['2']} gap={10}>
+                {Posts.map((post: any) => (
+                  <PostContainer
+                    key={post._id}
+                    post={post}
+                    page={CurrentPage}
+                  />
+                ))}
+              </Grid>
+              {!isLastPage && (
+                <Button
+                  loadingText="Loading..."
+                  isLoading={isFetching}
+                  m={5}
+                  onClick={() => {
+                    fetchNextPage();
+                  }}
+                >
+                  Load More
+                </Button>
+              )}
+            </>
           )}
+          {isLastPage && <Heading textAlign="center">No posts yet</Heading>}
         </MarginContainer>
       </BgImage>
     </Box>

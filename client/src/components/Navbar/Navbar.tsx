@@ -1,268 +1,111 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
-import { Link as RouterLink, useLocation } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
 import {
-  Flex,
-  IconButton,
-  Box,
   Link,
+  Box,
+  Flex,
+  Container,
   Heading,
-  Menu,
-  useDisclosure,
-  MenuButton,
-  MenuList,
-  MenuItem,
+  IconButton,
 } from '@chakra-ui/react';
-import {
-  HamburgerIcon,
-  CloseIcon,
-  ChevronUpIcon,
-  ChevronDownIcon,
-} from '@chakra-ui/icons';
-import { motion } from 'framer-motion';
-import Logo from '../Assets/diary.webp';
-import { logout } from '../../features/AuthSlice';
+import { Link as RouterLink } from 'react-router-dom';
+import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
+import { useSelector } from 'react-redux';
+import Logo from '../../Assets/diary.png';
+import NavLinks from './NavLink';
 import type { AuthState } from '../../interface';
 
-function Navbar() {
-  const location = useLocation();
-  const isLogin = location.pathname === '/login';
-  const isRegister = location.pathname === '/register';
-  const LandingPage = location.pathname === '/';
-
-  const [cookies, setCookie, removeCookie] = useCookies(['token']);
-  const Auth: AuthState = useSelector((state: any) => state.Auth);
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const isDark = true;
-  const [display, changeDisplay] = useState(false);
-  const dispatch = useDispatch();
-
-  const onLogout = () => {
-    localStorage.clear();
-    removeCookie('token');
-    dispatch(logout());
-    window.location.reload();
-  };
-
-  if (isLogin || isRegister || LandingPage) return null;
-
-  const AuthLinks = (
-    <div>
-      <Menu isOpen={isOpen}>
-        <MenuButton
-          mx={5}
-          py={[1, 2, 2]}
-          px={4}
-          borderRadius={5}
-          _hover={{ bg: isDark ? '#102344' : 'black' }}
-          _focus={{
-            border: `2px solid${isDark ? 'gray.700' : 'gray.100'}`,
-          }}
-          aria-label="Courses"
-          fontWeight="normal"
-          onClick={onOpen}
-          onMouseLeave={onClose}
-        >
-          <span>
-            {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
-          </span>
-        </MenuButton>
-        <MenuList
-          onMouseEnter={onOpen}
-          onMouseLeave={onClose}
-          zIndex={2000}
-          fontSize="3xl"
-        >
-          <MenuItem>
-            <Link
-              as={RouterLink}
-              to="/Projects"
-              _hover={{ color: isDark ? 'blue.500' : 'gray.100' }}
-            >
-              <span className="hide-sm">Projects</span>
-            </Link>
-          </MenuItem>
-
-          <MenuItem>
-            <Link
-              as={RouterLink}
-              to="/feeds"
-              _hover={{ color: isDark ? 'blue.500' : 'gray.100' }}
-            >
-              <span className="hide-sm">feeds</span>
-            </Link>
-          </MenuItem>
-          <MenuItem>
-            <Link
-              as={RouterLink}
-              to="/MusicPlaylist"
-              _hover={{ color: isDark ? 'blue.500' : 'gray.100' }}
-            >
-              <span className="hide-sm">MusicPlaylist</span>
-            </Link>
-          </MenuItem>
-
-          <div className="dropdown-divider" />
-          <MenuItem>
-            <Link
-              as={RouterLink}
-              onClick={onLogout}
-              to="/login"
-              _hover={{ color: isDark ? 'red.500' : 'gray.100' }}
-            >
-              <i className="fas fa-sign-out-alt" />
-              {' '}
-              <span className="hide-sm">Logout</span>
-            </Link>
-          </MenuItem>
-        </MenuList>
-      </Menu>
-    </div>
+function StyledIcon({ children, isDark, ...props }: any) {
+  return (
+    <IconButton
+      aria-label="Open Menu"
+      size="lg"
+      bgColor={isDark ? 'blackAlpha.100' : 'blackAlpha.500'}
+      _focus={{ outline: 'none', border: '3px solid teal.600' }}
+      mr={2}
+      display={['flex', 'flex', 'none', 'none']}
+      {...props}
+    >
+      {children}
+    </IconButton>
   );
-  const UnAuthLinks = (
-    <Flex flexDir={['column', 'column', 'row']} width="80%" gap={5}>
-      <Link
-        onClick={() => changeDisplay(false)}
-        as={RouterLink}
-        to="/login"
-        backgroundColor={isDark ? 'gray.700' : 'gray.100'}
-        _hover={{ color: 'gray.500' }}
-        border="10px solid #102344"
-        outline="2px solid white"
-        borderRadius={10}
-        textAlign="center"
-        padding={2}
-      >
-        Login
-      </Link>
+}
 
-      <Link
-        onClick={() => changeDisplay(false)}
-        as={RouterLink}
-        to="/register"
-        backgroundColor={isDark ? 'gray.700' : 'gray.100'}
-        _hover={{ color: 'gray  .500' }}
-        border="10px solid #102344"
-        outline="2px solid white"
-        borderRadius={10}
-        textAlign="center"
-        padding={2}
-      >
-        Register
-      </Link>
-    </Flex>
+function MenuToggle({ toggle, isOpen }: any) {
+  return (
+    <Box display={{ base: 'block', md: 'none' }} onClick={toggle}>
+      {isOpen ? (
+        <StyledIcon>
+          <CloseIcon />
+        </StyledIcon>
+      ) : (
+        <StyledIcon>
+          <HamburgerIcon />
+        </StyledIcon>
+      )}
+    </Box>
   );
+}
 
+function NavBarContainer({ children, ...props }: any) {
   return (
     <Flex
       zIndex={2}
-      bgColor={isDark ? '#102344' : 'gray.200'}
       as="nav"
-      width="100%"
+      align="center"
       position="sticky"
       top="0"
       right="0"
-      py={['6vh', '8vh', '10vh', '10vh']}
-      px={[10, 50, 70, 100, 200]}
-      height="10vh"
-      alignItems="center"
-      justifyContent="space-between"
+      wrap="wrap"
+      w="100%"
+      p={10}
+      bg="primary.900"
+      {...props}
     >
-      <Link
-        as={RouterLink}
-        to="/"
-        _hover={{ color: 'black.600' }}
-        className="nav-link"
-      >
-        <Flex alignItems="center">
-          <img src={Logo} width={50} alt="Logo" />
-          <Box ml={2}>
-            <Heading fontFamily="cursive">
-              <span className="logo-text">Dairy</span>
-            </Heading>
-          </Box>
-        </Flex>
-      </Link>
-      <Flex align="center">
+      <Container maxW="900px">
         <Flex
-          display={['none', 'none', 'flex', 'flex']}
-          fontSize="2xl"
+          justifyContent="space-between"
+          alignItems="center"
+          flexWrap={['wrap', 'wrap', 'nowrap', 'nowrap']}
         >
-          {Auth.authenticated ? AuthLinks : UnAuthLinks}
+          {children}
         </Flex>
-
-        <IconButton
-          aria-label="Open Menu"
-          size="lg"
-          _focus={{ outline: 'none', border: '3px solid teal.600' }}
-          bgColor={isDark ? 'blackAlpha.100' : 'blackAlpha.500'}
-          mr={2}
-          icon={<HamburgerIcon />}
-          onClick={() => changeDisplay(true)}
-          display={['flex', 'flex', 'none', 'none']}
-        />
-      </Flex>
-
-      <Flex
-        w="100vw"
-        as={motion.div}
-        animate={display ? 'show' : 'hidden'}
-        variants={{
-          hidden: { y: -1000, opacity: 0 },
-          show: { y: 1, opacity: 1 },
-        }}
-        bgColor={isDark ? '#102344' : 'wheat'}
-        zIndex={20}
-        pos="fixed"
-        top="0"
-        left="0"
-        padding="5vh"
-        height={`${isOpen ? '70vh' : 'fit-content'}`}
-        overflowY="auto"
-        flexDir="column"
-        justifyContent={[
-          'flex-start',
-          'flex-start',
-          'center',
-          'center',
-        ]}
-      >
-        <Flex justify="space-between" alignItems="center" py={5}>
-          <Link
-            as={RouterLink}
-            to="/"
-            _hover={{ color: 'black.600' }}
-            className="nav-link"
-          >
-            <Flex alignItems="center">
-              <img src={Logo} width={50} alt="Logo" />
-              <Box ml={2}>
-                <Heading fontFamily="cursive">
-                  <span className="logo-text">Dairy</span>
-                </Heading>
-              </Box>
-            </Flex>
-          </Link>
-          <IconButton
-            mt={2}
-            mr={2}
-            aria-label="Open Menu"
-            size="lg"
-            bgColor={isDark ? 'blackAlpha.100' : 'blackAlpha.500'}
-            icon={<CloseIcon />}
-            onClick={() => changeDisplay(false)}
-          />
-        </Flex>
-
-        <Flex flexDir="column" align="flex-start" fontSize={20}>
-          {/* <Switch color="green" isChecked={isDark} /> */}
-          {Auth.authenticated ? AuthLinks : UnAuthLinks}
-        </Flex>
-      </Flex>
+      </Container>
     </Flex>
   );
 }
 
-export default Navbar;
+function LogoComponent() {
+  return (
+    <Link
+      as={RouterLink}
+      to="/"
+      color="primary.100"
+      _hover={{ color: 'primary.600' }}
+      className="nav-link"
+    >
+      <Flex alignItems="center">
+        <img src={Logo} width={50} alt="Logo" />
+        <Box ml={2}>
+          <Heading fontFamily="cursive">
+            <span className="logo-text">Dairy</span>
+          </Heading>
+        </Box>
+      </Flex>
+    </Link>
+  );
+}
+
+function NavBar() {
+  const [isOpen, setIsOpen] = React.useState(true);
+  const toggle = () => setIsOpen(!isOpen);
+  const { authenticated }: AuthState = useSelector((state: any) => state.Auth);
+  return (
+    <NavBarContainer>
+      <LogoComponent />
+      <MenuToggle toggle={toggle} isOpen={isOpen} />
+      <NavLinks isOpen={isOpen} isAuth={authenticated} />
+    </NavBarContainer>
+  );
+}
+
+export default NavBar;

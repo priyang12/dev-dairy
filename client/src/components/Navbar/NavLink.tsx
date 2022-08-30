@@ -18,11 +18,19 @@ function MenuItem({
       to={to}
       color="white"
       backgroundColor={isDark ? 'primary.200' : 'primary.600'}
-      border="10px solid"
+      border="5px solid"
+      height="fit-content"
       borderColor="primary.900"
-      outline="2px solid white"
       borderRadius={10}
       rounded="lg"
+      _hover={{
+        outline: '2px solid white',
+        color: 'white',
+      }}
+      _focus={{
+        outline: '2px solid white',
+      }}
+      transition="all 0.2s ease-in-out"
       textAlign="center"
       padding={2}
       {...rest}
@@ -41,7 +49,6 @@ function NavLinks({
 }) {
   return (
     <Box
-      // Look more
       display={{ base: isOpen ? 'block' : 'none', md: 'block' }}
       flexBasis={{ base: '100%', md: 'auto' }}
       as={motion.div}
@@ -71,8 +78,7 @@ function NavLinks({
         ) : (
           <Flex gap={10} justifyContent="space-around" w="100%">
             <Flex direction={['column', 'row', 'row']} gap={5}>
-              <MenuItem to="/feeds">Feeds</MenuItem>
-              <MenuItem to="/MusicPlaylist">MusicPlaylist</MenuItem>
+              <MenuItem to="/Posts">Posts</MenuItem>
             </Flex>
             <DropDownContainer />
           </Flex>

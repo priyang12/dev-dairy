@@ -6,3 +6,4 @@ firebase.json
 build
 .vscode
 *.mp3
+.turbo

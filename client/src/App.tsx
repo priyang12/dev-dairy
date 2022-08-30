@@ -1,4 +1,4 @@
-import { lazy, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
@@ -16,22 +16,19 @@ import NewProject from './pages/NewProject';
 import EditProject from './pages/EditProject';
 import SingleProject from './pages/SingleProject';
 import WorkSessions from './pages/WorkSessions';
-
+import MusicPlaylist from './pages/MusicPlaylist';
+import ProjectSessions from './pages/ProjectSessions';
+import FilterPosts from './pages/FilterPosts';
+import Settings from './pages/Settings';
+import PreferenceSettings from './pages/PreferenceSettings';
+import ProfileSettings from './pages/ProfileSettings';
 // Components
 import PrivateOutlet from './components/PrivateRoute';
 import Spinner from './components/spinner';
-import MusicPlaylist from './pages/MusicPlaylist';
-import Navbar from './components/Navbar';
-import FallBackSuspenseWrapper from './components/FallBackSuspenseWrapper';
-import ProjectSessions from './pages/ProjectSessions';
-
-// Lazy load  components
-const MusicPlayer = lazy(
-  async () => import('./components/MusicPlayer'),
-);
 
 function App() {
   const dispatch = useDispatch();
+
   // eslint-disable-next-line no-unused-vars
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
   const { isLoading } = useGetUserQuery(cookies.token, {
@@ -55,50 +52,25 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Navbar />
-      <FallBackSuspenseWrapper fallback={false}>
-        <MusicPlayer />
-      </FallBackSuspenseWrapper>
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/Register" element={<Register />} />
         <Route path="/" element={<PrivateOutlet />}>
-          <Route path="/feeds" element={<Posts />} />
-        </Route>
-        <Route path="/" element={<PrivateOutlet />}>
-          <Route path="/Projects" element={<Projects />} />
-        </Route>
-        <Route path="/" element={<PrivateOutlet />}>
-          <Route path="/Projects/:id" element={<SingleProject />} />
-        </Route>
-        <Route path="/" element={<PrivateOutlet />}>
-          <Route
-            path="/EditProject/:id"
-            element={(
-              <FallBackSuspenseWrapper>
-                <EditProject />
-              </FallBackSuspenseWrapper>
-            )}
-          />
-        </Route>
-        <Route path="/" element={<PrivateOutlet />}>
-          <Route path="/RoadMap/:id" element={<RoadMap />} />
-        </Route>
-        <Route path="/" element={<PrivateOutlet />}>
-          <Route path="/Sessions" element={<WorkSessions />} />
-        </Route>
-        <Route path="/" element={<PrivateOutlet />}>
-          <Route
-            path="/Project/Sessions/:id"
-            element={<ProjectSessions />}
-          />
-        </Route>
-        <Route path="/" element={<PrivateOutlet />}>
-          <Route path="/NewProject" element={<NewProject />} />
-        </Route>
-        <Route path="/" element={<PrivateOutlet />}>
-          <Route path="/MusicPlaylist" element={<MusicPlaylist />} />
+          <Route path="Posts" element={<Posts />} />
+          <Route path="Posts/filter" element={<FilterPosts />} />
+          <Route path="Projects" element={<Projects />} />
+          <Route path="Projects/:id" element={<SingleProject />} />
+          <Route path="EditProject/:id" element={<EditProject />} />
+          <Route path="RoadMap/:id" element={<RoadMap />} />
+          <Route path="Sessions" element={<WorkSessions />} />
+          <Route path="Project/Sessions/:id" element={<ProjectSessions />} />
+          <Route path="NewProject" element={<NewProject />} />
+          <Route path="MusicPlaylist" element={<MusicPlaylist />} />
+          <Route path="Settings" element={<Settings />}>
+            <Route path="Preference" element={<PreferenceSettings />} />
+            <Route path="Profile" element={<ProfileSettings />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>

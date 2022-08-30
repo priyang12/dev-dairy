@@ -14,16 +14,13 @@ import {
 } from '@chakra-ui/react';
 import type { FormField } from '../../components/CustomForm';
 import type { AuthState } from '../../interface';
-import { useLoginUserMutation } from '../../API/AuthAPI';
-import {
-  ValidateEmail,
-  ValidatePassword,
-} from '../../utils/Validation';
+import { useLogin } from '../../API/AuthAPI';
+import { ValidateEmail, ValidatePassword } from '../../utils/Validation';
 import CustomForm from '../../components/CustomForm';
 
 function Login() {
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
-  const [loginUser, result] = useLoginUserMutation();
+  const [loginUser, result] = useLogin();
   const navigate = useNavigate();
   const Auth: AuthState = useSelector((state: any) => state.Auth);
 
@@ -70,7 +67,10 @@ function Login() {
   return (
     <Box
       p={10}
-      backgroundImage="url('https://source.unsplash.com/random/?nature')"
+      backgroundImage={`url(${
+        localStorage.getItem('AuthImage') ||
+        'https://source.unsplash.com/npwjNTG_SQA'
+      })`}
       backgroundPosition="center"
       backgroundSize="cover"
       backgroundRepeat="no-repeat"
@@ -88,11 +88,7 @@ function Login() {
 
           <Text as="p" fontSize="xl">
             Don&lsquo;t have an account?
-            <Link
-              as={RouterLink}
-              to="/register"
-              _hover={{ color: 'green' }}
-            >
+            <Link as={RouterLink} to="/register" _hover={{ color: 'green' }}>
               <span>&nbsp;</span>
               Sign up
             </Link>

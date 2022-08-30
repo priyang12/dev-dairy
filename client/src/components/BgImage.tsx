@@ -21,10 +21,10 @@ function BgImage({ BgImageData, children, ...rest }: ComponentProps) {
             ? BgImageData.ImageFile
             : BgImageData.url
         })`,
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-        zIndex: -1,
       }}
+      backgroundSize="cover"
+      backgroundRepeat="no-repeat"
+      zIndex={-1}
       {...rest}
     >
       {children}

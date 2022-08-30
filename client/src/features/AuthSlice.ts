@@ -11,24 +11,24 @@ const AuthSlice = createSlice({
   name: 'AuthAPI',
   initialState: initState,
   reducers: {
-    setToken: (state, action) => {
-      state.authenticated = true;
-      state.token = action.payload;
-    },
-    setError: (state, action) => {
-      state.authenticated = false;
-      state.error = action.payload;
-    },
-    logout: (state) => {
-      state.authenticated = false;
-      state.token = '';
-      state.error = null;
-    },
+    setToken: (state, action) => ({
+      ...state,
+      token: action.payload,
+      authenticated: true,
+    }),
+    setError: (state, action) => ({
+      ...state,
+      error: action.payload,
+      authenticated: false,
+    }),
+    logout: (state) => ({
+      ...state,
+      token: '',
+      authenticated: false,
+      error: null,
+    }),
   },
 });
-
-// Exporting data for selectors
-export const isAuthenticated = (state: any) => state.authenticated;
 
 export const { logout, setError, setToken } = AuthSlice.actions;
 

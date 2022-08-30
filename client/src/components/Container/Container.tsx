@@ -3,12 +3,15 @@ import { Container as CustomContainer } from '@chakra-ui/react';
 
 interface ContainerProps extends BoxProps {
   children: React.ReactNode;
-  // eslint-disable-next-line react/require-default-props
   MW?: string;
 }
 
-function Container({ children, MW = '900px' }: ContainerProps) {
-  return <CustomContainer maxW={MW}>{children}</CustomContainer>;
+function Container({ children, MW = '900px', ...rest }: ContainerProps) {
+  return (
+    <CustomContainer maxW={MW} {...rest}>
+      {children}
+    </CustomContainer>
+  );
 }
 
 export default Container;

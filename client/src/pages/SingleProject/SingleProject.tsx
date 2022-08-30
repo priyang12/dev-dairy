@@ -12,64 +12,62 @@ import {
   Icon,
   Progress,
   Text,
-  useDisclosure,
   Grid,
   GridItem,
   Link,
-  Alert,
 } from '@chakra-ui/react';
 import { CheckIcon, ExternalLinkIcon } from '@chakra-ui/icons';
-import { useSelector } from 'react-redux';
-import {
-  Navigate,
-  useParams,
-  Link as RouterLink,
-} from 'react-router-dom';
+import { Navigate, useParams, Link as RouterLink } from 'react-router-dom';
 import { parseISO, format } from 'date-fns';
 import invert from 'invert-color';
+import { toast } from 'react-toastify';
 import {
   useDeleteProjectMutation,
   useGetProjectIdQuery,
 } from '../../API/ProjectAPI';
-import type { AlertState, IRoadMap } from '../../interface';
-import ModalComponent from '../../components/ModalComponent';
+import type { IRoadMap } from '../../interface';
 import Spinner from '../../components/spinner';
 import RandomColor from '../../utils/RandomColor';
+import ConfirmationModal from '../../components/ConfirmationModal';
 
 function SingleProject() {
   const { id } = useParams<{ id: string }>();
-  const { alert }: AlertState = useSelector(
-    (state: any) => state.Alert,
-  );
-
   const {
-    isFetching, isLoading, isError, data,
+    isFetching,
+    isLoading,
+    isError,
+    data: project,
   } = useGetProjectIdQuery(id, {
     skip: !id,
   });
-  const project = data;
+
   const [DeleteProjectMutation, DeleteResult] = useDeleteProjectMutation();
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
   if (isFetching || isLoading) return <Spinner />;
 
   if (isError || !project) {
     return <div>No Project Found</div>;
   }
-  console.log(project);
 
   if (DeleteResult.isSuccess) {
     return <Navigate to="/projects" />;
   }
+  const ConfirmDelete = (e: any) => {
+    e.preventDefault();
+    const FormValues = e.target.elements;
+    const { Confirm } = FormValues;
+
+    if (Confirm.value === `${project.title} Confirm`) {
+      DeleteProjectMutation(project._id);
+    } else {
+      toast.error('Please confirm the title');
+    }
+  };
 
   return (
     <Container maxW="900px" mb={10}>
       <Flex alignItems="flex-end" justifyContent="flex-end">
-        <Button
-          mt={5}
-          as={RouterLink}
-          to={`/Project/Sessions/${project._id}`}
-        >
+        <Button mt={5} as={RouterLink} to={`/Project/Sessions/${project._id}`}>
           Work Sessions
         </Button>
       </Flex>
@@ -82,9 +80,7 @@ function SingleProject() {
         p={5}
       >
         <Heading>
-          Title :
-          {' '}
-          <span>{project.title}</span>
+          Title : <span>{project.title}</span>
         </Heading>
         <Text textAlign="right" fontSize="2xl">
           {format(parseISO(project.date), "yyyy-MM-dd'T'HH:mm")}
@@ -101,13 +97,7 @@ function SingleProject() {
           Description :
         </Text>
 
-        <Text
-          as="span"
-          fontSize="2xl"
-          w="100px"
-          px="2"
-          lineHeight="1px"
-        >
+        <Text as="span" fontSize="2xl" w="100px" px="2" lineHeight="1px">
           {project.description}
         </Text>
       </Text>
@@ -156,12 +146,7 @@ function SingleProject() {
         </Text>
       </Heading>
       {project.website && (
-        <Flex
-          gap={5}
-          fontSize="3xl"
-          borderBottom="4px solid white"
-          py={5}
-        >
+        <Flex gap={5} fontSize="3xl" borderBottom="4px solid white" py={5}>
           <span>Website : </span>
           <Link
             href={project.website}
@@ -178,19 +163,12 @@ function SingleProject() {
             justifyItems="center"
             alignItems="center"
           >
-            Link
-            {' '}
-            <ExternalLinkIcon mx="2px" />
+            Link <ExternalLinkIcon mx="2px" />
           </Link>
         </Flex>
       )}
       {project.github && (
-        <Flex
-          gap={5}
-          fontSize="3xl"
-          borderBottom="4px solid white"
-          py={5}
-        >
+        <Flex gap={5} fontSize="3xl" borderBottom="4px solid white" py={5}>
           <span>Github : </span>
           <Link
             href={project.github}
@@ -207,18 +185,12 @@ function SingleProject() {
             justifyItems="center"
             alignItems="center"
           >
-            Github
-            {' '}
-            <ExternalLinkIcon mx="2px" />
+            Github <ExternalLinkIcon mx="2px" />
           </Link>
         </Flex>
       )}
       {project.roadMap.length > 0 && (
-        <Box
-          justifyContent="space-between"
-          alignItems="center"
-          mt={5}
-        >
+        <Box justifyContent="space-between" alignItems="center" mt={5}>
           <Flex alignItems="center" my={5}>
             <Heading as="h3" fontSize="2xl">
               Road Map
@@ -233,9 +205,7 @@ function SingleProject() {
                     key={road.name}
                     p={2}
                     bg={`${road.color ? road.color : RandomColor()}`}
-                    color={`${
-                      road.color ? invert(road.color) : RandomColor()
-                    }`}
+                    color={`${road.color ? invert(road.color) : RandomColor()}`}
                     fontSize="1.5rem"
                     borderRadius={10}
                     width="100%"
@@ -247,11 +217,7 @@ function SingleProject() {
                 </AccordionButton>
                 <AccordionPanel pb={4}>
                   <>
-                    Work
-                    {' '}
-                    {road.progress}
-                    {' '}
-                    %
+                    Work {road.progress} %
                     <Progress
                       colorScheme="green"
                       height="20px"
@@ -275,7 +241,6 @@ function SingleProject() {
           w="100%"
           p={5}
           variant="outline"
-          onClick={onOpen}
           _hover={{
             bg: 'blue',
             color: 'white',
@@ -283,46 +248,25 @@ function SingleProject() {
         >
           Edit Project
         </Button>
-        <Button
-          mt={5}
-          colorScheme="red"
-          w="100%"
-          variant="outline"
-          onClick={onOpen}
-          _hover={{
-            bg: 'red',
-            color: 'white',
-          }}
-        >
-          Delete Project
-        </Button>
 
-        <ModalComponent
-          Title="Delete Project"
-          isOpen={isOpen}
-          onClose={onClose}
+        <ConfirmationModal
+          OnSubmit={ConfirmDelete}
+          Result={DeleteResult}
+          Title={`${project.title}`}
         >
-          <Box>
-            {alert && <Alert>{alert}</Alert>}
-            <Text>Are you sure you want to delete this project?</Text>
-            <Button
-              colorScheme="red"
-              w="100%"
-              variant="outline"
-              _hover={{
-                bg: 'red',
-                color: 'white',
-              }}
-              isLoading={DeleteResult.isLoading}
-              loadingText="Deleting..."
-              onClick={() => {
-                DeleteProjectMutation(project._id);
-              }}
-            >
-              Delete
-            </Button>
-          </Box>
-        </ModalComponent>
+          <Button
+            mt={5}
+            colorScheme="red"
+            w="100%"
+            variant="outline"
+            _hover={{
+              bg: 'red',
+              color: 'white',
+            }}
+          >
+            Delete Project
+          </Button>
+        </ConfirmationModal>
       </Container>
     </Container>
   );

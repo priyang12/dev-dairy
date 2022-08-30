@@ -22,7 +22,7 @@ export default class WorkSessionService {
       .lean()
       .exec();
     if (!WorkSessions) {
-      this.logger.error("WorkSessions not found");
+      this.logger.error("WorkSessions Not Found");
       throw new Error("No WorkSessions Found in Users");
     }
     this.logger.info("WorkSessions Found");
@@ -40,8 +40,8 @@ export default class WorkSessionService {
       .lean()
       .exec();
     if (!WorkSessions) {
-      this.logger.error("WorkSessions not found");
-      throw new Error("WorkSessions not found");
+      this.logger.error("WorkSessions Not Found");
+      throw new Error("WorkSessions Not Found");
     }
     this.logger.info("WorkSessions found");
     return WorkSessions;
@@ -58,8 +58,8 @@ export default class WorkSessionService {
       .lean()
       .exec();
     if (!WorkSessions) {
-      this.logger.error("WorkSessions not found");
-      throw new Error("WorkSessions not found");
+      this.logger.error("WorkSessions Not Found");
+      throw new Error("WorkSessions Not Found");
     }
     this.logger.info("WorkSessions found");
     return WorkSessions;
@@ -75,8 +75,8 @@ export default class WorkSessionService {
       .lean()
       .exec();
     if (CheckWorkSessions) {
-      this.logger.error("WorkSessions already exists");
-      throw new Error("WorkSessions already exists");
+      this.logger.error("CRUD Error: WorkSessions already exists");
+      throw new Error("CRUD Error: WorkSessions already exists");
     }
     const newWorkSessions = this.WorkSessions.create({
       user: userId,
@@ -86,8 +86,8 @@ export default class WorkSessionService {
     });
 
     if (!newWorkSessions) {
-      this.logger.error("WorkSessions not found");
-      throw new Error("WorkSessions not found");
+      this.logger.error("CRUD Error: WorkSessions Not Found");
+      throw new Error("CRUD Error: WorkSessions Not Found");
     }
     this.logger.info("WorkSessions found");
     return newWorkSessions;
@@ -96,16 +96,17 @@ export default class WorkSessionService {
   public async PushWorkSession(
     userId: string,
     ProjectId: string,
-    NewWorkSession: ISession
+    NewWorkSession: ISession,
+    Select?: string
   ) {
     const newWorkSessions = this.WorkSessions.findOneAndUpdate(
       { project: ProjectId, user: userId },
       { $push: { session: NewWorkSession } },
       { new: true }
-    ).select("session");
+    ).select(Select?.concat("session") || "session");
     if (!newWorkSessions) {
-      this.logger.error("WorkSessions not found");
-      throw new Error("WorkSessions not found");
+      this.logger.error("WorkSessions Not Found");
+      throw new Error("WorkSessions Not Found");
     }
     this.logger.info("WorkSessions found");
     return newWorkSessions;
@@ -114,16 +115,17 @@ export default class WorkSessionService {
   public async PullWorkSession(
     userId: string,
     ProjectId: string,
-    WorkSession: ISession
+    WorkSession: ISession,
+    Select?: string
   ) {
     const newWorkSessions = this.WorkSessions.findOneAndUpdate(
       { project: ProjectId, user: userId },
       { $pull: { session: WorkSession } },
       { new: true }
-    ).select("session");
+    ).select(Select?.concat("session") || "session");
     if (!newWorkSessions) {
-      this.logger.error("WorkSessions not found");
-      throw new Error("WorkSessions not found");
+      this.logger.error("WorkSessions Not Found");
+      throw new Error("WorkSessions Not Found");
     }
     this.logger.info("WorkSessions found");
     return newWorkSessions;
@@ -142,8 +144,8 @@ export default class WorkSessionService {
       .lean()
       .exec();
     if (!updatedWorkSessions) {
-      this.logger.error("WorkSessions not found");
-      throw new Error("WorkSessions not found");
+      this.logger.error("CRUD Error: WorkSessions Not Updated");
+      throw new Error("CRUD Error: WorkSessions Not Updated");
     }
     this.logger.info("WorkSessions found");
     return updatedWorkSessions;
@@ -162,8 +164,8 @@ export default class WorkSessionService {
     console.log(deletedWorkSessions.deletedCount);
 
     if (!deletedWorkSessions.deletedCount) {
-      this.logger.error("WorkSessions not found");
-      throw new Error("WorkSessions not found");
+      this.logger.error("CRUD Error: WorkSessions Not Deleted");
+      throw new Error("CRUD Error: WorkSessions Not Deleted");
     }
     this.logger.info("WorkSessions found");
     return {
@@ -180,8 +182,8 @@ export default class WorkSessionService {
       .exec();
 
     if (!Delete.deletedCount) {
-      this.logger.error("WorkSessions not found");
-      throw new Error("WorkSessions not found");
+      this.logger.error("CRUD Error: WorkSessions Not Deleted");
+      throw new Error("CRUD Error: WorkSessions Not Deleted");
     }
 
     return {
@@ -201,8 +203,8 @@ export default class WorkSessionService {
       .lean()
       .exec();
     if (!Delete.deletedCount) {
-      this.logger.error("WorkSessions not found");
-      throw new Error("WorkSessions not found");
+      this.logger.error("CRUD Error: WorkSessions Not Deleted");
+      throw new Error("CRUD Error: WorkSessions Not Deleted");
     }
     return {
       result: Delete,

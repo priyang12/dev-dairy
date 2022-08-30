@@ -2,6 +2,7 @@ import { Flex, IconButton, Text } from '@chakra-ui/react';
 import { FaList } from 'react-icons/fa';
 import { MdDeleteForever } from 'react-icons/md';
 import { Draggable } from 'react-beautiful-dnd';
+import { v4 as uuidv4 } from 'uuid';
 
 const getItemStyle = (draggableStyle: any, isDragging: any) => ({
   background: isDragging ? 'red' : 'transparent',
@@ -11,12 +12,17 @@ const getItemStyle = (draggableStyle: any, isDragging: any) => ({
 
 function MusicList({ songs, playSongFN, RemoveSong }: any) {
   return (
-    <Flex direction="column" gap={1} h={['80vh', '100vh']} overflowY="scroll">
+    <Flex
+      direction="column"
+      gap={1}
+      maxH={['80vh', '100vh']}
+      overflowY="scroll"
+    >
       {[...songs].map((song: string, index) => (
-        <Draggable index={index} draggableId={song} key={`${song}-${index}`}>
+        <Draggable index={index} draggableId={song} key={`${song}-${uuidv4()}`}>
           {(provided: any, snapshot: any) => (
             <div
-              key={index}
+              key={uuidv4()}
               className="card"
               ref={provided.innerRef}
               style={getItemStyle(provided.draggableStyle, snapshot.isDragging)}
@@ -24,6 +30,8 @@ function MusicList({ songs, playSongFN, RemoveSong }: any) {
               {...provided.dragHandleProps}
             >
               <Flex
+                w="100%"
+                minW={['50vw', '70vw']}
                 key={song}
                 border="1px solid #fff"
                 p={[2, 2, 2, 4]}
@@ -45,7 +53,7 @@ function MusicList({ songs, playSongFN, RemoveSong }: any) {
                     color: '#000',
                   }}
                   onClick={() => {
-                    playSongFN(song, index);
+                    playSongFN(index);
                   }}
                 >
                   {song}
@@ -53,7 +61,7 @@ function MusicList({ songs, playSongFN, RemoveSong }: any) {
                 <IconButton
                   icon={<MdDeleteForever />}
                   onClick={() => {
-                    RemoveSong(song, index);
+                    RemoveSong(song);
                   }}
                   aria-label="DeleteMusic"
                 />

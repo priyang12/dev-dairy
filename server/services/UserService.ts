@@ -41,7 +41,7 @@ export default class UserService {
         message: "User updated",
       };
     }
-    throw new Error("User cannot be updated");
+    throw new Error("CRUD Error: User cannot be updated");
   }
   public async DeleteUser(UserId: string): Promise<{ message: string }> {
     const User = await this.userModel.findByIdAndDelete(UserId);

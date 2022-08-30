@@ -1,14 +1,9 @@
+import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
 import { format, parseISO } from 'date-fns';
 import { Route, Router, Routes } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
-import userEvent from '@testing-library/user-event';
-import {
-  render,
-  screen,
-  waitFor,
-  waitForElementToBeRemoved,
-} from '../../test-utils';
+import { render, screen, waitForElementToBeRemoved } from '../../test-utils';
 import { SingleProjectResponse } from '../../mock/MockedData';
 import SingleProject from './index';
 import server from '../../mock/server';
@@ -32,25 +27,18 @@ it('render Single Project', async () => {
   expect(screen.getByAltText('loading...')).toBeInTheDocument();
   await waitForElementToBeRemoved(screen.getByAltText('loading...'));
 
-  expect(
-    screen.getByText(SingleProjectResponse.title),
-  ).toBeInTheDocument();
+  expect(screen.getByText(SingleProjectResponse.title)).toBeInTheDocument();
   expect(
     screen.getByText(SingleProjectResponse.description),
   ).toBeInTheDocument();
 
   expect(
     screen.getByText(
-      format(
-        parseISO(SingleProjectResponse.date),
-        "yyyy-MM-dd'T'HH:mm",
-      ),
+      format(parseISO(SingleProjectResponse.date), "yyyy-MM-dd'T'HH:mm"),
     ),
   ).toBeInTheDocument();
   SingleProjectResponse.roadMap.forEach((roadMap: any) => {
-    expect(
-      screen.getByText(roadMap.name.toUpperCase()),
-    ).toBeInTheDocument();
+    expect(screen.getByText(roadMap.name.toUpperCase())).toBeInTheDocument();
   });
 
   SingleProjectResponse.technologies.forEach((tech: any) => {
@@ -59,7 +47,9 @@ it('render Single Project', async () => {
 });
 it('render Empty Project', async () => {
   server.use(
-    rest.get(`${API}/projects/:id`, (req, res, ctx) => res(ctx.status(404), ctx.json({ message: 'No Project Found' }))),
+    rest.get(`${API}/projects/:id`, (req, res, ctx) =>
+      res(ctx.status(404), ctx.json({ message: 'No Project Found' })),
+    ),
   );
   setup();
   await waitForElementToBeRemoved(screen.getByAltText('loading...'));
@@ -69,14 +59,16 @@ it('render Empty Project', async () => {
 
 it('Render Different Values', async () => {
   server.use(
-    rest.get(`${API}/projects/:id`, (req, res, ctx) => res(
-      ctx.status(200),
-      ctx.json({
-        ...SingleProjectResponse,
-        live: false,
-        website: '',
-      }),
-    )),
+    rest.get(`${API}/projects/:id`, (req, res, ctx) =>
+      res(
+        ctx.status(200),
+        ctx.json({
+          ...SingleProjectResponse,
+          live: false,
+          website: '',
+        }),
+      ),
+    ),
   );
   setup();
   expect(screen.getByAltText('loading...')).toBeInTheDocument();
@@ -84,24 +76,7 @@ it('Render Different Values', async () => {
 
   expect(screen.getByText('Not Yet Deployed')).toBeInTheDocument();
 });
-it('Delete Project', async () => {
-  setup();
-  expect(screen.getByAltText('loading...')).toBeInTheDocument();
-  await waitForElementToBeRemoved(screen.getByAltText('loading...'));
-  // Delete Project
-  const deleteButton = screen.getByRole('button', {
-    name: 'Delete Project',
-  });
-  userEvent.click(deleteButton);
-  expect(
-    screen.getByText('Are you sure you want to delete this project?'),
-  ).toBeInTheDocument();
-  const cancelButton = screen.getByRole('button', { name: 'Delete' });
-  userEvent.click(cancelButton);
-  await waitForElementToBeRemoved(screen.getByText('Deleting...'));
 
-  expect(History.location.pathname).toBe('/projects');
-});
 it('Click on Edit Project', async () => {
   setup();
   expect(screen.getByAltText('loading...')).toBeInTheDocument();
@@ -112,27 +87,67 @@ it('Click on Edit Project', async () => {
   expect(History.location.pathname).toMatch(/EditProject/);
 });
 
-it('Server Error on Delete', async () => {
-  server.use(
-    rest.delete(`${API}/projects/:id`, (req, res, ctx) => res(ctx.status(401), ctx.json({ message: 'Server Error' }))),
-  );
-
+it('Delete Project', async () => {
   setup();
   expect(screen.getByAltText('loading...')).toBeInTheDocument();
   await waitForElementToBeRemoved(screen.getByAltText('loading...'));
   // Delete Project
-
   const deleteButton = screen.getByRole('button', {
     name: 'Delete Project',
   });
   userEvent.click(deleteButton);
   expect(
-    screen.getByText('Are you sure you want to delete this project?'),
+    screen.getByText(/Are you sure you want to delete/),
   ).toBeInTheDocument();
-  const cancelButton = screen.getByRole('button', { name: 'Delete' });
-  userEvent.click(cancelButton);
 
-  await waitFor(() => {
-    expect(screen.getByText('Server Error')).toBeInTheDocument();
+  const ConfirmButton = screen.getByRole('button', { name: 'Delete' });
+
+  userEvent.click(ConfirmButton);
+
+  const ConfirmInput = screen.getByTestId('confirm-input');
+  userEvent.type(ConfirmInput, `${SingleProjectResponse.title} Confirm`);
+
+  const SubmitButton = screen.getByRole('button', { name: 'Delete' });
+
+  userEvent.click(SubmitButton);
+
+  await waitForElementToBeRemoved(ConfirmButton);
+
+  expect(History.location.pathname).toBe('/projects');
+});
+
+it('Server Error on Delete', async () => {
+  server.use(
+    rest.delete(`${API}/projects/:id`, (req, res, ctx) =>
+      res(ctx.status(401), ctx.json({ message: 'Server Error' })),
+    ),
+  );
+
+  setup();
+
+  await waitForElementToBeRemoved(screen.getByAltText('loading...'), {
+    timeout: 2000,
   });
+
+  // Delete Project
+  const deleteButton = screen.getByRole('button', {
+    name: 'Delete Project',
+  });
+  userEvent.click(deleteButton);
+  expect(
+    screen.getByText(/Are you sure you want to delete/),
+  ).toBeInTheDocument();
+
+  const ConfirmButton = screen.getByRole('button', { name: 'Delete' });
+
+  userEvent.click(ConfirmButton);
+
+  const ConfirmInput = screen.getByTestId('confirm-input');
+  userEvent.type(ConfirmInput, `${SingleProjectResponse.title} Confirm`);
+
+  const SubmitButton = screen.getByRole('button', { name: 'Delete' });
+
+  userEvent.click(SubmitButton);
+
+  expect(History.location.pathname).toBe('/projects');
 });

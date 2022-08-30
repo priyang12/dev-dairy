@@ -32,7 +32,7 @@ function LandingPage() {
     (state: any) => state.Auth,
   );
 
-  if (authenticated) return <Navigate to="/feeds" />;
+  if (authenticated) return <Navigate to="/Posts" />;
 
   return (
     <Box id="landing-page">

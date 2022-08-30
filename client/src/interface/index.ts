@@ -19,6 +19,7 @@ export interface UserState {
 
 export interface AlertState {
   alert: string;
+  Type: 'success' | 'error' | 'info' | 'warning';
   result: boolean;
 }
 
@@ -30,7 +31,11 @@ export interface IAlert {
 export interface INewPost {
   title: string;
   description: string;
-  project: any;
+  project: {
+    _id: string;
+    title: string;
+    process: number;
+  };
   status: string;
   roadMap: any;
 }

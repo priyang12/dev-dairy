@@ -10,7 +10,6 @@ import {
   Flex,
   Heading,
   Text,
-  Link,
 } from '@chakra-ui/react';
 import type { FormField } from '../../components/CustomForm';
 import CustomForm from '../../components/CustomForm';
@@ -20,13 +19,16 @@ import {
   ValidateTitle,
   ValidatePassword,
 } from '../../utils/Validation';
-import { useRegisterUserMutation } from '../../API/AuthAPI';
+import { useRegister } from '../../API/AuthAPI';
 import type { AuthState } from '../../interface';
+import { StoreState } from '../../store';
 
 function Register() {
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
-  const [registerUser, result] = useRegisterUserMutation();
-  const Auth: AuthState = useSelector((state: any) => state.Auth);
+  const [registerUser, result] = useRegister();
+  const { authenticated, token, error }: AuthState = useSelector(
+    (state: StoreState) => state.Auth,
+  );
   const RegisterFields: FormField[] = [
     {
       fieldType: 'text',
@@ -97,18 +99,21 @@ function Register() {
     }
   };
   useEffect(() => {
-    if (Auth.authenticated) {
+    if (authenticated) {
       <Navigate to="/Projects" />;
     }
-  }, [Auth.authenticated]);
-  if (Auth.authenticated) {
-    setCookie('token', Auth.token, { path: '/' });
+  }, [authenticated]);
+  if (authenticated) {
+    setCookie('token', token, { path: '/' });
   }
   return (
     <Box
       pt={15}
       px={10}
-      backgroundImage="url('https://source.unsplash.com/random/?nature')"
+      backgroundImage={`url(${
+        localStorage.getItem('AuthImage') ||
+        'https://source.unsplash.com/npwjNTG_SQA'
+      })`}
       backgroundPosition="center"
       backgroundSize="cover"
       backgroundRepeat="no-repeat"
@@ -118,10 +123,10 @@ function Register() {
         justifyContent="space-between"
         flexDir={['column', 'column', 'row']}
       >
-        {Auth.error && (
+        {error && (
           <Alert status="error" borderRadius={10} mb={5}>
             <AlertIcon />
-            {Auth.error}
+            {error}
           </Alert>
         )}
         <CustomForm
@@ -146,14 +151,14 @@ function Register() {
           <Text>Sign up for your DevConnector account</Text>
           <Text>Already have an account?</Text>
           <Button
+            as={RouterLink}
+            to="/login"
             colorScheme="green"
             variant="outline"
             backdropFilter="auto"
             backdropBlur="10px"
           >
-            <Link as={RouterLink} to="/login">
-              Login
-            </Link>
+            Login
           </Button>
         </Box>
       </Flex>

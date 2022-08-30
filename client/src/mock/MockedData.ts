@@ -33,7 +33,7 @@ export const PostsResponse = [
     description: 'New Post as asdihasd description',
     project: {
       process: 50,
-      _id: '628515d405524527385df72a',
+      _id: '62d454a40e8927017f86a454',
       title: 'Dev-Dairy',
     },
     status: 'Done',
@@ -48,7 +48,7 @@ export const PostsResponse = [
     description: 'New Post 2 asdsad as asdihasd description',
     project: {
       process: 20,
-      _id: '628515d405524527385df72a',
+      _id: '62d454a40e8927017f86a454',
       title: 'Dev-Dairy',
     },
     status: 'In-Process',
@@ -63,13 +63,32 @@ export const PostsResponse = [
     description: 'New Post 3 asdsad as asdihasd description',
     project: {
       process: 20,
-      _id: '628515d405524527385df72a',
+      _id: '62d454a40e8927017f86a454',
       title: 'Dev-Dairy',
     },
     status: 'In-Process',
     roadMap: '6285168e05524527385df734',
     user: '62812edf18f5ba45b7667f2e',
     date: '2022-05-19T06:39:55.948Z',
+    __v: 0,
+  },
+];
+
+export const Page2PostsResponse = [
+  {
+    _id: '628516b505524527385f7e3c',
+    title: 'Second Post the Post',
+    description: 'New Post as asdihasd description',
+    project: {
+      process: 50,
+
+      _id: '62d454a40e8927017f86a454',
+      title: 'Dev-Dairy',
+    },
+    status: 'Done',
+    roadMap: '6285167905524527385df72f',
+    user: '62812edf18f5ba45b7667f2e',
+    date: '2022-03-18T15:54:29.864Z',
     __v: 0,
   },
 ];
@@ -185,8 +204,8 @@ export const MockedAllWorkSessions = [
     project: {
       _id: '62d458dcbb0be104192d298b',
       process: 1,
-      title: 'New Projectg 1',
-      description: " stack prototype for maintaing dev's personal dairy",
+      title: 'New Project 1',
+      description: " stack prototype for maintaing dev's personal dairy 1",
     },
     session: [
       {
@@ -212,8 +231,8 @@ export const MockedAllWorkSessions = [
     project: {
       _id: '62d454a40e8927017f86a454',
       process: 1,
-      title: 'asdas asuiodhaso',
-      description: "MERN stack prototype for maintaing dev's personal dairy",
+      title: 'New Project 2',
+      description: "MERN stack prototype for maintaing dev's personal dairy 2",
     },
     session: [],
     date: '2022-07-21T17:12:56.809Z',

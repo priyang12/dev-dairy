@@ -1,7 +1,6 @@
 async function BlobToImg(blob: Blob) {
   return new Promise((resolve, reject) => {
     const fileReader = new FileReader();
-    console.log('blob', blob);
 
     fileReader.onload = (e: any) => {
       const base64String = e.target.result;

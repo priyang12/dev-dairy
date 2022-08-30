@@ -18,45 +18,49 @@ import {
   FaPause,
   FaPlay,
 } from 'react-icons/fa';
-
 import { AiOutlineCloseCircle } from 'react-icons/ai';
-
 import { GoMute, GoUnmute } from 'react-icons/go';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactPlayer from 'react-player/file';
 import Draggable from 'react-draggable';
 import {
+  resetPlayer,
   setCurrentMusic,
   setLoading as MusicLoading,
-} from '../features/MusicSlice';
-import useSongsdb from '../Hooks/useSongsdb';
-import MusicSymbol from '../Assets/Music.webp';
-import BlobToImg from '../utils/BlobToImg';
-import type { MusicState } from '../features/MusicSlice';
-import type { AuthState } from '../interface';
+} from '../../features/MusicSlice';
+import useSongsdb from '../../Hooks/useSongsdb';
+import MusicSymbol from '../../Assets/Music.webp';
+import BlobToImg from '../../utils/BlobToImg';
+import type { MusicState } from '../../features/MusicSlice';
+import { StoreState } from '../../store';
+
+const convertTime = (time: number) => {
+  const minutes = Math.floor(time / 60);
+  const seconds = Math.floor(time - minutes * 60);
+  return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+};
 
 function MusicPlayer() {
-  const { SongsDB } = useSongsdb();
-  const { authenticated }: AuthState = useSelector((state: any) => state.Auth);
-  const { CurrentMusic, PlayList }: MusicState = useSelector(
-    (state: any) => state.Music,
-  );
   const dispatch = useDispatch();
+  const { SongsDB } = useSongsdb();
+  const { CurrentMusic, PlayList }: MusicState = useSelector(
+    (state: StoreState) => state.Music,
+  );
   const MusicPlayerRef = useRef<any>(null);
-  const [SongFile, setSongFile] = useState<any>(null);
-  const [SongInfo, setSongInfo] = useState<{
-    title: string;
-    artist: string;
-    album: string;
-    year: string;
-  } | null>(null);
+  const [SongFile, setSongFile] = useState('');
+  const [SongInfo, setSongInfo] = useState<
+    Partial<{
+      title: string;
+      artist: string;
+      album: string;
+      year: string;
+    }>
+  >({});
   const [SongImage, setSongImage] = useState('');
-  // Music Controllers
-  const [ClosePlayer, setClosePlayer] = useState<boolean>(false);
+  const [ClosePlayer, setClosePlayer] = useState(false);
   const [Hidden, setHidden] = useState(false);
   const [Mute, setMute] = useState(false);
-  const [sliderValue, setSliderValue] = useState(5);
   const [showTooltip, setShowTooltip] = useState(false);
   const [Playing, setPlaying] = useState(false);
   const [Start, setStart] = useState({
@@ -81,23 +85,53 @@ function MusicPlayer() {
         });
         SongsDB?.get('SongsMeta', PlayList[CurrentMusic]).then(
           async (songImage: any) => {
-            const Image = (songImage && ((await BlobToImg(songImage)) as string)) || null;
+            const Image =
+              (songImage && ((await BlobToImg(songImage)) as string)) || null;
             setSongImage(Image);
           },
         );
       } catch (error) {
-        console.log('error', error);
+        // Add Error Alert
       } finally {
         dispatch(MusicLoading(false));
       }
     }
   }, [CurrentMusic, PlayList, SongsDB, dispatch]);
 
+  useEffect(() => {
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: SongInfo.title || 'Title Not Found',
+        artist: SongInfo.artist || 'Artist Not Found',
+        album: SongInfo.album || 'Album Not Found',
+        artwork: [
+          {
+            // need to fix image
+            sizes: '320x180',
+            src: 'https://i.ytimg.com/vi/u1xDX1OUnd8/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDYF2l5wIC_G8O_FviFDNlJC-XSHQ',
+            type: 'image/png',
+          },
+        ],
+      });
+      navigator.mediaSession.setActionHandler('previoustrack', () => {
+        dispatch(setCurrentMusic(CurrentMusic - 1));
+      });
+      navigator.mediaSession.setActionHandler('nexttrack', () => {
+        dispatch(setCurrentMusic(CurrentMusic + 1));
+      });
+    }
+  }, [SongInfo]);
+
   const Toggle = () => {
     setPlaying((prev) => !prev);
   };
 
-  if (!authenticated) return null;
+  const SeekTo = (val: number) => {
+    MusicPlayerRef.current?.seekTo(val);
+    setProgressStates(val);
+  };
+
+  if (CurrentMusic < 0) return null;
 
   return (
     <Draggable defaultPosition={{ x: 1000, y: 0 }} grid={[25, 25]}>
@@ -128,12 +162,7 @@ function MusicPlayer() {
               <FaMusic />
             </IconButton>
 
-            <Box
-              display={Hidden ? 'none' : 'block'}
-              onTransitionEnd={() => {
-                console.log('transition end');
-              }}
-            >
+            <Box display={Hidden ? 'none' : 'block'} onTransitionEnd={() => {}}>
               <IconButton
                 bg="#333"
                 aria-label="MusicCloseButton"
@@ -143,6 +172,7 @@ function MusicPlayer() {
                 onClick={() => {
                   setPlaying(false);
                   setClosePlayer((prev) => !prev);
+                  dispatch(resetPlayer());
                 }}
               >
                 <AiOutlineCloseCircle />
@@ -166,7 +196,6 @@ function MusicPlayer() {
                   />
                 )}
               </Box>
-
               {CurrentMusic > -1 && (
                 <Text
                   fontSize="lg"
@@ -179,81 +208,29 @@ function MusicPlayer() {
                   {SongInfo ? SongInfo?.title : PlayList[CurrentMusic]}
                 </Text>
               )}
-
-              <Flex id="Controllers" w="100%" justifyContent="space-around">
-                <IconButton
-                  bg="transparent"
-                  icon={<FaBackward />}
-                  aria-label="Music"
-                  onClick={() => {
-                    dispatch(setCurrentMusic(CurrentMusic - 1));
-                  }}
-                />
-                {!Playing ? (
-                  <IconButton
-                    bg="transparent"
-                    aria-label="Play"
-                    icon={<FaPlay />}
-                    onClick={Toggle}
-                    rounded="3xl"
-                  />
-                ) : (
-                  <IconButton
-                    bg="transparent"
-                    aria-label="Pause"
-                    icon={<FaPause />}
-                    onClick={Toggle}
-                  />
-                )}
-                <IconButton
-                  icon={<FaForward />}
-                  aria-label="Music"
-                  bg="transparent"
-                  onClick={() => {
-                    dispatch(setCurrentMusic(CurrentMusic + 1));
-                  }}
-                />
-              </Flex>
-
-              <Flex justifyContent="space-between" mx={2} mt={5}>
-                <Text>
-                  {Start.x}
-                  :
-                  {Start.y}
-                </Text>
-                <Flex justifyContent="center">
-                  {Mute ? (
-                    <IconButton
-                      icon={<GoMute />}
-                      aria-label="Mute"
-                      onClick={() => {
-                        setMute((prev) => !prev);
-                      }}
-                    />
-                  ) : (
-                    <IconButton
-                      icon={<GoUnmute />}
-                      aria-label="Mute"
-                      onClick={() => {
-                        setMute((prev) => !prev);
-                      }}
-                    />
-                  )}
-                </Flex>
-                <Text>
-                  {Duration.minutes}
-                  :
-                  {Duration.seconds}
-                </Text>
-              </Flex>
+              <Controllers
+                dispatch={dispatch}
+                setCurrentMusic={setCurrentMusic}
+                CurrentMusic={CurrentMusic}
+                Playing={Playing}
+                PlayListSize={PlayList.length}
+                Toggle={Toggle}
+              />
+              <MusicDurations
+                Start={Start}
+                Duration={Duration}
+                Mute={Mute}
+                setMute={setMute}
+              />
               {/* Need TO Fix Auto Focus  */}
+
               <Slider
                 id="slider"
                 value={ProgressStates}
                 min={0}
-                max={100}
+                max={MusicPlayerRef.current?.getDuration()}
                 colorScheme="teal"
-                onChange={(v) => setSliderValue(v)}
+                onChange={SeekTo}
                 onMouseEnter={() => setShowTooltip(true)}
                 onMouseLeave={() => setShowTooltip(false)}
               >
@@ -266,7 +243,7 @@ function MusicPlayer() {
                   color="white"
                   placement="top"
                   isOpen={showTooltip}
-                  label={`${sliderValue}%`}
+                  label={convertTime(MusicPlayerRef.current?.getCurrentTime())}
                 >
                   <SliderThumb boxSize={6}>
                     <Box color="tomato" as={FaMusic} />
@@ -293,8 +270,6 @@ function MusicPlayer() {
                   x: Math.floor(progress.playedSeconds / 60),
                   y: Math.floor(progress.playedSeconds % 60),
                 });
-
-                setProgressStates(Math.round(progress.played * 100));
               }}
               playing={Playing}
             />
@@ -316,3 +291,105 @@ function MusicPlayer() {
 }
 
 export default MusicPlayer;
+
+type MusicDurations = {
+  Start: {
+    x: number;
+    y: number;
+  };
+  Mute: boolean;
+  setMute: any;
+  Duration: {
+    minutes: number;
+    seconds: number;
+  };
+};
+
+function MusicDurations({ Start, Duration, Mute, setMute }: MusicDurations) {
+  return (
+    <Flex justifyContent="space-between" alignItems="center" mx={2} mt={5}>
+      <Text w="50px">
+        {Start.x}:{Start.y}
+      </Text>
+      <Flex justifyContent="center">
+        {Mute ? (
+          <IconButton
+            icon={<GoMute />}
+            aria-label="Mute"
+            onClick={() => {
+              setMute((prev: boolean) => !prev);
+            }}
+          />
+        ) : (
+          <IconButton
+            icon={<GoUnmute />}
+            aria-label="Mute"
+            onClick={() => {
+              setMute((prev: boolean) => !prev);
+            }}
+          />
+        )}
+      </Flex>
+      <Text w="50px" textAlign="right">
+        {Duration.minutes}:{Duration.seconds}
+      </Text>
+    </Flex>
+  );
+}
+
+function Controllers({
+  dispatch,
+  setCurrentMusic,
+  CurrentMusic,
+  Playing,
+  Toggle,
+  PlayListSize,
+}: {
+  dispatch: any;
+  setCurrentMusic: any;
+  CurrentMusic: number;
+  Playing: boolean;
+  Toggle: any;
+  PlayListSize: number;
+}) {
+  return (
+    <Flex id="Controllers" w="100%" justifyContent="space-around">
+      {PlayListSize > 0 && (
+        <IconButton
+          bg="transparent"
+          icon={<FaBackward />}
+          aria-label="Music"
+          onClick={() => {
+            dispatch(setCurrentMusic(CurrentMusic - 1));
+          }}
+        />
+      )}
+      {!Playing ? (
+        <IconButton
+          bg="transparent"
+          aria-label="Play"
+          icon={<FaPlay />}
+          onClick={Toggle}
+          rounded="3xl"
+        />
+      ) : (
+        <IconButton
+          bg="transparent"
+          aria-label="Pause"
+          icon={<FaPause />}
+          onClick={Toggle}
+        />
+      )}
+      {PlayListSize > 0 && (
+        <IconButton
+          icon={<FaForward />}
+          aria-label="Music"
+          bg="transparent"
+          onClick={() => {
+            dispatch(setCurrentMusic(CurrentMusic + 1));
+          }}
+        />
+      )}
+    </Flex>
+  );
+}

@@ -9,35 +9,24 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { parseISO, format } from 'date-fns';
-import {
-  useDeletePostMutation,
-  useUpdatePostMutation,
-} from '../../API/PostAPI';
+import { useDeletePost, useUpdatePostMutation } from '../../API/PostAPI';
 import PostModal from './PostModal';
-import { useGetProjectsQuery } from '../../API/ProjectAPI';
 import { GetTaskColor } from '../../utils/GetStatusColor';
 import type { IPost } from '../../interface';
 
 type PropTypes = {
   post: IPost;
+  page: number;
 };
 
-function PostContainer({ post }: PropTypes) {
+function PostContainer({ post, page }: PropTypes) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [mutation] = useDeletePostMutation();
-  const [UpdateMutate, UpdateResult] = useUpdatePostMutation();
-  const { data: Projects } = useGetProjectsQuery('');
-  const postProject = typeof post.project === 'string'
-    ? post.project
-    : Projects?.find((project: any) => project._id === post.project);
+  const [mutation, { isSuccess, isLoading }] = useDeletePost();
+  const [UpdateMutate] = useUpdatePostMutation();
 
-  const deletePost = () => {
-    mutation(post._id);
-  };
-  if (typeof postProject === 'string') return null;
   return (
     <GridItem
-      bgColor="gray.500"
+      bgColor="primary.500"
       color="#fff"
       position="relative"
       p={5}
@@ -58,18 +47,18 @@ function PostContainer({ post }: PropTypes) {
       <Box as="article" position="relative">
         <Heading textAlign="center" mb={5}>
           Project : &nbsp;
-          {postProject?.title ? postProject.title : post.project.title}
+          {post.project.title}
         </Heading>
         <Box fontSize="2xl" w="100%" bg="#333" py={3} px={2} borderRadius={10}>
           Process : &nbsp;
-          {postProject ? postProject.process : post.project.process}
+          {post.project.process}
           <Progress
             colorScheme="green"
             height="10px"
             size="sm"
             mt={4}
             borderRadius="10px"
-            value={postProject ? postProject.process : post.project.process}
+            value={post.project.process}
           />
         </Box>
         <Flex direction="column" p={5} fontSize="xl" pl={0}>
@@ -78,7 +67,11 @@ function PostContainer({ post }: PropTypes) {
           </Text>
 
           <Text>{post.description}</Text>
-          <Flex justifyContent="space-between" alignItems="center">
+          <Flex
+            justifyContent="space-between"
+            alignItems="center"
+            direction={['column', 'row']}
+          >
             <Flex direction="column">
               <Text
                 bg={GetTaskColor(post.status)}
@@ -97,7 +90,16 @@ function PostContainer({ post }: PropTypes) {
               <Button onClick={onOpen} bg="red.500" fontSize="2xl">
                 Update Post
               </Button>
-              <Button bg="blue.500" onClick={deletePost} fontSize="2xl">
+              <Button
+                bg="blue.500"
+                isLoading={isLoading}
+                loadingText="Deleting Post"
+                data-testid={`delete-post-${post._id}`}
+                onClick={() => {
+                  mutation({ id: post._id, page });
+                }}
+                fontSize="2xl"
+              >
                 Delete Post
               </Button>
             </Flex>
@@ -106,12 +108,12 @@ function PostContainer({ post }: PropTypes) {
 
         {isOpen && (
           <PostModal
+            page={page}
             onClose={onClose}
             isOpen={isOpen}
             action="Update"
             post={post}
             actionSubmit={UpdateMutate}
-            actionResult={UpdateResult}
           />
         )}
       </Box>

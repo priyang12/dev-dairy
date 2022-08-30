@@ -1,7 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { toast } from 'react-toastify';
+import { CheckError } from '../utils/helpers';
 import API from '.';
-import { setAlert } from '../features/AlertSlice';
-import type { IPost } from '../interface';
+import type { IPost, IProject } from '../interface';
 import type { RootState } from '../store';
 import type { DeletedPostAPI, NewPostAPI, UpdatePostAPI } from './interface';
 
@@ -17,14 +18,18 @@ const PostApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['Posts'],
+  tagTypes: ['Posts', 'FilteredPosts'],
 
   endpoints: (builder) => ({
-    GetPosts: builder.query<IPost[], null>({
-      query() {
+    GetPosts: builder.query<IPost[], any>({
+      query({ page, limit }) {
         return {
           url: '',
           method: 'get',
+          params: {
+            page,
+            limit,
+          },
         };
       },
       providesTags: ['Posts'],
@@ -44,6 +49,16 @@ const PostApi = createApi({
           method: 'get',
         };
       },
+      providesTags: ['Posts'],
+    }),
+    GetFilteredPosts: builder.query<IPost[], string>({
+      query(filter) {
+        return {
+          url: `/filter${filter}`,
+          method: 'GET',
+        };
+      },
+      providesTags: ['FilteredPosts'],
     }),
     NewPost: builder.mutation<NewPostAPI, Partial<IPost>>({
       query(data) {
@@ -57,66 +72,190 @@ const PostApi = createApi({
         try {
           const { data: NewPost } = await queryFulfilled;
           dispatch(
-            PostApi.util.updateQueryData('GetPosts', null, (posts: IPost[]) => [
-              NewPost.post,
-              ...posts,
-            ]),
-          );
-          dispatch(
-            setAlert({
-              alert: `${NewPost.post.title} Created Successfully`,
-              result: true,
-            }),
+            PostApi.util.updateQueryData(
+              'GetPosts',
+              {
+                page: 1,
+                limit: 10,
+              },
+              (posts: IPost[]) => [NewPost.post, ...posts],
+            ),
           );
         } catch (error: any) {
-          dispatch(
-            setAlert({
-              alert: error.error.data.msg || 'server Error',
-              result: false,
-            }),
-          );
+          const errorMessage = CheckError(error);
+          toast.error(errorMessage);
           dispatch(PostApi.util.invalidateTags(['Posts']));
         }
       },
     }),
-    UpdatePost: builder.mutation<UpdatePostAPI, Partial<IPost>>({
-      query(data) {
+    UpdatePost: builder.mutation<
+      UpdatePostAPI,
+      {
+        UpdatedPost: IPost;
+        page: number;
+        ProjectData: Pick<IProject, '_id' | 'title' | 'process'>;
+      }
+    >({
+      query({ UpdatedPost }) {
         return {
-          url: `/${data._id}`,
+          url: `/${UpdatedPost._id}`,
           method: 'put',
-          body: data,
+          body: UpdatedPost,
         };
       },
-      onQueryStarted(data, { dispatch, queryFulfilled }) {
+
+      onQueryStarted(
+        { UpdatedPost, page, ProjectData },
+        { dispatch, queryFulfilled },
+      ) {
         const UpdateResult = dispatch(
-          PostApi.util.updateQueryData('GetPosts', null, (posts) => posts.map((post) => {
-            if (post._id === data._id) {
-              data.date = post.date;
-              return data as IPost;
-            }
-            return post;
-          })),
+          PostApi.util.updateQueryData(
+            'GetPosts',
+            {
+              page: page - 1,
+              limit: 10,
+            },
+            (posts) =>
+              posts.map((post) => {
+                if (post._id === UpdatedPost._id) {
+                  UpdatedPost.project = ProjectData;
+                  UpdatedPost.date = post.date;
+                  return UpdatedPost as IPost;
+                }
+                return post;
+              }),
+          ),
         );
 
-        queryFulfilled.catch(UpdateResult.undo);
+        queryFulfilled
+          .then(({ data: UpdatePost }) => {
+            toast.success(`${UpdatePost.message} Updated Successfully`);
+          })
+          .catch((error: any) => {
+            const errorMessage = CheckError(error);
+            toast.warning(errorMessage);
+            UpdateResult.undo();
+          });
       },
     }),
-    DeletePost: builder.mutation<DeletedPostAPI, Partial<string>>({
-      query(id) {
+    DeletePost: builder.mutation<
+      DeletedPostAPI,
+      {
+        id: string;
+        page: number;
+      }
+    >({
+      query({ id }) {
         return {
           url: `/${id}`,
           method: 'delete',
         };
       },
 
-      onQueryStarted(id, { dispatch, queryFulfilled }) {
+      onQueryStarted({ id, page }, { dispatch, queryFulfilled }) {
         const deleteResult = dispatch(
-          PostApi.util.updateQueryData('GetPosts', null, (data: IPost[]) => {
-            const newData = data.filter((item: IPost) => item._id !== id);
-            return newData;
-          }),
+          PostApi.util.updateQueryData(
+            'GetPosts',
+            {
+              page: page - 1,
+              limit: 10,
+            },
+            (data: IPost[]) => {
+              const newData = data.filter((item: IPost) => item._id !== id);
+              return newData;
+            },
+          ),
         );
-        queryFulfilled.catch(deleteResult.undo);
+        queryFulfilled
+          .then(({ data: DeleteRes }) => {
+            toast.warning(`${DeleteRes.message}`);
+          })
+          .catch((error: any) => {
+            const errorMessage = CheckError(error);
+            toast.dark(errorMessage);
+            deleteResult.undo();
+          });
+      },
+    }),
+    UpdateFilterPost: builder.mutation<
+      UpdatePostAPI,
+      {
+        UpdatedPost: IPost;
+        filter: string;
+        ProjectData: Pick<IProject, '_id' | 'title' | 'process'>;
+      }
+    >({
+      query({ UpdatedPost }) {
+        return {
+          url: `/${UpdatedPost._id}`,
+          method: 'put',
+          body: UpdatedPost,
+        };
+      },
+      onQueryStarted(
+        { UpdatedPost, filter, ProjectData },
+        { dispatch, queryFulfilled },
+      ) {
+        const UpdateResult = dispatch(
+          PostApi.util.updateQueryData('GetFilteredPosts', filter, (posts) =>
+            posts.map((post) => {
+              if (post._id === UpdatedPost._id) {
+                UpdatedPost.project = ProjectData;
+                UpdatedPost.date = post.date;
+                return UpdatedPost as IPost;
+              }
+              return post;
+            }),
+          ),
+        );
+
+        queryFulfilled
+          .then(({ data: UpdatePost }) => {
+            dispatch(PostApi.util.invalidateTags(['Posts']));
+            toast.success(`${UpdatePost.message} Updated Successfully`);
+          })
+          .catch((error: any) => {
+            const errorMessage = CheckError(error);
+            toast.dark(errorMessage);
+            UpdateResult.undo();
+          });
+      },
+    }),
+    DeleteFilterPost: builder.mutation<
+      DeletedPostAPI,
+      {
+        id: string;
+        filter: string;
+      }
+    >({
+      query({ id }) {
+        return {
+          url: `/${id}`,
+          method: 'delete',
+        };
+      },
+
+      onQueryStarted({ id, filter }, { dispatch, queryFulfilled }) {
+        const deleteResult = dispatch(
+          PostApi.util.updateQueryData(
+            'GetFilteredPosts',
+            filter,
+            (data: IPost[]) => {
+              const newData = data.filter((item: IPost) => item._id !== id);
+              return newData;
+            },
+          ),
+        );
+        queryFulfilled
+          .then(({ data: DeleteRes }) => {
+            dispatch(PostApi.util.invalidateTags(['Posts']));
+            toast.warning(`${DeleteRes.message}`);
+          })
+          .catch((error: any) => {
+            const errorMessage = CheckError(error);
+            toast.error(errorMessage);
+            deleteResult.undo();
+          });
       },
     }),
   }),
@@ -124,11 +263,15 @@ const PostApi = createApi({
 
 export const {
   useGetPostsQuery,
+  useGetFilteredPostsQuery: useGetFilteredPosts,
+  useLazyGetPostsQuery: useLazyGetPosts,
   useGetPostQuery,
   useGetPostByProjectQuery,
-  useNewPostMutation,
+  useNewPostMutation: useNewPost,
   useUpdatePostMutation,
-  useDeletePostMutation,
+  useUpdateFilterPostMutation: useUpdateFilterPost,
+  useDeletePostMutation: useDeletePost,
+  useDeleteFilterPostMutation: useDeleteFilterPost,
 } = PostApi;
 
 export default PostApi;
