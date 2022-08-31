@@ -27,6 +27,7 @@ function Feeds() {
     CurrentPage,
     isLastPage,
     fetchNextPage,
+    DeletePost,
   } = useInfinitePosts();
 
   const [AddNewPost, Result] = useNewPost();
@@ -93,6 +94,7 @@ function Feeds() {
                 {Posts.map((post: any) => (
                   <PostContainer
                     key={post._id}
+                    DeletePost={DeletePost}
                     post={post}
                     page={CurrentPage}
                   />
