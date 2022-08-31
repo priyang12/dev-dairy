@@ -27,7 +27,6 @@ function Feeds() {
     CurrentPage,
     isLastPage,
     fetchNextPage,
-    DeletePost,
   } = useInfinitePosts();
 
   const [AddNewPost, Result] = useNewPost();
@@ -91,14 +90,15 @@ function Feeds() {
           {Posts.length > 0 && (
             <>
               <Grid gridTemplateColumns={['2']} gap={10}>
-                {Posts.map((post: any) => (
-                  <PostContainer
-                    key={post._id}
-                    DeletePost={DeletePost}
-                    post={post}
-                    page={CurrentPage}
-                  />
-                ))}
+                {Posts.map((data) =>
+                  data.posts.map((post) => (
+                    <PostContainer
+                      key={post._id}
+                      post={post}
+                      page={data.page}
+                    />
+                  )),
+                )}
               </Grid>
               {!isLastPage && (
                 <Button

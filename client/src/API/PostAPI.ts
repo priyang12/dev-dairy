@@ -112,7 +112,7 @@ const PostApi = createApi({
           PostApi.util.updateQueryData(
             'GetPosts',
             {
-              page: page - 1,
+              page,
               limit: 10,
             },
             (posts) =>
@@ -157,7 +157,7 @@ const PostApi = createApi({
           PostApi.util.updateQueryData(
             'GetPosts',
             {
-              page: page - 1,
+              page,
               limit: 10,
             },
             (data: IPost[]) => {
