@@ -17,10 +17,9 @@ import type { IPost } from '../../interface';
 type PropTypes = {
   post: IPost;
   page: number;
-  DeletePost: (id: string) => void;
 };
 
-function PostContainer({ post, page, DeletePost }: PropTypes) {
+function PostContainer({ post, page }: PropTypes) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [mutation, { isSuccess, isLoading }] = useDeletePost();
   const [UpdateMutate] = useUpdatePostMutation();
@@ -98,7 +97,6 @@ function PostContainer({ post, page, DeletePost }: PropTypes) {
                 data-testid={`delete-post-${post._id}`}
                 onClick={() => {
                   mutation({ id: post._id, page });
-                  DeletePost(post._id);
                 }}
                 fontSize="2xl"
               >
