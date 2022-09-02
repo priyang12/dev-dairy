@@ -40,7 +40,7 @@ it('render Projects', async () => {
       ),
     ).toBeInTheDocument();
     project.technologies.forEach((tech) => {
-      expect(screen.getByText(tech)).toBeInTheDocument();
+      expect(screen.getByTestId(`${tech}-${project._id}`)).toBeInTheDocument();
     });
 
     expect(

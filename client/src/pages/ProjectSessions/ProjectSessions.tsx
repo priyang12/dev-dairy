@@ -23,12 +23,14 @@ function ProjectSessions() {
   const { id } = useParams<{
     id: any;
   }>();
+
   const Dispatch = useDispatch();
   const { Project: SessionProject } = useSelector(
     (state: StoreState) => state.WorkSession,
   );
-  const { data: Project, isLoading, isFetching } = useGetProjectIdQuery(id);
-  const { data: ProjectSession } = useGetSessionsByProject(id);
+  const { data: Project, isLoading } = useGetProjectIdQuery(id);
+  const { data: ProjectSession, isLoading: LoadingSessions } =
+    useGetSessionsByProject(id);
   const [DeleteAllSessions, DeleteResult] = useDeleteAllProjectSessions();
   const [PullCall, PullResult] = usePullSessions();
   const [DeleteCheck, setDeleteCheck] = useState(false);
@@ -44,8 +46,9 @@ function ProjectSessions() {
 
   useApiToast({
     Result: PullResult,
-    SuccessType: 'error',
-    successMessage: 'Session Removed',
+    SuccessType: 'warning',
+    successMessage: 'Sessions Removed',
+    loadingMessage: 'Deleting Sessions',
     ErrorMessage: 'Error Pulling Session',
   });
 
@@ -55,6 +58,9 @@ function ProjectSessions() {
         autoClose: 2000,
       });
     } else {
+      toast.success(`WorkSession For ${Project?.title} is Loaded `, {
+        autoClose: 2000,
+      });
       Dispatch(
         setProject({
           id,
@@ -73,9 +79,7 @@ function ProjectSessions() {
     setDeleteList(new Set());
   };
 
-  if (isLoading || isFetching) return <Spinner />;
-
-  if (!ProjectSession) return null;
+  if (isLoading || LoadingSessions) return <Spinner />;
 
   return (
     <Container my={5}>
@@ -89,14 +93,14 @@ function ProjectSessions() {
         >
           <Heading>
             <span>{Project?.title}</span>
-            <span>&lsquo;s</span>
+            <span>s</span>
             &nbsp;
             <Text as="span" fontSize="2xl">
               Work Sessions
             </Text>
           </Heading>
 
-          {ProjectSession?.session.length > 0 && (
+          {ProjectSession && ProjectSession?.session.length > 0 && (
             <Button
               alignSelf={['flex-start', 'center', 'flex-start', 'flex-start']}
               colorScheme="red"
@@ -105,6 +109,7 @@ function ProjectSessions() {
                 bg: 'red',
                 color: 'white',
               }}
+              data-testid="delete-all-sessions"
               onClick={() => {
                 DeleteAllSessions(id);
               }}
@@ -178,7 +183,7 @@ function ProjectSessions() {
       )}
       <Flex direction="column" gap={5}>
         {!DeleteResult.isLoading &&
-          (ProjectSession?.session.length > 0 ? (
+          (ProjectSession && ProjectSession?.session.length > 0 ? (
             ProjectSession?.session.map((session) => (
               <Flex
                 justifyContent="space-between"
@@ -195,7 +200,7 @@ function ProjectSessions() {
                 {DeleteCheck &&
                   (!DeleteList.has(session._id) ? (
                     <IconButton
-                      aria-label="DeleteButton"
+                      aria-label={`DeleteButton-${session._id}`}
                       _hover={{
                         color: '#fff',
                       }}
@@ -208,7 +213,7 @@ function ProjectSessions() {
                     </IconButton>
                   ) : (
                     <IconButton
-                      aria-label="DeleteButton"
+                      aria-label={`RemoveDeleteButton-${session._id}`}
                       _hover={{
                         color: '#fff',
                       }}

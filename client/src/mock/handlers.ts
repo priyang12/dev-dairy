@@ -32,19 +32,26 @@ const handlers = [
   // Posts
   rest.get(`${API}/posts`, (req, res, ctx) => {
     const page = req.url.searchParams.get('page');
-
     if (page === '1' || !page) {
-      return res(ctx.delay(1000), ctx.json(PostsResponse));
+      return res(ctx.json(PostsResponse));
     }
-    return res(ctx.delay(1000), ctx.json(Page2PostsResponse));
+    return res(ctx.json(Page2PostsResponse));
   }),
-  rest.get(`${API}/posts/filter`, (req, res, ctx) =>
-    res(ctx.delay(1000), ctx.json(PostsResponse)),
-  ),
+  rest.get(`${API}/posts/filter`, (req, res, ctx) => {
+    const status = req.url.searchParams.get('status');
+    const title = req.url.searchParams.get('title');
+    const project = req.url.searchParams.get('project');
+    const FilteredPosts = PostsResponse.filter(
+      (post) =>
+        (status && post.status === status) ||
+        (title && post.title.includes(title)) ||
+        (project && post.project._id === project),
+    );
 
-  rest.post(`${API}/posts`, (req, res, ctx) =>
-    res(ctx.delay(1000), ctx.json(NewPostResponse)),
-  ),
+    return res(ctx.json(FilteredPosts));
+  }),
+
+  rest.post(`${API}/posts`, (req, res, ctx) => res(ctx.json(NewPostResponse))),
 
   rest.get(`${API}/posts/:id`, (req, res, ctx) =>
     res(ctx.json(PostsResponse[0])),
@@ -138,7 +145,6 @@ const handlers = [
 
   rest.delete(`${API}/workSession/project/:id`, (req, res, ctx) =>
     res(
-      ctx.delay(5000),
       ctx.json({
         result: true,
         message: 'Work Session Deleted Successfully',
@@ -147,7 +153,6 @@ const handlers = [
   ),
   rest.delete(`${API}/workSession`, (req, res, ctx) =>
     res(
-      ctx.delay(5000),
       ctx.json({
         result: true,
         message: 'Work Session Deleted Successfully',

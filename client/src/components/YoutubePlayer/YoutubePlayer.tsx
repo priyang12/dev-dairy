@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import { Box, IconButton } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import { AiFillYoutube } from 'react-icons/ai';
+import ReactPlayer from 'react-player';
 import Container from '../Container';
 import Spinner from '../spinner';
 import SerachUrl from './SerachUrl';
@@ -88,14 +89,13 @@ function YoutubePlayer() {
             Loading={Loading}
           />
           {Loading && <Spinner />}
-          {/* <ReactPlayer
-          url={url}
-          onBuffer={() => setLoading(true)}
-          onBufferEnd={() => setLoading(false)}
-          width="100%"
-          playing
-          controls
-        /> */}
+          <ReactPlayer
+            url={url}
+            onBuffer={() => setLoading(true)}
+            onBufferEnd={() => setLoading(false)}
+            width="100%"
+            controls
+          />
         </Container>
       </Box>
     </>
