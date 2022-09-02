@@ -19,7 +19,6 @@ import ProjectApi from './API/ProjectAPI';
 import WorkSessionApi from './API/WorkSessionsAPI';
 import AuthReducer from './features/AuthSlice';
 import UserReducer from './features/UserSlice';
-import AlertReducer from './features/AlertSlice';
 import MusicReducer from './features/MusicSlice';
 import WorkSessionReducer from './features/WorkSessionSlice';
 
@@ -37,7 +36,6 @@ const RootReducers = combineReducers({
   [WorkSessionApi.reducerPath]: WorkSessionApi.reducer,
   Auth: AuthReducer,
   User: UserReducer,
-  Alert: AlertReducer,
   Music: MusicReducer,
   WorkSession: WorkSessionReducer,
 });

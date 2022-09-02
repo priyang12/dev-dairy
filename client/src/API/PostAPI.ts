@@ -60,17 +60,25 @@ const PostApi = createApi({
       },
       providesTags: ['FilteredPosts'],
     }),
-    NewPost: builder.mutation<NewPostAPI, Partial<IPost>>({
-      query(data) {
+    NewPost: builder.mutation<
+      NewPostAPI,
+      Partial<{
+        CreatePost: IPost;
+        ProjectData: Pick<IProject, '_id' | 'title' | 'process'>;
+      }>
+    >({
+      query({ CreatePost }) {
         return {
           url: '',
           method: 'post',
-          body: data,
+          body: CreatePost,
         };
       },
-      async onQueryStarted(data, { dispatch, queryFulfilled }) {
+      async onQueryStarted({ ProjectData }, { dispatch, queryFulfilled }) {
         try {
           const { data: NewPost } = await queryFulfilled;
+          console.log(ProjectData);
+
           dispatch(
             PostApi.util.updateQueryData(
               'GetPosts',
@@ -78,7 +86,13 @@ const PostApi = createApi({
                 page: 1,
                 limit: 10,
               },
-              (posts: IPost[]) => [NewPost.post, ...posts],
+              (posts: IPost[]) => [
+                {
+                  ...NewPost.post,
+                  project: ProjectData,
+                },
+                ...posts,
+              ],
             ),
           );
         } catch (error: any) {

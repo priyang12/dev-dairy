@@ -1,7 +1,6 @@
 import type { FormEvent } from 'react';
 import { useLayoutEffect } from 'react';
 import { Link as RouterLink, useParams, Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { ArrowForwardIcon } from '@chakra-ui/icons';
 import {
   Alert,
@@ -35,7 +34,7 @@ import {
 } from '../../API/ProjectAPI';
 import Spinner from '../../components/spinner';
 import useForm from '../../Hooks/useForm';
-import type { AlertState, IProject } from '../../interface';
+import type { IProject } from '../../interface';
 import { useApiToast } from '../../Hooks/useApiToast';
 import { CheckError } from '../../utils/helpers';
 
@@ -54,7 +53,6 @@ const init: EditProjectFrom = {
 
 function EditProject() {
   const { id } = useParams<{ id: string }>();
-  const { Type, alert }: AlertState = useSelector((state: any) => state.Alert);
   const {
     isFetching,
     isLoading,
@@ -132,24 +130,6 @@ function EditProject() {
 
   return (
     <Container maxW="800px" mb={10} mt={10}>
-      {alert && (
-        <Alert
-          my={5}
-          borderRadius={10}
-          status={Type}
-          variant="subtle"
-          flexDirection="column"
-          alignItems="center"
-          justifyContent="center"
-          textAlign="center"
-          height="200px"
-        >
-          <AlertIcon boxSize="40px" mr={0} />
-          <AlertTitle mt={4} mb={1} fontSize="lg">
-            <strong>{alert}</strong>
-          </AlertTitle>
-        </Alert>
-      )}
       <Flex justifyContent="space-between">
         <Heading as="h1" size="lg" mb={4}>
           Edit Project

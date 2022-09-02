@@ -116,7 +116,14 @@ function PostModal({
           },
         });
       } else {
-        actionSubmit(data);
+        actionSubmit({
+          CreatePost: data,
+          ProjectData: {
+            _id: ProjectData?._id,
+            title: ProjectData?.title,
+            process: ProjectData?.process,
+          },
+        });
       }
 
       ResetModal();
