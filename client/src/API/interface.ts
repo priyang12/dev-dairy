@@ -1,5 +1,3 @@
-import type { AlertState } from '../interface';
-
 export interface AuthUserResponse {
   user: {
     _id: string;
@@ -28,5 +26,3 @@ export interface NewProjectAPI {
   message: string;
   project: any;
 }
-
-export type DeletedProjectAPI = AlertState;

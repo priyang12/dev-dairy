@@ -1,11 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { toast } from 'react-toastify';
 import API from '.';
-import { setAlert } from '../features/AlertSlice';
 import type { IProject, IRoadMap } from '../interface';
 import type { RootState } from '../store';
 import { CheckError } from '../utils/helpers';
-import type { DeletedProjectAPI, NewProjectAPI } from './interface';
+import type { NewProjectAPI } from './interface';
 
 const ProjectApi = createApi({
   reducerPath: 'ProjectApi',
@@ -116,17 +115,12 @@ const ProjectApi = createApi({
           );
         } catch (error: any) {
           const errorMessage = CheckError(error);
-          dispatch(
-            setAlert({
-              Type: 'error',
-              alert: errorMessage,
-            }),
-          );
+          toast.error(errorMessage);
         }
       },
       invalidatesTags: ['projectId'],
     }),
-    DeleteProject: builder.mutation<DeletedProjectAPI, Partial<string>>({
+    DeleteProject: builder.mutation<any, Partial<string>>({
       query(id) {
         return {
           url: `/${id}`,
@@ -142,23 +136,13 @@ const ProjectApi = createApi({
         );
         try {
           await queryFulfilled;
-          dispatch(
-            setAlert({
-              alert: 'Project Deleted Successfully',
-              Type: 'warning',
-              result: true,
-            }),
-          );
+          toast.warn('Project deleted successfully', {
+            autoClose: 5000,
+          });
         } catch (e: any) {
           deleteResult.undo();
           const errorMessage = CheckError(e);
-          dispatch(
-            setAlert({
-              alert: errorMessage,
-              Type: 'error',
-              result: true,
-            }),
-          );
+          toast.error(errorMessage);
         }
       },
     }),
@@ -181,12 +165,10 @@ const ProjectApi = createApi({
       async onQueryStarted({ projectId }, { dispatch, queryFulfilled }) {
         try {
           const { data: resData } = await queryFulfilled;
-          dispatch(
-            setAlert({
-              alert: resData.message,
-              result: resData.result,
-            }),
-          );
+
+          toast.success('RoadMap created successfully', {
+            autoClose: 5000,
+          });
 
           dispatch(
             ProjectApi.util.updateQueryData(
@@ -207,10 +189,8 @@ const ProjectApi = createApi({
             ),
           );
         } catch (e: any) {
-          setAlert({
-            alert: e.error.data.message,
-            type: false,
-          });
+          const errorMessage = CheckError(e);
+          toast.error(errorMessage);
         }
       },
     }),
@@ -245,12 +225,9 @@ const ProjectApi = createApi({
         );
         try {
           const { data: resData } = await queryFulfilled;
-          dispatch(
-            setAlert({
-              alert: resData.message,
-              result: resData.result,
-            }),
-          );
+          toast.success('RoadMap Edited successfully', {
+            autoClose: 5000,
+          });
 
           dispatch(
             ProjectApi.util.invalidateTags([
@@ -259,12 +236,8 @@ const ProjectApi = createApi({
           );
         } catch (e: any) {
           EditedRoadMap.undo();
-          dispatch(
-            setAlert({
-              alert: e.error.data.message,
-              result: false,
-            }),
-          );
+          const errorMessage = CheckError(e);
+          toast.error(errorMessage);
         }
       },
     }),
@@ -304,8 +277,9 @@ const ProjectApi = createApi({
             ),
           );
         } catch (error) {
-          dispatch(setAlert('Server Error'));
           deleteResult.undo();
+          const errorMessage = CheckError(error);
+          toast.error(errorMessage);
         }
       },
     }),

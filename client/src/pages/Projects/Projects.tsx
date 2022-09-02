@@ -2,7 +2,6 @@ import { Button, Flex, Heading } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 import { useGetProjectsQuery } from '../../API/ProjectAPI';
 import ProjectCard from '../SingleProject/ProjectCard';
-import AlertComponent from '../../components/AlertComponent';
 import Spinner from '../../components/spinner';
 import type { IProject } from '../../interface';
 import Container from '../../components/Container';
@@ -35,7 +34,6 @@ function Projects() {
 
   return (
     <Container>
-      <AlertComponent />
       <Heading m={5} ml={0} textAlign="center">
         Total Projects {data.length}
       </Heading>
