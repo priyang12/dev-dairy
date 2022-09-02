@@ -34,7 +34,7 @@ it('render Projects', async () => {
       screen.getByText(format(parseISO(project.date), "yyyy-MM-dd'T'HH:mm")),
     ).toBeInTheDocument();
     project.technologies.forEach((tech) => {
-      expect(screen.getByText(tech)).toBeInTheDocument();
+      expect(screen.getByTestId(`${tech}-${project._id}`)).toBeInTheDocument();
     });
 
     expect(

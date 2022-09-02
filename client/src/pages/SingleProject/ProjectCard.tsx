@@ -14,6 +14,7 @@ function ProjectCard({ Project }: { Project: IProject }) {
         {Project.technologies.map((tech) => (
           <Text
             key={tech}
+            data-testid={`${tech}-${Project._id}`}
             p={2}
             bg={`${RandomColor()}`}
             fontSize={20}

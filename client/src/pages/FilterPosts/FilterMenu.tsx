@@ -37,6 +37,7 @@ function FilterMenu({ onClose }: { onClose: () => void }) {
       }
       return acc;
     }, '');
+
     setSearch(query);
     onClose();
   };
@@ -65,7 +66,7 @@ function FilterMenu({ onClose }: { onClose: () => void }) {
           />
         </FormControl>
         <FormControl>
-          <FormLabel htmlFor="Project">Project</FormLabel>
+          <FormLabel htmlFor="project">Project</FormLabel>
           {LoadingProject ? (
             <Skeleton>
               <div>Loading Projects</div>

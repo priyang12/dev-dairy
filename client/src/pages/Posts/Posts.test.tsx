@@ -34,6 +34,7 @@ it('render Posts', async () => {
     timeout: 2100,
   });
   expect(screen.getByText('Dairy Log')).toBeInTheDocument();
+
   PostsResponse.forEach((post) => {
     expect(screen.getByText(post.title)).toBeInTheDocument();
     expect(screen.getByText(post.description)).toBeInTheDocument();
