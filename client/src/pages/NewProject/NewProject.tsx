@@ -21,8 +21,8 @@ import {
   Switch,
   IconButton,
 } from '@chakra-ui/react';
-import { useState } from 'react';
-import { Navigate as Redirect } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { v4 as uuIdv4 } from 'uuid';
 import Container from '../../components/Container';
 import { useCreateProject } from '../../API/ProjectAPI';
@@ -33,6 +33,7 @@ import {
   ValidateDescription,
   ValidateTitle,
 } from '../../utils/Validation';
+import Spinner from '../../components/spinner';
 
 interface NewProjectInterface {
   Title: string;
@@ -55,6 +56,7 @@ const init: NewProjectInterface = {
 };
 
 function NewProject() {
+  const navigate = useNavigate();
   const [CreateProject, CreateProjectResult] = useCreateProject();
   const [Technologies, setTechnologies] = useState<any[]>([]);
   const [NewRoadMap, setNewRoadMap] = useState<any>({
@@ -65,6 +67,12 @@ function NewProject() {
   const [RoadMaps, setRoadMaps] = useState<IRoadMap[]>([]);
   const { FormValues, ErrorsState, HandleChange, SetState, setError } =
     useForm(init);
+
+  useEffect(() => {
+    if (CreateProjectResult.isSuccess) {
+      navigate(`/project/${CreateProjectResult.data.project._id}`);
+    }
+  }, [CreateProjectResult.isSuccess]);
 
   const AddNewTech = () => {
     if (!ErrorsState.NewTech) {
@@ -124,9 +132,8 @@ function NewProject() {
     }
   };
 
-  if (CreateProjectResult.isSuccess) {
-    return <Redirect to="/Projects" />;
-  }
+  if (CreateProjectResult.isLoading) return <Spinner />;
+
   return (
     <Container MW="900px">
       <Box py={10}>

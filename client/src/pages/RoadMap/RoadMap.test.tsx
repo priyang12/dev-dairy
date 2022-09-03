@@ -4,62 +4,106 @@ import { Router, Routes, Route } from 'react-router-dom';
 import {
   render,
   screen,
+  waitFor,
   waitForElementToBeRemoved,
 } from '../../test-utils';
 import '@testing-library/jest-dom/extend-expect';
 import RoadMap from './RoadMap';
 import { MockedRoadMap } from '../../mock/MockedData';
+import server from '../../mock/server';
+import { rest } from 'msw';
+import API from '../../API';
 
-const route = '/EditProject/132';
+const ProjectId = '132';
+
+const route = `/RoadMap/${ProjectId}`;
 const History = createMemoryHistory({ initialEntries: [route] });
 
-const setup = () => render(
-  <Router location={route} navigator={History}>
-    <Routes>
-      <Route path="/EditProject/:id" element={<RoadMap />} />
-    </Routes>
-  </Router>,
-);
-
-it('should render without crashing', async () => {
-  setup();
-  await waitForElementToBeRemoved(screen.getByAltText(/loading/));
-  expect(screen.getByText(/Road Maps/)).toBeInTheDocument();
-
-  userEvent.click(
-    screen.getByRole('button', { name: 'Add New RoadMap' }),
+const Render = () =>
+  render(
+    <Router location={route} navigator={History}>
+      <Routes>
+        <Route path="/RoadMap/:id" element={<RoadMap />} />
+      </Routes>
+    </Router>,
   );
 
+const setup = async () => {
+  Render();
+  await waitForElementToBeRemoved(screen.getByAltText(/loading/));
+  expect(screen.getByText(/Road Maps/)).toBeInTheDocument();
+  const AddRoadMap = screen.getByRole('button', { name: 'Add New RoadMap' });
+
+  userEvent.click(AddRoadMap);
+
+  const CloseModelButton = screen.getByTestId('CloseModelButton');
+
   const RoadMapName = screen.getByLabelText('RoadMap Name');
+  const SubmitRoadMap = screen.getByRole('button', {
+    name: 'Submit RoadMap',
+  });
+
+  userEvent.click(CloseModelButton);
+
+  return {
+    AddRoadMap,
+    RoadMapName,
+    SubmitRoadMap,
+  };
+};
+
+it('should render without crashing', async () => {
+  const { AddRoadMap, RoadMapName, SubmitRoadMap } = await setup();
+
+  userEvent.click(AddRoadMap);
+
   // Empty RoadMapName
   userEvent.type(RoadMapName, '');
 
-  const SubmitRoadmap = screen.getByRole('button', {
-    name: 'Submit RoadMap',
-  });
-  userEvent.click(SubmitRoadmap);
+  userEvent.click(SubmitRoadMap);
 
-  expect(
-    screen.getByText(/Please enter a RoadMap name/),
-  ).toBeInTheDocument();
+  expect(screen.getByText(/Please enter a RoadMap name/)).toBeInTheDocument();
 
   userEvent.type(RoadMapName, 'Test RoadMap');
 
-  userEvent.click(SubmitRoadmap);
+  userEvent.click(SubmitRoadMap);
+
+  await waitForElementToBeRemoved(screen.getByText('Adding RoadMap'));
+  expect(screen.getByText(/Road Maps/)).toBeInTheDocument();
+  expect(screen.getByText(/RoadMap created successfully/)).toBeInTheDocument();
+});
+
+it('Server Error while creating RoadMap', async () => {
+  server.use(
+    rest.put(`${API}/projects/${ProjectId}/roadMap`, (req, res, ctx) =>
+      res(
+        ctx.status(500),
+        ctx.json({ message: 'Server Error While Creating RoadMap' }),
+      ),
+    ),
+  );
+
+  const { AddRoadMap, RoadMapName, SubmitRoadMap } = await setup();
+
+  userEvent.click(AddRoadMap);
+
+  userEvent.type(RoadMapName, 'Test RoadMap');
+
+  userEvent.click(SubmitRoadMap);
 
   await waitForElementToBeRemoved(screen.getByText('Adding RoadMap'));
 
-  // Add Alert
+  await waitFor(() => {
+    expect(
+      screen.getByText('Server Error While Creating RoadMap'),
+    ).toBeInTheDocument();
+  });
 });
 
 it('Delete RoadMap', async () => {
-  setup();
-  await waitForElementToBeRemoved(screen.getByAltText(/loading/));
-  expect(screen.getByText(/Road Maps/)).toBeInTheDocument();
+  await setup();
 
-  userEvent.click(
-    screen.getByText(MockedRoadMap[0].name.toUpperCase()),
-  );
+  userEvent.click(screen.getByText(MockedRoadMap[0].name.toUpperCase()));
 
   const RoadMapDelete = screen.getByRole('button', {
     name: `Delete ${MockedRoadMap[0].name}`,
@@ -71,17 +115,46 @@ it('Delete RoadMap', async () => {
     screen.queryByText(MockedRoadMap[0].name.toUpperCase()),
   ).not.toBeInTheDocument();
 
-  // Add Alert
+  await waitFor(() => {
+    expect(
+      screen.getByText(/RoadMap Deleted Successfully/),
+    ).toBeInTheDocument();
+  });
+});
+
+it('Delete RoadMap Server Error', async () => {
+  server.use(
+    rest.delete(`${API}/projects/${ProjectId}/roadMap`, (req, res, ctx) =>
+      res(
+        ctx.status(500),
+        ctx.json({ message: 'Delete RoadMap Server Error' }),
+      ),
+    ),
+  );
+
+  await setup();
+
+  userEvent.click(screen.getByText(MockedRoadMap[0].name.toUpperCase()));
+
+  const RoadMapDelete = screen.getByRole('button', {
+    name: `Delete ${MockedRoadMap[0].name}`,
+  });
+
+  userEvent.click(RoadMapDelete);
+
+  expect(
+    screen.queryByText(MockedRoadMap[0].name.toUpperCase()),
+  ).not.toBeInTheDocument();
+
+  await waitFor(() => {
+    expect(screen.getByText(/Delete RoadMap Server Error/)).toBeInTheDocument();
+  });
 });
 
 it('Edit RoadMap', async () => {
-  setup();
-  await waitForElementToBeRemoved(screen.getByAltText(/loading/));
-  expect(screen.getByText(/Road Maps/)).toBeInTheDocument();
+  await setup();
 
-  userEvent.click(
-    screen.getByText(MockedRoadMap[0].name.toUpperCase()),
-  );
+  userEvent.click(screen.getByText(MockedRoadMap[0].name.toUpperCase()));
 
   const RoadMapEdit = screen.getByRole('button', {
     name: `Edit ${MockedRoadMap[0].name}`,
@@ -106,26 +179,61 @@ it('Edit RoadMap', async () => {
   // Empty RoadMapName
 
   userEvent.click(UpdateRoadMap);
-  expect(
-    screen.getByText(/Please enter a RoadMap name/),
-  ).toBeInTheDocument();
+  expect(screen.getByText(/Please enter a RoadMap name/)).toBeInTheDocument();
 
   userEvent.type(RoadMapName, NewValue.name);
   userEvent.click(Process);
 
-  // userEvent.(Process, NewValue.progress);
   userEvent.click(UpdateRoadMap);
 
-  await waitForElementToBeRemoved(
-    screen.getByText('Updating RoadMap'),
-    {
-      timeout: 2000,
-    },
+  await waitForElementToBeRemoved(screen.getByText('Updating RoadMap'), {
+    timeout: 3000,
+  });
+
+  await waitFor(() => {
+    expect(screen.getByText(/RoadMap Edited successfully/)).toBeInTheDocument();
+  });
+});
+
+it('Edit RoadMap Server Error', async () => {
+  server.use(
+    rest.patch(`${API}/projects/${ProjectId}/roadMap`, (req, res, ctx) =>
+      res(ctx.status(500), ctx.json({ message: 'Edit RoadMap Server Error' })),
+    ),
   );
 
-  expect(
-    screen.getByText(NewValue.name.toUpperCase()),
-  ).toBeInTheDocument();
+  await setup();
 
-  // Add Alert
+  userEvent.click(screen.getByText(MockedRoadMap[0].name.toUpperCase()));
+
+  const RoadMapEdit = screen.getByRole('button', {
+    name: `Edit ${MockedRoadMap[0].name}`,
+  });
+
+  userEvent.click(RoadMapEdit);
+
+  expect(screen.getByText(/Edit RoadMap/)).toBeInTheDocument();
+
+  const RoadMapName = screen.getByDisplayValue(MockedRoadMap[0].name);
+  const Process = screen.getByTestId('Process-Id');
+  const UpdateRoadMap = screen.getByRole('button', {
+    name: 'Update RoadMap',
+  });
+
+  const NewValue = {
+    name: 'Updated RoadMap',
+    progress: '50',
+  };
+  userEvent.clear(RoadMapName);
+
+  userEvent.type(RoadMapName, NewValue.name);
+  userEvent.click(Process);
+
+  userEvent.click(UpdateRoadMap);
+
+  expect(screen.getByText(NewValue.name.toUpperCase())).toBeInTheDocument();
+
+  await waitFor(() => {
+    expect(screen.getByText(/Edit RoadMap Server Error/)).toBeInTheDocument();
+  });
 });

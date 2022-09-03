@@ -5,13 +5,16 @@ export const CheckError = (
   ErrorMessage: string = 'Something went wrong',
 ) => {
   let errorMessage = ErrorMessage;
-  if ('error' in error) {
+  if (typeof error === 'object' && 'error' in error) {
     const errMsg =
       'status' in error.error
         ? error.error.data.message
         : JSON.stringify(error.data);
 
     errorMessage = errMsg;
+  }
+  if (error instanceof Error) {
+    errorMessage = error.message;
   }
   return errorMessage;
 };
@@ -20,15 +23,4 @@ export function isFetchBaseQueryError(
   error: unknown,
 ): error is FetchBaseQueryError {
   return typeof error === 'object' && error != null && 'status' in error;
-}
-
-export function isErrorWithMessage(
-  error: unknown,
-): error is { message: string } {
-  return (
-    typeof error === 'object'
-    && error != null
-    && 'message' in error
-    && typeof (error as any).message === 'string'
-  );
 }

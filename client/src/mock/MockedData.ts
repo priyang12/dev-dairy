@@ -427,12 +427,12 @@ export const ProjectsResponse = [
 ];
 
 export const SingleProjectResponse = {
-  technologies: ['React', 'Node.js'],
-  process: 40,
+  technologies: ['react', 'storybook', 'scss'],
+  process: 25,
+  _id: '62a498033fea6300092ced84',
+  title: 'component',
+  description: 'component lib using storybook react scss.',
   github: 'https://github.com/',
-  _id: '628515d405524527385dsdf2a',
-  title: 'New Project',
-  description: 'Des for Project',
   user: '627bcea32b463cb2da6853b7',
   roadMap: [
     {

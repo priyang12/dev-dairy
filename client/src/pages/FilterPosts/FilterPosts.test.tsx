@@ -12,6 +12,9 @@ import userEvent from '@testing-library/user-event';
 import { PostsResponse, ProjectsResponse } from '../../mock/MockedData';
 import FilterPosts from './FilterPosts';
 
+const route = `/Posts/filter?project=${ProjectsResponse[0]._id}`;
+const History = createMemoryHistory({ initialEntries: [route] });
+
 const setup = (History: any, route: any) => {
   render(
     <Router navigator={History} location={route}>
@@ -23,8 +26,6 @@ const setup = (History: any, route: any) => {
 };
 
 it('Put Filter', async () => {
-  const route = `/Posts/filter?project=${ProjectsResponse[0]._id}`;
-  const History = createMemoryHistory({ initialEntries: [route] });
   setup(History, route);
 
   await waitFor(() => {
@@ -37,7 +38,6 @@ it('Put Filter', async () => {
   const FilterPosts = PostsResponse.filter(
     (post) => post.project._id === ProjectsResponse[0]._id,
   );
-  console.log(FilterPosts);
 
   FilterPosts.forEach((post) => {
     expect(screen.getByText(post.title)).toBeInTheDocument();
@@ -49,9 +49,9 @@ it('Put Filter', async () => {
 });
 
 it('Put Filter', async () => {
-  const route = `/Posts/filter?project=${ProjectsResponse[1]._id}&status=Done`;
-  const History = createMemoryHistory({ initialEntries: [route] });
-  setup(History, route);
+  const FilteredRoute = `/Posts/filter?project=${ProjectsResponse[1]._id}&status=Done`;
+  const NewHistory = createMemoryHistory({ initialEntries: [route] });
+  setup(NewHistory, FilteredRoute);
 
   await waitFor(() => {
     expect(screen.getByAltText(/loading.../)).toBeInTheDocument();
@@ -75,9 +75,9 @@ it('Put Filter', async () => {
 });
 
 it('Test Filter Menu', async () => {
-  const route = '/Posts/filter';
-  const History = createMemoryHistory({ initialEntries: [route] });
-  setup(History, route);
+  const FilteredRoute = '/Posts/filter';
+  const NewHistory = createMemoryHistory({ initialEntries: [route] });
+  setup(NewHistory, FilteredRoute);
 
   await waitForElementToBeRemoved(screen.queryByText('Loading Projects'));
   const ProjectSelect = screen.getByLabelText('Project');
@@ -94,4 +94,29 @@ it('Test Filter Menu', async () => {
 
   // const ProcessSelect = screen.getByLabelText('status');
   // userEvent.selectOptions(ProcessSelect, ['In-Process']);
+});
+
+it('Delete Post', async () => {
+  setup(History, route);
+  expect(screen.getByAltText('loading...')).toBeInTheDocument();
+  await waitForElementToBeRemoved(screen.queryByAltText('loading...'), {
+    timeout: 2100,
+  });
+  expect(screen.getByText('Filter Log')).toBeInTheDocument();
+
+  const FilterPosts = PostsResponse.filter(
+    (post) => post.project._id === ProjectsResponse[0]._id,
+  );
+
+  const post = screen.getByText(FilterPosts[0].title);
+  expect(post).toBeInTheDocument();
+
+  const deleteButton = screen.getByTestId(`delete-post-${FilterPosts[0]._id}`);
+
+  userEvent.click(deleteButton);
+
+  expect(post).not.toBeInTheDocument();
+  await waitFor(() => screen.getByText(/Post Deleted Successfully/), {
+    timeout: 2100,
+  });
 });

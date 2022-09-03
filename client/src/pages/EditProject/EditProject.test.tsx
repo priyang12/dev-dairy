@@ -68,8 +68,9 @@ it('Render EditProject', async () => {
 });
 
 it('Field Validation', async () => {
-  const { Title, Description, Process, Github, Live, Website, updateButton } =
+  const { Title, Description, Github, Live, Website, updateButton } =
     await setup();
+
   userEvent.clear(Title);
   userEvent.clear(Description);
   userEvent.clear(Github);
@@ -77,7 +78,6 @@ it('Field Validation', async () => {
   userEvent.clear(Website);
   userEvent.click(updateButton);
 
-  // expect(screen.getByText(/Title is required/)).toBeInTheDocument();
   expect(screen.getByText(/DESCRIPTION is required/)).toBeInTheDocument();
   expect(screen.getByText(/WEBSITE is required/)).toBeInTheDocument();
   expect(screen.getByText(/GITHUB is required/)).toBeInTheDocument();
@@ -111,7 +111,7 @@ it('Test Edit Project Put Request', async () => {
         ctx.status(403),
         ctx.json({
           result: false,
-          message: 'Server Error',
+          message: 'Server Error While Updating Project',
         }),
       ),
     ),
@@ -119,7 +119,7 @@ it('Test Edit Project Put Request', async () => {
   const { updateButton } = await setup();
   userEvent.click(updateButton);
   await waitFor(() => {
-    screen.getByText(/Server Error/);
+    screen.getByText(/Server Error While Updating Project/);
   });
 });
 

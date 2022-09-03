@@ -4,7 +4,7 @@ export function toDaysMinutesSeconds(totalSeconds: number, Formate: string) {
   const seconds = totalSeconds % 60;
   const minutes = secondsToMinutes(totalSeconds) % 60;
   const hours = secondsToHours(totalSeconds) % 24;
-  const days = Math.floor(secondsToHours(totalSeconds) / (3600 * 24));
+  const days = Math.floor(totalSeconds / 86400);
 
   if (Formate === 'hh:mm:ss') {
     return `${hours}:${minutes}:${seconds}`;
