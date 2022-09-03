@@ -51,7 +51,7 @@ function SessionWidget() {
           >
             <HiChevronDoubleUp />
           </IconButton>
-          <Bar setDisplay={setDisplay} />
+          <Bar />
         </Box>
       </Collapse>
     </Box>

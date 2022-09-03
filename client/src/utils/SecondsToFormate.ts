@@ -1,6 +1,6 @@
 import { secondsToHours, secondsToMinutes } from 'date-fns';
 
-export function toDaysMinutesSeconds(totalSeconds: number, Formate: string) {
+function toDaysMinutesSeconds(totalSeconds: number, Formate?: string) {
   const seconds = totalSeconds % 60;
   const minutes = secondsToMinutes(totalSeconds) % 60;
   const hours = secondsToHours(totalSeconds) % 24;
@@ -26,3 +26,5 @@ export function toDaysMinutesSeconds(totalSeconds: number, Formate: string) {
     seconds,
   };
 }
+
+export { toDaysMinutesSeconds };

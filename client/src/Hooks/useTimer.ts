@@ -62,6 +62,25 @@ export const useTimer = (initialTime: number) => {
     return seconds + Minute * 60 + Hour * 3600 + Day * 86400;
   }, [seconds, Minute, Hour, Day]);
 
+  interface setTimesFunction {
+    seconds?: number;
+    minutes?: number;
+    hours?: number;
+    days?: number;
+  }
+
+  const setTimesFunction = ({
+    seconds,
+    minutes,
+    hours,
+    days,
+  }: setTimesFunction) => {
+    seconds && setSeconds(seconds);
+    minutes && setMinute(minutes);
+    hours && setHour(hours);
+    days && setDay(days);
+  };
+
   return {
     Initialized,
     seconds,
@@ -75,5 +94,6 @@ export const useTimer = (initialTime: number) => {
     startTimer,
     stopTimer,
     resetTimer,
+    setTimesFunction,
   };
 };

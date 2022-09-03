@@ -1,19 +1,22 @@
 import { Grid, GridItem, Heading, Text } from '@chakra-ui/react';
 import { ButtonGroup, Button } from '@priyang/react-component-lib';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { usePageVisibility } from 'react-page-visibility';
 import { usePushSession } from '../../API/WorkSessionsAPI';
 import { setProject } from '../../features/WorkSessionSlice';
 import { useApiToast } from '../../Hooks/useApiToast';
 import { useTimer } from '../../Hooks/useTimer';
 import { StoreState } from '../../store';
 import Container from '../Container';
+import { toDaysMinutesSeconds } from '../../utils/SecondsToFormate';
 
-function Bar({ setDisplay }: { setDisplay: (State: boolean) => void }) {
+function Bar() {
   const Dispatch = useDispatch();
+  const isVisible = usePageVisibility();
+  const [StartSessionTime, setStartSessionTime] = useState<Date | null>(null);
   const { Project } = useSelector((state: StoreState) => state.WorkSession);
   const [PushCall, PushResult] = usePushSession();
-
   useApiToast({
     Result: PushResult,
     successMessage: 'Session Created',
@@ -26,6 +29,7 @@ function Bar({ setDisplay }: { setDisplay: (State: boolean) => void }) {
     seconds,
     Minute,
     Hour,
+    setTimesFunction,
     resetTimer,
     stopTimer,
     startTimer,
@@ -33,10 +37,53 @@ function Bar({ setDisplay }: { setDisplay: (State: boolean) => void }) {
   } = useTimer(0);
 
   useEffect(() => {
+    if (document.visibilityState === 'hidden' || document.hidden === true)
+      stopTimer();
+    else if (StartSessionTime) {
+      // @ts-ignore
+      const elapsed = new Date() - (StartSessionTime as number);
+      if (elapsed > 1000) {
+        const TotalSeconds = Math.floor(elapsed / 1000);
+        // Need to Implement Function Overload.
+        setTimesFunction(toDaysMinutesSeconds(TotalSeconds) as any);
+        startTimer();
+      }
+    }
+  }, [document.visibilityState, document.hidden, isVisible]);
+
+  useEffect(() => {
     if (PushResult.isSuccess) {
       resetTimer();
     }
   }, [PushResult]);
+
+  const StartSession = () => {
+    startTimer();
+    if (!StartSessionTime) setStartSessionTime(new Date());
+  };
+  const StopSession = () => {
+    stopTimer();
+  };
+  const PushNewSession = () => {
+    PushCall({
+      ProjectId: Project.id,
+      session: { Time: CountTotalTime() },
+    });
+  };
+
+  const RemoveSession = () => {
+    Dispatch(
+      setProject({
+        id: '',
+        name: '',
+      }),
+    );
+  };
+
+  const RestSession = () => {
+    resetTimer();
+    setStartSessionTime(null);
+  };
 
   if (!Project.id) {
     return (
@@ -47,20 +94,7 @@ function Bar({ setDisplay }: { setDisplay: (State: boolean) => void }) {
       </Container>
     );
   }
-  const PushNewSession = () => {
-    PushCall({
-      ProjectId: Project.id,
-      session: { Time: CountTotalTime() },
-    });
-  };
-  const RemoveSession = () => {
-    Dispatch(
-      setProject({
-        id: '',
-        name: '',
-      }),
-    );
-  };
+
   return (
     <Container MW="1200px">
       <Grid
@@ -90,11 +124,11 @@ function Bar({ setDisplay }: { setDisplay: (State: boolean) => void }) {
         </GridItem>
         <GridItem order={[2, 2]}>
           <ButtonGroup className="primary-border" bg="secondary.300">
-            <Button onClick={startTimer}>Start</Button>
-            <Button variant="primary-border" onClick={stopTimer}>
+            <Button onClick={StartSession}>Start</Button>
+            <Button variant="primary-border" onClick={StopSession}>
               Stop
             </Button>
-            <Button onClick={resetTimer}>Reset</Button>
+            <Button onClick={RestSession}>Reset</Button>
           </ButtonGroup>
         </GridItem>
         <GridItem order={[1, 1, 3]}>
