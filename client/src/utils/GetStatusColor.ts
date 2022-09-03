@@ -1,4 +1,4 @@
-export const GetTaskColor = (status: string) => {
+export const GetStatusColor = (status: string) => {
   switch (status) {
     case 'Done':
       return '#00ff00';

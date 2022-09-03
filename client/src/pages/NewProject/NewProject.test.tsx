@@ -1,6 +1,14 @@
 import userEvent from '@testing-library/user-event';
+import { rest } from 'msw';
 import { BrowserRouter } from 'react-router-dom';
-import { render, screen } from '../../test-utils';
+import API from '../../API';
+import server from '../../mock/server';
+import {
+  render,
+  screen,
+  waitFor,
+  waitForElementToBeRemoved,
+} from '../../test-utils';
 import NewProject from './NewProject';
 
 function setup() {
@@ -99,26 +107,6 @@ it('Check Field Inputs and validation', () => {
   expect(screen.getByText(/TITLE is required/)).toBeInTheDocument();
   expect(screen.getByText(/DESCRIPTION is required/)).toBeInTheDocument();
 });
-it('Valid Input With Api Call', () => {
-  const {
-    Title,
-    Description,
-    process,
-    Github,
-    live,
-    Website,
-    CreateProjectBtn,
-  } = setup();
-
-  userEvent.type(Title, 'Test Title');
-  userEvent.type(Description, 'Test Description');
-  userEvent.clear(process);
-  userEvent.type(process, '20');
-  userEvent.click(live);
-  userEvent.type(Github, 'https://github.com');
-  userEvent.type(Website, 'https://github.com');
-  userEvent.click(CreateProjectBtn);
-});
 
 it('Technology Input and Delete', async () => {
   const { AddNewTechBtn, NewTech } = setup();
@@ -147,4 +135,69 @@ it('RoadMap Input', async () => {
   const deleteBtn = screen.getByTestId('delete-roadMap');
 
   userEvent.click(deleteBtn);
+});
+
+it('Valid Input With Api Call', async () => {
+  const {
+    Title,
+    Description,
+    process,
+    Github,
+    live,
+    Website,
+    CreateProjectBtn,
+  } = setup();
+
+  userEvent.type(Title, 'Test Title');
+  userEvent.type(Description, 'Test Description');
+  userEvent.clear(process);
+  userEvent.type(process, '20');
+  userEvent.click(live);
+  userEvent.type(Github, 'https://github.com');
+  userEvent.type(Website, 'https://github.com');
+  userEvent.click(CreateProjectBtn);
+
+  await waitForElementToBeRemoved(screen.getByAltText(/loading/));
+  await waitFor(() => {
+    expect(
+      screen.getByText(/Project Created Successfully/),
+    ).toBeInTheDocument();
+  });
+});
+
+it('Server Error Api Repose', async () => {
+  server.use(
+    rest.post(`${API}/projects`, (req, res, ctx) =>
+      res(
+        ctx.status(401),
+        ctx.json({ message: 'Server Error Project Can not Created' }),
+      ),
+    ),
+  );
+
+  const {
+    Title,
+    Description,
+    process,
+    Github,
+    live,
+    Website,
+    CreateProjectBtn,
+  } = setup();
+
+  userEvent.type(Title, 'Test Title');
+  userEvent.type(Description, 'Test Description');
+  userEvent.clear(process);
+  userEvent.type(process, '20');
+  userEvent.click(live);
+  userEvent.type(Github, 'https://github.com');
+  userEvent.type(Website, 'https://github.com');
+  userEvent.click(CreateProjectBtn);
+
+  await waitForElementToBeRemoved(screen.getByAltText(/loading/));
+  await waitFor(() => {
+    expect(
+      screen.getByText(/Server Error Project Can not Created/),
+    ).toBeInTheDocument();
+  });
 });

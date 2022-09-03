@@ -12,7 +12,7 @@ import { parseISO, format } from 'date-fns';
 import { useLocation } from 'react-router-dom';
 import { useDeleteFilterPost, useUpdateFilterPost } from '../../API/PostAPI';
 import PostModal from './PostModal';
-import { GetTaskColor } from '../../utils/GetStatusColor';
+import { GetStatusColor } from '../../utils/GetStatusColor';
 import type { IPost } from '../../interface';
 
 type PropTypes = {
@@ -75,7 +75,7 @@ function PostContainer({ post }: PropTypes) {
           >
             <Flex direction="column">
               <Text
-                bg={GetTaskColor(post.status)}
+                bg={GetStatusColor(post.status)}
                 color="#fff"
                 fontSize={['2xl', '3xl', '4xl']}
                 width="fit-content"

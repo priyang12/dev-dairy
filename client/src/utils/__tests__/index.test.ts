@@ -7,6 +7,12 @@ import {
   CheckURL,
 } from '../Validation';
 
+import { CheckError, isFetchBaseQueryError } from '../helpers';
+import BlobToImg from '../BlobToImg';
+import { GetStatusColor } from '../GetStatusColor';
+import { toDaysMinutesSeconds } from '../SecondsToFormate';
+import RandomColor from '../RandomColor';
+
 describe('Validation Utils', () => {
   it('Validate Name should return an error if the name is not alphanumeric', () => {
     let result = ValidateTitle('', 'Name');
@@ -81,5 +87,82 @@ describe('Validation Utils', () => {
   it('CheckURL should return true if the url is valid', () => {
     const result = CheckURL('https://google.com');
     expect(result).toBe(true);
+  });
+});
+
+describe('Error Helpers', () => {
+  it('CheckError Function', () => {
+    const error = {
+      error: {
+        status: 400,
+        data: {
+          message: 'Server Error from API',
+        },
+      },
+    };
+    let ErrorMessage = CheckError(error, 'Server Error');
+
+    expect(isFetchBaseQueryError(error.error)).toBe(true);
+    expect(ErrorMessage).toBe('Server Error from API');
+
+    ErrorMessage = CheckError(Error('Server Error in CodeBase'));
+    expect(ErrorMessage).toBe('Server Error in CodeBase');
+
+    ErrorMessage = CheckError('UnCatched Error Message');
+    expect(ErrorMessage).toBe('Something went wrong');
+  });
+});
+
+describe('BlobToImg', () => {
+  it('BlobToImg Function', async () => {
+    const blob = new Blob([''], { type: 'image/png' });
+    const result = await BlobToImg(blob);
+    expect(result).toBe('data:image/png;base64,');
+  });
+});
+
+// GetStatusColor
+describe('GetStatusColor', () => {
+  it('GetStatusColor Function', () => {
+    let result = GetStatusColor('Done');
+    expect(result).toBe('#00ff00');
+    result = GetStatusColor('In-Process');
+    expect(result).toBe('#FFC107');
+    result = GetStatusColor('Started');
+    expect(result).toBe('#3a21f3');
+    result = GetStatusColor('Not Started');
+    expect(result).toBe('#ff2c07');
+  });
+});
+
+// toDaysMinutesSeconds
+describe('toDaysMinutesSeconds', () => {
+  it('toDaysMinutesSeconds Function', () => {
+    const result = toDaysMinutesSeconds(10000, 'hh:mm:ss');
+    expect(result).toBe('2:46:40');
+  });
+
+  it('toDaysMinutesSeconds Function', () => {
+    const result = toDaysMinutesSeconds(100000, 'dd:hh:mm:ss');
+    expect(result).toBe('1:3:46:40');
+  });
+
+  it('toDaysMinutesSeconds Function', () => {
+    const result = toDaysMinutesSeconds(100000, 'mm:ss');
+    expect(result).toBe('46:40');
+  });
+
+  it('toDaysMinutesSeconds Function', () => {
+    const result = toDaysMinutesSeconds(100000, 'ss');
+    expect(result).toBe('40');
+  });
+});
+
+// RandomColor
+
+describe('RandomColor', () => {
+  it('RandomColor Function', () => {
+    const result = RandomColor();
+    expect(result).toMatch(/#/);
   });
 });

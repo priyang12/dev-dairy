@@ -3,7 +3,12 @@ import { rest } from 'msw';
 import { format, parseISO } from 'date-fns';
 import { Route, Router, Routes } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
-import { render, screen, waitForElementToBeRemoved } from '../../test-utils';
+import {
+  render,
+  screen,
+  waitFor,
+  waitForElementToBeRemoved,
+} from '../../test-utils';
 import { SingleProjectResponse } from '../../mock/MockedData';
 import SingleProject from './index';
 import server from '../../mock/server';
@@ -114,9 +119,19 @@ it('Delete Project', async () => {
   await waitForElementToBeRemoved(ConfirmButton);
 
   expect(History.location.pathname).toBe('/projects');
+
+  await waitFor(() => {
+    expect(
+      screen.getByText('Project Deleted Successfully'),
+    ).toBeInTheDocument();
+  });
+
+  expect(
+    screen.queryByText(SingleProjectResponse.title),
+  ).not.toBeInTheDocument();
 });
 
-it('Server Error on Delete', async () => {
+it('Server Error on Delete Project', async () => {
   server.use(
     rest.delete(`${API}/projects/:id`, (req, res, ctx) =>
       res(ctx.status(401), ctx.json({ message: 'Server Error' })),
@@ -149,5 +164,7 @@ it('Server Error on Delete', async () => {
 
   userEvent.click(SubmitButton);
 
-  expect(History.location.pathname).toBe('/projects');
+  await waitFor(() => {
+    expect(screen.getByText('Server Error')).toBeInTheDocument();
+  });
 });

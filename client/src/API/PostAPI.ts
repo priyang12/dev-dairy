@@ -77,7 +77,6 @@ const PostApi = createApi({
       async onQueryStarted({ ProjectData }, { dispatch, queryFulfilled }) {
         try {
           const { data: NewPost } = await queryFulfilled;
-          console.log(ProjectData);
 
           dispatch(
             PostApi.util.updateQueryData(

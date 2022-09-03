@@ -23,7 +23,7 @@ function ModalComponent({
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>{Title}</ModalHeader>
-        <ModalCloseButton />
+        <ModalCloseButton data-testid="CloseModelButton" />
         <ModalBody>{children}</ModalBody>
       </ModalContent>
     </Modal>

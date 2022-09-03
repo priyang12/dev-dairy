@@ -68,7 +68,7 @@ const ProjectApi = createApi({
       async onQueryStarted(data, { dispatch, queryFulfilled }) {
         try {
           const { data: NewProject } = await queryFulfilled;
-          toast('Project created successfully', {
+          toast('Project Created Successfully', {
             type: 'success',
             autoClose: 5000,
           });
@@ -136,7 +136,7 @@ const ProjectApi = createApi({
         );
         try {
           await queryFulfilled;
-          toast.warn('Project deleted successfully', {
+          toast.warn('Project Deleted Successfully', {
             autoClose: 5000,
           });
         } catch (e: any) {
@@ -264,6 +264,9 @@ const ProjectApi = createApi({
         );
         try {
           await queryFulfilled;
+          toast.warn('RoadMap Deleted Successfully', {
+            autoClose: 5000,
+          });
           dispatch(
             ProjectApi.util.updateQueryData(
               'GetProjectId',
