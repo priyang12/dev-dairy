@@ -66,7 +66,7 @@ export const useInfinitePosts = () => {
     CurrentPage: page,
     isLastPage: End,
     fetchNextPage() {
-      if (End) {
+      if (!End) {
         trigger({ page, limit: 10 });
         setpage((prevPage: number) => prevPage + 1);
       }

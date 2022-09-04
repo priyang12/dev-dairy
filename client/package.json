@@ -37,6 +37,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "install": "npm install --legacy-peer-deps",
     "start:test": "DISABLE_ESLINT_PLUGIN=true env-cmd -f .env.test react-scripts start",
     "msw": "npx msw init ./public",
     "msw:cleanup": "rm public/mockServiceWorker.js",
