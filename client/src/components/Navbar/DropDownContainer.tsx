@@ -4,6 +4,10 @@ import { Link as RouterLink } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../features/AuthSlice';
+import ProjectApi from '../../API/ProjectAPI';
+import WorkSessionsApi from '../../API/WorkSessionsAPI';
+import PostApi from '../../API/PostAPI';
+import UserApi from '../../API/UserAPI';
 
 function LinkItem({
   children,
@@ -40,6 +44,11 @@ function DropDownContainer() {
     localStorage.clear();
     removeCookie('token');
     dispatch(logout());
+    dispatch(ProjectApi.util.resetApiState());
+    dispatch(WorkSessionsApi.util.resetApiState());
+    dispatch(PostApi.util.resetApiState());
+    dispatch(ProjectApi.util.resetApiState());
+    dispatch(UserApi.util.resetApiState());
   };
   return (
     <Menu>

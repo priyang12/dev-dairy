@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import { Box, IconButton } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import { AiFillYoutube } from 'react-icons/ai';
-import ReactPlayer from 'react-player';
+import ReactPlayer from 'react-player/youtube';
 import Container from '../Container';
 import Spinner from '../spinner';
 import SerachUrl from './SerachUrl';

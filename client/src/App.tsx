@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { logout, setToken } from './features/AuthSlice';
@@ -25,10 +25,11 @@ import ProfileSettings from './pages/ProfileSettings';
 // Components
 import PrivateOutlet from './components/PrivateRoute';
 import Spinner from './components/spinner';
+import type { StoreState } from './store';
 
 function App() {
   const dispatch = useDispatch();
-
+  const { token } = useSelector((state: StoreState) => state.Auth);
   // eslint-disable-next-line no-unused-vars
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
   const { isLoading } = useGetUserQuery(cookies.token, {
@@ -39,12 +40,17 @@ function App() {
   useEffect(() => {
     if (cookies.token) {
       dispatch(setToken(cookies.token));
-      getProjects('');
     }
     return () => {
       dispatch(logout());
     };
-  }, [cookies.token, dispatch, getProjects]);
+  }, [cookies.token, dispatch]);
+
+  useEffect(() => {
+    if (token) {
+      getProjects('');
+    }
+  }, [token, getProjects]);
 
   if (isLoading) {
     return <Spinner />;
