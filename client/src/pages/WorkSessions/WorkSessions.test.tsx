@@ -27,7 +27,7 @@ it('Render WorkSessions', async () => {
 
 it('Delete All WorkSessions', async () => {
   const { DeleteAll } = await StepUp();
-  userEvent.click(DeleteAll);
+  await userEvent.click(DeleteAll);
   expect(
     screen.getByText(/Are you sure you want to delete/),
   ).toBeInTheDocument();
@@ -35,6 +35,6 @@ it('Delete All WorkSessions', async () => {
   const ConfirmButton = screen.getByRole('button', {
     name: 'Delete',
   });
-  userEvent.type(Confirm, 'Sure');
-  userEvent.click(ConfirmButton);
+  await userEvent.type(Confirm, 'Sure');
+  await userEvent.click(ConfirmButton);
 });

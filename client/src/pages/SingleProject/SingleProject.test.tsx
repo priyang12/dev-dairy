@@ -88,7 +88,7 @@ it('Click on Edit Project', async () => {
   await waitForElementToBeRemoved(screen.getByAltText('loading...'));
   // Edit Project
   const editButton = screen.getByText('Edit Project');
-  userEvent.click(editButton);
+  await userEvent.click(editButton);
   expect(History.location.pathname).toMatch(/EditProject/);
 });
 
@@ -100,21 +100,21 @@ it('Delete Project', async () => {
   const deleteButton = screen.getByRole('button', {
     name: 'Delete Project',
   });
-  userEvent.click(deleteButton);
+  await userEvent.click(deleteButton);
   expect(
     screen.getByText(/Are you sure you want to delete/),
   ).toBeInTheDocument();
 
   const ConfirmButton = screen.getByRole('button', { name: 'Delete' });
 
-  userEvent.click(ConfirmButton);
+  await userEvent.click(ConfirmButton);
 
   const ConfirmInput = screen.getByTestId('confirm-input');
-  userEvent.type(ConfirmInput, `${SingleProjectResponse.title} Confirm`);
+  await userEvent.type(ConfirmInput, `${SingleProjectResponse.title} Confirm`);
 
   const SubmitButton = screen.getByRole('button', { name: 'Delete' });
 
-  userEvent.click(SubmitButton);
+  await userEvent.click(SubmitButton);
 
   await waitForElementToBeRemoved(ConfirmButton);
 
@@ -148,21 +148,21 @@ it('Server Error on Delete Project', async () => {
   const deleteButton = screen.getByRole('button', {
     name: 'Delete Project',
   });
-  userEvent.click(deleteButton);
+  await userEvent.click(deleteButton);
   expect(
     screen.getByText(/Are you sure you want to delete/),
   ).toBeInTheDocument();
 
   const ConfirmButton = screen.getByRole('button', { name: 'Delete' });
 
-  userEvent.click(ConfirmButton);
+  await userEvent.click(ConfirmButton);
 
   const ConfirmInput = screen.getByTestId('confirm-input');
-  userEvent.type(ConfirmInput, `${SingleProjectResponse.title} Confirm`);
+  await userEvent.type(ConfirmInput, `${SingleProjectResponse.title} Confirm`);
 
   const SubmitButton = screen.getByRole('button', { name: 'Delete' });
 
-  userEvent.click(SubmitButton);
+  await userEvent.click(SubmitButton);
 
   await waitFor(() => {
     expect(screen.getByText('Server Error')).toBeInTheDocument();

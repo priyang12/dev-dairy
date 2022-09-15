@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
@@ -15,7 +15,7 @@ if (process.env.REACT_APP_ENVIRONMENT === 'test') {
 }
 
 const config = {
-  useSystemColorMode: true,
+  initialColorMode: 'dark',
 };
 
 const colors = {
@@ -80,7 +80,10 @@ const theme = extendTheme({
   space,
 });
 
-ReactDOM.render(
+const container = document.getElementById('root');
+const root = createRoot(container!);
+
+root.render(
   <React.StrictMode>
     <Provider store={Store}>
       <PersistGate loading={null} persistor={Persister}>
@@ -90,5 +93,4 @@ ReactDOM.render(
       </PersistGate>
     </Provider>
   </React.StrictMode>,
-  document.getElementById('root'),
 );

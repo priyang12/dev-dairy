@@ -82,18 +82,18 @@ it('Test Filter Menu', async () => {
   await waitForElementToBeRemoved(screen.queryByText('Loading Projects'));
   const ProjectSelect = screen.getByLabelText('Project');
 
-  userEvent.selectOptions(ProjectSelect, [`${ProjectsResponse[0]._id}`]);
+  await userEvent.selectOptions(ProjectSelect, [`${ProjectsResponse[0]._id}`]);
 
   const FilterLogs = screen.getByRole('button', { name: 'Filter Logs' });
 
-  userEvent.click(FilterLogs);
+  await userEvent.click(FilterLogs);
 
   expect(FilterLogs).not.toBeVisible();
   expect(screen.getByText('No Filter Applied')).toBeInTheDocument();
   expect(screen.queryByText('No posts yet')).not.toBeInTheDocument();
 
   // const ProcessSelect = screen.getByLabelText('status');
-  // userEvent.selectOptions(ProcessSelect, ['In-Process']);
+  // await userEvent.selectOptions(ProcessSelect, ['In-Process']);
 });
 
 it('Delete Post', async () => {
@@ -113,7 +113,7 @@ it('Delete Post', async () => {
 
   const deleteButton = screen.getByTestId(`delete-post-${FilterPosts[0]._id}`);
 
-  userEvent.click(deleteButton);
+  await userEvent.click(deleteButton);
 
   expect(post).not.toBeInTheDocument();
   await waitFor(() => screen.getByText(/Post Deleted Successfully/), {

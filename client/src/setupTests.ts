@@ -9,6 +9,15 @@ Object.defineProperty(window, 'scrollTo', {
   writable: true,
 });
 
+(global as any).ResizeObserver = class ResizeObserver {
+  constructor() {
+    // listener = ls;
+  }
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+};
+
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());

@@ -61,16 +61,16 @@ it('Render Page', () => {
   expect(RoadMap).toBeInTheDocument();
 });
 
-it('Website Disable and not Disable', () => {
+it('Website Disable and not Disable', async () => {
   const { Website, live } = setup();
   // Check WebSite Input Disabled
   expect(Website).toBeDisabled();
-  userEvent.click(live);
+  await userEvent.click(live);
   expect(Website).toBeEnabled();
-  userEvent.type(Website, 'Test Website');
+  await userEvent.type(Website, 'Test Website');
 });
 
-it('Check Field Inputs and validation', () => {
+it('Check Field Inputs and validation', async () => {
   const {
     Title,
     Description,
@@ -81,14 +81,14 @@ it('Check Field Inputs and validation', () => {
     CreateProjectBtn,
   } = setup();
 
-  userEvent.type(Title, 'asd');
-  userEvent.type(Description, 'as');
-  userEvent.clear(process);
-  userEvent.type(process, '20');
-  userEvent.click(live);
-  userEvent.type(Github, 'Test Github');
-  userEvent.type(Website, 'Test Website');
-  userEvent.click(CreateProjectBtn);
+  await userEvent.type(Title, 'asd');
+  await userEvent.type(Description, 'as');
+  await userEvent.clear(process);
+  await userEvent.type(process, '20');
+  await userEvent.click(live);
+  await userEvent.type(Github, 'Test Github');
+  await userEvent.type(Website, 'Test Website');
+  await userEvent.click(CreateProjectBtn);
 
   // check if the validation is working
   expect(
@@ -102,39 +102,39 @@ it('Check Field Inputs and validation', () => {
   expect(screen.getByText(/Enter Valid URL for Website/)).toBeInTheDocument();
 
   // check for Empty Title Message
-  userEvent.clear(Title);
-  userEvent.clear(Description);
+  await userEvent.clear(Title);
+  await userEvent.clear(Description);
   expect(screen.getByText(/TITLE is required/)).toBeInTheDocument();
   expect(screen.getByText(/DESCRIPTION is required/)).toBeInTheDocument();
 });
 
 it('Technology Input and Delete', async () => {
   const { AddNewTechBtn, NewTech } = setup();
-  userEvent.type(NewTech, 'Test Technology');
+  await userEvent.type(NewTech, 'Test Technology');
   expect(NewTech).toHaveValue('Test Technology');
-  userEvent.click(AddNewTechBtn);
+  await userEvent.click(AddNewTechBtn);
 
   const deleteBtn = screen.getByTestId('delete-tech-0');
 
-  userEvent.click(deleteBtn);
+  await userEvent.click(deleteBtn);
 });
 
 it('RoadMap Input', async () => {
   const { AddRoadMapBtn, RoadMap, Color } = setup();
 
-  userEvent.type(RoadMap, 'Test RoadMap');
+  await userEvent.type(RoadMap, 'Test RoadMap');
   expect(RoadMap).toHaveValue('Test RoadMap');
 
   expect(Color).toHaveValue('#000000');
 
-  userEvent.click(AddRoadMapBtn);
+  await userEvent.click(AddRoadMapBtn);
 
   expect(RoadMap).toHaveValue('');
   expect(Color).toHaveValue('#000000');
 
   const deleteBtn = screen.getByTestId('delete-roadMap');
 
-  userEvent.click(deleteBtn);
+  await userEvent.click(deleteBtn);
 });
 
 it('Valid Input With Api Call', async () => {
@@ -148,14 +148,14 @@ it('Valid Input With Api Call', async () => {
     CreateProjectBtn,
   } = setup();
 
-  userEvent.type(Title, 'Test Title');
-  userEvent.type(Description, 'Test Description');
-  userEvent.clear(process);
-  userEvent.type(process, '20');
-  userEvent.click(live);
-  userEvent.type(Github, 'https://github.com');
-  userEvent.type(Website, 'https://github.com');
-  userEvent.click(CreateProjectBtn);
+  await userEvent.type(Title, 'Test Title');
+  await userEvent.type(Description, 'Test Description');
+  await userEvent.clear(process);
+  await userEvent.type(process, '20');
+  await userEvent.click(live);
+  await userEvent.type(Github, 'https://github.com');
+  await userEvent.type(Website, 'https://github.com');
+  await userEvent.click(CreateProjectBtn);
 
   await waitForElementToBeRemoved(screen.getByAltText(/loading/));
   await waitFor(() => {
@@ -185,14 +185,14 @@ it('Server Error Api Repose', async () => {
     CreateProjectBtn,
   } = setup();
 
-  userEvent.type(Title, 'Test Title');
-  userEvent.type(Description, 'Test Description');
-  userEvent.clear(process);
-  userEvent.type(process, '20');
-  userEvent.click(live);
-  userEvent.type(Github, 'https://github.com');
-  userEvent.type(Website, 'https://github.com');
-  userEvent.click(CreateProjectBtn);
+  await userEvent.type(Title, 'Test Title');
+  await userEvent.type(Description, 'Test Description');
+  await userEvent.clear(process);
+  await userEvent.type(process, '20');
+  await userEvent.click(live);
+  await userEvent.type(Github, 'https://github.com');
+  await userEvent.type(Website, 'https://github.com');
+  await userEvent.click(CreateProjectBtn);
 
   await waitForElementToBeRemoved(screen.getByAltText(/loading/));
   await waitFor(() => {

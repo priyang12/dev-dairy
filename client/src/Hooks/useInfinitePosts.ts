@@ -6,6 +6,7 @@ export const useInfinitePosts = () => {
   const shouldReset = useRef(true);
   const [page, setpage] = useState(1);
   const [trigger, result] = useLazyGetPosts();
+
   const [posts, setPosts] = useState<
     {
       page: number;

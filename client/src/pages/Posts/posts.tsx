@@ -24,7 +24,6 @@ function Feeds() {
     isLoading: LoadingPosts,
     isFetching,
     data: Posts,
-    CurrentPage,
     isLastPage,
     fetchNextPage,
   } = useInfinitePosts();
@@ -114,7 +113,9 @@ function Feeds() {
               )}
             </>
           )}
-          {isLastPage && <Heading textAlign="center">No posts yet</Heading>}
+          {(Posts[0].posts.length === 0 || isLastPage) && (
+            <Heading textAlign="center">No posts yet</Heading>
+          )}
         </MarginContainer>
       </BgImage>
     </Box>

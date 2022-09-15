@@ -28,19 +28,19 @@ it('Render Login Page', () => {
   expect(submit).toBeInTheDocument();
 });
 
-it('Invalided input', () => {
+it('Invalided input', async () => {
   const { email, password, submit } = setup();
-  userEvent.type(email, 'test');
-  userEvent.type(password, 'test');
-  userEvent.click(submit);
+  await userEvent.type(email, 'test');
+  await userEvent.type(password, 'test');
+  await userEvent.click(submit);
   screen.getByText(/Please enter a valid email/);
 });
 
 it('Valid input', async () => {
   const { email, password, submit } = setup();
-  userEvent.type(email, 'patel@gmail.com');
-  userEvent.type(password, '123456');
-  userEvent.click(submit);
+  await userEvent.type(email, 'patel@gmail.com');
+  await userEvent.type(password, '123456');
+  await userEvent.click(submit);
   expect(screen.getByText(/Just a moment/)).toBeInTheDocument();
   await waitForElementToBeRemoved(() => screen.getByText(/Just a moment/));
 });
@@ -53,9 +53,9 @@ it('Error message', async () => {
     ),
   );
 
-  userEvent.type(email, 'patel@gmail.com');
-  userEvent.type(password, '123456');
-  userEvent.click(submit);
+  await userEvent.type(email, 'patel@gmail.com');
+  await userEvent.type(password, '123456');
+  await userEvent.click(submit);
   await waitForElementToBeRemoved(() => screen.getByText(/Just a moment/));
   expect(screen.getByText(/Invalid credentials/)).toBeInTheDocument();
 });

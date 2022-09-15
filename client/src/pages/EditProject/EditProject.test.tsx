@@ -27,8 +27,10 @@ const Render = () =>
   );
 
 const setup = async () => {
-  Render();
+  await Render();
+
   await waitForElementToBeRemoved(screen.getByAltText(/loading/));
+  screen.debug();
   expect(screen.getByText(/Edit Project/)).toBeInTheDocument();
   const Title = screen.getByLabelText(/Title/);
   const Description = screen.getByLabelText(/Description/);
@@ -71,12 +73,12 @@ it('Field Validation', async () => {
   const { Title, Description, Github, Live, Website, updateButton } =
     await setup();
 
-  userEvent.clear(Title);
-  userEvent.clear(Description);
-  userEvent.clear(Github);
-  userEvent.click(Live);
-  userEvent.clear(Website);
-  userEvent.click(updateButton);
+  await userEvent.clear(Title);
+  await userEvent.clear(Description);
+  await userEvent.clear(Github);
+  await userEvent.click(Live);
+  await userEvent.clear(Website);
+  await userEvent.click(updateButton);
 
   expect(screen.getByText(/DESCRIPTION is required/)).toBeInTheDocument();
   expect(screen.getByText(/WEBSITE is required/)).toBeInTheDocument();
@@ -87,14 +89,14 @@ it('Update Edit Project', async () => {
   const { Title, Description, Process, Github, Live, Website, updateButton } =
     await setup();
 
-  userEvent.type(Title, 'New Title');
-  userEvent.type(Description, 'New Description');
-  userEvent.type(Process, '10');
-  userEvent.type(Github, 'New Github');
-  userEvent.click(Live);
-  userEvent.type(Website, 'New Website');
+  await userEvent.type(Title, 'New Title');
+  await userEvent.type(Description, 'New Description');
+  await userEvent.type(Process, '10');
+  await userEvent.type(Github, 'New Github');
+  await userEvent.click(Live);
+  await userEvent.type(Website, 'New Website');
 
-  userEvent.click(updateButton);
+  await userEvent.click(updateButton);
 
   await waitFor(() => {
     screen.getByText(/Updating Project/);
@@ -117,7 +119,7 @@ it('Test Edit Project Put Request', async () => {
     ),
   );
   const { updateButton } = await setup();
-  userEvent.click(updateButton);
+  await userEvent.click(updateButton);
   await waitFor(() => {
     screen.getByText(/Server Error While Updating Project/);
   });
