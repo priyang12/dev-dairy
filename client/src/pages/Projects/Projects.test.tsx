@@ -60,7 +60,7 @@ it('Redirect On Single Project Page', async () => {
   const NextPage = screen.getAllByRole('link', {
     name: 'More',
   });
-  userEvent.click(NextPage[0]);
+  await userEvent.click(NextPage[0]);
   expect(history.push).toHaveBeenCalledWith(
     {
       hash: '',

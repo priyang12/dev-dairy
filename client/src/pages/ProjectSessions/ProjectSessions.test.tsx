@@ -46,7 +46,7 @@ it('should render without crashing', async () => {
 it('should render Delete All Work Sessions', async () => {
   await SetUp();
 
-  userEvent.click(screen.getByTestId('delete-all-sessions'));
+  await userEvent.click(screen.getByTestId('delete-all-sessions'));
 
   await waitFor(() => {
     expect(screen.getByText(/Deleting Session/i)).toBeInTheDocument();
@@ -64,13 +64,13 @@ it('Delete Selected Work Sessions', async () => {
 
   const DeleteBtn = screen.getByText('Delete Session');
 
-  userEvent.click(DeleteBtn);
+  await userEvent.click(DeleteBtn);
 
-  userEvent.click(screen.getByText('Cancel Delete'));
+  await userEvent.click(screen.getByText('Cancel Delete'));
 
   expect(screen.queryByText('Cancel Delete')).not.toBeInTheDocument();
 
-  userEvent.click(DeleteBtn);
+  await userEvent.click(DeleteBtn);
 
   const SelectSession1 = screen.getByLabelText(
     `DeleteButton-${MockedProjectWorkSessions.session[0]._id}`,
@@ -80,11 +80,11 @@ it('Delete Selected Work Sessions', async () => {
   );
 
   // Select Session 1 and 2
-  userEvent.click(SelectSession1);
-  userEvent.click(SelectSession2);
+  await userEvent.click(SelectSession1);
+  await userEvent.click(SelectSession2);
 
   // remove from set
-  userEvent.click(
+  await userEvent.click(
     screen.getByLabelText(
       `RemoveDeleteButton-${MockedProjectWorkSessions.session[0]._id}`,
     ),
@@ -92,7 +92,7 @@ it('Delete Selected Work Sessions', async () => {
 
   const DeleteSelectedBtn = screen.getByText('Delete Selected Sessions');
 
-  userEvent.click(DeleteSelectedBtn);
+  await userEvent.click(DeleteSelectedBtn);
 
   // alerts
 
@@ -108,7 +108,7 @@ it('Delete Selected Work Sessions', async () => {
 it('Start a New Session', async () => {
   await SetUp();
 
-  userEvent.click(screen.getByText('Start Session'));
+  await userEvent.click(screen.getByText('Start Session'));
   await waitFor(() => {
     expect(
       screen.getByText(
@@ -116,7 +116,7 @@ it('Start a New Session', async () => {
       ),
     ).toBeInTheDocument();
   });
-  userEvent.click(screen.getByText('Start Session'));
+  await userEvent.click(screen.getByText('Start Session'));
 
   await waitFor(() => {
     expect(

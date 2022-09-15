@@ -56,8 +56,7 @@ function Login() {
 
   useEffect(() => {
     if (Auth.authenticated) {
-      navigate('/Projects');
-      // navigate('/Posts');
+      navigate('/Posts');
     }
   }, [Auth.authenticated, navigate]);
 

@@ -31,13 +31,13 @@ it('Render Register Page', () => {
   expect(submit).toBeInTheDocument();
 });
 
-it('Invalided input', () => {
+it('Invalided input', async () => {
   const { email, password, name, password2, submit } = setup();
-  userEvent.type(name, 'prg');
-  userEvent.type(email, 'test');
-  userEvent.type(password, 'test');
-  userEvent.type(password2, 'test2');
-  userEvent.click(submit);
+  await userEvent.type(name, 'prg');
+  await userEvent.type(email, 'test');
+  await userEvent.type(password, 'test');
+  await userEvent.type(password2, 'test2');
+  await userEvent.click(submit);
   expect(
     screen.getByText(/Name must be between 4 and 30 characters/),
   ).toBeInTheDocument();
@@ -51,11 +51,11 @@ it('Invalided input', () => {
 
 it('Valid input', async () => {
   const { email, password, name, password2, submit } = setup();
-  userEvent.type(name, 'priyang');
-  userEvent.type(email, 'test@gmail.com');
-  userEvent.type(password, 'test123');
-  userEvent.type(password2, 'test123');
-  userEvent.click(submit);
+  await userEvent.type(name, 'priyang');
+  await userEvent.type(email, 'test@gmail.com');
+  await userEvent.type(password, 'test123');
+  await userEvent.type(password2, 'test123');
+  await userEvent.click(submit);
   expect(screen.getByText(/Just a moment/)).toBeInTheDocument();
   await waitForElementToBeRemoved(() => screen.getByText(/Just a moment/));
 });
@@ -71,11 +71,11 @@ it('Error message', async () => {
     ),
   );
 
-  userEvent.type(name, 'priyang');
-  userEvent.type(email, 'test@gmail.com');
-  userEvent.type(password, 'test123');
-  userEvent.type(password2, 'test123');
-  userEvent.click(submit);
+  await userEvent.type(name, 'priyang');
+  await userEvent.type(email, 'test@gmail.com');
+  await userEvent.type(password, 'test123');
+  await userEvent.type(password2, 'test123');
+  await userEvent.click(submit);
   await waitForElementToBeRemoved(() => screen.getByText(/Just a moment/));
   expect(
     screen.getByText(/Server Error Please try again later/),

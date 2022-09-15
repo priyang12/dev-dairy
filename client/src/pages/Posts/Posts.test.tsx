@@ -34,7 +34,9 @@ it('render Posts', async () => {
     timeout: 2100,
   });
   expect(screen.getByText('Dairy Log')).toBeInTheDocument();
-
+  await waitFor(() => {
+    expect(screen.getByText(PostsResponse[0].title)).toBeInTheDocument();
+  });
   PostsResponse.forEach((post) => {
     expect(screen.getByText(post.title)).toBeInTheDocument();
     expect(screen.getByText(post.description)).toBeInTheDocument();
@@ -42,20 +44,6 @@ it('render Posts', async () => {
       screen.getByText(format(parseISO(post.date), "yyyy-MM-dd' 'HH:mm")),
     ).toBeInTheDocument();
   });
-});
-it('render with no Posts', async () => {
-  server.use(
-    rest.get(`${API}/posts`, (req, res, ctx) =>
-      res(ctx.delay(2000), ctx.json([])),
-    ),
-  );
-  setup();
-  expect(screen.getByAltText('loading...')).toBeInTheDocument();
-  await waitForElementToBeRemoved(screen.queryByAltText('loading...'), {
-    timeout: 2100,
-  });
-  expect(screen.getByText('Dairy Log')).toBeInTheDocument();
-  expect(screen.queryByText('No posts yet')).toBeInTheDocument();
 });
 
 it('Delete Post', async () => {
@@ -65,19 +53,37 @@ it('Delete Post', async () => {
     timeout: 2100,
   });
   expect(screen.getByText('Dairy Log')).toBeInTheDocument();
+
+  await waitFor(() => {
+    screen.getByText(PostsResponse[0].title);
+  });
   const post = screen.getByText(PostsResponse[0].title);
-  expect(post).toBeInTheDocument();
 
   const deleteButton = screen.getByTestId(
     `delete-post-${PostsResponse[0]._id}`,
   );
 
-  userEvent.click(deleteButton);
+  await userEvent.click(deleteButton);
 
   expect(post).not.toBeInTheDocument();
   await waitFor(() => screen.getByText(/Post Deleted Successfully/), {
     timeout: 2100,
   });
+});
+
+it('render with no Posts', async () => {
+  server.use(
+    rest.get(`${API}/posts`, (req, res, ctx) =>
+      res(ctx.delay(2000), ctx.json([])),
+    ),
+  );
+  await setup();
+  expect(screen.getByAltText('loading...')).toBeInTheDocument();
+  await waitForElementToBeRemoved(screen.queryByAltText('loading...'), {
+    timeout: 2100,
+  });
+  expect(screen.getByText('Dairy Log')).toBeInTheDocument();
+  expect(screen.getByText('No posts yet')).toBeInTheDocument();
 });
 
 it('Post Field Validation', async () => {
@@ -88,11 +94,11 @@ it('Post Field Validation', async () => {
   });
   expect(screen.getByText('Dairy Log')).toBeInTheDocument();
 
-  userEvent.click(screen.getByText('Create New Entry'));
+  await userEvent.click(screen.getByText('Create New Entry'));
 
   expect(screen.getByText('New Log')).toBeInTheDocument();
 
-  userEvent.click(screen.getByText('Create Log'));
+  await userEvent.click(screen.getByText('Create Log'));
 
   expect(screen.getByText(/must be between 4 and 30 characters/));
   expect(screen.getByText(/must be between 10 and 400 characters/));
@@ -108,29 +114,29 @@ it('Add New Post', async () => {
   });
   expect(screen.getByText('Dairy Log')).toBeInTheDocument();
 
-  userEvent.click(screen.getByText('Create New Entry'));
+  await userEvent.click(screen.getByText('Create New Entry'));
 
   expect(screen.getByText('New Log')).toBeInTheDocument();
-  userEvent.type(screen.getByLabelText('Title'), 'New Title');
-  userEvent.type(screen.getByLabelText('Description'), 'New Description');
+  await userEvent.type(screen.getByLabelText('Title'), 'New Title');
+  await userEvent.type(screen.getByLabelText('Description'), 'New Description');
 
   const ProjectSelect = screen.getByLabelText('Project');
 
-  userEvent.selectOptions(ProjectSelect, [`${ProjectsResponse[0]._id}`]);
+  await userEvent.selectOptions(ProjectSelect, [`${ProjectsResponse[0]._id}`]);
   await waitFor(() => {
     screen.getByText('Select RoadMap');
   });
   // await waitForElementToBeRemoved(screen.queryByText('Loading RoadMap'));
   const RoadMapSelect = screen.getByLabelText('RoadMap');
 
-  userEvent.selectOptions(RoadMapSelect, [
+  await userEvent.selectOptions(RoadMapSelect, [
     `${SingleProjectResponse.roadMap[0]._id},${SingleProjectResponse.roadMap[0].color}`,
   ]);
 
   const ProcessSelect = screen.getByLabelText('status');
-  userEvent.selectOptions(ProcessSelect, ['Started']);
+  await userEvent.selectOptions(ProcessSelect, ['Started']);
 
-  userEvent.click(screen.getByText('Create Log'));
+  await userEvent.click(screen.getByText('Create Log'));
 
   await waitForElementToBeRemoved(screen.queryByText(/Create Log/));
 
@@ -146,18 +152,23 @@ it('Update Post', async () => {
     timeout: 2100,
   });
   expect(screen.getByText('Dairy Log')).toBeInTheDocument();
+
+  await waitFor(() => {
+    screen.getByText(PostsResponse[0].title);
+  });
+
   const UpdateButton = screen.getAllByText('Update Post');
-  userEvent.click(UpdateButton[0]);
+  await userEvent.click(UpdateButton[0]);
   expect(screen.getByText('Update New Log')).toBeInTheDocument();
 
   await waitForElementToBeRemoved(screen.queryByText('Loading RoadMap'));
 
-  userEvent.type(screen.getByLabelText('Title'), 'New Title');
-  userEvent.type(screen.getByLabelText('Description'), 'New Description');
+  await userEvent.type(screen.getByLabelText('Title'), 'New Title');
+  await userEvent.type(screen.getByLabelText('Description'), 'New Description');
   const RoadMapSelect = screen.getByLabelText('RoadMap');
 
-  userEvent.selectOptions(RoadMapSelect, [
+  await userEvent.selectOptions(RoadMapSelect, [
     `${SingleProjectResponse.roadMap[0]._id},${SingleProjectResponse.roadMap[0].color}`,
   ]);
-  userEvent.click(screen.getByText('Update New Log'));
+  await userEvent.click(screen.getByText('Update New Log'));
 });
