@@ -1,19 +1,12 @@
 import { Schema, model } from "mongoose";
-import type { Document } from "mongoose";
+import {
+  z,
+  WorkSessionSchema as ZodWorkSession,
+} from "@dev-dairy/zodvalidation";
 
-export interface IWorkSessions extends Document {
-  user: string;
-  project: string;
-  session: ISession[];
-  date: Date;
-  Time: number;
-}
+export type IWorkSessions = z.infer<typeof ZodWorkSession>;
 
-export interface ISession {
-  Time: number;
-  CreatedAt: Date;
-  UpdatedAt: Date;
-}
+export type ISession = IWorkSessions["session"][0];
 
 const Session = new Schema(
   {
@@ -27,7 +20,7 @@ const Session = new Schema(
   }
 );
 
-const WorkSessionSchema = new Schema({
+const WorkSessionSchema = new Schema<IWorkSessions>({
   user: {
     type: Schema.Types.ObjectId,
     required: true,

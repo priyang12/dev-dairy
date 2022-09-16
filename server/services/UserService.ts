@@ -20,28 +20,16 @@ export default class UserService {
   }
 
   public async UpdateUser(
-    User: IUser,
+    userId: string,
     userInputDTO: any
   ): Promise<{ user: IUser; message: string }> {
-    if (userInputDTO) {
-      User.username = userInputDTO.username;
-      User.ImageUrl = userInputDTO.ImageUrl;
-      if (userInputDTO.password) {
-        const salt = randomBytes(32);
-        const hashedPassword = await argon2.hash(userInputDTO.password, {
-          salt,
-        });
-        User.password = hashedPassword;
-      }
-
-      await User.save();
-
-      return {
-        user: User,
-        message: "User updated",
-      };
+    const User = await this.userModel.findByIdAndUpdate(userId, userInputDTO, {
+      new: true,
+    });
+    if (!User) {
+      throw new Error("CRUD Error: User cannot be updated");
     }
-    throw new Error("CRUD Error: User cannot be updated");
+    return { user: User, message: "User updated" };
   }
   public async DeleteUser(UserId: string): Promise<{ message: string }> {
     const User = await this.userModel.findByIdAndDelete(UserId);

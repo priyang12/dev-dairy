@@ -1,3 +1,4 @@
+import { WorkSessionSchema } from "@dev-dairy/zodvalidation";
 import { Router } from "express";
 import {
   GetWorkSession,
@@ -13,6 +14,7 @@ import {
 } from "../controllers/WorkSessionsController";
 
 import auth from "../middleware/auth";
+import ZodMiddleware from "../middleware/ZodMiddleware";
 
 export default (app: Router) => {
   app
@@ -26,8 +28,24 @@ export default (app: Router) => {
     .put(auth, UpdateWorkSession)
     .delete(auth, DeleteWorkSession);
 
-  app.route("/workSession/:id/push").patch(auth, PushWorkSession);
-  app.route("/workSession/:id/pull").patch(auth, PullWorkSession);
+  app.route("/workSession/:id/push").patch(
+    auth,
+    ZodMiddleware(
+      WorkSessionSchema.pick({
+        Time: true,
+      })
+    ),
+    PushWorkSession
+  );
+  app.route("/workSession/:id/pull").patch(
+    auth,
+    ZodMiddleware(
+      WorkSessionSchema.pick({
+        Time: true,
+      })
+    ),
+    PullWorkSession
+  );
 
   app
     .route("/workSession/project/:projectId")

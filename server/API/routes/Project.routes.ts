@@ -1,3 +1,4 @@
+import { ProjectSchema, RoadMapSchema } from "@dev-dairy/zodvalidation";
 import { Router } from "express";
 import {
   AddRoadMap,
@@ -12,22 +13,30 @@ import {
 } from "../controllers/ProjectController";
 
 import auth from "../middleware/auth";
-import { ProjectValidator } from "../middleware/ProjectValidator";
+import ZodMiddleware from "../middleware/ZodMiddleware";
 
 export default (app: Router) => {
   app
     .route("/projects")
     .get(auth, GetProjects)
-    .post(auth, ProjectValidator("CreateProject"), CreateProject);
+    .post(
+      auth,
+      ZodMiddleware(
+        ProjectSchema.omit({
+          user: true,
+        })
+      ),
+      CreateProject
+    );
   app
     .route("/projects/:id")
     .get(auth, GetProjectById)
-    .put(auth, UpdateProject)
+    .put(auth, ZodMiddleware(ProjectSchema.partial()), UpdateProject)
     .delete(auth, DeleteProject);
   app
     .route("/projects/:id/roadMap")
     .get(auth, GetRoadMapProjectById)
-    .put(auth, ProjectValidator("AddRoadMap"), AddRoadMap)
-    .patch(auth, EditRoadMap)
+    .put(auth, ZodMiddleware(RoadMapSchema), AddRoadMap)
+    .patch(auth, ZodMiddleware(RoadMapSchema.partial()), EditRoadMap)
     .delete(auth, DeleteRoadMap);
 };

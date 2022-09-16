@@ -1,9 +1,5 @@
 import asyncHandler from "express-async-handler";
-
-import { validationResult } from "express-validator";
-
 import type { Request, Response } from "express";
-
 import PostService from "../../services/PostService";
 import Container from "typedi";
 
@@ -97,10 +93,6 @@ export const GetPost = asyncHandler(
 // @access Private
 export const CreatePost = asyncHandler(
   async (req: Request, res: Response): Promise<any> => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(422).json(errors.array());
-    }
     const projectServiceInstance = Container.get(PostService);
     const message = await projectServiceInstance.CreatePost(
       req.user._id,
