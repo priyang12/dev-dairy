@@ -7,6 +7,7 @@ import {
   FormErrorMessage,
   Box,
 } from '@chakra-ui/react';
+import { useCallback } from 'react';
 import useForm from '../Hooks/useForm';
 
 export interface FormField {
@@ -28,18 +29,16 @@ function Form({ SubmitForm, FormFields, mb = 5, children }: Props) {
     (acc, curr) => ({ ...acc, [curr.fieldName]: '' }),
     {},
   );
-
   const { ErrorsState, HandleChange, setErrors } = useForm<any>(InitState);
 
-  const check = (e: any) => {
+  const HandleSubmit = useCallback((e: any) => {
     e.preventDefault();
-
     SubmitForm(e, setErrors);
-  };
+  }, []);
 
   return (
     <div>
-      <Box as="form" onSubmit={check}>
+      <Box as="form" onSubmit={HandleSubmit}>
         {FormFields.map((field) => (
           <FormControl
             mb={mb}

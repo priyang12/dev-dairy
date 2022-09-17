@@ -145,7 +145,7 @@ function LandingPage() {
                 Login
               </Link>
             </Button>
-            <Box>
+            <Box color="primary.800">
               <Icon
                 as={Arrow}
                 w={71}
