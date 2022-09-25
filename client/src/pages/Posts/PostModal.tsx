@@ -10,27 +10,29 @@ import {
   FormErrorMessage,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { useGetProjectsQuery, useGetRoadMapsQuery } from '../../API/ProjectAPI';
-import type { INewPost, IPost, IProject } from '../../interface';
+import { useGetProjects, useGetRoadMaps } from '../../API/ProjectAPI';
 import ModalComponent from '../../components/ModalComponent';
-import { ValidateDescription, ValidateTitle } from '../../utils/Validation';
+import { PostSchema, ZodError } from '@dev-dairy/zodvalidation';
+import type { IPost, IProject } from '../../interface';
 
-interface Props {
-  action: string;
-  post?: IPost;
-  actionSubmit: (data: any) => void;
+interface BaseProps {
   onClose: () => void;
   isOpen: boolean;
   page: number;
+  actionSubmit: (data: any) => void;
 }
 
-interface PostFields {
-  title: string;
-  description: string;
-  Project: string;
-  status: string;
-  roadMap: string;
+interface EditProps extends BaseProps {
+  action: 'update';
+  post: IPost;
 }
+
+interface CreateProps extends BaseProps {
+  action: 'create';
+  post?: IPost;
+}
+
+type Props = EditProps | CreateProps;
 
 const init = {
   title: '',
@@ -48,16 +50,12 @@ function PostModal({
   isOpen,
 }: Props) {
   const [RoadMapColor, setRoadMapColor] = useState('');
-  const [ErrorState, setErrorState] = useState<PostFields>(init);
+  const [ErrorState, setErrorState] = useState(init);
   const [proId, setproId] = useState(post?.project._id);
-  const { data: Projects, isLoading: LoadingProject } = useGetProjectsQuery('');
-
-  const { data: RoadMap, isFetching: RoadMapFetching } = useGetRoadMapsQuery(
-    proId,
-    {
-      skip: !proId,
-    },
-  );
+  const { data: Projects, isLoading: LoadingProject } = useGetProjects('');
+  const { data: RoadMap, isFetching: RoadMapFetching } = useGetRoadMaps(proId, {
+    skip: !proId,
+  });
 
   const ChangeRoadMapSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setproId(e.target.value);
@@ -75,58 +73,59 @@ function PostModal({
   const submit = (e: React.FormEvent<HTMLFormElement> | any) => {
     e.preventDefault();
 
-    const { title, description, Project, status, roadMap } = e.target
-      .elements as typeof e.target.elements & PostFields;
+    const {
+      title,
+      description,
+      Project,
+      status,
+      roadMap,
+    }: typeof e.target.elements = e.target.elements;
 
-    const ErrorTitle = ValidateTitle(title.value, 'Title');
-    const ErrorDes = ValidateDescription(description.value);
+    const ProjectData = Projects?.find((val) => val._id === Project.value);
+    const SelectedProjectData = {
+      _id: ProjectData?._id,
+      title: ProjectData?.title,
+      process: ProjectData?.process,
+    };
 
-    const ErrorProject =
-      Project.value === 'Select Project' ? 'Project is Required' : '';
-    const ErrorRoadMap =
-      roadMap.value === 'Select RoadMap' ? 'RoadMap is Required' : '';
-
-    if (ErrorTitle || ErrorDes || ErrorProject || ErrorRoadMap) {
-      setErrorState({
-        title: ErrorTitle,
-        description: ErrorDes,
-        Project: ErrorProject,
-        roadMap: ErrorRoadMap,
-        status: '',
-      });
-    } else {
-      const ProjectData = Projects?.find((val) => val._id === Project.value);
-      const data: INewPost | any = {
+    try {
+      const data = PostSchema.omit({
+        _id: true,
+        date: true,
+      }).parse({
         title: title.value,
         description: description.value,
         project: Project.value,
         status: status.value,
         roadMap: roadMap.value.split(',')[0],
-      };
+      });
 
-      if (action !== 'New') {
-        data._id = post?._id;
+      if (action === 'update') {
         actionSubmit({
-          UpdatedPost: data,
-          page,
-          ProjectData: {
-            _id: ProjectData?._id,
-            title: ProjectData?.title,
-            process: ProjectData?.process,
+          UpdatedPost: {
+            ...data,
+            _id: post._id,
           },
+          ProjectData: SelectedProjectData,
+          page,
         });
       } else {
         actionSubmit({
           CreatePost: data,
-          ProjectData: {
-            _id: ProjectData?._id,
-            title: ProjectData?.title,
-            process: ProjectData?.process,
-          },
+          ProjectData: SelectedProjectData,
         });
       }
-
       ResetModal();
+    } catch (error) {
+      if (error instanceof ZodError) {
+        const Errors = error.flatten().fieldErrors as any;
+        setErrorState({
+          ...Errors,
+          Project: Errors.project,
+        });
+      } else {
+        throw error;
+      }
     }
   };
 
@@ -170,7 +169,7 @@ function PostModal({
               value={post?.project._id}
               onChange={ChangeRoadMapSelect}
             >
-              <option>Select Project</option>
+              <option value="">Select Project</option>
 
               {Projects?.map((project: IProject) => (
                 <option key={project._id} value={project._id}>
@@ -199,7 +198,7 @@ function PostModal({
               bgColor={RoadMapColor}
               onChange={RoadMapChange}
             >
-              <option>Select RoadMap</option>
+              <option value="">Select RoadMap</option>
               {RoadMap?.map((roadMap) => (
                 <option
                   key={roadMap._id}
@@ -222,8 +221,13 @@ function PostModal({
           </Select>
         </FormControl>
         <ModalFooter>
-          <Button type="submit" colorScheme="blue" variant="solid">
-            {action === 'New' ? 'Create Log' : 'Update New Log'}
+          <Button
+            type="submit"
+            colorScheme="blue"
+            variant="solid"
+            data-testid="SubmitButton"
+          >
+            {action === 'create' ? 'Create Log' : 'Update New Log'}
           </Button>
         </ModalFooter>
       </form>

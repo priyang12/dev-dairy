@@ -1,3 +1,5 @@
+import { IPost } from '../interface';
+
 export interface AuthUserResponse {
   user: {
     _id: string;
@@ -11,7 +13,7 @@ export interface AuthUserResponse {
 export interface NewPostAPI {
   result: boolean;
   message: string;
-  post: any;
+  post: IPost;
 }
 
 export type UpdatePostAPI = NewPostAPI;

@@ -10,16 +10,17 @@ import { Ring } from '@priyang/react-component-lib';
 import { Link as RouterLink } from 'react-router-dom';
 import { BsFillFilterCircleFill } from 'react-icons/bs';
 import { useNewPost } from '../../API/PostAPI';
+import { useInfinitePosts } from '../../Hooks/useInfinitePosts';
+import { useApiToast } from '../../Hooks/useApiToast';
 import PostContainer from './PostContainer';
 import Spinner from '../../components/spinner';
 import MarginContainer from '../../components/MarginContainer';
 import PostModal from './PostModal';
 import BgImage from '../../components/BgImage';
-import { useApiToast } from '../../Hooks/useApiToast';
-import { useInfinitePosts } from '../../Hooks/useInfinitePosts';
 
 function Feeds() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   const {
     isLoading: LoadingPosts,
     isFetching,
@@ -78,7 +79,7 @@ function Feeds() {
             page={1}
             onClose={onClose}
             isOpen={isOpen}
-            action="New"
+            action="create"
             actionSubmit={AddNewPost}
           />
 

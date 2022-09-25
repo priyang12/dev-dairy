@@ -10,10 +10,10 @@ import {
   FormErrorMessage,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { useGetProjectsQuery, useGetRoadMapsQuery } from '../../API/ProjectAPI';
-import type { INewPost, IPost, IProject } from '../../interface';
+import { useGetProjects, useGetRoadMaps } from '../../API/ProjectAPI';
 import ModalComponent from '../../components/ModalComponent';
 import { ValidateDescription, ValidateTitle } from '../../utils/Validation';
+import type { IPost } from '../../interface';
 
 interface Props {
   action: string;
@@ -50,14 +50,11 @@ function PostModal({
   const [RoadMapColor, setRoadMapColor] = useState('');
   const [ErrorState, setErrorState] = useState<PostFields>(init);
   const [proId, setproId] = useState(post?.project._id);
-  const { data: Projects, isLoading: LoadingProject } = useGetProjectsQuery('');
+  const { data: Projects, isLoading: LoadingProject } = useGetProjects('');
 
-  const { data: RoadMap, isFetching: RoadMapFetching } = useGetRoadMapsQuery(
-    proId,
-    {
-      skip: !proId,
-    },
-  );
+  const { data: RoadMap, isFetching: RoadMapFetching } = useGetRoadMaps(proId, {
+    skip: !proId,
+  });
 
   const ChangeRoadMapSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setproId(e.target.value);
@@ -93,7 +90,7 @@ function PostModal({
       });
     } else {
       const ProjectData = Projects?.find((val) => val._id === Project.value);
-      const data: INewPost | any = {
+      const data: any = {
         title: title.value,
         description: description.value,
         project: Project.value,
@@ -158,7 +155,7 @@ function PostModal({
             >
               <option>Select Project</option>
 
-              {Projects?.map((project: IProject) => (
+              {Projects?.map((project) => (
                 <option key={project._id} value={project._id}>
                   {project.title}
                 </option>

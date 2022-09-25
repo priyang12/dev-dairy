@@ -8,13 +8,13 @@ import {
   Skeleton,
 } from '@chakra-ui/react';
 import { useSearchParams } from 'react-router-dom';
-import { useGetProjectsQuery } from '../../API/ProjectAPI';
+import { useGetProjects } from '../../API/ProjectAPI';
 import useForm from '../../Hooks/useForm';
 import { IProject } from '../../interface';
 
 function FilterMenu({ onClose }: { onClose: () => void }) {
   const [search, setSearch] = useSearchParams();
-  const { data: Projects, isLoading: LoadingProject } = useGetProjectsQuery({
+  const { data: Projects, isLoading: LoadingProject } = useGetProjects({
     Select: '-roadMap',
   });
   const { FormValues, ErrorsState, HandleChange } = useForm<{

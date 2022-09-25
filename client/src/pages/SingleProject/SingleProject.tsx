@@ -21,10 +21,7 @@ import { Navigate, useParams, Link as RouterLink } from 'react-router-dom';
 import { parseISO, format } from 'date-fns';
 import invert from 'invert-color';
 import { toast } from 'react-toastify';
-import {
-  useDeleteProjectMutation,
-  useGetProjectIdQuery,
-} from '../../API/ProjectAPI';
+import { useDeleteProject, useGetProjectId } from '../../API/ProjectAPI';
 import type { IRoadMap } from '../../interface';
 import Spinner from '../../components/spinner';
 import RandomColor from '../../utils/RandomColor';
@@ -37,11 +34,11 @@ function SingleProject() {
     isLoading,
     isError,
     data: project,
-  } = useGetProjectIdQuery(id, {
+  } = useGetProjectId(id, {
     skip: !id,
   });
 
-  const [DeleteProjectMutation, DeleteResult] = useDeleteProjectMutation();
+  const [DeleteProjectMutation, DeleteResult] = useDeleteProject();
 
   if (isFetching || isLoading) return <Spinner />;
 
@@ -189,7 +186,7 @@ function SingleProject() {
           </Link>
         </Flex>
       )}
-      {project.roadMap.length > 0 && (
+      {project.roadMap && project.roadMap.length > 0 && (
         <Box justifyContent="space-between" alignItems="center" mt={5}>
           <Flex alignItems="center" my={5}>
             <Heading as="h3" fontSize="2xl">

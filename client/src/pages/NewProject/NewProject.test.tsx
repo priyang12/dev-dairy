@@ -1,3 +1,4 @@
+import { ProjectErrorMessage } from '@dev-dairy/zodvalidation';
 import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
 import { BrowserRouter } from 'react-router-dom';
@@ -91,21 +92,27 @@ it('Check Field Inputs and validation', async () => {
   await userEvent.click(CreateProjectBtn);
 
   // check if the validation is working
+  expect(screen.getByText(ProjectErrorMessage.title.short)).toBeInTheDocument();
   expect(
-    screen.getByText(/Title must be between 4 and 30 characters/),
+    screen.getByText(ProjectErrorMessage.description.short),
   ).toBeInTheDocument();
-  expect(
-    screen.getByText(/Description must be between 10 and 400 characters/),
-  ).toBeInTheDocument();
-
-  expect(screen.getByText(/Enter Valid Github Link/)).toBeInTheDocument();
-  expect(screen.getByText(/Enter Valid URL for Website/)).toBeInTheDocument();
+  expect(screen.getByText(ProjectErrorMessage.github)).toBeInTheDocument();
+  expect(screen.getByText(ProjectErrorMessage.website)).toBeInTheDocument();
 
   // check for Empty Title Message
   await userEvent.clear(Title);
   await userEvent.clear(Description);
   expect(screen.getByText(/TITLE is required/)).toBeInTheDocument();
   expect(screen.getByText(/DESCRIPTION is required/)).toBeInTheDocument();
+
+  // new input
+  await userEvent.type(Title, 'Test Title long long long long long long long');
+  await userEvent.type(Github, 'https://github.com');
+  await userEvent.type(Website, 'https://www.youtube.com');
+  await userEvent.click(CreateProjectBtn);
+  expect(screen.getByText(ProjectErrorMessage.title.long)).toBeInTheDocument();
+  expect(screen.getByText(ProjectErrorMessage.github)).toBeInTheDocument();
+  expect(screen.getByText(ProjectErrorMessage.website)).toBeInTheDocument();
 });
 
 it('Technology Input and Delete', async () => {
@@ -148,7 +155,7 @@ it('Valid Input With Api Call', async () => {
     CreateProjectBtn,
   } = setup();
 
-  await userEvent.type(Title, 'Test Title');
+  await userEvent.type(Title, 'Test Titles');
   await userEvent.type(Description, 'Test Description');
   await userEvent.clear(process);
   await userEvent.type(process, '20');

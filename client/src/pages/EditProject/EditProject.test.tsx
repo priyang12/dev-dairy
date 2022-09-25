@@ -1,3 +1,4 @@
+import { ProjectErrorMessage } from '@dev-dairy/zodvalidation';
 import userEvent from '@testing-library/user-event';
 import { createMemoryHistory } from 'history';
 import { rest } from 'msw';
@@ -78,11 +79,15 @@ it('Field Validation', async () => {
   await userEvent.clear(Github);
   await userEvent.click(Live);
   await userEvent.clear(Website);
+
   await userEvent.click(updateButton);
 
-  expect(screen.getByText(/DESCRIPTION is required/)).toBeInTheDocument();
-  expect(screen.getByText(/WEBSITE is required/)).toBeInTheDocument();
-  expect(screen.getByText(/GITHUB is required/)).toBeInTheDocument();
+  expect(screen.getByText(ProjectErrorMessage.title.short)).toBeInTheDocument();
+  expect(
+    screen.getByText(ProjectErrorMessage.description.short),
+  ).toBeInTheDocument();
+  expect(screen.getByText(ProjectErrorMessage.github)).toBeInTheDocument();
+  expect(screen.getByText(ProjectErrorMessage.website)).toBeInTheDocument();
 });
 
 it('Update Edit Project', async () => {

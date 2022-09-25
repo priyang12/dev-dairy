@@ -20,7 +20,7 @@ import {
   SliderTrack,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { useEditRoadMapMutation } from '../../API/ProjectAPI';
+import { useEditRoadMap } from '../../API/ProjectAPI';
 
 import ModalComponent from '../../components/ModalComponent';
 import type { IRoadMap } from '../../interface';
@@ -79,7 +79,7 @@ function EditRoadMap({
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [roadMapError, setRoadMapError] = useState('');
   const [Progress, setProgress] = useState(RoadMap.progress);
-  const [EditRoadMapCall, { isSuccess, isLoading }] = useEditRoadMapMutation();
+  const [EditRoadMapCall, { isSuccess, isLoading }] = useEditRoadMap();
 
   useEffect(() => {
     if (isSuccess && isOpen) {

@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const RoadMapSchema = z.object({
+  _id: z.string(),
   new: z.string(),
   name: z.string(),
   color: z.string(),
@@ -8,10 +9,29 @@ export const RoadMapSchema = z.object({
   github: z.string().optional(),
 });
 
+export const ProjectErrorMessage = {
+  title: {
+    short: "Project title is too short (min 3 characters)",
+    long: "Project title is too long (max 100 characters)",
+  },
+  description: {
+    short: "Project description is too short (min 10 characters)",
+    long: "Project description is too long (max 500 characters)",
+  },
+  github: "Invalid github url",
+  website: "Please enter a valid URL starting with http:// or https://",
+};
+
 export const ProjectSchema = z.object({
   user: z.any(),
-  title: z.string().min(4).max(30),
-  description: z.string().min(10).max(400),
+  title: z
+    .string()
+    .min(4, ProjectErrorMessage.title.short)
+    .max(30, ProjectErrorMessage.title.long),
+  description: z
+    .string()
+    .min(10, ProjectErrorMessage.description.short)
+    .max(500, ProjectErrorMessage.description.long),
   technologies: z.array(z.string()),
   roadMap: z.array(RoadMapSchema).optional(),
   process: z.number().default(1),
@@ -28,13 +48,13 @@ export const ProjectSchema = z.object({
         return false;
       }
       return false;
-    }, "Must be a valid Github URL")
+    }, ProjectErrorMessage.github)
     .optional(),
 
   website: z
     .string()
     .refine((val) => val.startsWith("http://") || val.startsWith("https://"), {
-      message: "Please enter a valid URL starting with http:// or https://",
+      message: ProjectErrorMessage.website,
     })
     .optional(),
   date: z.date().optional(),

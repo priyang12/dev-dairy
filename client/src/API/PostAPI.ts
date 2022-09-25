@@ -34,7 +34,7 @@ const PostApi = createApi({
       },
       providesTags: ['Posts'],
     }),
-    GetPost: builder.query<IPost, Partial<string>>({
+    GetPost: builder.query<IPost, string>({
       query(id) {
         return {
           url: `/${id}`,
@@ -42,7 +42,7 @@ const PostApi = createApi({
         };
       },
     }),
-    GetPostByProject: builder.query<IPost[], Partial<string>>({
+    GetPostByProject: builder.query<IPost[], string>({
       query(id) {
         return {
           url: `/project/${id}`,
@@ -62,10 +62,10 @@ const PostApi = createApi({
     }),
     NewPost: builder.mutation<
       NewPostAPI,
-      Partial<{
+      {
         CreatePost: IPost;
         ProjectData: Pick<IProject, '_id' | 'title' | 'process'>;
-      }>
+      }
     >({
       query({ CreatePost }) {
         return {
@@ -85,7 +85,7 @@ const PostApi = createApi({
                 page: 1,
                 limit: 10,
               },
-              (posts: IPost[]) => [
+              (posts) => [
                 {
                   ...NewPost.post,
                   project: ProjectData,

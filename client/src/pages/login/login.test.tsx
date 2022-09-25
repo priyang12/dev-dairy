@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import API from '../../API';
 import server from '../../mock/server';
 import { render, screen, waitForElementToBeRemoved } from '../../test-utils';
-
+import { AuthErrorMessages } from '@dev-dairy/zodvalidation';
 import Login from './index';
 
 const setup = (): any => {
@@ -33,7 +33,8 @@ it('Invalided input', async () => {
   await userEvent.type(email, 'test');
   await userEvent.type(password, 'test');
   await userEvent.click(submit);
-  screen.getByText(/Please enter a valid email/);
+  screen.getByText(AuthErrorMessages.email);
+  screen.getByText(AuthErrorMessages.password);
 });
 
 it('Valid input', async () => {
