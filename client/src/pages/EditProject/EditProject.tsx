@@ -28,15 +28,13 @@ import {
   Textarea,
   Link,
 } from '@chakra-ui/react';
-import {
-  useGetProjectIdQuery,
-  useUpdateProjectMutation,
-} from '../../API/ProjectAPI';
+import { useGetProjectId, useUpdateProject } from '../../API/ProjectAPI';
 import Spinner from '../../components/spinner';
 import useForm from '../../Hooks/useForm';
 import type { IProject } from '../../interface';
 import { useApiToast } from '../../Hooks/useApiToast';
 import { CheckError } from '../../utils/helpers';
+import { ProjectSchema, ZodError } from '@dev-dairy/zodvalidation';
 
 type EditProjectFrom = Omit<IProject, 'roadMap' | '_id' | 'user'>;
 
@@ -59,14 +57,13 @@ function EditProject() {
     isError,
     error,
     data: project,
-  } = useGetProjectIdQuery(id, {
+  } = useGetProjectId(id, {
     skip: !id,
   });
+  const [UpdateProjectMutation, UpdateResult] = useUpdateProject();
 
-  const { FormValues, ErrorsState, HandleChange, setFormValues } =
+  const { FormValues, ErrorsState, HandleChange, setFormValues, setErrors } =
     useForm(init);
-
-  const [UpdateProjectMutation, UpdateResult] = useUpdateProjectMutation();
 
   useApiToast({
     Result: UpdateResult,
@@ -74,10 +71,10 @@ function EditProject() {
     successMessage: 'Project Updated Successfully',
   });
 
-  const ProcessChange = (value: number | any) => {
+  const ProcessChange = (value: number | string) => {
     setFormValues((State: EditProjectFrom) => ({
       ...State,
-      process: value,
+      process: Number(value),
     }));
   };
 
@@ -87,7 +84,26 @@ function EditProject() {
       top: 0,
       behavior: 'smooth',
     });
-    UpdateProjectMutation({ ...FormValues, _id: id });
+
+    try {
+      const parsedData = ProjectSchema.omit({
+        date: true,
+        roadMap: true,
+      }).parse(FormValues);
+
+      UpdateProjectMutation({ ...parsedData, _id: id });
+    } catch (error) {
+      if (error instanceof ZodError) {
+        const Errors = error.flatten().fieldErrors as any;
+        setErrors({
+          ...Errors,
+          title: Errors.title,
+          description: Errors.description,
+          github: Errors.github,
+          website: Errors.website,
+        });
+      }
+    }
   };
 
   useLayoutEffect(() => {
@@ -166,7 +182,7 @@ function EditProject() {
             id="title"
             name="title"
             placeholder="Pick Good Project Title"
-            defaultValue={FormValues.title}
+            value={FormValues.title}
             onChange={HandleChange}
             required
           />

@@ -1,18 +1,13 @@
 import { Schema, model } from "mongoose";
-import type { Model, Document } from "mongoose";
+import type { Model } from "mongoose";
+import { z, PostSchema as ZodPost } from "@dev-dairy/zodvalidation";
 
-export interface IPost extends Document {
-  user: string;
-  title: string;
-  description: string;
-  project: string;
-  status: string;
-  roadMap: any;
-  date: Date;
-}
+export type IPost = z.infer<typeof ZodPost> & {
+  _id: string;
+};
 
 // Create Schema
-const PostSchema = new Schema({
+const PostSchema = new Schema<IPost>({
   user: {
     type: Schema.Types.ObjectId,
     required: true,
@@ -45,6 +40,7 @@ const PostSchema = new Schema({
     default: Date.now,
   },
 });
+
 const Post: Model<IPost> = model<IPost>("post", PostSchema);
 
 export default Post;

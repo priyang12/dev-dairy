@@ -1,13 +1,12 @@
 import { Button, Flex, Heading } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
-import { useGetProjectsQuery } from '../../API/ProjectAPI';
+import { useGetProjects } from '../../API/ProjectAPI';
 import ProjectCard from '../SingleProject/ProjectCard';
 import Spinner from '../../components/spinner';
-import type { IProject } from '../../interface';
 import Container from '../../components/Container';
 
 function Projects() {
-  const { isLoading, isFetching, data } = useGetProjectsQuery('');
+  const { isLoading, isFetching, data } = useGetProjects('');
 
   if (isLoading || isFetching) return <Spinner />;
 
@@ -52,7 +51,7 @@ function Projects() {
       </Button>
 
       <Flex gap={10} direction="column">
-        {data.map((project: IProject) => (
+        {data.map((project) => (
           <ProjectCard Project={project} key={project._id} />
         ))}
       </Flex>

@@ -111,7 +111,7 @@ function PostContainer({ post, page }: PropTypes) {
             page={page}
             onClose={onClose}
             isOpen={isOpen}
-            action="Update"
+            action="update"
             post={post}
             actionSubmit={UpdateMutate}
           />

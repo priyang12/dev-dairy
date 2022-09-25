@@ -1,14 +1,13 @@
-import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
 import { format, parseISO } from 'date-fns';
 import { BrowserRouter } from 'react-router-dom';
+import userEvent from '@testing-library/user-event';
 import {
   render,
   screen,
   waitForElementToBeRemoved,
   waitFor,
 } from '../../test-utils';
-
 import {
   PostsResponse,
   ProjectsResponse,
@@ -16,8 +15,8 @@ import {
 } from '../../mock/MockedData';
 import Posts from './index';
 import server from '../../mock/server';
-
 import API from '../../API';
+import { PostErrorMessages } from '@dev-dairy/zodvalidation';
 
 const setup = (): any => {
   render(
@@ -96,14 +95,16 @@ it('Post Field Validation', async () => {
 
   await userEvent.click(screen.getByText('Create New Entry'));
 
-  expect(screen.getByText('New Log')).toBeInTheDocument();
+  expect(screen.getByText('create Log')).toBeInTheDocument();
 
   await userEvent.click(screen.getByText('Create Log'));
 
-  expect(screen.getByText(/must be between 4 and 30 characters/));
-  expect(screen.getByText(/must be between 10 and 400 characters/));
-  expect(screen.getByText(/Project is Required/));
-  expect(screen.getByText(/RoadMap is Required/));
+  expect(screen.getByText(PostErrorMessages.title.short)).toBeInTheDocument();
+  expect(
+    screen.getByText(PostErrorMessages.description.short),
+  ).toBeInTheDocument();
+  expect(screen.getByText(PostErrorMessages.project)).toBeInTheDocument();
+  expect(screen.getByText(PostErrorMessages.roadMap)).toBeInTheDocument();
 });
 
 it('Add New Post', async () => {
@@ -116,7 +117,7 @@ it('Add New Post', async () => {
 
   await userEvent.click(screen.getByText('Create New Entry'));
 
-  expect(screen.getByText('New Log')).toBeInTheDocument();
+  expect(screen.getByText('create Log')).toBeInTheDocument();
   await userEvent.type(screen.getByLabelText('Title'), 'New Title');
   await userEvent.type(screen.getByLabelText('Description'), 'New Description');
 
@@ -136,9 +137,11 @@ it('Add New Post', async () => {
   const ProcessSelect = screen.getByLabelText('status');
   await userEvent.selectOptions(ProcessSelect, ['Started']);
 
-  await userEvent.click(screen.getByText('Create Log'));
+  const submitting = screen.getByTestId('SubmitButton');
 
-  await waitForElementToBeRemoved(screen.queryByText(/Create Log/));
+  await userEvent.click(submitting);
+
+  await waitForElementToBeRemoved(submitting);
 
   await waitFor(() => screen.findByText(/New post added successfully/), {
     timeout: 2100,

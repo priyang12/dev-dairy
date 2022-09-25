@@ -1,3 +1,4 @@
+import { AuthErrorMessages } from '@dev-dairy/zodvalidation';
 import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
 import { BrowserRouter } from 'react-router-dom';
@@ -14,7 +15,7 @@ const setup = (): any => {
     </BrowserRouter>,
   );
   return {
-    name: screen.getByLabelText(/Name/),
+    name: screen.getByLabelText(/Username/),
     email: screen.getByLabelText(/Email/),
     password: screen.getByLabelText('Password'),
     password2: screen.getByLabelText(/ConfirmPassword/),
@@ -33,20 +34,15 @@ it('Render Register Page', () => {
 
 it('Invalided input', async () => {
   const { email, password, name, password2, submit } = setup();
-  await userEvent.type(name, 'prg');
+  await userEvent.type(name, 'pr');
   await userEvent.type(email, 'test');
   await userEvent.type(password, 'test');
   await userEvent.type(password2, 'test2');
   await userEvent.click(submit);
-  expect(
-    screen.getByText(/Name must be between 4 and 30 characters/),
-  ).toBeInTheDocument();
-
-  expect(screen.getByText(/Please enter a valid email/)).toBeInTheDocument();
-  expect(
-    screen.getByText(/Password must be at least 6 characters/),
-  ).toBeInTheDocument();
-  expect(screen.getByText(/Passwords do not match/)).toBeInTheDocument();
+  expect(screen.getByText(AuthErrorMessages.username)).toBeInTheDocument();
+  expect(screen.getByText(AuthErrorMessages.email)).toBeInTheDocument();
+  expect(screen.getByText(AuthErrorMessages.password)).toBeInTheDocument();
+  expect(screen.getByText(AuthErrorMessages.password2)).toBeInTheDocument();
 });
 
 it('Valid input', async () => {

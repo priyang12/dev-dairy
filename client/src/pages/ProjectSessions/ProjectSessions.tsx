@@ -6,7 +6,7 @@ import { FcCancel } from 'react-icons/fc';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useGetProjectIdQuery } from '../../API/ProjectAPI';
+import { useGetProjectId } from '../../API/ProjectAPI';
 import Container from '../../components/Container';
 import Spinner from '../../components/spinner';
 import { setProject } from '../../features/WorkSessionSlice';
@@ -28,7 +28,7 @@ function ProjectSessions() {
   const { Project: SessionProject } = useSelector(
     (state: StoreState) => state.WorkSession,
   );
-  const { data: Project, isLoading } = useGetProjectIdQuery(id);
+  const { data: Project, isLoading } = useGetProjectId(id);
   const { data: ProjectSession, isLoading: LoadingSessions } =
     useGetSessionsByProject(id);
   const [DeleteAllSessions, DeleteResult] = useDeleteAllProjectSessions();
@@ -196,7 +196,10 @@ function ProjectSessions() {
                   {toDaysMinutesSeconds(session.Time, 'hh:mm:ss')}
                 </Heading>
 
-                <Text>{format(parseISO(session.createdAt), 'yyyy-MM-dd')}</Text>
+                <Text>
+                  {session.createdAt &&
+                    format(parseISO(session.createdAt), 'yyyy-MM-dd')}
+                </Text>
                 {DeleteCheck &&
                   (!DeleteList.has(session._id) ? (
                     <IconButton

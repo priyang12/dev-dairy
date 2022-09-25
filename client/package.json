@@ -30,7 +30,8 @@
     "redux-persist": "^6.0.0",
     "typescript": "^4.6.3",
     "uuid": "^8.3.2",
-    "web-vitals": "^0.2.4"
+    "web-vitals": "^0.2.4",
+    "@dev-dairy/zodvalidation": "*"
   },
   "resolutions": {
     "redux-persist/@types/react": "17.0.43",

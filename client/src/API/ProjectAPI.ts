@@ -47,17 +47,20 @@ const ProjectApi = createApi({
     }),
     GetProjectRoadMap: builder.query<
       IProject,
-      Partial<{
+      {
         projectId: string;
         RoadMapId: string;
-      }>
+      }
     >({
       query: ({ projectId, RoadMapId }) => ({
         url: `/${projectId}/roadMap/${RoadMapId}`,
         method: 'get',
       }),
     }),
-    CreateProject: builder.mutation<NewProjectAPI, Partial<IProject>>({
+    CreateProject: builder.mutation<
+      NewProjectAPI,
+      Omit<IProject, 'date' | '_id'>
+    >({
       query(data) {
         return {
           url: '',
@@ -70,7 +73,7 @@ const ProjectApi = createApi({
           const { data: NewProject } = await queryFulfilled;
           toast('Project Created Successfully', {
             type: 'success',
-            autoClose: 5000,
+            autoClose: 2000,
           });
           dispatch(
             ProjectApi.util.updateQueryData(
@@ -86,10 +89,10 @@ const ProjectApi = createApi({
       },
     }),
     UpdateProject: builder.mutation<
-      Partial<{
+      {
         result: boolean;
         message: string;
-      }>,
+      },
       Partial<IProject>
     >({
       query(data) {
@@ -120,7 +123,7 @@ const ProjectApi = createApi({
       },
       invalidatesTags: ['projectId'],
     }),
-    DeleteProject: builder.mutation<any, Partial<string>>({
+    DeleteProject: builder.mutation<any, string>({
       query(id) {
         return {
           url: `/${id}`,
@@ -175,7 +178,7 @@ const ProjectApi = createApi({
               'GetProjectId',
               projectId,
               (project: IProject) => {
-                project.roadMap.push(resData.roadmap);
+                project.roadMap?.push(resData.roadmap);
                 return project;
               },
             ),
@@ -272,7 +275,7 @@ const ProjectApi = createApi({
               'GetProjectId',
               projectId,
               (project: IProject) => {
-                project.roadMap = project.roadMap.filter(
+                project.roadMap = project.roadMap?.filter(
                   (roadMap) => roadMap._id !== RoadMapId[0],
                 );
                 return project;
@@ -290,16 +293,16 @@ const ProjectApi = createApi({
 });
 
 export const {
-  useGetProjectsQuery,
+  useGetProjectsQuery: useGetProjects,
   usePrefetch,
-  useGetProjectIdQuery,
+  useGetProjectIdQuery: useGetProjectId,
   useCreateProjectMutation: useCreateProject,
-  useDeleteProjectMutation,
-  useUpdateProjectMutation,
-  useGetRoadMapsQuery,
-  useCreateNewRoadMapMutation,
-  useRemoveRoadMapMutation,
-  useEditRoadMapMutation,
+  useDeleteProjectMutation: useDeleteProject,
+  useUpdateProjectMutation: useUpdateProject,
+  useGetRoadMapsQuery: useGetRoadMaps,
+  useCreateNewRoadMapMutation: useCreateNewRoadMap,
+  useRemoveRoadMapMutation: useRemoveRoadMap,
+  useEditRoadMapMutation: useEditRoadMap,
 } = ProjectApi;
 
 export default ProjectApi;
