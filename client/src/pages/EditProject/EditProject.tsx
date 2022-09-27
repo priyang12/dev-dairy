@@ -28,13 +28,13 @@ import {
   Textarea,
   Link,
 } from '@chakra-ui/react';
+import { ProjectSchema, ZodError } from '@dev-dairy/zodvalidation';
 import { useGetProjectId, useUpdateProject } from '../../API/ProjectAPI';
 import Spinner from '../../components/spinner';
 import useForm from '../../Hooks/useForm';
 import type { IProject } from '../../interface';
 import { useApiToast } from '../../Hooks/useApiToast';
 import { CheckError } from '../../utils/helpers';
-import { ProjectSchema, ZodError } from '@dev-dairy/zodvalidation';
 
 type EditProjectFrom = Omit<IProject, 'roadMap' | '_id' | 'user'>;
 

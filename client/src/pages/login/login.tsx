@@ -12,10 +12,10 @@ import {
   Link,
   Text,
 } from '@chakra-ui/react';
+import { LoginSchema, ZodError } from '@dev-dairy/zodvalidation';
 import type { FormField } from '../../components/CustomForm';
 import type { AuthState } from '../../interface';
 import { useLogin } from '../../API/AuthAPI';
-import { LoginSchema, ZodError } from '@dev-dairy/zodvalidation';
 import CustomForm from '../../components/CustomForm';
 
 function Login() {

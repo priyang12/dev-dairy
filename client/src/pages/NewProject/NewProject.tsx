@@ -24,12 +24,12 @@ import {
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuIdv4 } from 'uuid';
+import { ProjectSchema, ZodError } from '@dev-dairy/zodvalidation';
 import { useCreateProject } from '../../API/ProjectAPI';
 import Container from '../../components/Container';
 import useForm from '../../Hooks/useForm';
 import Spinner from '../../components/spinner';
 import { CheckURL } from '../../utils/Validation';
-import { ProjectSchema, ZodError } from '@dev-dairy/zodvalidation';
 import type { IRoadMap } from '../../interface';
 
 const init = {
@@ -113,7 +113,7 @@ function NewProject() {
         }).parse({
           title: Title,
           description: Description,
-          process: process,
+          process,
           github: Github,
           live: Live,
           website: Website,

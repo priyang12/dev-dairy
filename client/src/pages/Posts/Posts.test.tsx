@@ -2,6 +2,7 @@ import { rest } from 'msw';
 import { format, parseISO } from 'date-fns';
 import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
+import { PostErrorMessages } from '@dev-dairy/zodvalidation';
 import {
   render,
   screen,
@@ -16,7 +17,6 @@ import {
 import Posts from './index';
 import server from '../../mock/server';
 import API from '../../API';
-import { PostErrorMessages } from '@dev-dairy/zodvalidation';
 
 const setup = (): any => {
   render(

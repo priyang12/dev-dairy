@@ -1,10 +1,10 @@
 import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
 import { BrowserRouter } from 'react-router-dom';
+import { AuthErrorMessages } from '@dev-dairy/zodvalidation';
 import API from '../../API';
 import server from '../../mock/server';
 import { render, screen, waitForElementToBeRemoved } from '../../test-utils';
-import { AuthErrorMessages } from '@dev-dairy/zodvalidation';
 import Login from './index';
 
 const setup = (): any => {

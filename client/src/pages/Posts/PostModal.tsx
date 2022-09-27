@@ -10,9 +10,9 @@ import {
   FormErrorMessage,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
+import { PostSchema, ZodError } from '@dev-dairy/zodvalidation';
 import { useGetProjects, useGetRoadMaps } from '../../API/ProjectAPI';
 import ModalComponent from '../../components/ModalComponent';
-import { PostSchema, ZodError } from '@dev-dairy/zodvalidation';
 import type { IPost, IProject } from '../../interface';
 
 interface BaseProps {

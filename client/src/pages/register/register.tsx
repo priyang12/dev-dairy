@@ -11,11 +11,11 @@ import {
   Heading,
   Text,
 } from '@chakra-ui/react';
+import { RegisterSchema, ZodError } from '@dev-dairy/zodvalidation';
 import type { FormField } from '../../components/CustomForm';
 import type { AuthState } from '../../interface';
 import { StoreState } from '../../store';
 import { useRegister } from '../../API/AuthAPI';
-import { RegisterSchema, ZodError } from '@dev-dairy/zodvalidation';
 import CustomForm from '../../components/CustomForm';
 
 function Register() {

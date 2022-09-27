@@ -13,8 +13,11 @@ Object.defineProperty(window, 'scrollTo', {
   constructor() {
     // listener = ls;
   }
+
   observe() {}
+
   unobserve() {}
+
   disconnect() {}
 };
 

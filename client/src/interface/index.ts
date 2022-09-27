@@ -6,6 +6,7 @@ import {
   WorkSessionSchema,
   z,
 } from '@dev-dairy/zodvalidation';
+
 export interface AuthState {
   authenticated: boolean;
   token: string;
