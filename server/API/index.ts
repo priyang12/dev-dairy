@@ -4,6 +4,7 @@ import UserRoutes from "./routes/User.routes";
 import ProjectRoutes from "./routes/Project.routes";
 import PostRoutes from "./routes/Post.routes";
 import WorkSessions from "./routes/WorkSessions.routes";
+import SharedProjectModel from "./routes/ShareProject.routes";
 import agendas from "./routes/agenda.routes";
 
 export default () => {
@@ -13,6 +14,7 @@ export default () => {
   ProjectRoutes(app);
   PostRoutes(app);
   WorkSessions(app);
+  SharedProjectModel(app);
   agendas(app);
   return app;
 };

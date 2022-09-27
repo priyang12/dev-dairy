@@ -1,8 +1,4 @@
 import { Service, Inject } from "typedi";
-
-import argon2 from "argon2";
-import { randomBytes } from "crypto";
-
 import { Model } from "mongoose";
 import { IUser } from "../models/User";
 import { Logger } from "winston";

@@ -24,10 +24,20 @@ export default async ({ expressApp }: any) => {
     name: "workSessionsModel",
     model: require("../models/WorkSessions").default,
   };
+  const sharedProjectModel = {
+    name: "sharedProjectModel",
+    model: require("../models/ShareProject").default,
+  };
 
   await dependencyInjectorLoader({
     mongoConnection,
-    models: [userModel, projectModel, postModel, workSessionsModel],
+    models: [
+      userModel,
+      projectModel,
+      postModel,
+      workSessionsModel,
+      sharedProjectModel,
+    ],
   });
 
   Logger.info("✌️ Dependency Injector loaded");
