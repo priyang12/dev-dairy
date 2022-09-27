@@ -47,6 +47,25 @@ export const GetSharedProject = asyncHandler(
 );
 
 /**
+ * @route   GET api/shareProject/:ProjectId
+ * @desc Get Project Token
+ * @access  Private
+ * @param   {string} ProjectId - Project ID
+ * @returns {object} Project Token
+ */
+export const GetProjectToken = asyncHandler(
+  async (req: Request, res: Response): Promise<any> => {
+    const { ProjectId } = req.params;
+    const projectServiceInstance = Container.get(ProjectService);
+    const ServiceRes = await projectServiceInstance.GetProjectToken(
+      ProjectId,
+      req.user._id
+    );
+    return res.status(200).json(ServiceRes);
+  }
+);
+
+/**
  * @route DELETE api/shareProject/:Id
  * @desc Delete a shared project
  * @access Private

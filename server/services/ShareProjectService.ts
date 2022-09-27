@@ -31,17 +31,20 @@ export default class ShareProjectService {
     });
 
     if (CheckSharedProject) {
-      throw new Error("CRUD Error: Project Token already exists");
+      throw new Error("CRUD Error: Project is already shared");
     }
+    const ExDate = new Date(expirationTime);
+
     const TokenId = uuidv4();
     const token = jwt.sign({ Id: TokenId }, keys.jwtSecret || "abc123", {
-      expiresIn: expirationTime,
+      expiresIn: ExDate.getTime() / 1000,
     });
 
     const sharedProject = await this.sharedProjectModel.create({
       project: project,
       user: userId,
       JWTToken: TokenId,
+      expirationTime: ExDate,
     });
 
     if (!sharedProject) {
@@ -52,7 +55,6 @@ export default class ShareProjectService {
 
   public async GetSharedProject(token: string) {
     const ProjectToken = await jwt.verify(token, keys.jwtSecret || "abc123");
-    console.log(ProjectToken);
 
     const sharedProject = await this.sharedProjectModel.findOne({
       JWTToken:
@@ -66,6 +68,27 @@ export default class ShareProjectService {
     return { project: Project };
   }
 
+  public async GetProjectToken(projectId: string, userId: string) {
+    const sharedProject = await this.sharedProjectModel.findOne({
+      project: projectId,
+      user: userId,
+    });
+    if (!sharedProject) {
+      return {
+        message: "Project is not shared",
+        token: null,
+      };
+    }
+    const ExDate = sharedProject.expirationTime as Date;
+
+    const UUidToken = sharedProject.JWTToken;
+    const token = jwt.sign({ Id: UUidToken }, keys.jwtSecret || "abc123", {
+      expiresIn: ExDate.getTime() / 1000,
+    });
+    return {
+      token: token,
+    };
+  }
   public async DeleteSharedProject(userId: string, projectId: string) {
     const sharedProject = await this.sharedProjectModel.deleteOne({
       user: userId,

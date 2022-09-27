@@ -14,6 +14,10 @@ const ShareProjectSchema = new Schema({
     required: true,
     ref: "User",
   },
+  expirationTime: {
+    type: Date,
+    required: true,
+  },
   date: {
     type: Date,
     default: Date.now,

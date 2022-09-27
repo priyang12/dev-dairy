@@ -3,14 +3,18 @@ import {
   GetSharedProject,
   ShareProject,
   DeleteSharedProject,
+  GetProjectToken,
 } from "../controllers/ShareProjectController";
 import auth from "../middleware/auth";
 
 export default (app: Router) => {
   app
     .route("/shareProject")
-    .post(auth, ShareProject)
-    .get(auth, GetSharedProject);
+    .get(auth, GetSharedProject)
+    .post(auth, ShareProject);
 
-  app.route("/shareProject/:ProjectId").delete(auth, DeleteSharedProject);
+  app
+    .route("/shareProject/:ProjectId")
+    .get(auth, GetProjectToken)
+    .delete(auth, DeleteSharedProject);
 };
