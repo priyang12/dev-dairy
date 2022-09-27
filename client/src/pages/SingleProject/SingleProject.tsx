@@ -63,7 +63,10 @@ function SingleProject() {
 
   return (
     <Container maxW="900px" mb={10}>
-      <Flex alignItems="flex-end" justifyContent="flex-end">
+      <Flex alignItems="flex-end" justifyContent="flex-end" gap={5}>
+        <Button mt={5} as={RouterLink} to={`/ShareProject/${project._id}`}>
+          Share Project
+        </Button>
         <Button mt={5} as={RouterLink} to={`/Project/Sessions/${project._id}`}>
           Work Sessions
         </Button>
@@ -202,7 +205,14 @@ function SingleProject() {
                     key={road.name}
                     p={2}
                     bg={`${road.color ? road.color : RandomColor()}`}
-                    color={`${road.color ? invert(road.color) : RandomColor()}`}
+                    color={`${
+                      road.color
+                        ? invert(road.color, {
+                            black: '#000',
+                            white: '#fff',
+                          })
+                        : RandomColor()
+                    }`}
                     fontSize="1.5rem"
                     borderRadius={10}
                     width="100%"
