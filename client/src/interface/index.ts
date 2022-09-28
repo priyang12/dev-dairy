@@ -3,6 +3,7 @@ import {
   ProjectSchema,
   RoadMapSchema,
   SessionSchema,
+  ShareProjectSchema,
   WorkSessionSchema,
   z,
 } from '@dev-dairy/zodvalidation';
@@ -64,11 +65,4 @@ export type IWorkSessions = Omit<
   date: string;
 };
 
-// export interface IWorkSessions {
-//   _id: string;
-//   Time: number;
-//   user: string;
-
-//   session: ISession[];
-
-// }
+export type ISharedProject = typeof ShareProjectSchema;

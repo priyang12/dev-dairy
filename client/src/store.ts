@@ -16,6 +16,7 @@ import AuthApi from './API/AuthAPI';
 import PostApi from './API/PostAPI';
 import UserApi from './API/UserAPI';
 import ProjectApi from './API/ProjectAPI';
+import ShareProjectApi from './API/ShareProjectAPI';
 import WorkSessionApi from './API/WorkSessionsAPI';
 import AuthReducer from './features/AuthSlice';
 import UserReducer from './features/UserSlice';
@@ -34,6 +35,7 @@ const RootReducers = combineReducers({
   [PostApi.reducerPath]: PostApi.reducer,
   [ProjectApi.reducerPath]: ProjectApi.reducer,
   [WorkSessionApi.reducerPath]: WorkSessionApi.reducer,
+  [ShareProjectApi.reducerPath]: ShareProjectApi.reducer,
   Auth: AuthReducer,
   User: UserReducer,
   Music: MusicReducer,
@@ -59,6 +61,7 @@ export const createStoreWithMiddleware = (initialState = {}): Store =>
         .concat(UserApi.middleware)
         .concat(PostApi.middleware)
         .concat(ProjectApi.middleware)
+        .concat(ShareProjectApi.middleware)
         .concat(WorkSessionApi.middleware),
   });
 

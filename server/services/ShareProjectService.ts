@@ -87,6 +87,7 @@ export default class ShareProjectService {
     });
     return {
       token: token,
+      expirationTime: ExDate,
     };
   }
   public async DeleteSharedProject(userId: string, projectId: string) {

@@ -18,13 +18,13 @@ const ShareProjectSchema = new Schema({
     type: Date,
     required: true,
   },
-  date: {
-    type: Date,
-    default: Date.now,
-  },
   JWTToken: {
     type: String,
     required: true,
+  },
+  date: {
+    type: Date,
+    default: Date.now,
   },
 });
 export type ISharedProject = InferSchemaType<typeof ShareProjectSchema>;

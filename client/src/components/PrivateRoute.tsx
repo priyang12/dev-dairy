@@ -4,12 +4,12 @@ import { Navigate, Outlet } from 'react-router-dom';
 import type { AuthState } from '../interface';
 import Navbar from './Navbar';
 import FallBackSuspenseWrapper from './FallBackSuspenseWrapper';
-import SessionWidget from './SessionWidget';
+// import SessionWidget from './SessionWidget';
 
 // Lazy load  components
 const MusicPlayer = lazy(async () => import('./MusicPlayer'));
 const CustomToaster = lazy(async () => import('./CustomToaster'));
-const YoutubePlayer = lazy(async () => import('./YoutubePlayer'));
+// const YoutubePlayer = lazy(async () => import('./YoutubePlayer'));
 
 function AuthContainer({ children }: { children: React.ReactNode }) {
   return (
@@ -21,11 +21,11 @@ function AuthContainer({ children }: { children: React.ReactNode }) {
       <FallBackSuspenseWrapper fallback={false}>
         <MusicPlayer />
       </FallBackSuspenseWrapper>
-      <SessionWidget />
+      {/* <SessionWidget /> */}
       {children}
-      <FallBackSuspenseWrapper fallback={false}>
+      {/* <FallBackSuspenseWrapper fallback={false}>
         <YoutubePlayer />
-      </FallBackSuspenseWrapper>
+      </FallBackSuspenseWrapper> */}
     </>
   );
 }
