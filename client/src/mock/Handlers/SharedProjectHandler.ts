@@ -14,7 +14,8 @@ export const MockedSharedProject = [
   rest.get(`${API}/shareProject/:id`, (req, res, ctx) =>
     res(
       ctx.json({
-        token: '123456789',
+        token:
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6ImI2ODgzOWU1LTY1NDUtNDk4OC1hNjk2LTgyNjFhZjUzMmExYiIsImlhdCI6MTY2NDMwOTcwNywiZXhwIjozMzI4ODcyMzA3fQ.TiNJXVux31YZj8gmausr0l0-3Kt4a8AzQn9eZS_9qAo',
         expirationTime: '2021-08-01T00:00:00.000Z',
       }),
     ),

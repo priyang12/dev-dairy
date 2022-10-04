@@ -1,12 +1,4 @@
-import {
-  Button,
-  Flex,
-  Heading,
-  Input,
-  Skeleton,
-  Text,
-  Tooltip,
-} from '@chakra-ui/react';
+import { Button, Flex, Heading, Text, Tooltip } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useDeleteSharedToken, useGetToken } from '../../API/ShareProjectAPI';
@@ -75,7 +67,7 @@ function ShareProject() {
     <Container my="lg">
       <Heading fontSize="4xl">Share Project Page</Heading>
       <Project />
-      <Skeleton isLoaded={!isLoading} height="2rem">
+      {/* <Skeleton isLoaded={!isLoading} height="2rem">
         {TokenResponse?.token ? (
           <ShareLinkComponent
             token={'1234567890'}
@@ -84,7 +76,8 @@ function ShareProject() {
         ) : (
           <ShareModal />
         )}
-      </Skeleton>
+      </Skeleton> */}
+      <ShareModal />
     </Container>
   );
 }

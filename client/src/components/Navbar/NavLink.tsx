@@ -63,7 +63,7 @@ function NavLinks({ isOpen, isAuth }: { isOpen: boolean; isAuth: boolean }) {
         ) : (
           <Flex gap={10} justifyContent="space-around" w="100%">
             <Flex direction={['column', 'row', 'row']} gap={5}>
-              <MenuItem to="/ShareProject/:id">Posts</MenuItem>
+              <MenuItem to="/posts">Posts</MenuItem>
             </Flex>
             <DropDownContainer />
           </Flex>

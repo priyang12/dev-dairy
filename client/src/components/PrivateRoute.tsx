@@ -1,15 +1,15 @@
 import { lazy } from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate, Outlet } from 'react-router-dom';
-import type { AuthState } from '../interface';
 import Navbar from './Navbar';
 import FallBackSuspenseWrapper from './FallBackSuspenseWrapper';
-// import SessionWidget from './SessionWidget';
+import type { AuthState } from '../interface';
 
 // Lazy load  components
 const MusicPlayer = lazy(async () => import('./MusicPlayer'));
 const CustomToaster = lazy(async () => import('./CustomToaster'));
-// const YoutubePlayer = lazy(async () => import('./YoutubePlayer'));
+const YoutubePlayer = lazy(async () => import('./YoutubePlayer'));
+const SessionWidget = lazy(async () => import('./SessionWidget'));
 
 function AuthContainer({ children }: { children: React.ReactNode }) {
   return (
@@ -21,11 +21,13 @@ function AuthContainer({ children }: { children: React.ReactNode }) {
       <FallBackSuspenseWrapper fallback={false}>
         <MusicPlayer />
       </FallBackSuspenseWrapper>
-      {/* <SessionWidget /> */}
+      <FallBackSuspenseWrapper fallback={false}>
+        <SessionWidget />
+      </FallBackSuspenseWrapper>
       {children}
-      {/* <FallBackSuspenseWrapper fallback={false}>
+      <FallBackSuspenseWrapper fallback={false}>
         <YoutubePlayer />
-      </FallBackSuspenseWrapper> */}
+      </FallBackSuspenseWrapper>
     </>
   );
 }

@@ -17,22 +17,22 @@ const ShareProjectApi = createApi({
   }),
   tagTypes: ['ProjectToken'],
   endpoints: (builder) => ({
-    ShareProject: builder.mutation<
+    CreateToken: builder.mutation<
       {
         message: string;
         token: string;
       },
       {
         ProjectId: string;
-        ExpirationDate: string;
+        expireDate: string;
       }
     >({
-      query: ({ ProjectId, ExpirationDate: ExpirationDate }) => ({
+      query: ({ ProjectId, expireDate }) => ({
         url: `/`,
         method: 'POST',
         body: {
           projectId: ProjectId,
-          expirationTime: ExpirationDate,
+          expirationTime: expireDate,
         },
       }),
     }),
@@ -88,7 +88,7 @@ export const {
   useDeleteSharedTokenMutation: useDeleteSharedToken,
   useGetSharedProjectQuery: useGetSharedProject,
   useGetTokenQuery: useGetToken,
-  useShareProjectMutation: useShareProject,
+  useCreateTokenMutation: useCreateToken,
 } = ShareProjectApi;
 
 export default ShareProjectApi;
