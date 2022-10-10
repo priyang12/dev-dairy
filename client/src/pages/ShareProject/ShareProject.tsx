@@ -8,11 +8,11 @@ import {
 } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { format, parseISO } from 'date-fns';
 import { useDeleteSharedToken, useGetToken } from '../../API/ShareProjectAPI';
 import Container from '../../components/Container';
 import Project from './Project';
 import ShareModal from './ShareModal';
-import { format, parseISO } from 'date-fns';
 import { useApiToast } from '../../Hooks/useApiToast';
 
 function ShareLinkComponent({

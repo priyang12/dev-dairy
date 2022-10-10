@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   Flex,
-  GridItem,
   Heading,
   Progress,
   Text,

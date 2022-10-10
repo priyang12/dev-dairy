@@ -41,7 +41,7 @@ function AuthContainer({ children }: { children: React.ReactNode }) {
   );
 }
 
-const AuthRoutes = () => {
+function AuthRoutes() {
   return (
     <AuthContainer>
       <Routes>
@@ -64,6 +64,6 @@ const AuthRoutes = () => {
       </Routes>
     </AuthContainer>
   );
-};
+}
 
 export default AuthRoutes;
