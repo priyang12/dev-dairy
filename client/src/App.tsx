@@ -9,25 +9,11 @@ import { usePrefetch } from './API/ProjectAPI';
 import LandingPage from './pages/LandingPage';
 import Login from './pages/login';
 import Register from './pages/register';
-import Posts from './pages/Posts';
-import Projects from './pages/Projects';
-import RoadMap from './pages/RoadMap';
-import NewProject from './pages/NewProject';
-import EditProject from './pages/EditProject';
-import SingleProject from './pages/SingleProject';
-import WorkSessions from './pages/WorkSessions';
-import MusicPlaylist from './pages/MusicPlaylist';
-import ProjectSessions from './pages/ProjectSessions';
-import FilterPosts from './pages/FilterPosts';
-import Settings from './pages/Settings';
-import PreferenceSettings from './pages/PreferenceSettings';
-import ProfileSettings from './pages/ProfileSettings';
 // Components
 import PrivateOutlet from './components/PrivateRoute';
+import CustomToaster from './components/CustomToaster';
 import Spinner from './components/spinner';
 import type { StoreState } from './store';
-import ShareProject from './pages/ShareProject';
-import Share from './pages/Share';
 
 function App() {
   const dispatch = useDispatch();
@@ -60,28 +46,12 @@ function App() {
 
   return (
     <BrowserRouter>
+      <CustomToaster />
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/Register" element={<Register />} />
-        <Route path="/" element={<PrivateOutlet />}>
-          <Route path="Posts" element={<Posts />} />
-          <Route path="Posts/filter" element={<FilterPosts />} />
-          <Route path="Projects" element={<Projects />} />
-          <Route path="NewProject" element={<NewProject />} />
-          <Route path="Projects/:id" element={<SingleProject />} />
-          <Route path="EditProject/:id" element={<EditProject />} />
-          <Route path="RoadMap/:id" element={<RoadMap />} />
-          <Route path="ShareProject/:id" element={<ShareProject />} />
-          <Route path="Share/:token" element={<Share />} />
-          <Route path="Project/Sessions/:id" element={<ProjectSessions />} />
-          <Route path="Sessions" element={<WorkSessions />} />
-          <Route path="MusicPlaylist" element={<MusicPlaylist />} />
-          <Route path="Settings" element={<Settings />}>
-            <Route path="Preference" element={<PreferenceSettings />} />
-            <Route path="Profile" element={<ProfileSettings />} />
-          </Route>
-        </Route>
+        <Route path="*" element={<PrivateOutlet />} />
       </Routes>
     </BrowserRouter>
   );
