@@ -1,5 +1,6 @@
 import {
   Box,
+  Flex,
   Grid,
   Heading,
   IconButton,
@@ -34,11 +35,9 @@ function Feeds() {
         minH="100vh"
         backgroundSize="cover"
         backgroundRepeat="repeat"
-        BgImageData={
-          {
-            // url: 'https://source.unsplash.com/random/?dark-nature',
-          }
-        }
+        BgImageData={{
+          url: 'https://source.unsplash.com/random/?dark-nature',
+        }}
       >
         <MarginContainer display="flex" flexDir="column" py={5}>
           <Heading size="4xl" textAlign="center" mb={5}>
@@ -60,11 +59,11 @@ function Feeds() {
             </Heading>
           )}
           {Posts && Posts.length > 0 ? (
-            <Grid gridTemplateColumns={['2']} gap={10}>
+            <Flex flexDir="column" gap={10}>
               {Posts.map((post: any) => (
                 <PostContainer key={post._id} post={post} />
               ))}
-            </Grid>
+            </Flex>
           ) : (
             search && <Heading textAlign="center">No posts yet</Heading>
           )}

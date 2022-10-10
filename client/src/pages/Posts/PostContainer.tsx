@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   Flex,
-  GridItem,
   Heading,
   Progress,
   Text,
@@ -25,7 +24,7 @@ function PostContainer({ post, page }: PropTypes) {
   const [UpdateMutate] = useUpdatePostMutation();
 
   return (
-    <GridItem
+    <Box
       bgColor="primary.500"
       color="#fff"
       position="relative"
@@ -45,7 +44,12 @@ function PostContainer({ post, page }: PropTypes) {
       }}
     >
       <Box as="article" position="relative">
-        <Heading textAlign="center" mb={5}>
+        <Heading
+          textAlign="center"
+          mb={5}
+          color="primary.500"
+          fontFamily="Arial"
+        >
           Project : &nbsp;
           {post.project.title}
         </Heading>
@@ -62,11 +66,13 @@ function PostContainer({ post, page }: PropTypes) {
           />
         </Box>
         <Flex direction="column" p={5} fontSize="xl" pl={0}>
-          <Text fontSize="4xl" fontWeight="bold">
+          <Text fontSize="4xl" fontWeight="bold" color="primary.500">
             {post.title}
           </Text>
 
-          <Text>{post.description}</Text>
+          <Text color="primary.500" fontSize="2xl">
+            {post.description}
+          </Text>
           <Flex
             justifyContent="space-between"
             alignItems="center"
@@ -84,7 +90,9 @@ function PostContainer({ post, page }: PropTypes) {
               >
                 {post.status}
               </Text>
-              <Text>{format(parseISO(post.date), "yyyy-MM-dd' 'HH:mm")}</Text>
+              <Text fontSize="3xl" color="primary.500">
+                {format(parseISO(post.date), "yyyy-MM-dd' 'HH:mm")}
+              </Text>
             </Flex>
             <Flex gap={5} direction="column">
               <Button onClick={onOpen} bg="red.500" fontSize="2xl">
@@ -117,7 +125,7 @@ function PostContainer({ post, page }: PropTypes) {
           />
         )}
       </Box>
-    </GridItem>
+    </Box>
   );
 }
 

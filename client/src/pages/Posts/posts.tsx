@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Flex,
   Grid,
   Heading,
   IconButton,
@@ -20,7 +21,6 @@ import BgImage from '../../components/BgImage';
 
 function Feeds() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
   const {
     isLoading: LoadingPosts,
     isFetching,
@@ -89,7 +89,7 @@ function Feeds() {
 
           {Posts.length > 0 && (
             <>
-              <Grid gridTemplateColumns={['2']} gap={10}>
+              <Flex gap={10} flexDir="column">
                 {Posts.map((data) =>
                   data.posts.map((post) => (
                     <PostContainer
@@ -99,7 +99,7 @@ function Feeds() {
                     />
                   )),
                 )}
-              </Grid>
+              </Flex>
               {!isLastPage && (
                 <Button
                   loadingText="Loading..."
