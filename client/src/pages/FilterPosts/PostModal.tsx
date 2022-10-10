@@ -89,7 +89,6 @@ function PostModal({
         status: '',
       });
     } else {
-      const ProjectData = Projects?.find((val) => val._id === Project.value);
       const data: any = {
         title: title.value,
         description: description.value,
@@ -103,11 +102,6 @@ function PostModal({
       actionSubmit({
         UpdatedPost: data,
         filter,
-        ProjectData: {
-          _id: ProjectData?._id,
-          title: ProjectData?.title,
-          process: ProjectData?.process,
-        },
       });
       ResetModal();
     }

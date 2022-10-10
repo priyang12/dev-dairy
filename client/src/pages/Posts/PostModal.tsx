@@ -106,7 +106,6 @@ function PostModal({
             ...data,
             _id: post._id,
           },
-          ProjectData: SelectedProjectData,
           page,
         });
       } else {
