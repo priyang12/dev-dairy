@@ -66,3 +66,7 @@ export type IWorkSessions = Omit<
 };
 
 export type ISharedProject = typeof ShareProjectSchema;
+
+export interface ISharedProjectReposes extends IProject {
+  user: Omit<IUser, 'password'>;
+}

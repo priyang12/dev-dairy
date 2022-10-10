@@ -27,6 +27,7 @@ import PrivateOutlet from './components/PrivateRoute';
 import Spinner from './components/spinner';
 import type { StoreState } from './store';
 import ShareProject from './pages/ShareProject';
+import Share from './pages/Share';
 
 function App() {
   const dispatch = useDispatch();
@@ -72,6 +73,7 @@ function App() {
           <Route path="EditProject/:id" element={<EditProject />} />
           <Route path="RoadMap/:id" element={<RoadMap />} />
           <Route path="ShareProject/:id" element={<ShareProject />} />
+          <Route path="Share/:token" element={<Share />} />
           <Route path="Project/Sessions/:id" element={<ProjectSessions />} />
           <Route path="Sessions" element={<WorkSessions />} />
           <Route path="MusicPlaylist" element={<MusicPlaylist />} />

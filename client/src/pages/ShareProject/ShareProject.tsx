@@ -1,4 +1,11 @@
-import { Button, Flex, Heading, Text, Tooltip } from '@chakra-ui/react';
+import {
+  Button,
+  Flex,
+  Heading,
+  Skeleton,
+  Text,
+  Tooltip,
+} from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useDeleteSharedToken, useGetToken } from '../../API/ShareProjectAPI';
@@ -25,11 +32,8 @@ function ShareLinkComponent({
 
   return (
     <>
-      <Heading fontSize="2xl">Share Link</Heading>
-      <Flex gap="lg" alignItems="center" py="sm" flexDir={['column', 'row']}>
-        <Text w="100%" p={3} border="2px solid" borderColor="primary.500">
-          http://localhost:3000/share/{token}
-        </Text>
+      <Flex alignItems="flex-start" gap={5}>
+        <Heading fontSize="2xl">Share Link</Heading>{' '}
         <CopyToClipboard text={`http://localhost:3000/share/${token}`}>
           <Button w={['100%', 'auto']}>
             Copy
@@ -39,10 +43,22 @@ function ShareLinkComponent({
           </Button>
         </CopyToClipboard>
       </Flex>
+      <Flex gap="lg" alignItems="center" py="sm" flexDir={['column', 'row']}>
+        <Text
+          w="100%"
+          p={3}
+          border="2px solid"
+          borderColor="primary.500"
+          textOverflow="ellipsis"
+        >
+          http://localhost:3000/share/{token}
+        </Text>
+      </Flex>
       <Flex
         alignItems="center"
         justifyContent="flex-start"
         flexDir={['column', 'row']}
+        pb="lg"
       >
         <Button
           colorScheme="red"
@@ -59,25 +75,35 @@ function ShareLinkComponent({
   );
 }
 
+function ShareLinkLoading({
+  isLoading,
+  TokenResponse,
+}: {
+  isLoading: boolean;
+  TokenResponse: any;
+}) {
+  return (
+    <Skeleton isLoaded={!isLoading} height="2rem">
+      {TokenResponse?.token ? (
+        <ShareLinkComponent
+          token={TokenResponse.token}
+          ExpireDate={TokenResponse.expirationTime}
+        />
+      ) : (
+        <ShareModal />
+      )}
+    </Skeleton>
+  );
+}
 function ShareProject() {
   const { id } = useParams<{ id: string }>();
   const { data: TokenResponse, isLoading } = useGetToken(id as string);
 
   return (
     <Container my="lg">
-      <Heading fontSize="4xl">Share Project Page</Heading>
+      <Heading fontSize="4xl">Share Project</Heading>
       <Project />
-      {/* <Skeleton isLoaded={!isLoading} height="2rem">
-        {TokenResponse?.token ? (
-          <ShareLinkComponent
-            token={'1234567890'}
-            ExpireDate="2021-08-01T00:00:00.000Z"
-          />
-        ) : (
-          <ShareModal />
-        )}
-      </Skeleton> */}
-      <ShareModal />
+      <ShareLinkLoading isLoading={isLoading} TokenResponse={TokenResponse} />
     </Container>
   );
 }

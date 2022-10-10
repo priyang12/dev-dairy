@@ -64,7 +64,10 @@ export default class ShareProjectService {
     if (!sharedProject) {
       throw new Error("CRUD Error: Project cannot be shared");
     }
-    const Project = await this.projectModel.findById(sharedProject.project);
+    const Project = await this.projectModel
+      .findById(sharedProject.project)
+      .populate("user", ["username", "email"]);
+
     return { project: Project };
   }
 

@@ -1,6 +1,11 @@
 import { rest } from 'msw';
 import API from '../../API';
-import { SingleProjectResponse } from '../MockedData';
+import { AuthResponse, SingleProjectResponse } from '../MockedData';
+
+export const MockedSharedProjectResponse = {
+  ...SingleProjectResponse,
+  user: AuthResponse.user,
+};
 
 export const MockedSharedProject = [
   rest.post(`${API}/shareProject`, (req, res, ctx) =>
@@ -21,7 +26,7 @@ export const MockedSharedProject = [
     ),
   ),
   rest.get(`${API}/shareProject`, (req, res, ctx) =>
-    res(ctx.json(SingleProjectResponse)),
+    res(ctx.json(MockedSharedProjectResponse)),
   ),
   rest.delete(`${API}/shareProject/:id`, (req, res, ctx) =>
     res(

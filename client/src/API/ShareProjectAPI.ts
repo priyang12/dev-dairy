@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { IProject } from '../interface';
+import type { ISharedProjectReposes } from '../interface';
 import type { RootState } from '../store';
 import API from '.';
 
@@ -54,7 +54,7 @@ const ShareProjectApi = createApi({
         return ['ProjectToken'];
       },
     }),
-    GetSharedProject: builder.query<IProject, string>({
+    GetSharedProject: builder.query<ISharedProjectReposes, string>({
       query: (token) => ({
         url: '',
         method: 'GET',

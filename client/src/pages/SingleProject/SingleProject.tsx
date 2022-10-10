@@ -64,9 +64,6 @@ function SingleProject() {
   return (
     <Container maxW="900px" mb={10}>
       <Flex alignItems="flex-end" justifyContent="flex-end" gap={5}>
-        <Button mt={5} as={RouterLink} to={`/ShareProject/${project._id}`}>
-          Share Project
-        </Button>
         <Button mt={5} as={RouterLink} to={`/Project/Sessions/${project._id}`}>
           Work Sessions
         </Button>
