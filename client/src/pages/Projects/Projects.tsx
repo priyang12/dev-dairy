@@ -1,7 +1,7 @@
 import { Button, Flex, Heading } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 import { useGetProjects } from '../../API/ProjectAPI';
-import ProjectCard from '../SingleProject/ProjectCard';
+import ProjectCard from './ProjectCard';
 import Spinner from '../../components/spinner';
 import Container from '../../components/Container';
 

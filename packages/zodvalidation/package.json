@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "description": "validation schema for front end and backend",
   "main": "index.ts",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "scripts": {},
   "author": "Priyang",
   "license": "ISC",
   "dependencies": {
