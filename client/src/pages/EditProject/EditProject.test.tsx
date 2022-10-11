@@ -29,9 +29,7 @@ const Render = () =>
 
 const setup = async () => {
   await Render();
-
   await waitForElementToBeRemoved(screen.getByAltText(/loading/));
-  screen.debug();
   expect(screen.getByText(/Edit Project/)).toBeInTheDocument();
   const Title = screen.getByLabelText(/Title/);
   const Description = screen.getByLabelText(/Description/);

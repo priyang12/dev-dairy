@@ -5,12 +5,6 @@ import { GetStatusColor } from '../GetStatusColor';
 import { toDaysMinutesSeconds } from '../SecondsToFormate';
 import RandomColor from '../RandomColor';
 
-import { CheckError, isFetchBaseQueryError } from '../helpers';
-import BlobToImg from '../BlobToImg';
-import { GetStatusColor } from '../GetStatusColor';
-import { toDaysMinutesSeconds } from '../SecondsToFormate';
-import RandomColor from '../RandomColor';
-
 describe('Validation Utils', () => {
   it('Validate Name should return an error if the name is not alphanumeric', () => {
     let result = ValidateTitle('', 'Name');
