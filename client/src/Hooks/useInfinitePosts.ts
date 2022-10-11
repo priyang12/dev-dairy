@@ -6,6 +6,7 @@ export const useInfinitePosts = () => {
   const shouldReset = useRef(true);
   const [page, setpage] = useState(1);
   const [trigger, result] = useLazyGetPosts();
+
   const [posts, setPosts] = useState<
     {
       page: number;
@@ -67,7 +68,7 @@ export const useInfinitePosts = () => {
     isLastPage: End,
     fetchNextPage() {
       if (!End) {
-        trigger({ page, limit: 10 });
+        trigger({ page: page + 1, limit: 10 });
         setpage((prevPage: number) => prevPage + 1);
       }
     },

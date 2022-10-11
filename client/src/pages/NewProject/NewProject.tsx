@@ -24,28 +24,15 @@ import {
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuIdv4 } from 'uuid';
-import Container from '../../components/Container';
+import { ProjectSchema, ZodError } from '@dev-dairy/zodvalidation';
 import { useCreateProject } from '../../API/ProjectAPI';
-import type { IRoadMap } from '../../interface';
+import Container from '../../components/Container';
 import useForm from '../../Hooks/useForm';
-import {
-  CheckURL,
-  ValidateDescription,
-  ValidateTitle,
-} from '../../utils/Validation';
 import Spinner from '../../components/spinner';
+import { CheckURL } from '../../utils/Validation';
+import type { IRoadMap } from '../../interface';
 
-interface NewProjectInterface {
-  Title: string;
-  Description: string;
-  process: number;
-  Github: string;
-  Live: boolean;
-  Website: string;
-  NewTech: string;
-}
-
-const init: NewProjectInterface = {
+const init = {
   Title: '',
   Description: '',
   process: 5,
@@ -65,8 +52,14 @@ function NewProject() {
   });
 
   const [RoadMaps, setRoadMaps] = useState<IRoadMap[]>([]);
-  const { FormValues, ErrorsState, HandleChange, SetState, setError } =
-    useForm(init);
+  const {
+    FormValues,
+    ErrorsState,
+    HandleChange,
+    SetState,
+    setError,
+    setErrors,
+  } = useForm(init);
 
   useEffect(() => {
     if (CreateProjectResult.isSuccess) {
@@ -95,20 +88,15 @@ function NewProject() {
     newTechs.splice(index, 1);
     setTechnologies(newTechs);
   };
-  const ProcessChange = (value: number | any) => {
-    SetState({ ...FormValues, process: value });
+  const ProcessChange = (value: string | number) => {
+    SetState({ ...FormValues, process: Number(value) });
   };
 
-  const AddNewProject = () => {
+  const OnSubmitProject = () => {
     const { Title, Description, process, Github, Live, Website } = FormValues;
     const newRoadMaps = [...RoadMaps];
     const newTechs = [...Technologies];
 
-    const TitleError = setError('Title', ValidateTitle(Title, 'Title'));
-    const DescriptionError = setError(
-      'Description',
-      ValidateDescription(Description, 'Description'),
-    );
     let GithubError = null;
     let WebsiteError = null;
     if (Github && !CheckURL(Github)) {
@@ -118,17 +106,37 @@ function NewProject() {
       WebsiteError = setError('Website', 'Enter Valid URL for Website');
     }
 
-    if (!TitleError && !DescriptionError && !GithubError && !WebsiteError) {
-      CreateProject({
-        title: Title,
-        description: Description,
-        process,
-        github: Github,
-        live: Live,
-        website: Website,
-        roadMap: newRoadMaps,
-        technologies: newTechs,
-      });
+    try {
+      CreateProject(
+        ProjectSchema.omit({
+          date: true,
+        }).parse({
+          title: Title,
+          description: Description,
+          process,
+          github: Github,
+          live: Live,
+          website: Website,
+          roadMap: newRoadMaps,
+          technologies: newTechs,
+        }),
+      );
+    } catch (error) {
+      if (error instanceof ZodError) {
+        const Errors = error.flatten().fieldErrors as any;
+        setErrors({
+          Title: Errors.title,
+          Description: Errors.description,
+          process: Errors.process,
+          Github: Errors.github,
+          Live: Errors.live,
+          Website: Errors.website,
+          NewTech: Errors.technologies,
+        });
+      }
+      //  else {
+      //   throw error;
+      // }
     }
   };
 
@@ -371,7 +379,7 @@ function NewProject() {
           mt={10}
           loadingText="Add Project"
           isLoading={CreateProjectResult.isLoading}
-          onClick={AddNewProject}
+          onClick={OnSubmitProject}
         >
           Create Project
         </Button>

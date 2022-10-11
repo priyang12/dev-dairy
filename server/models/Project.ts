@@ -1,26 +1,18 @@
 import { Schema, model } from "mongoose";
-import type { Model, Document } from "mongoose";
+import type { Model } from "mongoose";
+import {
+  z,
+  ProjectSchema as ZodProject,
+  RoadMapSchema as ZodRoadMap,
+} from "@dev-dairy/zodvalidation";
 
-export interface IProject extends Document {
-  user: string;
-  title: string;
-  description: string;
-  technologies: string[];
-  roadMap?: IRoadMap[];
-  process: string;
-  live?: string;
-  github?: string;
-  date: Date;
-}
+type withId<T> = T & { _id: string };
 
-export interface IRoadMap extends Document {
-  name: string;
-  color: string;
-  progress: number;
-  github?: string;
-}
+export type IProject = withId<z.infer<typeof ZodProject>>;
 
-const road = new Schema({
+export type IRoadMap = withId<z.infer<typeof ZodRoadMap>>;
+
+const road = new Schema<IRoadMap>({
   name: {
     type: String,
     required: true,
@@ -41,7 +33,7 @@ const road = new Schema({
 });
 
 // Create Schema
-const ProjectSchema = new Schema({
+const ProjectSchema = new Schema<IProject>({
   user: {
     type: Schema.Types.ObjectId,
     required: true,

@@ -1,13 +1,5 @@
 import { Schema, model, ObjectId } from "mongoose";
-import type { Model, Document } from "mongoose";
-
-export interface IUser extends Document {
-  _id: ObjectId;
-  username: string;
-  email: string;
-  password: string;
-  ImageUrl: string;
-}
+import type { Model, InferSchemaType } from "mongoose";
 
 // Create Schema
 const UserSchema = new Schema({
@@ -32,6 +24,11 @@ const UserSchema = new Schema({
     default: Date.now,
   },
 });
+
+export type IUser = InferSchemaType<typeof UserSchema>;
+
 const User: Model<IUser> = model<IUser>("User", UserSchema);
+
+export type UserModelType = Model<IUser>;
 
 export default User;

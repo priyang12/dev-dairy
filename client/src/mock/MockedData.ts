@@ -427,13 +427,13 @@ export const ProjectsResponse = [
 ];
 
 export const SingleProjectResponse = {
-  technologies: ['react', 'storybook', 'scss'],
-  process: 25,
   _id: '62a498033fea6300092ced84',
+  user: '627bcea32b463cb2da6853b7',
+  process: 25,
   title: 'component',
   description: 'component lib using storybook react scss.',
-  github: 'https://github.com/',
-  user: '627bcea32b463cb2da6853b7',
+  github: 'https://github.com/asdbkajsd,asjkdbakjsdnkasd',
+  technologies: ['react', 'storybook', 'scss'],
   roadMap: [
     {
       color: '#139f57',
@@ -442,7 +442,6 @@ export const SingleProjectResponse = {
       name: 'backend',
     },
     {
-      // Random Color
       color: '#131a9f',
       progress: 40,
       _id: '627fa6043sd711612ba80bd7d',

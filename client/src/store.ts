@@ -16,6 +16,7 @@ import AuthApi from './API/AuthAPI';
 import PostApi from './API/PostAPI';
 import UserApi from './API/UserAPI';
 import ProjectApi from './API/ProjectAPI';
+import ShareProjectApi from './API/ShareProjectAPI';
 import WorkSessionApi from './API/WorkSessionsAPI';
 import AuthReducer from './features/AuthSlice';
 import UserReducer from './features/UserSlice';
@@ -34,6 +35,7 @@ const RootReducers = combineReducers({
   [PostApi.reducerPath]: PostApi.reducer,
   [ProjectApi.reducerPath]: ProjectApi.reducer,
   [WorkSessionApi.reducerPath]: WorkSessionApi.reducer,
+  [ShareProjectApi.reducerPath]: ShareProjectApi.reducer,
   Auth: AuthReducer,
   User: UserReducer,
   Music: MusicReducer,
@@ -44,21 +46,24 @@ export type StoreState = ReturnType<typeof RootReducers>;
 
 const persistedReducer = persistReducer(persistConfig, RootReducers);
 
-export const createStoreWithMiddleware = (initialState = {}): Store => configureStore({
-  reducer: persistedReducer,
-  preloadedState: initialState,
-  devTools: process.env.NODE_ENV !== 'production',
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
-    serializableCheck: {
-      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-    },
-  })
-    .concat(AuthApi.middleware)
-    .concat(UserApi.middleware)
-    .concat(PostApi.middleware)
-    .concat(ProjectApi.middleware)
-    .concat(WorkSessionApi.middleware),
-});
+export const createStoreWithMiddleware = (initialState = {}): Store =>
+  configureStore({
+    reducer: persistedReducer,
+    preloadedState: initialState,
+    devTools: process.env.NODE_ENV !== 'production',
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: {
+          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+        },
+      })
+        .concat(AuthApi.middleware)
+        .concat(UserApi.middleware)
+        .concat(PostApi.middleware)
+        .concat(ProjectApi.middleware)
+        .concat(ShareProjectApi.middleware)
+        .concat(WorkSessionApi.middleware),
+  });
 
 export const store = createStoreWithMiddleware();
 

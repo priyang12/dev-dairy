@@ -21,24 +21,6 @@ export const ValidateDescription = (
   return error;
 };
 
-export const ValidateEmail = (email: string) => {
-  // eslint-disable-next-line
-
-  const re =    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; //eslint-disable-line
-  if (!re.test(String(email).toLowerCase()) || email === '') return 'Please enter a valid email';
-  return '';
-};
-
-export const ValidatePassword = (password: string) => {
-  if (password.length < 6) return 'Password must be at least 6 characters';
-  return '';
-};
-
-export const ConfirmPasswordCheck = (password: string, password2: string) => {
-  if (password !== password2) return 'Passwords do not match';
-  return '';
-};
-
 export const CheckURL = (string: string) => {
   let url;
   try {

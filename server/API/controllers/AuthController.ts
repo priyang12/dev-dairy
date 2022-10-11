@@ -1,9 +1,5 @@
 import asyncHandler from "express-async-handler";
-import createError from "http-errors";
-import { validationResult } from "express-validator";
-
 import type { Request, Response } from "express";
-
 import AuthService from "../../services/AuthService";
 import Container from "typedi";
 import UserService from "../../services/UserService";
@@ -24,12 +20,6 @@ export const GetUser = asyncHandler(
 // @access public
 export const registerUser = asyncHandler(
   async (req, res, next): Promise<any> => {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      res.status(406).json({ errors: errors.array() });
-      return;
-    }
     const authServiceInstance = Container.get(AuthService);
     const { user, token } = await authServiceInstance.SignUp(req.body);
     return res.status(201).json({ user, token });
@@ -39,36 +29,23 @@ export const registerUser = asyncHandler(
 // @router POST api/users/login
 // @desc Login User
 // @access Admin
-export const loginUser = asyncHandler(
-  async (req, res): Promise<any> => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(422).json({ errors: errors.array() });
-    }
-
-    const authServiceInstance = Container.get(AuthService);
-    const { user, token } = await authServiceInstance.Login(
-      req.body.email,
-      req.body.password
-    );
-    return res.status(200).json({ user, token });
-  }
-);
+export const loginUser = asyncHandler(async (req, res): Promise<any> => {
+  const authServiceInstance = Container.get(AuthService);
+  const { user, token } = await authServiceInstance.Login(
+    req.body.email,
+    req.body.password
+  );
+  return res.status(200).json({ user, token });
+});
 
 // @router PUT api/users/update
 // @desc Update User Info
 // @access private
-export const UpdateUser = asyncHandler(
-  async (req: any, res): Promise<any> => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(422).json({ errors: errors.array() });
-    }
-    const authServiceInstance = Container.get(UserService);
-    const user = await authServiceInstance.UpdateUser(req.user, req.body);
-    return res.status(200).json(user);
-  }
-);
+export const UpdateUser = asyncHandler(async (req: any, res): Promise<any> => {
+  const authServiceInstance = Container.get(UserService);
+  const user = await authServiceInstance.UpdateUser(req.user, req.body);
+  return res.status(200).json(user);
+});
 
 // @router DELETE api/users/delete
 // @desc Delete User

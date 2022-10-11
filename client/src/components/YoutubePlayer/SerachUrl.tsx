@@ -21,7 +21,9 @@ function SerachUrl({ SubmitUrl, alert, urlInput, setUrlInput, Loading }: any) {
           value={urlInput}
           bg="primary.800"
           width="100%"
-          onChange={(e) => setUrlInput(e.target.value)}
+          onChange={(e: { target: { value: any } }) =>
+            setUrlInput(e.target.value)
+          }
         />
       </FormInput>
       <Button

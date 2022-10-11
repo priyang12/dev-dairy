@@ -90,10 +90,11 @@ function WorkSessions() {
                         </Td>
                         <Td>
                           <Text>
-                            {format(
-                              parseISO(workSession.createdAt),
-                              'dd/MM/yyyy',
-                            )}
+                            {workSession.createdAt &&
+                              format(
+                                parseISO(workSession.createdAt),
+                                'dd/MM/yyyy',
+                              )}
                           </Text>
                         </Td>
                       </Tr>

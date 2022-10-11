@@ -40,15 +40,15 @@ function ProjectCard({ Project }: { Project: IProject }) {
         <Button as={RouterLink} to={`/Projects/${Project._id}`}>
           More
         </Button>
-        <Button
-          flex={1}
-          as={RouterLink}
-          to={`/Project/Sessions/${Project._id}`}
-        >
+        <Button flex={1} as={RouterLink} to={`/ShareProject/${Project._id}`}>
+          Share Project
+        </Button>
+        <Button as={RouterLink} to={`/Project/Sessions/${Project._id}`}>
           Work Sessions
         </Button>
+
         <Text textAlign="right">
-          {format(parseISO(Project.date), "yyyy-MM-dd'T'HH:mm")}
+          {format(parseISO(Project.date), "dd-MM-yyyy' 'HH:mm")}
         </Text>
       </Flex>
     </Box>

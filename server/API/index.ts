@@ -4,7 +4,8 @@ import UserRoutes from "./routes/User.routes";
 import ProjectRoutes from "./routes/Project.routes";
 import PostRoutes from "./routes/Post.routes";
 import WorkSessions from "./routes/WorkSessions.routes";
-// import agendas from "./routes/agenda.routes";
+import SharedProjectModel from "./routes/ShareProject.routes";
+import agendas from "./routes/agenda.routes";
 
 export default () => {
   const app = Router();
@@ -13,6 +14,7 @@ export default () => {
   ProjectRoutes(app);
   PostRoutes(app);
   WorkSessions(app);
-  // agendas(app);
+  SharedProjectModel(app);
+  agendas(app);
   return app;
 };

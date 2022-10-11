@@ -12,10 +12,10 @@ import {
   Link,
   Text,
 } from '@chakra-ui/react';
+import { LoginSchema, ZodError } from '@dev-dairy/zodvalidation';
 import type { FormField } from '../../components/CustomForm';
 import type { AuthState } from '../../interface';
 import { useLogin } from '../../API/AuthAPI';
-import { ValidateEmail, ValidatePassword } from '../../utils/Validation';
 import CustomForm from '../../components/CustomForm';
 
 function Login() {
@@ -42,21 +42,21 @@ function Login() {
       email: e.target.elements.email.value,
       password: e.target.elements.password.value,
     };
-    const EmailError = ValidateEmail(FormValues.email);
-    const PasswordError = ValidatePassword(FormValues.password);
-    setErrors({
-      email: EmailError,
-      password: PasswordError,
-    });
 
-    if (!EmailError || !PasswordError) {
-      loginUser(FormValues);
+    try {
+      loginUser(LoginSchema.parse(FormValues));
+    } catch (error) {
+      if (error instanceof ZodError) {
+        setErrors(error.flatten().fieldErrors);
+      } else {
+        throw error;
+      }
     }
   };
 
   useEffect(() => {
     if (Auth.authenticated) {
-      navigate('/Projects');
+      navigate('/Posts');
     }
   }, [Auth.authenticated, navigate]);
 

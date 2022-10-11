@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import { Box, IconButton } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import { AiFillYoutube } from 'react-icons/ai';
-import ReactPlayer from 'react-player';
+import ReactPlayer from 'react-player/youtube';
 import Container from '../Container';
 import Spinner from '../spinner';
 import SerachUrl from './SerachUrl';
@@ -50,7 +50,7 @@ function YoutubePlayer() {
   return (
     <>
       {!Show && (
-        <Box position="fixed" right="5%" bottom="0" zIndex="100">
+        <Box position="fixed" right="5%" bottom="0">
           <IconButton
             aria-label="Show-Player"
             onClick={() => setShow(true)}

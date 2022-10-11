@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   Flex,
-  GridItem,
   Heading,
   Progress,
   Text,
@@ -26,7 +25,7 @@ function PostContainer({ post }: PropTypes) {
   const [UpdateMutate] = useUpdateFilterPost();
 
   return (
-    <GridItem
+    <Box
       bgColor="primary.500"
       color="#fff"
       position="relative"
@@ -121,7 +120,7 @@ function PostContainer({ post }: PropTypes) {
           />
         )}
       </Box>
-    </GridItem>
+    </Box>
   );
 }
 

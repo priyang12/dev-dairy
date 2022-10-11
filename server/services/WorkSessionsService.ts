@@ -2,7 +2,6 @@ import { Service, Inject } from "typedi";
 import { LeanDocument, Model } from "mongoose";
 import { Logger } from "winston";
 import { ISession, IWorkSessions } from "../models/WorkSessions";
-import type { DeleteWriteOpResultObject } from "mongodb";
 
 @Service()
 export default class WorkSessionService {
@@ -151,10 +150,7 @@ export default class WorkSessionService {
     return updatedWorkSessions;
   }
 
-  public async DeleteWorkSession(
-    userId: string,
-    WordSessionId: string
-  ): Promise<DeleteWriteOpResultObject> {
+  public async DeleteWorkSession(userId: string, WordSessionId: string) {
     const deletedWorkSessions = await this.WorkSessions.deleteOne({
       _id: WordSessionId,
       user: userId,
@@ -174,9 +170,7 @@ export default class WorkSessionService {
     };
   }
 
-  public async DeleteAllWorkSessions(
-    userId: string
-  ): Promise<DeleteWriteOpResultObject> {
+  public async DeleteAllWorkSessions(userId: string) {
     const Delete = await this.WorkSessions.deleteMany({ user: userId })
       .lean()
       .exec();
@@ -195,7 +189,7 @@ export default class WorkSessionService {
   public async DeleteAllWorkSessionsForProject(
     userId: string,
     ProjectId: string
-  ): Promise<DeleteWriteOpResultObject> {
+  ) {
     const Delete = await this.WorkSessions.deleteMany({
       user: userId,
       project: ProjectId,

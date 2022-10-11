@@ -1,5 +1,4 @@
 import asyncHandler from "express-async-handler";
-import { validationResult } from "express-validator";
 
 import Container from "typedi";
 
@@ -74,11 +73,6 @@ export const GetProjectWorkSessions = asyncHandler(
 
 export const CreateWorkSession = asyncHandler(
   async (req: Request, res: Response): Promise<any> => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(422).json(errors.array());
-    }
-
     const workSessionsServiceInstance = Container.get(WorkSessionsService);
     const workSessions = await workSessionsServiceInstance.CreateWorkSession(
       req.user._id,
@@ -107,10 +101,6 @@ export const PushWorkSession = asyncHandler(
         message: "Select must be a string",
       });
     }
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(422).json(errors.array());
-    }
 
     const workSessionsServiceInstance = Container.get(WorkSessionsService);
     const workSessions = await workSessionsServiceInstance.PushWorkSession(
@@ -136,10 +126,6 @@ export const PushWorkSession = asyncHandler(
 
 export const PullWorkSession = asyncHandler(
   async (req: Request, res: Response): Promise<any> => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(422).json(errors.array());
-    }
     const workSessionsServiceInstance = Container.get(WorkSessionsService);
 
     const { Select } = req.query;
@@ -172,10 +158,6 @@ export const PullWorkSession = asyncHandler(
 
 export const UpdateWorkSession = asyncHandler(
   async (req: Request, res: Response): Promise<any> => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(422).json(errors.array());
-    }
     const workSessionsServiceInstance = Container.get(WorkSessionsService);
     const workSessions = await workSessionsServiceInstance.UpdateWorkSession(
       req.user._id,
@@ -198,10 +180,6 @@ export const UpdateWorkSession = asyncHandler(
  **/
 export const DeleteWorkSession = asyncHandler(
   async (req: Request, res: Response): Promise<any> => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(422).json(errors.array());
-    }
     const workSessionsServiceInstance = Container.get(WorkSessionsService);
     const workSessions = await workSessionsServiceInstance.DeleteWorkSession(
       req.user._id,
@@ -223,10 +201,6 @@ export const DeleteWorkSession = asyncHandler(
  **/
 export const DeleteWorkSessions = asyncHandler(
   async (req: Request, res: Response): Promise<any> => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(422).json(errors.array());
-    }
     const workSessionsServiceInstance = Container.get(WorkSessionsService);
     const workSessions =
       await workSessionsServiceInstance.DeleteAllWorkSessions(req.user._id);
@@ -247,10 +221,6 @@ export const DeleteWorkSessions = asyncHandler(
 
 export const DeleteWorkSessionsOfProject = asyncHandler(
   async (req: Request, res: Response): Promise<any> => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(422).json(errors.array());
-    }
     const workSessionsServiceInstance = Container.get(WorkSessionsService);
     const workSessions =
       await workSessionsServiceInstance.DeleteAllWorkSessionsForProject(

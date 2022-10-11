@@ -34,7 +34,7 @@ const PostApi = createApi({
       },
       providesTags: ['Posts'],
     }),
-    GetPost: builder.query<IPost, Partial<string>>({
+    GetPost: builder.query<IPost, string>({
       query(id) {
         return {
           url: `/${id}`,
@@ -42,7 +42,7 @@ const PostApi = createApi({
         };
       },
     }),
-    GetPostByProject: builder.query<IPost[], Partial<string>>({
+    GetPostByProject: builder.query<IPost[], string>({
       query(id) {
         return {
           url: `/project/${id}`,
@@ -62,10 +62,10 @@ const PostApi = createApi({
     }),
     NewPost: builder.mutation<
       NewPostAPI,
-      Partial<{
+      {
         CreatePost: IPost;
         ProjectData: Pick<IProject, '_id' | 'title' | 'process'>;
-      }>
+      }
     >({
       query({ CreatePost }) {
         return {
@@ -85,7 +85,7 @@ const PostApi = createApi({
                 page: 1,
                 limit: 10,
               },
-              (posts: IPost[]) => [
+              (posts) => [
                 {
                   ...NewPost.post,
                   project: ProjectData,
@@ -106,7 +106,6 @@ const PostApi = createApi({
       {
         UpdatedPost: IPost;
         page: number;
-        ProjectData: Pick<IProject, '_id' | 'title' | 'process'>;
       }
     >({
       query({ UpdatedPost }) {
@@ -117,10 +116,7 @@ const PostApi = createApi({
         };
       },
 
-      onQueryStarted(
-        { UpdatedPost, page, ProjectData },
-        { dispatch, queryFulfilled },
-      ) {
+      onQueryStarted({ UpdatedPost, page }, { dispatch, queryFulfilled }) {
         const UpdateResult = dispatch(
           PostApi.util.updateQueryData(
             'GetPosts',
@@ -131,7 +127,7 @@ const PostApi = createApi({
             (posts) =>
               posts.map((post) => {
                 if (post._id === UpdatedPost._id) {
-                  UpdatedPost.project = ProjectData;
+                  UpdatedPost.project = post.project;
                   UpdatedPost.date = post.date;
                   return UpdatedPost as IPost;
                 }
@@ -195,7 +191,6 @@ const PostApi = createApi({
       {
         UpdatedPost: IPost;
         filter: string;
-        ProjectData: Pick<IProject, '_id' | 'title' | 'process'>;
       }
     >({
       query({ UpdatedPost }) {
@@ -205,15 +200,12 @@ const PostApi = createApi({
           body: UpdatedPost,
         };
       },
-      onQueryStarted(
-        { UpdatedPost, filter, ProjectData },
-        { dispatch, queryFulfilled },
-      ) {
+      onQueryStarted({ UpdatedPost, filter }, { dispatch, queryFulfilled }) {
         const UpdateResult = dispatch(
           PostApi.util.updateQueryData('GetFilteredPosts', filter, (posts) =>
             posts.map((post) => {
               if (post._id === UpdatedPost._id) {
-                UpdatedPost.project = ProjectData;
+                UpdatedPost.project = post.project;
                 UpdatedPost.date = post.date;
                 return UpdatedPost as IPost;
               }

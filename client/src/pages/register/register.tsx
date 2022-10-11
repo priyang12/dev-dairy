@@ -11,17 +11,12 @@ import {
   Heading,
   Text,
 } from '@chakra-ui/react';
+import { RegisterSchema, ZodError } from '@dev-dairy/zodvalidation';
 import type { FormField } from '../../components/CustomForm';
-import CustomForm from '../../components/CustomForm';
-import {
-  ConfirmPasswordCheck,
-  ValidateEmail,
-  ValidateTitle,
-  ValidatePassword,
-} from '../../utils/Validation';
-import { useRegister } from '../../API/AuthAPI';
 import type { AuthState } from '../../interface';
 import { StoreState } from '../../store';
+import { useRegister } from '../../API/AuthAPI';
+import CustomForm from '../../components/CustomForm';
 
 function Register() {
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
@@ -32,7 +27,7 @@ function Register() {
   const RegisterFields: FormField[] = [
     {
       fieldType: 'text',
-      fieldName: 'name',
+      fieldName: 'username',
       placeholder: 'Pick a Cool Nickname',
     },
     {
@@ -43,8 +38,7 @@ function Register() {
     {
       fieldType: 'password',
       fieldName: 'password',
-      placeholder:
-        'Enter a Strong Password with at least 6 characters',
+      placeholder: 'Enter a Strong Password with at least 6 characters',
     },
     {
       fieldType: 'password',
@@ -53,7 +47,7 @@ function Register() {
     },
   ];
   interface FormData {
-    name: { value: string };
+    username: { value: string };
     email: { value: string };
     password: { value: string };
     ConfirmPassword: { value: string };
@@ -63,49 +57,37 @@ function Register() {
     setErrors: any,
   ) => {
     e.preventDefault();
-
-    const {
-      email, name, password, ConfirmPassword,
-    } = e.target
+    const { email, username, password, ConfirmPassword } = e.target
       .elements as typeof e.target.elements & FormData;
-
-    const UsernameError = ValidateTitle(name.value);
-    const EmailError = ValidateEmail(email.value);
-    const PasswordError = ValidatePassword(password.value);
-    const ConfirmError = ConfirmPasswordCheck(
-      password.value,
-      ConfirmPassword.value,
-    );
-
-    if (
-      !UsernameError
-      && !EmailError
-      && !PasswordError
-      && !ConfirmError
-    ) {
-      registerUser({
-        username: name.value,
-        email: email.value,
-        password: password.value,
-        password2: ConfirmPassword.value,
-      });
-    } else {
-      setErrors({
-        name: UsernameError,
-        email: EmailError,
-        password: PasswordError,
-        ConfirmPassword: ConfirmError,
-      });
+    const FormValues = {
+      username: username.value,
+      email: email.value,
+      password: password.value,
+      password2: ConfirmPassword.value,
+    };
+    try {
+      registerUser(RegisterSchema.parse(FormValues));
+    } catch (error) {
+      if (error instanceof ZodError) {
+        const errors = error.flatten().fieldErrors;
+        setErrors({
+          username: errors.username,
+          email: errors.email,
+          password: errors.password,
+          ConfirmPassword: errors.password2,
+        });
+      } else {
+        throw error;
+      }
     }
   };
+
   useEffect(() => {
-    if (authenticated) {
-      <Navigate to="/Projects" />;
-    }
+    if (authenticated) <Navigate to="/Projects" />;
   }, [authenticated]);
-  if (authenticated) {
-    setCookie('token', token, { path: '/' });
-  }
+
+  if (authenticated) setCookie('token', token, { path: '/' });
+
   return (
     <Box
       pt={15}
@@ -129,10 +111,7 @@ function Register() {
             {error}
           </Alert>
         )}
-        <CustomForm
-          FormFields={RegisterFields}
-          SubmitForm={RegisterUser}
-        >
+        <CustomForm FormFields={RegisterFields} SubmitForm={RegisterUser}>
           <Button
             backdropFilter="auto"
             backdropBlur="10px"

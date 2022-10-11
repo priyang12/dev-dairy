@@ -3,11 +3,7 @@ import { createMemoryHistory } from 'history';
 import { format, parseISO } from 'date-fns';
 import userEvent from '@testing-library/user-event';
 import { Router } from 'react-router-dom';
-import {
-  render,
-  screen,
-  waitForElementToBeRemoved,
-} from '../../test-utils';
+import { render, screen, waitForElementToBeRemoved } from '../../test-utils';
 import { ProjectsResponse } from '../../mock/MockedData';
 import Projects from './Projects';
 import server from '../../mock/server';
@@ -35,9 +31,7 @@ it('render Projects', async () => {
   ProjectsResponse.forEach((project) => {
     expect(screen.getByText(project.title)).toBeInTheDocument();
     expect(
-      screen.getByText(
-        format(parseISO(project.date), "yyyy-MM-dd'T'HH:mm"),
-      ),
+      screen.getByText(format(parseISO(project.date), "dd-MM-yyyy' 'HH:mm")),
     ).toBeInTheDocument();
     project.technologies.forEach((tech) => {
       expect(screen.getByTestId(`${tech}-${project._id}`)).toBeInTheDocument();
@@ -66,7 +60,7 @@ it('Redirect On Single Project Page', async () => {
   const NextPage = screen.getAllByRole('link', {
     name: 'More',
   });
-  userEvent.click(NextPage[0]);
+  await userEvent.click(NextPage[0]);
   expect(history.push).toHaveBeenCalledWith(
     {
       hash: '',

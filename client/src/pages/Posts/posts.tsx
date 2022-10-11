@@ -1,7 +1,7 @@
 import {
   Box,
   Button,
-  Grid,
+  Flex,
   Heading,
   IconButton,
   useDisclosure,
@@ -10,13 +10,13 @@ import { Ring } from '@priyang/react-component-lib';
 import { Link as RouterLink } from 'react-router-dom';
 import { BsFillFilterCircleFill } from 'react-icons/bs';
 import { useNewPost } from '../../API/PostAPI';
+import { useInfinitePosts } from '../../Hooks/useInfinitePosts';
+import { useApiToast } from '../../Hooks/useApiToast';
 import PostContainer from './PostContainer';
 import Spinner from '../../components/spinner';
 import MarginContainer from '../../components/MarginContainer';
 import PostModal from './PostModal';
 import BgImage from '../../components/BgImage';
-import { useApiToast } from '../../Hooks/useApiToast';
-import { useInfinitePosts } from '../../Hooks/useInfinitePosts';
 
 function Feeds() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -24,7 +24,6 @@ function Feeds() {
     isLoading: LoadingPosts,
     isFetching,
     data: Posts,
-    CurrentPage,
     isLastPage,
     fetchNextPage,
   } = useInfinitePosts();
@@ -79,7 +78,7 @@ function Feeds() {
             page={1}
             onClose={onClose}
             isOpen={isOpen}
-            action="New"
+            action="create"
             actionSubmit={AddNewPost}
           />
 
@@ -89,7 +88,7 @@ function Feeds() {
 
           {Posts.length > 0 && (
             <>
-              <Grid gridTemplateColumns={['2']} gap={10}>
+              <Flex gap={10} flexDir="column">
                 {Posts.map((data) =>
                   data.posts.map((post) => (
                     <PostContainer
@@ -99,7 +98,7 @@ function Feeds() {
                     />
                   )),
                 )}
-              </Grid>
+              </Flex>
               {!isLastPage && (
                 <Button
                   loadingText="Loading..."
@@ -114,7 +113,9 @@ function Feeds() {
               )}
             </>
           )}
-          {isLastPage && <Heading textAlign="center">No posts yet</Heading>}
+          {(Posts[0].posts.length === 0 || isLastPage) && (
+            <Heading textAlign="center">No posts yet</Heading>
+          )}
         </MarginContainer>
       </BgImage>
     </Box>

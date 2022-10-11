@@ -18,8 +18,6 @@ export default class UserService {
     userId: string,
     Select: string
   ): Promise<IProject[]> {
-    console.log(Select);
-
     const Projects = await this.ProjectModel.find({ user: userId }).select(
       Select?.concat(" -__v") || "-__v"
     );
@@ -143,10 +141,8 @@ export default class UserService {
   public async EditRoadMap(
     userId: string,
     projectId: string,
-    roadMap: IRoadMap
+    roadMap: IRoadMap & { _id: string }
   ) {
-    console.log(roadMap._id);
-
     const updatedRoadMap = await this.ProjectModel.findOneAndUpdate(
       { _id: projectId, user: userId, "roadMap._id": roadMap._id },
       {

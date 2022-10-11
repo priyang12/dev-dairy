@@ -1,3 +1,13 @@
+import {
+  PostSchema,
+  ProjectSchema,
+  RoadMapSchema,
+  SessionSchema,
+  ShareProjectSchema,
+  WorkSessionSchema,
+  z,
+} from '@dev-dairy/zodvalidation';
+
 export interface AuthState {
   authenticated: boolean;
   token: string;
@@ -17,67 +27,46 @@ export interface UserState {
   error: string;
 }
 
-export interface AlertState {
-  alert: string;
-  Type: 'success' | 'error' | 'info' | 'warning';
-  result: boolean;
-}
-
 export interface IAlert {
   message: string;
   result: boolean;
 }
 
-export interface INewPost {
-  title: string;
-  description: string;
+export type IPost = z.infer<typeof PostSchema> & {
+  _id: string;
   project: {
     _id: string;
     title: string;
     process: number;
   };
-  status: string;
-  roadMap: any;
-}
-export interface IPost extends INewPost {
-  _id: string;
-  user: string | any;
   date: string;
-}
+};
 
-export interface IRoadMap {
+export type IProject = Omit<z.infer<typeof ProjectSchema>, 'date'> & {
   _id: string;
-  name: string;
-  color?: string;
-  progress?: number;
-}
-
-export interface IProject {
-  _id: string;
-  user: string;
-  title: string;
-  description: string;
-  technologies: string[];
-  website: string;
-  roadMap: IRoadMap[];
-  process: number;
-  live?: boolean;
-  github?: string;
   date: string;
-}
+};
 
-export interface ISession {
+export type IRoadMap = z.infer<typeof RoadMapSchema> & {
   _id: string;
-  Time: number;
-  createdAt: string;
-  updatedAt: string;
-}
+};
 
-export interface IWorkSessions {
+export type ISession = z.infer<typeof SessionSchema> & {
   _id: string;
-  Time: number;
-  user: string;
+};
+
+export type IWorkSessions = Omit<
+  z.infer<typeof WorkSessionSchema>,
+  'session'
+> & {
+  _id: string;
   project: Pick<IProject, '_id' | 'process' | 'title' | 'description'>;
   session: ISession[];
   date: string;
+};
+
+export type ISharedProject = typeof ShareProjectSchema;
+
+export interface ISharedProjectReposes extends IProject {
+  user: Omit<IUser, 'password'>;
 }

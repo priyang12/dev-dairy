@@ -17,10 +17,10 @@ import {
 import invert from 'invert-color';
 import { useParams, Navigate } from 'react-router-dom';
 import {
-  useCreateNewRoadMapMutation,
-  useGetProjectIdQuery,
-  useGetRoadMapsQuery,
-  useRemoveRoadMapMutation,
+  useCreateNewRoadMap,
+  useGetProjectId,
+  useGetRoadMaps,
+  useRemoveRoadMap,
 } from '../../API/ProjectAPI';
 import Container from '../../components/Container';
 import RoadMapModal from './RoadMapModal';
@@ -30,24 +30,22 @@ import EditRoadMap from './EditRoadMap';
 
 function RoadMap() {
   const { id } = useParams<{ id: string }>();
-
-  const { data: RoadMapData, isFetching } = useGetRoadMapsQuery(id, {
+  const { data: RoadMapData, isFetching } = useGetRoadMaps(id, {
     skip: !id,
   });
-
-  const { isFetching: ProjectLoading, data: ProjectData } =
-    useGetProjectIdQuery(id, {
+  const { isFetching: ProjectLoading, data: ProjectData } = useGetProjectId(
+    id,
+    {
       skip: !id,
-    });
+    },
+  );
 
-  const [RoadMapMutate, RoadMapResult] = useCreateNewRoadMapMutation();
-  const [DeleteRoadMap, DeleteMapResult] = useRemoveRoadMapMutation();
+  const [RoadMapMutate, RoadMapResult] = useCreateNewRoadMap();
+  const [DeleteRoadMap, DeleteMapResult] = useRemoveRoadMap();
 
   if (!id) return <Navigate to="/projects" />;
 
-  if (isFetching) {
-    return <Spinner />;
-  }
+  if (isFetching) return <Spinner />;
 
   return (
     <Container maxW="1200px" mt={20}>
