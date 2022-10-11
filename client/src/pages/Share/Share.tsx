@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { CheckIcon, ExternalLinkIcon } from '@chakra-ui/icons';
 import { useParams } from 'react-router-dom';
-import { format, parseISO } from 'date-fns/esm';
+import { format, parseISO } from 'date-fns';
 import { useGetSharedProject } from '../../API/ShareProjectAPI';
 import Container from '../../components/Container';
 import Spinner from '../../components/spinner';

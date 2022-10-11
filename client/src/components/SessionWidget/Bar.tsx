@@ -133,7 +133,6 @@ function Bar() {
         </GridItem>
         <GridItem order={[1, 1, 3]}>
           <Text fontSize="3xl">Project : {Project.name}</Text>
-
           {!Initialized ? (
             <Text>Start The Timer</Text>
           ) : (

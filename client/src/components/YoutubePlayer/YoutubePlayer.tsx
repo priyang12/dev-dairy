@@ -50,7 +50,7 @@ function YoutubePlayer() {
   return (
     <>
       {!Show && (
-        <Box position="fixed" right="5%" bottom="0" zIndex="100">
+        <Box position="fixed" right="5%" bottom="0">
           <IconButton
             aria-label="Show-Player"
             onClick={() => setShow(true)}
