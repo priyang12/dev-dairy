@@ -6,7 +6,6 @@ import {
   IconButton,
   useDisclosure,
 } from '@chakra-ui/react';
-import { Ring } from '@priyang/react-component-lib';
 import { Link as RouterLink } from 'react-router-dom';
 import { BsFillFilterCircleFill } from 'react-icons/bs';
 import { useNewPost } from '../../API/PostAPI';
@@ -51,17 +50,9 @@ function Feeds() {
         }}
       >
         <MarginContainer display="flex" flexDir="column" py={5}>
-          <Ring
-            radius="15px"
-            ringColor="#080808"
-            w="fit-content"
-            m="auto"
-            my={10}
-          >
-            <Button onClick={onOpen} fontSize="3xl" p={10}>
-              Create New Entry
-            </Button>
-          </Ring>
+          <Button onClick={onOpen} fontSize="3xl" p={10}>
+            Create New Entry
+          </Button>
 
           <IconButton
             as={RouterLink}

@@ -13,7 +13,6 @@ function SerachUrl({ SubmitUrl, alert, urlInput, setUrlInput, Loading }: any) {
       onSubmit={SubmitUrl}
     >
       <FormControl width="100%">
-        {/* Need to Fix alert not showing in component lib */}
         <Label alert={alert}>Youtube URL</Label>
         <Input
           InputSize="large"
