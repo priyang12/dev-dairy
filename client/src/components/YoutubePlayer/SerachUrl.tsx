@@ -1,5 +1,5 @@
 import { Button, Box } from '@chakra-ui/react';
-import { FormInput, Input, Label } from '@priyang/react-component-lib';
+import { FormControl, Input, Label } from '@priyang/react-component-lib';
 
 function SerachUrl({ SubmitUrl, alert, urlInput, setUrlInput, Loading }: any) {
   return (
@@ -12,7 +12,7 @@ function SerachUrl({ SubmitUrl, alert, urlInput, setUrlInput, Loading }: any) {
       alignItems="center"
       onSubmit={SubmitUrl}
     >
-      <FormInput width="100%">
+      <FormControl width="100%">
         {/* Need to Fix alert not showing in component lib */}
         <Label alert={alert}>Youtube URL</Label>
         <Input
@@ -25,7 +25,7 @@ function SerachUrl({ SubmitUrl, alert, urlInput, setUrlInput, Loading }: any) {
             setUrlInput(e.target.value)
           }
         />
-      </FormInput>
+      </FormControl>
       <Button
         w={['50%', 'fit-content']}
         type="submit"

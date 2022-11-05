@@ -83,7 +83,7 @@ function LogoComponent() {
       _hover={{ color: 'primary.600' }}
       className="nav-link"
     >
-      <Flex alignItems="center">
+      <Flex alignItems="center" width={'50px'}>
         <img src={Logo} width={50} alt="Logo" />
         <Box ml={2}>
           <Heading fontFamily="cursive">
