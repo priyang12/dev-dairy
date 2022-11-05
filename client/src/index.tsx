@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 import { store as Store, Persister } from './store';
-import '@priyang/react-component-lib/dist/react-component-lib.cjs.development.css';
+import '@priyang/react-component-lib/dist/index.css';
 import 'react-toastify/dist/ReactToastify.css';
 import './Styles/Global.css';
 import App from './App';

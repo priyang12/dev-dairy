@@ -16,7 +16,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "paths": {
-      "@priyang/jsmediatags": ["./node_modules/@types/jsmediatags"]
+      "@priyang/jsmediatags": ["../node_modules/@types/jsmediatags"]
     }
   },
   "include": ["src", "./react-app-env.d.ts"],
