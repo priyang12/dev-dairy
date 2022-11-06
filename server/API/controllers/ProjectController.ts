@@ -61,6 +61,7 @@ export const CreateProject = asyncHandler(
       req.user._id,
       req.body
     );
+
     return res.status(201).json(message);
   }
 );
