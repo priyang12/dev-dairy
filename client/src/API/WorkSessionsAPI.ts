@@ -7,13 +7,7 @@ const WorkSessionsApi = createApi({
   reducerPath: 'SessionsApi',
   baseQuery: fetchBaseQuery({
     baseUrl: `${API}/workSession`,
-    prepareHeaders: (headers, { getState }) => {
-      const { token } = (getState() as RootState).Auth;
-      if (token) {
-        headers.set('x-auth-token', token);
-      }
-      return headers;
-    },
+    credentials: 'include',
   }),
   tagTypes: ['Sessions', 'ProjectSessions'],
   endpoints: (builder) => ({

@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { setToken, setError } from '../features/AuthSlice';
+import { setError } from '../features/AuthSlice';
 import { setUser } from '../features/UserSlice';
 import type { IUser } from '../interface';
 import type { AuthUserResponse } from './interface';
@@ -25,7 +25,6 @@ const AuthApi = createApi({
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          dispatch(setToken(data.token));
           dispatch(setUser(data.user));
         } catch (error: any) {
           const ErrorMessage = CheckError(error);
@@ -47,7 +46,6 @@ const AuthApi = createApi({
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          dispatch(setToken(data.token));
           dispatch(setUser(data.user));
         } catch (error: any) {
           const ErrorMessage = CheckError(error);

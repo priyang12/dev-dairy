@@ -195,7 +195,7 @@ function SingleProject() {
           </Flex>
 
           <Accordion allowToggle>
-            {project.roadMap.map((road: IRoadMap) => (
+            {project.roadMap.map((road: any) => (
               <AccordionItem key={road._id}>
                 <AccordionButton>
                   <Text

@@ -10,7 +10,6 @@ import { IProject } from "../../models/Project";
 export const GetProjects = asyncHandler(
   async (req: any, res: Response): Promise<any> => {
     const { Select } = req.query;
-
     const projectServiceInstance = Container.get(ProjectService);
     const projects = await projectServiceInstance.GetUserProjects(
       req.user._id,

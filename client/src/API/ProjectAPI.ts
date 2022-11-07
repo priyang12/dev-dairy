@@ -10,13 +10,7 @@ const ProjectApi = createApi({
   reducerPath: 'ProjectApi',
   baseQuery: fetchBaseQuery({
     baseUrl: `${API}/projects`,
-    prepareHeaders: (headers, { getState }) => {
-      const { token } = (getState() as RootState).Auth;
-      if (token) {
-        headers.set('x-auth-token', token);
-      }
-      return headers;
-    },
+    credentials: 'include',
   }),
 
   tagTypes: ['projectId', 'RoadMapsId'],

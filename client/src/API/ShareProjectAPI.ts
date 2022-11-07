@@ -7,13 +7,7 @@ const ShareProjectApi = createApi({
   reducerPath: 'ShareProjectApi',
   baseQuery: fetchBaseQuery({
     baseUrl: `${API}/shareProject`,
-    prepareHeaders: (headers, { getState }) => {
-      const { token } = (getState() as RootState).Auth;
-      if (token) {
-        headers.set('x-auth-token', token);
-      }
-      return headers;
-    },
+    credentials: 'include',
   }),
   tagTypes: ['ProjectToken'],
   endpoints: (builder) => ({

@@ -1,25 +1,21 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import {
+  BaseQueryFn,
+  createApi,
+  fetchBaseQuery,
+} from '@reduxjs/toolkit/query/react';
 import { toast } from 'react-toastify';
 import { CheckError } from '../utils/helpers';
 import API from '.';
 import type { IPost, IProject } from '../interface';
-import type { RootState } from '../store';
 import type { DeletedPostAPI, NewPostAPI, UpdatePostAPI } from './interface';
 
 const PostApi = createApi({
   reducerPath: 'PostAPI',
   baseQuery: fetchBaseQuery({
     baseUrl: `${API}/posts`,
-    prepareHeaders: (headers, { getState }) => {
-      const { token } = (getState() as RootState).Auth;
-      if (token) {
-        headers.set('x-auth-token', token);
-      }
-      return headers;
-    },
+    credentials: 'include',
   }),
   tagTypes: ['Posts', 'FilteredPosts'],
-
   endpoints: (builder) => ({
     GetPosts: builder.query<IPost[], any>({
       query({ page, limit }) {

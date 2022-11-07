@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useCookies } from 'react-cookie';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link as RouterLink, Navigate, useNavigate } from 'react-router-dom';
 import {
   Alert,
   AlertIcon,
@@ -21,7 +21,6 @@ import CustomForm from '../../components/CustomForm';
 function Login() {
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
   const [loginUser, result] = useLogin();
-  const navigate = useNavigate();
   const Auth: AuthState = useSelector((state: any) => state.Auth);
 
   const LoginFields: FormField[] = [
@@ -42,7 +41,6 @@ function Login() {
       email: e.target.elements.email.value,
       password: e.target.elements.password.value,
     };
-
     try {
       loginUser(LoginSchema.parse(FormValues));
     } catch (error) {
@@ -55,14 +53,13 @@ function Login() {
   };
 
   useEffect(() => {
-    if (Auth.authenticated) {
-      navigate('/Posts');
+    if (result.isSuccess) {
+      setCookie('token', result.data.token, { path: '/' });
+      <Navigate to="/posts" />;
     }
-  }, [Auth.authenticated, navigate]);
+  }, [result.isSuccess, result.data]);
 
-  if (Auth.authenticated) {
-    if (Auth.token) setCookie('token', Auth.token, { path: '/' });
-  }
+  if (cookies.token) return <Navigate to="/posts" />;
 
   return (
     <Box

@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import User from "../../models/User";
 
 export default async (req: any, res: Response, next: NextFunction) => {
-  const token = req.header("x-auth-token");
+  const token = req.cookies.token;
   //check token
   if (!token) {
     return res.status(401).json({ msg: "no token, authorization denied" });

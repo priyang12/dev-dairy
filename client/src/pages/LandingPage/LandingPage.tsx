@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux';
 import { Navigate, Link as ReactLink } from 'react-router-dom';
 import Data from './Data.json';
 import type { AuthState } from '../../interface';
+import { StoreState } from '../../store';
 
 const Arrow = createIcon({
   displayName: 'Arrow',
@@ -28,7 +29,9 @@ const Arrow = createIcon({
 });
 
 function LandingPage() {
-  const { authenticated }: AuthState = useSelector((state: any) => state.Auth);
+  const { authenticated }: AuthState = useSelector(
+    (state: StoreState) => state.Auth,
+  );
 
   if (authenticated) return <Navigate to="/Posts" />;
 

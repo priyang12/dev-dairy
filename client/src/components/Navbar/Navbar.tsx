@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux';
 import Logo from '../../Assets/diary.png';
 import NavLinks from './NavLink';
 import type { AuthState } from '../../interface';
+import { StoreState } from '../../store';
 
 function StyledIcon({ children, isDark, ...props }: any) {
   return (
@@ -98,7 +99,9 @@ function LogoComponent() {
 function NavBar() {
   const [isOpen, setIsOpen] = React.useState(true);
   const toggle = () => setIsOpen(!isOpen);
-  const { authenticated }: AuthState = useSelector((state: any) => state.Auth);
+  const { authenticated }: AuthState = useSelector(
+    (state: StoreState) => state.Auth,
+  );
   return (
     <NavBarContainer>
       <LogoComponent />

@@ -4,6 +4,9 @@ import { errorHandler, notFound } from "../API/middleware/Error";
 import routes from "../API/";
 import config from "../config/keys";
 import path from "path";
+import cookieParser from "cookie-parser";
+import keys from "../config/keys";
+
 export default ({ app }: { app: express.Application }) => {
   /**
    * Health Check endpoints
@@ -20,15 +23,21 @@ export default ({ app }: { app: express.Application }) => {
   // It shows the real origin IP in the heroku or Cloudwatch logs
   app.enable("trust proxy");
 
-  // The magic package that prevents frontend developers going nuts
-  // Alternate description:
-  // Enable Cross Origin Resource Sharing to all origins by default
-  app.use(cors());
+  app.use(
+    cors({
+      origin: keys.clientURL,
+      credentials: true,
+      allowedHeaders: ["Origin, X-Requested-With, Content-Type, Accept"],
+    })
+  );
 
   app.use(require("method-override")());
 
   // Transforms the raw string of req.body into json
   app.use(express.json());
+
+  app.use(cookieParser());
+
   // Load API routes
   app.use(config.api.prefix, routes());
 

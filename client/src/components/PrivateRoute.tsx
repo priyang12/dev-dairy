@@ -1,13 +1,12 @@
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
-import type { AuthState } from '../interface';
 import AuthRoutes from '../AuthRoutes';
+import { StoreState } from '../store';
 
 function PrivateOutlet() {
-  const Auth: AuthState = useSelector((state: any) => state.Auth);
-  console.log(Auth);
+  const { authenticated } = useSelector((state: StoreState) => state.Auth);
 
-  return Auth.authenticated ? <AuthRoutes /> : <Navigate to="/" />;
+  return authenticated ? <AuthRoutes /> : <Navigate to="/" />;
 }
 
 export default PrivateOutlet;
