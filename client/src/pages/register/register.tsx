@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useCookies } from 'react-cookie';
-import { Navigate, Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import {
   Alert,
   AlertIcon,
@@ -21,6 +21,7 @@ import CustomForm from '../../components/CustomForm';
 function Register() {
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
   const [registerUser, result] = useRegister();
+  const Navigate = useNavigate();
   const { error }: AuthState = useSelector((state: StoreState) => state.Auth);
   const RegisterFields: FormField[] = [
     {
@@ -83,11 +84,13 @@ function Register() {
   useEffect(() => {
     if (result.isSuccess) {
       setCookie('token', result.data.token, { path: '/' });
-      <Navigate to="/projects" />;
+      Navigate('/projects');
     }
-  }, [result.isSuccess, result.data]);
+  }, [result]);
 
-  if (cookies.token) return <Navigate to="/projects" />;
+  useEffect(() => {
+    if (cookies.token) Navigate('/projects');
+  }, [cookies.token]);
 
   return (
     <Box
