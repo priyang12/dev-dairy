@@ -43,27 +43,18 @@ function Feeds() {
         minH="100vh"
         backgroundSize="cover"
         backgroundRepeat="repeat"
-        BgImageData={{
-          url:
-            localStorage.getItem('PostImage') ||
-            'https://source.unsplash.com/aiKyJ6rHCP4',
-        }}
+        BgImageData={
+          {
+            // url:
+            //   localStorage.getItem('PostImage') ||
+            //   'https://source.unsplash.com/aiKyJ6rHCP4',
+          }
+        }
       >
         <MarginContainer display="flex" flexDir="column" py={5}>
           <Button onClick={onOpen} fontSize="3xl" p={10}>
             Create New Entry
           </Button>
-
-          <IconButton
-            as={RouterLink}
-            aria-label="Filter"
-            w="fit-content"
-            ml="auto"
-            fontSize="3xl"
-            to="/posts/filter"
-          >
-            <BsFillFilterCircleFill />
-          </IconButton>
 
           <PostModal
             page={1}
@@ -73,9 +64,21 @@ function Feeds() {
             actionSubmit={AddNewPost}
           />
 
-          <Heading size="4xl" textAlign="center" mb={5}>
-            Dairy Log
-          </Heading>
+          <Flex alignItems="center" justifyContent="center" m={5}>
+            <Heading size="4xl" textAlign="center" mb={5}>
+              Dairy Log
+            </Heading>
+            <IconButton
+              as={RouterLink}
+              aria-label="Filter"
+              w="fit-content"
+              ml="auto"
+              fontSize="3xl"
+              to="/posts/filter"
+            >
+              <BsFillFilterCircleFill />
+            </IconButton>
+          </Flex>
 
           {Posts.length > 0 && (
             <>

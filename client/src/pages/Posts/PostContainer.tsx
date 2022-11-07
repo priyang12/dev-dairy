@@ -3,7 +3,6 @@ import {
   Button,
   Flex,
   Heading,
-  Progress,
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
@@ -12,6 +11,8 @@ import { useDeletePost, useUpdatePostMutation } from '../../API/PostAPI';
 import PostModal from './PostModal';
 import { GetStatusColor } from '../../utils/GetStatusColor';
 import type { IPost } from '../../interface';
+import SharePost from './SharePost';
+import { assert, primary, space } from '../../Theme';
 
 type PropTypes = {
   post: IPost;
@@ -25,7 +26,6 @@ function PostContainer({ post, page }: PropTypes) {
 
   return (
     <Box
-      bgColor="primary.500"
       color="#fff"
       position="relative"
       p={5}
@@ -44,57 +44,47 @@ function PostContainer({ post, page }: PropTypes) {
       }}
     >
       <Box as="article" position="relative">
-        <Heading
-          textAlign="center"
-          mb={5}
-          color="primary.500"
-          fontFamily="Arial"
-        >
+        <Heading mb="md" fontFamily="Arial">
           Project : &nbsp;
           {post.project.title}
         </Heading>
-        <Box fontSize="2xl" w="100%" bg="#333" py={3} px={2} borderRadius={10}>
-          Process : &nbsp;
-          {post.project.process}
-          <Progress
-            colorScheme="green"
-            height="10px"
-            size="sm"
-            mt={4}
-            borderRadius="10px"
-            value={post.project.process}
-          />
-        </Box>
-        <Flex direction="column" p={5} fontSize="xl" pl={0}>
-          <Text fontSize="4xl" fontWeight="bold" color="primary.500">
-            {post.title}
-          </Text>
-
-          <Text color="primary.500" fontSize="2xl">
-            {post.description}
-          </Text>
+        <Flex direction="column" fontSize="xl" pl={0}>
+          <Box
+            bg={primary[700]}
+            p={space['sm']}
+            borderRadius={space.md}
+            border="2px solid"
+            borderColor={assert[500]}
+          >
+            <Text as="h3" fontSize="3xl" fontWeight="bold">
+              Title : <span>{post.title}</span>
+            </Text>
+            <Text fontSize="2xl">
+              Description : <span>{post.description}</span>
+            </Text>
+          </Box>
           <Flex
             justifyContent="space-between"
             alignItems="center"
             direction={['column', 'row']}
+            my="md"
+            gap={space.md}
           >
-            <Flex direction="column">
+            <Flex direction="column" gap="md">
               <Text
                 bg={GetStatusColor(post.status)}
                 color="#fff"
                 fontSize={['2xl', '3xl', '4xl']}
-                width="fit-content"
-                p={2}
-                my={5}
-                borderRadius={10}
+                textAlign="center"
+                borderRadius={space.sm}
               >
                 {post.status}
               </Text>
-              <Text fontSize="3xl" color="primary.500">
+              <Text fontSize="3xl">
                 {format(parseISO(post.date), "yyyy-MM-dd' 'HH:mm")}
               </Text>
             </Flex>
-            <Flex gap={5} direction="column">
+            <Flex gap={space.md} direction="column" w={['100%', 'auto']}>
               <Button onClick={onOpen} bg="red.500" fontSize="2xl">
                 Update Post
               </Button>
@@ -113,7 +103,7 @@ function PostContainer({ post, page }: PropTypes) {
             </Flex>
           </Flex>
         </Flex>
-
+        {post.status === 'Done' && <SharePost post={post} />}
         {isOpen && (
           <PostModal
             page={page}

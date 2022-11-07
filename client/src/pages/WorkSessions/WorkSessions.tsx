@@ -58,7 +58,7 @@ function WorkSessions() {
               as={Link}
               direction="column"
               gap={5}
-              _hover={{ color: 'third.600' }}
+              _hover={{ color: 'assert.600' }}
             >
               <Heading as="h2" fontSize="2xl">
                 Project : <span>{ProjectSession.project.title}</span>
