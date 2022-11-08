@@ -175,7 +175,7 @@ function MusicPlaylist() {
                 <Heading>No Songs Why Not Put some Below</Heading>
               </Box>
             )}
-            <Box mt={5} className="card">
+            <Box mt={5} className="glass">
               <DropZone
                 onDrop={onFileChange}
                 accept={{

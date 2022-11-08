@@ -31,6 +31,8 @@ export const errorHandler = (
   if (process.env.NODE_ENV !== "production") {
     console.log(ZodError);
   }
+  console.log(message);
+
   return res.status(code).json({
     message: message,
     ZodStack: ZodError,

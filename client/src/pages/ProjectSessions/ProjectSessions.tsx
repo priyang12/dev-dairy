@@ -83,7 +83,7 @@ function ProjectSessions() {
 
   return (
     <Container my={5}>
-      <Box className="card" p={5}>
+      <Box className="glass" p={5}>
         <Flex
           justifyContent="space-between"
           alignItems="center"
@@ -189,7 +189,7 @@ function ProjectSessions() {
                 justifyContent="space-between"
                 alignItems="center"
                 p={5}
-                className="card"
+                className="glass"
                 key={session._id}
               >
                 <Heading fontSize="xl">

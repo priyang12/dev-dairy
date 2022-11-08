@@ -12,7 +12,6 @@ const setup = (): any => {
     <BrowserRouter>
       <Login />
     </BrowserRouter>,
-    // { preloadedState: { Auth: AuthStateMock } },
   );
   return {
     email: screen.getByLabelText(/Email/),

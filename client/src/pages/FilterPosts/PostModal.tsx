@@ -89,16 +89,15 @@ function PostModal({
         status: '',
       });
     } else {
-      const data: any = {
+      const data = {
+        _id: post?._id,
         title: title.value,
         description: description.value,
         project: Project.value,
         status: status.value,
         roadMap: roadMap.value.split(',')[0],
       };
-      if (action !== 'New') {
-        data._id = post?._id;
-      }
+
       actionSubmit({
         UpdatedPost: data,
         filter,
@@ -200,7 +199,7 @@ function PostModal({
         </FormControl>
         <ModalFooter>
           <Button type="submit" colorScheme="blue" variant="solid">
-            {action === 'New' ? 'Create Log' : 'Update New Log'}
+            Update New Log
           </Button>
         </ModalFooter>
       </form>

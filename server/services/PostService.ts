@@ -10,24 +10,6 @@ export default class PostService {
     @Inject("logger") private logger: Logger
   ) {}
 
-  public async GetAllPost(userId: string): Promise<IPost[]> {
-    const Posts = await this.PostModel.find({ user: userId })
-      .sort({
-        date: -1,
-      })
-      .populate({
-        path: "project",
-        select: "title process roadMap",
-      });
-
-    if (!Posts) {
-      this.logger.error("Posts Not Found");
-      throw new Error("Posts Not Found");
-    }
-    this.logger.info("Posts Found");
-    return Posts;
-  }
-
   public async GetPostAggregate(userId: string): Promise<IPost[]> {
     const Posts = await this.PostModel.aggregate([
       {
@@ -92,77 +74,26 @@ export default class PostService {
     return Posts;
   }
 
-  public async GetPostsWithFilter(
-    userId: string,
-    status: string,
-    title: string,
-    project: string,
-    page: number,
-    limit: number,
-    Select?: string,
-    ProjectSelect?: string,
-    Sort?: string
-  ) {
-    const filter = {
-      user: userId,
-    } as Partial<
-      Pick<IPost, "status" | "project"> & {
-        title: {
-          $regex: string;
-          $options: string;
-        };
-      }
-    >;
-
-    if (status) {
-      filter["status"] = status;
-    }
-    if (title) {
-      filter["title"] = { $regex: title, $options: "i" };
-    }
-    if (project) {
-      filter["project"] = project;
-    }
-
-    const Posts = await this.PostModel.find(filter)
-      .skip(limit * (page - 1))
-      .limit(limit)
-      .select(Select)
-      .sort(
-        Sort || {
-          date: -1,
-        }
-      )
-      .populate({
-        path: "project",
-        select: ProjectSelect || "title process",
-      });
-
-    if (!Posts) {
-      this.logger.error("Posts Not Found");
-      throw new Error("Posts Not Found");
-    }
-    this.logger.info("Posts Found");
-    return Posts;
-  }
-
   public async GetPostsWithPagination(
     userId: string,
     page: number,
     limit: number,
     Select?: string,
     ProjectSelect?: string,
-    Sort?: string
+    Sort?: string,
+    filter?: any
   ): Promise<IPost[]> {
-    const Posts = await this.PostModel.find({ user: userId })
+    if (filter?.title) {
+      filter["title"] = { $regex: filter.title, $options: "i" };
+    }
+    const Posts = await this.PostModel.find({
+      user: userId,
+      ...filter,
+    })
       .skip(limit * (page - 1))
       .limit(limit)
       .select(Select)
-      .sort(
-        Sort || {
-          date: -1,
-        }
-      )
+      .sort(Sort)
       .populate({
         path: "project",
         select: ProjectSelect || "title process",

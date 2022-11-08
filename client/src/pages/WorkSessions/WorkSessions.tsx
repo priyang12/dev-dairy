@@ -46,7 +46,7 @@ function WorkSessions() {
       <Stack spacing={10} direction="column" my={5}>
         {data?.map((ProjectSession) => (
           <Box
-            className="card"
+            className="glass"
             key={ProjectSession._id}
             shadow="md"
             borderWidth="1px"
@@ -58,7 +58,7 @@ function WorkSessions() {
               as={Link}
               direction="column"
               gap={5}
-              _hover={{ color: 'third.600' }}
+              _hover={{ color: 'assert.600' }}
             >
               <Heading as="h2" fontSize="2xl">
                 Project : <span>{ProjectSession.project.title}</span>

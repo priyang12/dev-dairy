@@ -1,5 +1,6 @@
 import { Button, Box } from '@chakra-ui/react';
 import { FormControl, Input, Label } from '@priyang/react-component-lib';
+import { assert } from '../../Theme';
 
 function SerachUrl({ SubmitUrl, alert, urlInput, setUrlInput, Loading }: any) {
   return (
@@ -13,12 +14,15 @@ function SerachUrl({ SubmitUrl, alert, urlInput, setUrlInput, Loading }: any) {
       onSubmit={SubmitUrl}
     >
       <FormControl width="100%">
-        <Label alert={alert}>Youtube URL</Label>
+        <Label alert={alert} color={assert[600]}>
+          Youtube URL
+        </Label>
         <Input
           InputSize="large"
           type="url"
           value={urlInput}
           bg="primary.800"
+          color={assert[600]}
           width="100%"
           onChange={(e: { target: { value: any } }) =>
             setUrlInput(e.target.value)

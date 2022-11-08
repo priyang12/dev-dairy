@@ -1,10 +1,9 @@
 import { z } from "zod";
 
 export const RoadMapSchema = z.object({
-  _id: z.string(),
-  new: z.string(),
   name: z.string(),
   color: z.string(),
+  _id: z.string().optional(),
   progress: z.number().optional().default(0),
   github: z.string().optional(),
 });

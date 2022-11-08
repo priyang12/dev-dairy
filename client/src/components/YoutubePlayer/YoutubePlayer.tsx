@@ -50,7 +50,7 @@ function YoutubePlayer() {
   return (
     <>
       {!Show && (
-        <Box position="fixed" right="5%" bottom="0">
+        <Box position="fixed" right="5%" bottom="0" zIndex={2}>
           <IconButton
             aria-label="Show-Player"
             onClick={() => setShow(true)}
@@ -68,15 +68,13 @@ function YoutubePlayer() {
         bg="primary.700"
         borderRadius="2xl"
         width="100%"
+        height={['90%', 'auto']}
         transition="all 0.3s ease-in-out"
         transform={Show ? 'translateY(0)' : 'translateY(100%)'}
       >
         <Container>
           <IconButton
             aria-label="Close-YoutubePlayer"
-            position="absolute"
-            top="5px"
-            right="20%"
             onClick={() => setShow(false)}
           >
             <CloseIcon />

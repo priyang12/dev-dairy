@@ -23,7 +23,7 @@ function MusicList({ songs, playSongFN, RemoveSong }: any) {
           {(provided: any, snapshot: any) => (
             <div
               key={uuidv4()}
-              className="card"
+              className="glass"
               ref={provided.innerRef}
               style={getItemStyle(provided.draggableStyle, snapshot.isDragging)}
               {...provided.draggableProps}

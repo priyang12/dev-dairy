@@ -13,6 +13,8 @@ import { useSelector } from 'react-redux';
 import { Navigate, Link as ReactLink } from 'react-router-dom';
 import Data from './Data.json';
 import type { AuthState } from '../../interface';
+import { StoreState } from '../../store';
+import { space } from '../../Theme';
 
 const Arrow = createIcon({
   displayName: 'Arrow',
@@ -29,7 +31,7 @@ const Arrow = createIcon({
 
 function LandingPage() {
   const { authenticated }: AuthState = useSelector(
-    (state: any) => state.Auth,
+    (state: StoreState) => state.Auth,
   );
 
   if (authenticated) return <Navigate to="/Posts" />;
@@ -53,13 +55,7 @@ function LandingPage() {
               <feGaussianBlur stdDeviation="50" />
             </filter>
           </defs>
-          <circle
-            cx="71"
-            cy="61"
-            r="111"
-            fill="#F56565"
-            filter="url(#blur)"
-          />
+          <circle cx="71" cy="61" r="111" fill="#F56565" filter="url(#blur)" />
           <circle
             cx="244"
             cy="106"
@@ -67,12 +63,7 @@ function LandingPage() {
             fill="#ED64A6"
             filter="url(#blur)"
           />
-          <circle
-            cy="291"
-            r="139"
-            fill="#ED64A6"
-            filter="url(#blur)"
-          />
+          <circle cy="291" r="139" fill="#ED64A6" filter="url(#blur)" />
           <circle
             cx="80.5"
             cy="189.5"
@@ -117,9 +108,7 @@ function LandingPage() {
             lineHeight="110%"
             color="black"
           >
-            {Data.heading}
-            {' '}
-            <br />
+            {Data.heading} <br />
             <Text as="span" color="green.400">
               {Data.subheading}
             </Text>
@@ -136,11 +125,9 @@ function LandingPage() {
           >
             <Button
               fontSize="3xl"
-              p={5}
-              colorScheme="green"
-              bg="green.400"
+              p={space.md}
+              colorScheme="assert"
               rounded="full"
-              px={6}
               _hover={{
                 bg: 'green.500',
               }}
@@ -151,9 +138,9 @@ function LandingPage() {
             </Button>
             <Button
               fontSize="3xl"
-              p={5}
+              p={space.md}
               variant="link"
-              colorScheme="blue"
+              colorScheme="primary"
               size="sm"
             >
               <Link as={ReactLink} to="/login">

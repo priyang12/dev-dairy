@@ -30,7 +30,7 @@ function ShareModal() {
       </Button>
       <Modal onClose={onClose} isOpen={isOpen} isCentered>
         <ModalOverlay />
-        <ModalContent className="card" bg="transparent">
+        <ModalContent className="glass" bg="transparent">
           <ModalHeader>Share Link</ModalHeader>
           <ModalCloseButton data-testid="CloseModelButton" />
           <ModalBody>

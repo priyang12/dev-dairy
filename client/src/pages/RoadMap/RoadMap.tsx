@@ -27,6 +27,7 @@ import RoadMapModal from './RoadMapModal';
 import Spinner from '../../components/spinner';
 import RandomColor from '../../utils/RandomColor';
 import EditRoadMap from './EditRoadMap';
+import { assert } from '../../Theme';
 
 function RoadMap() {
   const { id } = useParams<{ id: string }>();
@@ -71,7 +72,7 @@ function RoadMap() {
       <Accordion allowToggle>
         {RoadMapData && RoadMapData.length > 0 ? (
           RoadMapData.map((road) => (
-            <AccordionItem key={road._id} bg="secondary.900">
+            <AccordionItem key={road._id} bg={assert[800]}>
               <AccordionButton>
                 <Text
                   key={road.name}

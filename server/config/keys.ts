@@ -4,6 +4,7 @@ dotenv.config();
 const keys = {
   Port: process.env.PORT || 5000,
   mongoURL: process.env.URI,
+  clientURL: process.env.ClientURL || "http://localhost:3000",
   mongoDevURI: process.env.Test_URI,
   jwtSecret: process.env.jwtSecret,
   Email: process.env.Email,

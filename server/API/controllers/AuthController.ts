@@ -3,6 +3,9 @@ import type { Request, Response } from "express";
 import AuthService from "../../services/AuthService";
 import Container from "typedi";
 import UserService from "../../services/UserService";
+import NodeCache from "node-cache";
+
+export const UserCache = new NodeCache({ stdTTL: 600 });
 
 // @route   GET api/Users/me
 // @desc    Fetch User
@@ -44,6 +47,7 @@ export const loginUser = asyncHandler(async (req, res): Promise<any> => {
 export const UpdateUser = asyncHandler(async (req: any, res): Promise<any> => {
   const authServiceInstance = Container.get(UserService);
   const user = await authServiceInstance.UpdateUser(req.user, req.body);
+  UserCache.flushAll();
   return res.status(200).json(user);
 });
 
@@ -54,6 +58,7 @@ export const DeleteUser = asyncHandler(
   async (req: any, res: Response): Promise<any> => {
     const authServiceInstance = Container.get(UserService);
     const data = await authServiceInstance.DeleteUser(req.user._id);
+    UserCache.flushAll();
     return res.status(200).json(data);
   }
 );

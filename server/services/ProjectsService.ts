@@ -4,6 +4,7 @@ import { IProject, IRoadMap } from "../models/Project";
 import { Logger } from "winston";
 import { IPost } from "../models/Post";
 import { IWorkSessions } from "../models/WorkSessions";
+import { runInTransaction } from "../utils/Transactions";
 
 @Service()
 export default class UserService {
@@ -19,7 +20,7 @@ export default class UserService {
     Select: string
   ): Promise<IProject[]> {
     const Projects = await this.ProjectModel.find({ user: userId }).select(
-      Select?.concat(" -__v") || "-__v"
+      Select?.concat(" -__v")
     );
 
     if (!Projects) {
@@ -39,7 +40,7 @@ export default class UserService {
       _id: projectId,
       user: userId,
     })
-      .select(Select?.concat(" -__v") || "-__v")
+      .select(Select ? Select?.concat(" -__v") : " -__v")
       .exec();
     if (!project) {
       this.logger.error("Project Not Found");
@@ -65,32 +66,45 @@ export default class UserService {
     return roadMaps;
   }
 
-  public async PostProject(
-    userId: string,
-    project: IProject
-  ): Promise<{ message: string; result: boolean; project: IProject }> {
-    const newProject = await this.ProjectModel.create({
-      ...project,
-      user: userId,
-    });
-    const WorkSession = await this.WorkSessionModel.create({
-      project: newProject._id,
-      user: userId,
-      session: [],
-      date: new Date(),
-    });
+  public async PostProject(userId: string, project: IProject) {
+    return runInTransaction(async (session) => {
+      const newProject = await this.ProjectModel.create(
+        [
+          {
+            ...project,
+            user: userId,
+          },
+        ],
+        {
+          session: session,
+        }
+      );
+      const WorkSession = await this.WorkSessionModel.create(
+        [
+          {
+            project: newProject[0]._id,
+            user: userId,
+            session: [],
+            date: new Date(),
+          },
+        ],
+        {
+          session: session,
+        }
+      );
 
-    if (!newProject || !WorkSession) {
-      this.logger.error("Project Not Created");
-      throw new Error("CRUD Error: Project Not Created");
-    }
+      if (!newProject || !WorkSession) {
+        this.logger.error("Project Not Created");
+        throw new Error("CRUD Error: Project Not Created");
+      }
 
-    this.logger.info("Project created with RoadMaps");
-    return {
-      result: true,
-      project: newProject,
-      message: `Project ${newProject.title} created`,
-    };
+      this.logger.info("Project created with RoadMaps");
+      return {
+        result: true,
+        project: newProject,
+        message: `Project ${newProject[0].title} created`,
+      };
+    });
   }
   public async UpdateProject(
     userId: string,
@@ -187,33 +201,41 @@ export default class UserService {
     };
   }
 
-  public async DeleteProject(
-    userId: string,
-    projectId: string
-  ): Promise<{ message: string; result: boolean }> {
-    const [deletedProject, deletedPosts, deletedWorkSessions] =
-      await Promise.all([
-        this.ProjectModel.findOneAndDelete({
-          _id: projectId,
-          user: userId,
-        }).exec(),
-        this.PostModel.deleteMany({ project: projectId, user: userId }).exec(),
-        this.WorkSessionModel.findOneAndDelete({
-          project: projectId,
-          user: userId,
-        }).exec(),
-      ]);
+  public async DeleteProject(userId: string, projectId: string) {
+    return runInTransaction(async (session) => {
+      const [deletedProject, deletedPosts, deletedWorkSessions] =
+        await Promise.all([
+          this.ProjectModel.findOneAndDelete({
+            _id: projectId,
+            user: userId,
+          })
+            .session(session)
+            .exec(),
+          this.PostModel.deleteMany({
+            project: projectId,
+            user: userId,
+          })
+            .session(session)
+            .exec(),
+          this.WorkSessionModel.findOneAndDelete({
+            project: projectId,
+            user: userId,
+          })
+            .session(session)
+            .exec(),
+        ]);
 
-    if (!deletedProject || !deletedPosts || !deletedWorkSessions) {
-      this.logger.error("CRUD Error: Project Not Deleted");
-      throw new Error("CRUD Error: Project Not Deleted");
-    }
+      if (!deletedProject || !deletedPosts || !deletedWorkSessions) {
+        this.logger.error("CRUD Error: Project Not Deleted");
+        throw new Error("CRUD Error: Project Not Deleted");
+      }
 
-    this.logger.info("Project deleted");
+      this.logger.info("Project deleted");
 
-    return {
-      result: true,
-      message: `Project ${deletedProject.title} deleted`,
-    };
+      return {
+        result: true,
+        message: `Project ${deletedProject.title} deleted`,
+      };
+    });
   }
 }

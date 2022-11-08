@@ -3,7 +3,6 @@ import type { AuthState } from '../interface';
 
 const initState: AuthState = {
   authenticated: false,
-  token: '',
   error: null,
 };
 
@@ -11,9 +10,8 @@ const AuthSlice = createSlice({
   name: 'AuthAPI',
   initialState: initState,
   reducers: {
-    setToken: (state, action) => ({
+    setAuth: (state) => ({
       ...state,
-      token: action.payload,
       authenticated: true,
     }),
     setError: (state, action) => ({
@@ -30,6 +28,6 @@ const AuthSlice = createSlice({
   },
 });
 
-export const { logout, setError, setToken } = AuthSlice.actions;
+export const { logout, setError, setAuth } = AuthSlice.actions;
 
 export default AuthSlice.reducer;

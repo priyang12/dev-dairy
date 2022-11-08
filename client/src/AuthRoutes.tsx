@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 import React, { lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import FallBackSuspenseWrapper from './components/FallBackSuspenseWrapper';
@@ -28,7 +28,7 @@ function AuthContainer({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Navbar />
-      <Box position="fixed" right="0" bottom="0" zIndex="10" w="100%">
+      <Flex w="100%" gap={'xl'}>
         <FallBackSuspenseWrapper fallback={false}>
           <MusicPlayer />
         </FallBackSuspenseWrapper>
@@ -38,7 +38,7 @@ function AuthContainer({ children }: { children: React.ReactNode }) {
         <FallBackSuspenseWrapper fallback={false}>
           <YoutubePlayer />
         </FallBackSuspenseWrapper>
-      </Box>
+      </Flex>
       {children}
     </>
   );

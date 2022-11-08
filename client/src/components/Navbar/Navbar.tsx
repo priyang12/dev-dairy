@@ -13,6 +13,8 @@ import { useSelector } from 'react-redux';
 import Logo from '../../Assets/diary.png';
 import NavLinks from './NavLink';
 import type { AuthState } from '../../interface';
+import { StoreState } from '../../store';
+import { assert, primary } from '../../Theme';
 
 function StyledIcon({ children, isDark, ...props }: any) {
   return (
@@ -79,8 +81,8 @@ function LogoComponent() {
     <Link
       as={RouterLink}
       to="/"
-      color="primary.100"
-      _hover={{ color: 'primary.600' }}
+      color={assert[600]}
+      _hover={{ color: 'secondary.600' }}
       className="nav-link"
     >
       <Flex alignItems="center" width={'50px'}>
@@ -98,7 +100,9 @@ function LogoComponent() {
 function NavBar() {
   const [isOpen, setIsOpen] = React.useState(true);
   const toggle = () => setIsOpen(!isOpen);
-  const { authenticated }: AuthState = useSelector((state: any) => state.Auth);
+  const { authenticated }: AuthState = useSelector(
+    (state: StoreState) => state.Auth,
+  );
   return (
     <NavBarContainer>
       <LogoComponent />

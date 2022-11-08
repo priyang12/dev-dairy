@@ -53,20 +53,3 @@ it('render Projects with no projects', async () => {
   await waitForElementToBeRemoved(screen.getByAltText('loading...'));
   expect(screen.getByText('No Projects')).toBeInTheDocument();
 });
-
-it('Redirect On Single Project Page', async () => {
-  setup();
-  await waitForElementToBeRemoved(screen.getByAltText('loading...'));
-  const NextPage = screen.getAllByRole('link', {
-    name: 'More',
-  });
-  await userEvent.click(NextPage[0]);
-  expect(history.push).toHaveBeenCalledWith(
-    {
-      hash: '',
-      pathname: `/Projects/${ProjectsResponse[0]._id}`,
-      search: '',
-    },
-    undefined,
-  );
-});

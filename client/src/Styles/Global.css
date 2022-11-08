@@ -17,7 +17,7 @@ a:hover {
   z-index: -1;
 }
 
-.card {
+.glass {
   backdrop-filter: blur(10px) saturate(180%);
   -webkit-backdrop-filter: blur(10px) saturate(180%);
   background-color: rgba(10, 11, 18, 0.49);

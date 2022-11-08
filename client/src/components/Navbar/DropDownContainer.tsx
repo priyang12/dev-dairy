@@ -76,7 +76,7 @@ function DropDownContainer() {
             zIndex={2000}
             fontSize="3xl"
             bg="transparent"
-            className="card"
+            className="glass"
           >
             <Link
               as={RouterLink}

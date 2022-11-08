@@ -140,7 +140,7 @@ function MusicPlayer() {
           <Box
             mt={20}
             bg="transparent"
-            className="card"
+            className="glass"
             w={Hidden ? '0px' : '250px'}
             p={5}
             shadow={4}

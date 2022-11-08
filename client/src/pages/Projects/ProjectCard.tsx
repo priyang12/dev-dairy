@@ -3,12 +3,21 @@ import { Link as RouterLink } from 'react-router-dom';
 import { format, parseISO } from 'date-fns';
 import RandomColor from '../../utils/RandomColor';
 import type { IProject } from '../../interface';
+import { assert, secondary, space } from '../../Theme';
 
 function ProjectCard({ Project }: { Project: IProject }) {
   return (
-    <Box p={5} shadow="md" borderWidth="1px" width="100%">
-      <Heading fontSize="xl">{Project.title}</Heading>
-      <Text mt={4}>{Project.description}</Text>
+    <Box
+      p={5}
+      shadow="md"
+      borderWidth="1px"
+      borderColor={assert[600]}
+      width="100%"
+    >
+      <Heading fontSize={space['xl']}>{Project.title}</Heading>
+      <Text mt={4} fontSize={space.lg}>
+        {Project.description}
+      </Text>
 
       <Flex gap={['4', '5', '10']} mt={5} direction={['column', 'row']}>
         {Project.technologies.map((tech) => (
@@ -24,7 +33,7 @@ function ProjectCard({ Project }: { Project: IProject }) {
           </Text>
         ))}
       </Flex>
-      <Box bg="#333" mt={5} p={5} borderRadius={5}>
+      <Box bg="#333" mt={space.md} p={space.md} borderRadius={5}>
         <Text>Progress</Text>
         <Progress
           colorScheme="green"
@@ -36,18 +45,47 @@ function ProjectCard({ Project }: { Project: IProject }) {
           value={Project.process}
         />
       </Box>
-      <Flex justifyContent="space-between" gap={5} alignItems="center" mt={5}>
-        <Button as={RouterLink} to={`/Projects/${Project._id}`}>
+      <Flex
+        flexDirection={['column', 'row']}
+        justifyContent="space-between"
+        alignItems="center"
+        gap={space.md}
+        mt={space.md}
+      >
+        <Button
+          as={RouterLink}
+          to={`/Projects/${Project._id}`}
+          w={['100%', 'auto']}
+          colorScheme="blue"
+        >
           More
         </Button>
-        <Button flex={1} as={RouterLink} to={`/ShareProject/${Project._id}`}>
+        <Button
+          flex={['', '', 1]}
+          as={RouterLink}
+          to={`/ShareProject/${Project._id}`}
+          w={['100%', 'auto']}
+          textOverflow="ellipsis"
+          whiteSpace="nowrap"
+          overflow="hidden"
+        >
           Share Project
         </Button>
-        <Button as={RouterLink} to={`/Project/Sessions/${Project._id}`}>
+        <Button
+          flex={['', 1, '']}
+          as={RouterLink}
+          to={`/Project/Sessions/${Project._id}`}
+          w={['100%', 'auto']}
+        >
           Work Sessions
         </Button>
 
-        <Text textAlign="right">
+        <Text
+          textAlign="right"
+          p={space.md}
+          bg={secondary[200]}
+          borderRadius={space.sm}
+        >
           {format(parseISO(Project.date), "dd-MM-yyyy' 'HH:mm")}
         </Text>
       </Flex>
