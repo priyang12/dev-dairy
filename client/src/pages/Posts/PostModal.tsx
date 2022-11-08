@@ -103,8 +103,8 @@ function PostModal({
       if (action === 'update') {
         actionSubmit({
           UpdatedPost: {
-            ...data,
             _id: post._id,
+            ...data,
           },
           page,
         });

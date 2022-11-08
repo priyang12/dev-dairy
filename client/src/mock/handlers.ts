@@ -65,23 +65,22 @@ const handlers = [
   // Posts
   rest.get(`${API}/posts`, (req, res, ctx) => {
     const page = req.url.searchParams.get('page');
-    if (page === '1' || !page) {
-      return res(ctx.json(PostsResponse));
-    }
-    return res(ctx.json(Page2PostsResponse));
-  }),
-  rest.get(`${API}/posts/filter`, (req, res, ctx) => {
     const status = req.url.searchParams.get('status');
     const title = req.url.searchParams.get('title');
     const project = req.url.searchParams.get('project');
-    const FilteredPosts = PostsResponse.filter(
-      (post) =>
-        (status && post.status === status) ||
-        (title && post.title.includes(title)) ||
-        (project && post.project._id === project),
-    );
 
-    return res(ctx.json(FilteredPosts));
+    if (page === '1' || !page) {
+      return res(ctx.json(PostsResponse));
+    } else if (status || title || project) {
+      const FilteredPosts = PostsResponse.filter(
+        (post) =>
+          (status && post.status === status) ||
+          (title && post.title.includes(title)) ||
+          (project && post.project._id === project),
+      );
+      return res(ctx.json(FilteredPosts));
+    }
+    return res(ctx.json(Page2PostsResponse));
   }),
 
   rest.post(`${API}/posts`, (req, res, ctx) => res(ctx.json(NewPostResponse))),

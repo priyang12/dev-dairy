@@ -8,7 +8,7 @@ import {
 import { useLocation } from 'react-router-dom';
 import { BsFillFilterCircleFill } from 'react-icons/bs';
 import { useEffect } from 'react';
-import { useGetFilteredPosts } from '../../API/PostAPI';
+import { useGetPostsQuery } from '../../API/PostAPI';
 import PostContainer from './PostContainer';
 import Spinner from '../../components/spinner';
 import MarginContainer from '../../components/MarginContainer';
@@ -18,10 +18,9 @@ import FilterMenu from './FilterMenu';
 function Feeds() {
   const { search } = useLocation();
   const { isOpen, onClose, onToggle } = useDisclosure();
-  const { isLoading: LoadingPosts, data: Posts } = useGetFilteredPosts(search, {
+  const { isLoading: LoadingPosts, data: Posts } = useGetPostsQuery(search, {
     skip: !search,
   });
-
   useEffect(() => {
     onToggle();
   }, []);
@@ -34,9 +33,11 @@ function Feeds() {
         minH="100vh"
         backgroundSize="cover"
         backgroundRepeat="repeat"
-        BgImageData={{
-          url: 'https://source.unsplash.com/random/?dark-nature',
-        }}
+        BgImageData={
+          {
+            // url: 'https://source.unsplash.com/random/?dark-nature',
+          }
+        }
       >
         <MarginContainer display="flex" flexDir="column" py={5}>
           <Heading size="4xl" textAlign="center" mb={5}>
@@ -59,7 +60,7 @@ function Feeds() {
           )}
           {Posts && Posts.length > 0 ? (
             <Flex flexDir="column" gap={10}>
-              {Posts.map((post: any) => (
+              {Posts.map((post) => (
                 <PostContainer key={post._id} post={post} />
               ))}
             </Flex>

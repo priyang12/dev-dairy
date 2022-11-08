@@ -15,46 +15,17 @@ const PostApi = createApi({
     baseUrl: `${API}/posts`,
     credentials: 'include',
   }),
-  tagTypes: ['Posts', 'FilteredPosts'],
+  tagTypes: ['Posts'],
   endpoints: (builder) => ({
     GetPosts: builder.query<IPost[], any>({
-      query({ page, limit }) {
+      query(params) {
         return {
           url: '',
           method: 'get',
-          params: {
-            page,
-            limit,
-          },
+          params: params,
         };
       },
       providesTags: ['Posts'],
-    }),
-    GetPost: builder.query<IPost, string>({
-      query(id) {
-        return {
-          url: `/${id}`,
-          method: 'get',
-        };
-      },
-    }),
-    GetPostByProject: builder.query<IPost[], string>({
-      query(id) {
-        return {
-          url: `/project/${id}`,
-          method: 'get',
-        };
-      },
-      providesTags: ['Posts'],
-    }),
-    GetFilteredPosts: builder.query<IPost[], string>({
-      query(filter) {
-        return {
-          url: `/filter${filter}`,
-          method: 'GET',
-        };
-      },
-      providesTags: ['FilteredPosts'],
     }),
     NewPost: builder.mutation<
       NewPostAPI,
@@ -104,42 +75,60 @@ const PostApi = createApi({
         page: number;
       }
     >({
-      query({ UpdatedPost }) {
+      query({ UpdatedPost, page }) {
         return {
           url: `/${UpdatedPost._id}`,
           method: 'put',
           body: UpdatedPost,
         };
       },
-
       onQueryStarted({ UpdatedPost, page }, { dispatch, queryFulfilled }) {
-        const UpdateResult = dispatch(
-          PostApi.util.updateQueryData(
-            'GetPosts',
-            {
-              page,
-              limit: 10,
-            },
-            (posts) =>
-              posts.map((post) => {
-                if (post._id === UpdatedPost._id) {
-                  UpdatedPost.project = post.project;
-                  UpdatedPost.date = post.date;
-                  return UpdatedPost as IPost;
-                }
-                return post;
-              }),
-          ),
-        );
+        // need to look at
+        // it is causing api call to send wrong data
+        // const UpdateResult = dispatch(
+        //   PostApi.util.updateQueryData(
+        //     'GetPosts',
+        //     {
+        //       page,
+        //       limit: 10,
+        //     },
+        //     (posts) =>
+        //       posts.map((post) => {
+        //         if (post._id === UpdatedPost._id) {
+        //           UpdatedPost.project = post.project;
+        //           UpdatedPost.date = post.date;
+        //           return UpdatedPost as IPost;
+        //         }
+        //         return post;
+        //       }),
+        //   ),
+        // );
 
         queryFulfilled
           .then(({ data: UpdatePost }) => {
             toast.success(`${UpdatePost.message} Updated Successfully`);
+            dispatch(
+              PostApi.util.updateQueryData(
+                'GetPosts',
+                {
+                  page,
+                  limit: 10,
+                },
+                (posts) =>
+                  posts.map((post) => {
+                    if (post._id === UpdatedPost._id) {
+                      UpdatedPost.project = post.project;
+                      UpdatedPost.date = post.date;
+                      return UpdatedPost as IPost;
+                    }
+                    return post;
+                  }),
+              ),
+            );
           })
           .catch((error: any) => {
             const errorMessage = CheckError(error);
             toast.warning(errorMessage);
-            UpdateResult.undo();
           });
       },
     }),
@@ -192,33 +181,31 @@ const PostApi = createApi({
       query({ UpdatedPost }) {
         return {
           url: `/${UpdatedPost._id}`,
-          method: 'put',
+          method: 'PUT',
           body: UpdatedPost,
         };
       },
       onQueryStarted({ UpdatedPost, filter }, { dispatch, queryFulfilled }) {
-        const UpdateResult = dispatch(
-          PostApi.util.updateQueryData('GetFilteredPosts', filter, (posts) =>
-            posts.map((post) => {
-              if (post._id === UpdatedPost._id) {
-                UpdatedPost.project = post.project;
-                UpdatedPost.date = post.date;
-                return UpdatedPost as IPost;
-              }
-              return post;
-            }),
-          ),
-        );
-
         queryFulfilled
           .then(({ data: UpdatePost }) => {
             dispatch(PostApi.util.invalidateTags(['Posts']));
             toast.success(`${UpdatePost.message} Updated Successfully`);
+            dispatch(
+              PostApi.util.updateQueryData('GetPosts', filter, (posts) =>
+                posts.map((post) => {
+                  if (post._id === UpdatedPost._id) {
+                    UpdatedPost.project = post.project;
+                    UpdatedPost.date = post.date;
+                    return UpdatedPost as IPost;
+                  }
+                  return post;
+                }),
+              ),
+            );
           })
           .catch((error: any) => {
             const errorMessage = CheckError(error);
             toast.dark(errorMessage);
-            UpdateResult.undo();
           });
       },
     }),
@@ -238,14 +225,10 @@ const PostApi = createApi({
 
       onQueryStarted({ id, filter }, { dispatch, queryFulfilled }) {
         const deleteResult = dispatch(
-          PostApi.util.updateQueryData(
-            'GetFilteredPosts',
-            filter,
-            (data: IPost[]) => {
-              const newData = data.filter((item: IPost) => item._id !== id);
-              return newData;
-            },
-          ),
+          PostApi.util.updateQueryData('GetPosts', filter, (data: IPost[]) => {
+            const newData = data.filter((item: IPost) => item._id !== id);
+            return newData;
+          }),
         );
         queryFulfilled
           .then(({ data: DeleteRes }) => {
@@ -264,10 +247,7 @@ const PostApi = createApi({
 
 export const {
   useGetPostsQuery,
-  useGetFilteredPostsQuery: useGetFilteredPosts,
   useLazyGetPostsQuery: useLazyGetPosts,
-  useGetPostQuery,
-  useGetPostByProjectQuery,
   useNewPostMutation: useNewPost,
   useUpdatePostMutation,
   useUpdateFilterPostMutation: useUpdateFilterPost,

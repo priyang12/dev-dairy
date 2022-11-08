@@ -32,12 +32,12 @@ function AuthContainer({ children }: { children: React.ReactNode }) {
         <FallBackSuspenseWrapper fallback={false}>
           <MusicPlayer />
         </FallBackSuspenseWrapper>
-        <FallBackSuspenseWrapper fallback={false}>
+        {/* <FallBackSuspenseWrapper fallback={false}>
           <SessionWidget />
-        </FallBackSuspenseWrapper>
-        <FallBackSuspenseWrapper fallback={false}>
+        </FallBackSuspenseWrapper> */}
+        {/* <FallBackSuspenseWrapper fallback={false}>
           <YoutubePlayer />
-        </FallBackSuspenseWrapper>
+        </FallBackSuspenseWrapper> */}
       </Box>
       {children}
     </>

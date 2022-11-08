@@ -12,33 +12,36 @@ import { useGetProjects } from '../../API/ProjectAPI';
 import useForm from '../../Hooks/useForm';
 import { IProject } from '../../interface';
 
+type FilterTypes = {
+  title: string;
+  project: string;
+  status: string;
+  date: string;
+};
+
 function FilterMenu({ onClose }: { onClose: () => void }) {
   const [search, setSearch] = useSearchParams();
   const { data: Projects, isLoading: LoadingProject } = useGetProjects({
-    Select: '-roadMap',
+    select: '-roadMap',
   });
-  const { FormValues, ErrorsState, HandleChange } = useForm<{
-    title: string;
-    project: string;
-    status: string;
-    date: string;
-  }>({
-    title: search.get('title') || '',
-    project: search.get('project') || '',
-    status: search.get('status') || '',
-    date: search.get('date') || '',
+
+  const CurrentFilter = search.get('filter')
+    ? (JSON.parse(search.get('filter') as string) as FilterTypes)
+    : null;
+
+  const { FormValues, ErrorsState, HandleChange } = useForm({
+    title: CurrentFilter?.title || '',
+    project: CurrentFilter?.project || '',
+    status: CurrentFilter?.status || '',
+    date: CurrentFilter?.date || '',
   });
 
   const SubmitFilter = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const query = Object.entries(FormValues).reduce((acc, [key, value]) => {
-      if (value) {
-        return `${acc}&${key}=${value}`;
-      }
-      return acc;
-    }, '');
-
-    setSearch(query);
+    const query = Object.fromEntries(
+      Object.entries(FormValues).filter(([_, v]) => v != ''),
+    );
+    setSearch(`filter=${JSON.stringify(query)}`);
     onClose();
   };
   return (
