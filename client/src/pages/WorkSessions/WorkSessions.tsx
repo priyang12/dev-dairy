@@ -46,7 +46,7 @@ function WorkSessions() {
       <Stack spacing={10} direction="column" my={5}>
         {data?.map((ProjectSession) => (
           <Box
-            className="card"
+            className="glass"
             key={ProjectSession._id}
             shadow="md"
             borderWidth="1px"

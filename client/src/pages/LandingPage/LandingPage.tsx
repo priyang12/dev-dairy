@@ -14,6 +14,7 @@ import { Navigate, Link as ReactLink } from 'react-router-dom';
 import Data from './Data.json';
 import type { AuthState } from '../../interface';
 import { StoreState } from '../../store';
+import { space } from '../../Theme';
 
 const Arrow = createIcon({
   displayName: 'Arrow',
@@ -124,11 +125,9 @@ function LandingPage() {
           >
             <Button
               fontSize="3xl"
-              p={5}
-              colorScheme="green"
-              bg="green.400"
+              p={space.md}
+              colorScheme="assert"
               rounded="full"
-              px={6}
               _hover={{
                 bg: 'green.500',
               }}
@@ -139,9 +138,9 @@ function LandingPage() {
             </Button>
             <Button
               fontSize="3xl"
-              p={5}
+              p={space.md}
               variant="link"
-              colorScheme="blue"
+              colorScheme="primary"
               size="sm"
             >
               <Link as={ReactLink} to="/login">

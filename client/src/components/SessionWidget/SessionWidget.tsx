@@ -39,10 +39,12 @@ function SessionWidget() {
     <>
       {!Display && (
         <WidgetIcon
+          zIndex={2}
           setDisplay={setDisplay}
           Display={Display}
+          position="fixed"
+          left="5%"
           bottom="0"
-          right="10%"
         >
           <HiChevronDoubleUp />
         </WidgetIcon>
@@ -51,7 +53,10 @@ function SessionWidget() {
       <Box
         p={5}
         w="100%"
-        zIndex="20"
+        position="fixed"
+        right="0"
+        bottom="0"
+        zIndex="10"
         bg="primary.700"
         borderBottom="2px solid #e6e6e6"
         as={motion.div}

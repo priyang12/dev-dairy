@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect } from 'react';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useCookies } from 'react-cookie';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
@@ -17,6 +17,7 @@ import type { AuthState } from '../../interface';
 import { StoreState } from '../../store';
 import { useRegister } from '../../API/AuthAPI';
 import CustomForm from '../../components/CustomForm';
+import { space } from '../../Theme';
 
 function Register() {
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
@@ -94,57 +95,72 @@ function Register() {
 
   return (
     <Box
-      pt={15}
-      px={10}
-      backgroundImage={`url(${
-        localStorage.getItem('AuthImage') ||
-        'https://source.unsplash.com/npwjNTG_SQA'
-      })`}
+      p={space.lg}
+      backgroundImage={`url(${'https://source.unsplash.com/npwjNTG_SQA'})`}
       backgroundPosition="center"
       backgroundSize="cover"
       backgroundRepeat="no-repeat"
     >
-      <Heading textAlign="center">Register Page</Heading>
-      <Flex
-        justifyContent="space-between"
-        flexDir={['column', 'column', 'row']}
+      <Box
+        fontFamily="arial"
+        fontSize="4xl"
+        textAlign="center"
+        className="glass"
+        p={space.md}
       >
+        <Heading>Register Page</Heading>
+        <Text>Sign up for your DevConnector account</Text>
+        <Flex
+          justifyContent="center"
+          alignItems="center"
+          gap={space.lg}
+          direction={['column', 'row']}
+        >
+          <Text>Already have an account?</Text>
+          <Button
+            as={RouterLink}
+            to="/login"
+            colorScheme="assert"
+            variant="outline"
+            backdropFilter="auto"
+            backdropBlur="10px"
+            fontSize={space.md}
+          >
+            Login
+          </Button>
+        </Flex>
+      </Box>
+      <>
         {error && (
-          <Alert status="error" borderRadius={10} mb={5}>
+          <Alert status="error" bg="red.500" borderRadius={10} my={space.md}>
             <AlertIcon />
             {error}
           </Alert>
         )}
-        <CustomForm FormFields={RegisterFields} SubmitForm={RegisterUser}>
+        <CustomForm
+          display={['block', 'grid']}
+          gridTemplateColumns={['1fr', '1fr 1fr']}
+          p={['', '', space.xl]}
+          mt={space.md}
+          gap={space.md}
+          FormFields={RegisterFields}
+          SubmitForm={RegisterUser}
+        >
           <Button
+            p={space.lg}
             backdropFilter="auto"
             backdropBlur="10px"
             isLoading={result.isLoading}
             type="submit"
             loadingText="Just a moment ..."
-            colorScheme="green"
+            colorScheme="assert"
             variant="outline"
-            w="100%"
-            ml="auto"
+            gridColumn="1 / 3"
           >
             Register Now
           </Button>
         </CustomForm>
-        <Box fontFamily="arial" fontSize="4xl" mt={20}>
-          <Text>Sign up for your DevConnector account</Text>
-          <Text>Already have an account?</Text>
-          <Button
-            as={RouterLink}
-            to="/login"
-            colorScheme="green"
-            variant="outline"
-            backdropFilter="auto"
-            backdropBlur="10px"
-          >
-            Login
-          </Button>
-        </Box>
-      </Flex>
+      </>
     </Box>
   );
 }

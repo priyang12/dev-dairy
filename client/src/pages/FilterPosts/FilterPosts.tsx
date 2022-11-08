@@ -33,11 +33,11 @@ function Feeds() {
         minH="100vh"
         backgroundSize="cover"
         backgroundRepeat="repeat"
-        BgImageData={
-          {
-            // url: 'https://source.unsplash.com/random/?dark-nature',
-          }
-        }
+        BgImageData={{
+          url: localStorage.getItem('PostImage')
+            ? `https://source.unsplash.com/${localStorage.getItem('PostImage')}`
+            : '',
+        }}
       >
         <MarginContainer display="flex" flexDir="column" py={5}>
           <Heading size="4xl" textAlign="center" mb={5}>

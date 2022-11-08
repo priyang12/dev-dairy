@@ -14,6 +14,7 @@ import Logo from '../../Assets/diary.png';
 import NavLinks from './NavLink';
 import type { AuthState } from '../../interface';
 import { StoreState } from '../../store';
+import { assert, primary } from '../../Theme';
 
 function StyledIcon({ children, isDark, ...props }: any) {
   return (
@@ -80,8 +81,8 @@ function LogoComponent() {
     <Link
       as={RouterLink}
       to="/"
-      color="primary.100"
-      _hover={{ color: 'primary.600' }}
+      color={assert[600]}
+      _hover={{ color: 'secondary.600' }}
       className="nav-link"
     >
       <Flex alignItems="center" width={'50px'}>

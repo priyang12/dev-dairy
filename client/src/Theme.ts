@@ -57,9 +57,4 @@ export const ThemeColors = {
   primary,
   secondary,
   assert,
-  con: {
-    50: '#2B4F8D',
-    100: '##049CE4',
-    200: '#02C9AF',
-  },
 };

@@ -91,7 +91,7 @@ function Deploy({ live }: { live: boolean }) {
 
 function UserSection({ name, email }: { name: string; email: string }) {
   return (
-    <Box className="card" p="md" my="xl">
+    <Box className="glass" p="md" my="xl">
       <Heading>Username : {name}</Heading>
       <Text fontSize="2xl">Project Owner Email : {email}</Text>
     </Box>
@@ -121,7 +121,7 @@ function Share() {
         alignItems="center"
         border="1px solid white"
         templateColumns="repeat(auto-fit, minmax(150px, 1fr))"
-        className="card"
+        className="glass"
         borderRadius={10}
       >
         {project.technologies.map((tech: any) => (
@@ -137,7 +137,7 @@ function Share() {
           </GridItem>
         ))}
       </Grid>
-      <Box className="card" px={['md', 'xl']} my="md">
+      <Box className="glass" px={['md', 'xl']} my="md">
         {project.live && <Deploy live={project.live} />}
         {project.website && (
           <Flex
@@ -227,7 +227,7 @@ function Share() {
         ml="auto"
         w="fit-content"
         fontSize="5xl"
-        className="card"
+        className="glass"
       >
         {format(parseISO(project.date), 'dd-MMM yyyy')}
       </Text>

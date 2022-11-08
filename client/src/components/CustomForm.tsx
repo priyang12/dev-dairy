@@ -6,8 +6,9 @@ import {
   Input,
   FormErrorMessage,
   Box,
+  ChakraProps,
 } from '@chakra-ui/react';
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import useForm from '../Hooks/useForm';
 
 export interface FormField {
@@ -24,7 +25,13 @@ type Props = {
   children: React.ReactNode;
 };
 
-function Form({ SubmitForm, FormFields, mb = 5, children }: Props) {
+function Form({
+  SubmitForm,
+  FormFields,
+  mb = 5,
+  children,
+  ...props
+}: Props & ChakraProps) {
   const InitState = FormFields.reduce(
     (acc, curr) => ({ ...acc, [curr.fieldName]: '' }),
     {},
@@ -37,8 +44,8 @@ function Form({ SubmitForm, FormFields, mb = 5, children }: Props) {
   }, []);
 
   return (
-    <div>
-      <Box as="form" onSubmit={HandleSubmit}>
+    <>
+      <Box as="form" onSubmit={HandleSubmit} {...props}>
         {FormFields.map((field) => (
           <FormControl
             mb={mb}
@@ -72,7 +79,7 @@ function Form({ SubmitForm, FormFields, mb = 5, children }: Props) {
         ))}
         {children}
       </Box>
-    </div>
+    </>
   );
 }
 

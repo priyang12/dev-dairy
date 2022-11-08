@@ -43,13 +43,11 @@ function Feeds() {
         minH="100vh"
         backgroundSize="cover"
         backgroundRepeat="repeat"
-        BgImageData={
-          {
-            // url:
-            //   localStorage.getItem('PostImage') ||
-            //   'https://source.unsplash.com/aiKyJ6rHCP4',
-          }
-        }
+        BgImageData={{
+          url: localStorage.getItem('PostImage')
+            ? `https://source.unsplash.com/${localStorage.getItem('PostImage')}`
+            : '',
+        }}
       >
         <MarginContainer display="flex" flexDir="column" py={5}>
           <Button onClick={onOpen} fontSize="3xl" p={10}>
