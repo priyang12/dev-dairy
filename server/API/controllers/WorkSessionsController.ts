@@ -4,6 +4,9 @@ import Container from "typedi";
 
 import WorkSessionsService from "../../services/WorkSessionsService";
 import type { Request, Response } from "express";
+import NodeCache from "node-cache";
+
+const WorkSessionCache = new NodeCache({ stdTTL: 600 });
 
 /**
  * @route   GET api/WorkSessions
@@ -15,11 +18,17 @@ import type { Request, Response } from "express";
 
 export const GetWorkSessions = asyncHandler(
   async (req: Request, res: Response): Promise<any> => {
-    const workSessionsServiceInstance = Container.get(WorkSessionsService);
-    const workSessions = await workSessionsServiceInstance.GetWorkSessions(
-      req.user._id
-    );
-    return res.status(200).json(workSessions);
+    const CacheKey = `User + ${req.user._id}`;
+    if (WorkSessionCache.get(CacheKey)) {
+      return res.status(200).json(WorkSessionCache.get(CacheKey));
+    } else {
+      const workSessionsServiceInstance = Container.get(WorkSessionsService);
+      const workSessions = await workSessionsServiceInstance.GetWorkSessions(
+        req.user._id
+      );
+      WorkSessionCache.set(CacheKey, workSessions, 3600 / 2);
+      return res.status(200).json(workSessions);
+    }
   }
 );
 
@@ -32,12 +41,18 @@ export const GetWorkSessions = asyncHandler(
  */
 export const GetWorkSession = asyncHandler(
   async (req: Request, res: Response): Promise<any> => {
-    const workSessionsServiceInstance = Container.get(WorkSessionsService);
-    const workSessions = await workSessionsServiceInstance.GetWorkSession(
-      req.user._id,
-      req.params.id
-    );
-    return res.status(200).json(workSessions);
+    const CacheKey = `User + ${req.user._id} + Id + ${req.params.id}`;
+    if (WorkSessionCache.get(CacheKey)) {
+      return res.status(200).json(WorkSessionCache.get(CacheKey));
+    } else {
+      const workSessionsServiceInstance = Container.get(WorkSessionsService);
+      const workSessions = await workSessionsServiceInstance.GetWorkSession(
+        req.user._id,
+        req.params.id
+      );
+      WorkSessionCache.set(CacheKey, workSessions, 3600 / 2);
+      return res.status(200).json(workSessions);
+    }
   }
 );
 
@@ -50,13 +65,19 @@ export const GetWorkSession = asyncHandler(
  */
 export const GetProjectWorkSessions = asyncHandler(
   async (req: Request, res: Response): Promise<any> => {
-    const workSessionsServiceInstance = Container.get(WorkSessionsService);
-    const workSessions =
-      await workSessionsServiceInstance.GetProjectWorkSessions(
-        req.user._id,
-        req.params.projectId
-      );
-    return res.status(200).json(workSessions);
+    const CacheKey = `User + ${req.user._id} + projectId + ${req.params.projectId}`;
+    if (WorkSessionCache.get(CacheKey)) {
+      return res.status(200).json(WorkSessionCache.get(CacheKey));
+    } else {
+      const workSessionsServiceInstance = Container.get(WorkSessionsService);
+      const workSessions =
+        await workSessionsServiceInstance.GetProjectWorkSessions(
+          req.user._id,
+          req.params.projectId
+        );
+      WorkSessionCache.set(CacheKey, workSessions, 3600 / 2);
+      return res.status(200).json(workSessions);
+    }
   }
 );
 
@@ -109,6 +130,7 @@ export const PushWorkSession = asyncHandler(
       req.body,
       Select
     );
+    WorkSessionCache.flushAll();
     return res.status(200).json(workSessions);
   }
 );
@@ -141,6 +163,7 @@ export const PullWorkSession = asyncHandler(
       req.body,
       Select
     );
+    WorkSessionCache.flushAll();
     return res.status(200).json(workSessions);
   }
 );
@@ -164,6 +187,7 @@ export const UpdateWorkSession = asyncHandler(
       req.params.id,
       req.body
     );
+    WorkSessionCache.flushAll();
     return res.status(200).json(workSessions);
   }
 );
@@ -185,6 +209,7 @@ export const DeleteWorkSession = asyncHandler(
       req.user._id,
       req.params.id
     );
+    WorkSessionCache.flushAll();
     return res.status(200).json(workSessions);
   }
 );
@@ -204,6 +229,7 @@ export const DeleteWorkSessions = asyncHandler(
     const workSessionsServiceInstance = Container.get(WorkSessionsService);
     const workSessions =
       await workSessionsServiceInstance.DeleteAllWorkSessions(req.user._id);
+    WorkSessionCache.flushAll();
     return res.status(200).json(workSessions);
   }
 );
@@ -227,6 +253,7 @@ export const DeleteWorkSessionsOfProject = asyncHandler(
         req.user._id,
         req.params.projectId
       );
+    WorkSessionCache.flushAll();
     return res.status(200).json(workSessions);
   }
 );

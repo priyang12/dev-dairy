@@ -2,6 +2,9 @@ import asyncHandler from "express-async-handler";
 import type { Request, Response } from "express";
 import ProjectService from "../../services/ShareProjectService";
 import Container from "typedi";
+import NodeCache from "node-cache";
+
+const ShareProjectCache = new NodeCache({ stdTTL: 600 });
 
 /**
  * @route   POST api/shareProject
@@ -20,7 +23,7 @@ export const ShareProject = asyncHandler(
       req.user._id,
       expirationTime
     );
-    return res.status(200).json(ServiceRes);
+    return res.status(201).json(ServiceRes);
   }
 );
 
@@ -38,11 +41,18 @@ export const GetSharedProject = asyncHandler(
     if (!SharedToken) {
       return res.status(401).json({ msg: "no token, authorization denied" });
     }
-    const projectServiceInstance = Container.get(ProjectService);
-    const ServiceRes = await projectServiceInstance.GetSharedProject(
-      SharedToken
-    );
-    return res.status(200).json(ServiceRes);
+    const CacheKey = `Token + ${SharedToken}`;
+    if (ShareProjectCache.get(CacheKey)) {
+      const CacheResponse = ShareProjectCache.get(CacheKey) as string;
+      return res.status(201).json(JSON.parse(CacheResponse));
+    } else {
+      const projectServiceInstance = Container.get(ProjectService);
+      const ServiceRes = await projectServiceInstance.GetSharedProject(
+        SharedToken
+      );
+      ShareProjectCache.set(CacheKey, JSON.stringify(ServiceRes), 3600 / 2);
+      return res.status(201).json(ServiceRes);
+    }
   }
 );
 
@@ -56,12 +66,19 @@ export const GetSharedProject = asyncHandler(
 export const GetProjectToken = asyncHandler(
   async (req: Request, res: Response): Promise<any> => {
     const { ProjectId } = req.params;
-    const projectServiceInstance = Container.get(ProjectService);
-    const ServiceRes = await projectServiceInstance.GetProjectToken(
-      ProjectId,
-      req.user._id
-    );
-    return res.status(200).json(ServiceRes);
+
+    const CacheKey = `user + ${req.user._id} + Id + ${ProjectId}`;
+    if (ShareProjectCache.get(CacheKey)) {
+      return res.status(201).json(ShareProjectCache.get(CacheKey));
+    } else {
+      const projectServiceInstance = Container.get(ProjectService);
+      const ServiceRes = await projectServiceInstance.GetProjectToken(
+        ProjectId,
+        req.user._id
+      );
+      ShareProjectCache.set(CacheKey, ServiceRes, 3600 / 2);
+      return res.status(200).json(ServiceRes);
+    }
   }
 );
 
@@ -81,6 +98,7 @@ export const DeleteSharedProject = asyncHandler(
       req.user._id,
       ProjectId
     );
+    ShareProjectCache.flushAll();
     return res.status(200).json(ServiceRes);
   }
 );

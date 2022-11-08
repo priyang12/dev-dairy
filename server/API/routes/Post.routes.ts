@@ -6,12 +6,10 @@ import { Router } from "express";
 import {
   CreatePost,
   DeletePost,
-  GetPosts,
   GetProjectPosts,
   GetPost,
   UpdatePost,
   GetPostsWithPagination,
-  GetPostsWithFilter,
 } from "../controllers/PostController";
 
 import auth from "../middleware/auth";
@@ -22,9 +20,6 @@ export default (app: Router) => {
     .route("/posts")
     .get(auth, GetPostsWithPagination)
     .post(auth, ZodMiddleware(CreatePostValidation), CreatePost);
-
-  app.route("/posts/filter").get(auth, GetPostsWithFilter);
-  app.route("/posts/all").get(auth, GetPosts);
 
   app
     .route("/posts/:id")

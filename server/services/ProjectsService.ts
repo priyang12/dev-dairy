@@ -20,7 +20,7 @@ export default class UserService {
     Select: string
   ): Promise<IProject[]> {
     const Projects = await this.ProjectModel.find({ user: userId }).select(
-      Select?.concat(" -__v") || "-__v"
+      Select?.concat(" -__v")
     );
 
     if (!Projects) {
@@ -40,7 +40,7 @@ export default class UserService {
       _id: projectId,
       user: userId,
     })
-      .select(Select?.concat(" -__v") || "-__v")
+      .select(Select ? Select?.concat(" -__v") : " -__v")
       .exec();
     if (!project) {
       this.logger.error("Project Not Found");
