@@ -16,6 +16,18 @@ export const LoginSchema = z.object({
   }),
 });
 
+export const ResetPasswordSchema = z
+  .object({
+    password: z.string().refine((v) => v.length >= 6, {
+      message: AuthErrorMessages.password,
+    }),
+    password2: z.string(),
+  })
+  .refine((v) => v.password === v.password2, {
+    message: AuthErrorMessages.password2,
+    path: ["password2"],
+  });
+
 export const RegisterSchema = z
   .object({
     username: z.string().min(3, { message: AuthErrorMessages.username }),
