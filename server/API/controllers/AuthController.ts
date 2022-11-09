@@ -25,6 +25,8 @@ export const registerUser = asyncHandler(
   async (req, res, next): Promise<any> => {
     const authServiceInstance = Container.get(AuthService);
     const { user, token } = await authServiceInstance.SignUp(req.body);
+    const agenda = Container.get("agendaInstance") as any;
+    await agenda.schedule(new Date(Date.now() + 1000), "greet", user._id);
     return res.status(201).json({ user, token });
   }
 );
@@ -60,5 +62,24 @@ export const DeleteUser = asyncHandler(
     const data = await authServiceInstance.DeleteUser(req.user._id);
     UserCache.flushAll();
     return res.status(200).json(data);
+  }
+);
+
+export const ResetPassword = asyncHandler(
+  async (req: Request, res: Response): Promise<any> => {
+    const authServiceInstance = Container.get(AuthService);
+    const data = await authServiceInstance.SendResetPasswordToken(
+      req.body.email
+    );
+    const agenda = Container.get("agendaInstance") as any;
+    await agenda.schedule(new Date(Date.now() + 1000), "reset-password", {
+      ...data,
+      host: req.hostname,
+    });
+
+    return res.status(200).json({
+      message:
+        "Reset Link has been send to your email address. PS: Look into spam.",
+    });
   }
 );

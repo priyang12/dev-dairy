@@ -2,6 +2,7 @@ import expressLoader from "./express";
 import dependencyInjectorLoader from "./dependencyInjector";
 import mongooseLoader from "./mongoose";
 import Logger from "./logger";
+import jobsLoader from "./jobs";
 
 export default async ({ expressApp }: any) => {
   const { Db: mongoConnection } = await mongooseLoader();
@@ -29,7 +30,7 @@ export default async ({ expressApp }: any) => {
     model: require("../models/ShareProject").default,
   };
 
-  await dependencyInjectorLoader({
+  const { agenda } = await dependencyInjectorLoader({
     mongoConnection,
     models: [
       userModel,
@@ -39,6 +40,8 @@ export default async ({ expressApp }: any) => {
       sharedProjectModel,
     ],
   });
+
+  await jobsLoader({ agenda });
 
   Logger.info("✌️ Dependency Injector loaded");
 

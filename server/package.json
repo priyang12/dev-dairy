@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@dev-dairy/zodvalidation": "*",
+    "@sendgrid/mail": "^7.7.0",
     "agenda": "^4.3.0",
     "agendash": "^3.1.0",
     "argon2": "^0.28.5",
