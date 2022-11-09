@@ -51,7 +51,7 @@ function PostContainer({ post, page }: PropTypes) {
         <Flex direction="column" fontSize="xl" pl={0}>
           <Box
             bg={primary[700]}
-            p={space['sm']}
+            p={space.sm}
             borderRadius={space.md}
             border="2px solid"
             borderColor={assert[500]}

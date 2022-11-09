@@ -1,6 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { ISharedProjectReposes } from '../interface';
-import type { RootState } from '../store';
 import API from '.';
 
 const ShareProjectApi = createApi({

@@ -44,42 +44,40 @@ function Form({
   }, []);
 
   return (
-    <>
-      <Box as="form" onSubmit={HandleSubmit} {...props}>
-        {FormFields.map((field) => (
-          <FormControl
-            mb={mb}
-            isInvalid={ErrorsState[field.fieldName]}
-            isRequired={field.isRequired}
-            key={field.fieldName}
-            backdropFilter="auto"
-            backdropBlur="10px"
-            borderRadius={10}
-            p={5}
-          >
-            <FormLabel htmlFor={field.fieldName} fontSize="2xl">
-              {field.fieldName[0].toUpperCase() + field.fieldName.slice(1)}
-            </FormLabel>
-            <Input
-              id={field.fieldName}
-              type={field.fieldType}
-              onChange={(e: any) => {
-                HandleChange(e);
-              }}
-            />
+    <Box as="form" onSubmit={HandleSubmit} {...props}>
+      {FormFields.map((field) => (
+        <FormControl
+          mb={mb}
+          isInvalid={ErrorsState[field.fieldName]}
+          isRequired={field.isRequired}
+          key={field.fieldName}
+          backdropFilter="auto"
+          backdropBlur="10px"
+          borderRadius={10}
+          p={5}
+        >
+          <FormLabel htmlFor={field.fieldName} fontSize="2xl">
+            {field.fieldName[0].toUpperCase() + field.fieldName.slice(1)}
+          </FormLabel>
+          <Input
+            id={field.fieldName}
+            type={field.fieldType}
+            onChange={(e: any) => {
+              HandleChange(e);
+            }}
+          />
 
-            {ErrorsState[field.fieldName] ? (
-              <FormErrorMessage color="red" fontSize="xl">
-                {ErrorsState[`${field.fieldName}`]}
-              </FormErrorMessage>
-            ) : (
-              <FormHelperText fontSize="xl">{field.placeholder}</FormHelperText>
-            )}
-          </FormControl>
-        ))}
-        {children}
-      </Box>
-    </>
+          {ErrorsState[field.fieldName] ? (
+            <FormErrorMessage color="red" fontSize="xl">
+              {ErrorsState[`${field.fieldName}`]}
+            </FormErrorMessage>
+          ) : (
+            <FormHelperText fontSize="xl">{field.placeholder}</FormHelperText>
+          )}
+        </FormControl>
+      ))}
+      {children}
+    </Box>
   );
 }
 

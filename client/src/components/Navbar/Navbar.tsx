@@ -14,7 +14,7 @@ import Logo from '../../Assets/diary.png';
 import NavLinks from './NavLink';
 import type { AuthState } from '../../interface';
 import { StoreState } from '../../store';
-import { assert, primary } from '../../Theme';
+import { assert } from '../../Theme';
 
 function StyledIcon({ children, isDark, ...props }: any) {
   return (
@@ -85,7 +85,7 @@ function LogoComponent() {
       _hover={{ color: 'secondary.600' }}
       className="nav-link"
     >
-      <Flex alignItems="center" width={'50px'}>
+      <Flex alignItems="center" width="50px">
         <img src={Logo} width={50} alt="Logo" />
         <Box ml={2}>
           <Heading fontFamily="cursive">

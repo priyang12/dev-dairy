@@ -1,8 +1,4 @@
-import {
-  BaseQueryFn,
-  createApi,
-  fetchBaseQuery,
-} from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { toast } from 'react-toastify';
 import { CheckError } from '../utils/helpers';
 import API from '.';
@@ -22,7 +18,7 @@ const PostApi = createApi({
         return {
           url: '',
           method: 'get',
-          params: params,
+          params,
         };
       },
       providesTags: ['Posts'],

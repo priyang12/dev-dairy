@@ -78,7 +78,8 @@ const handlers = [
 
     if (page === '1' || !page) {
       return res(ctx.json(PostsResponse));
-    } else if (status || title || project) {
+    }
+    if (status || title || project) {
       const FilteredPosts = PostsResponse.filter(
         (post) =>
           (status && post.status === status) ||

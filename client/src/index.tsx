@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
+import { HelmetProvider } from 'react-helmet-async';
 import { store as Store, Persister } from './store';
 import { ThemeColors, space, config } from './Theme';
 import worker from './mock/browser';
@@ -29,7 +30,9 @@ root.render(
     <Provider store={Store}>
       <PersistGate loading={null} persistor={Persister}>
         <ChakraProvider theme={theme}>
-          <App />
+          <HelmetProvider>
+            <App />
+          </HelmetProvider>
         </ChakraProvider>
       </PersistGate>
     </Provider>

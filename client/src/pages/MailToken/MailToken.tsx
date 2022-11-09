@@ -37,7 +37,7 @@ function MailToken() {
         gap={space.md}
       >
         <FormControl width="100%">
-          <Label color={assert[600]} alert={'asdnasldn'} htmlFor="Email">
+          <Label color={assert[600]} htmlFor="Email">
             Enter Your Email Address
           </Label>
           <Input
@@ -53,7 +53,7 @@ function MailToken() {
         <Button
           w={['50%', 'fit-content']}
           type="submit"
-          colorScheme={'assert'}
+          colorScheme="assert"
           isLoading={SendTokenResult.isLoading}
           loadingText="Sending Token"
           alignSelf={['center', 'flex-end']}

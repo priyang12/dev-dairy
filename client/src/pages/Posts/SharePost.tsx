@@ -9,7 +9,7 @@ import {
 import { IPost } from '../../interface';
 
 function SharePost({ post }: { post: IPost }) {
-  const title = post.title;
+  const { title } = post;
   const shareUrl = `Description : ${post.description} \nDate : ${format(
     parseISO(post.date),
     'yyyy-MM-dd',
@@ -21,7 +21,7 @@ function SharePost({ post }: { post: IPost }) {
         url={`\ndescription: ${post.description}`}
         title={`Title: ${title}`}
       >
-        <TwitterIcon round={true}>Share</TwitterIcon>
+        <TwitterIcon round>Share</TwitterIcon>
       </TwitterShareButton>
       <TelegramShareButton url={title} title={shareUrl}>
         <TelegramIcon round />

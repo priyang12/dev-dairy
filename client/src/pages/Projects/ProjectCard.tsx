@@ -14,7 +14,7 @@ function ProjectCard({ Project }: { Project: IProject }) {
       borderColor={assert[600]}
       width="100%"
     >
-      <Heading fontSize={space['xl']}>{Project.title}</Heading>
+      <Heading fontSize={space.xl}>{Project.title}</Heading>
       <Text mt={4} fontSize={space.lg}>
         {Project.description}
       </Text>

@@ -22,7 +22,6 @@ import { parseISO, format } from 'date-fns';
 import invert from 'invert-color';
 import { toast } from 'react-toastify';
 import { useDeleteProject, useGetProjectId } from '../../API/ProjectAPI';
-import type { IRoadMap } from '../../interface';
 import Spinner from '../../components/spinner';
 import RandomColor from '../../utils/RandomColor';
 import ConfirmationModal from '../../components/ConfirmationModal';

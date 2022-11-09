@@ -28,7 +28,7 @@ function AuthContainer({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Navbar />
-      <Flex w="100%" gap={'xl'}>
+      <Flex w="100%" gap="xl">
         <FallBackSuspenseWrapper fallback={false}>
           <MusicPlayer />
         </FallBackSuspenseWrapper>

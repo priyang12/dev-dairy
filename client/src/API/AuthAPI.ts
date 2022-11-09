@@ -1,11 +1,11 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { toast } from 'react-toastify';
 import { setError } from '../features/AuthSlice';
 import { setUser } from '../features/UserSlice';
 import type { IUser } from '../interface';
 import type { AuthUserResponse } from './interface';
 import API from '.';
 import { CheckError } from '../utils/helpers';
-import { toast } from 'react-toastify';
 
 const AuthApi = createApi({
   reducerPath: 'AuthAPI',
@@ -63,7 +63,7 @@ const AuthApi = createApi({
             'Content-Type': 'application/json',
           },
           body: {
-            email: email,
+            email,
           },
         };
       },

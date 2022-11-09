@@ -2,7 +2,6 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { toast } from 'react-toastify';
 import API from '.';
 import type { IProject, IRoadMap } from '../interface';
-import type { RootState } from '../store';
 import { CheckError } from '../utils/helpers';
 import type { NewProjectAPI } from './interface';
 
