@@ -12,9 +12,7 @@ export default class AuthService {
     @Inject("logger") private logger: Logger
   ) {}
 
-  public async SignUp(
-    userInputDTO: any
-  ): Promise<{ user: any; token: string }> {
+  public async SignUp(userInputDTO: any) {
     // Check if user exists
     const emailExists = await this.userModel.findOne({
       email: userInputDTO.email,
@@ -36,12 +34,6 @@ export default class AuthService {
     }
     const token = this.generateToken(userRecord);
 
-    /**
-     * @TODO This is not the best way to deal with this
-     * There should exist a 'Mapper' layer
-     * that transforms data from layer to layer
-     * but that's too over-engineering for now
-     */
     const user = userRecord.toObject();
     Reflect.deleteProperty(user, "password");
 
@@ -72,7 +64,21 @@ export default class AuthService {
       throw new Error("Invalid Input: Invalid Password");
     }
   }
+  public async SendResetPasswordToken(email: string) {
+    const User = await this.userModel
+      .findOne({
+        email: email,
+      })
+      .exec();
 
+    if (!User) {
+      throw new Error("Invalid Input: email is not registered");
+    }
+    return {
+      email: User.email,
+      token: this.generateToken(User),
+    };
+  }
   private generateToken(user: any): string {
     const today = new Date();
     const exp = new Date(today);

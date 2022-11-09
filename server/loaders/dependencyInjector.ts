@@ -1,7 +1,8 @@
 import { Container } from "typedi";
-
 import LoggerInstance from "./logger";
 import agendaFactory from "./agenda";
+import sgMail from "@sendgrid/mail";
+import keys from "../config/keys";
 
 export default ({
   mongoConnection,
@@ -16,9 +17,12 @@ export default ({
     });
 
     const agendaInstance = agendaFactory({ mongoConnection });
+    if (keys.sendGrid) sgMail.setApiKey(keys.sendGrid);
+    else LoggerInstance.error("Key not Found");
 
     Container.set("agendaInstance", agendaInstance);
     Container.set("logger", LoggerInstance);
+    Container.set("sgMail", sgMail);
 
     LoggerInstance.info("✌️ Agenda injected into container");
 
