@@ -43,7 +43,7 @@ export const loginUser = asyncHandler(async (req, res): Promise<any> => {
   return res.status(200).json({ user, token });
 });
 
-// @router PUT api/users/update
+// @router PUT api/users/me
 // @desc Update User Info
 // @access private
 export const UpdateUser = asyncHandler(async (req: any, res): Promise<any> => {
@@ -53,7 +53,7 @@ export const UpdateUser = asyncHandler(async (req: any, res): Promise<any> => {
   return res.status(200).json(user);
 });
 
-// @router DELETE api/users/delete
+// @router DELETE api/users/me
 // @desc Delete User
 // @access private
 export const DeleteUser = asyncHandler(
@@ -65,6 +65,12 @@ export const DeleteUser = asyncHandler(
   }
 );
 
+/**
+ *
+ * @router POST api/users/reset
+ * @desc reset User Password
+ * @access private
+ */
 export const ResetPassword = asyncHandler(
   async (req: Request, res: Response): Promise<any> => {
     const authServiceInstance = Container.get(AuthService);

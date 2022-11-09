@@ -136,7 +136,7 @@ function Login() {
 
           <Link
             as={RouterLink}
-            to="ResetPassword"
+            to="/ForgotPassword"
             fontSize={30}
             fontWeight={500}
             alignSelf="flex-end"

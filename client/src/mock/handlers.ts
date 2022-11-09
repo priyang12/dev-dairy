@@ -58,6 +58,13 @@ const handlers = [
       // ctx.json(AuthResponse);
     ),
   ),
+  rest.post(`${API}/reset`, (req, res, ctx) =>
+    res(
+      ctx.json({
+        message: 'Token is Send',
+      }),
+    ),
+  ),
   rest.get(`${API}/user/me`, (req, res, ctx) =>
     res(ctx.json(AuthResponse.user)),
   ),
