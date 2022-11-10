@@ -8,6 +8,7 @@ import {
 } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 import { BsFillFilterCircleFill } from 'react-icons/bs';
+import { useErrorHandler } from 'react-error-boundary';
 import { useNewPost } from '../../API/PostAPI';
 import { useInfinitePosts } from '../../Hooks/useInfinitePosts';
 import { useApiToast } from '../../Hooks/useApiToast';
@@ -17,7 +18,6 @@ import MarginContainer from '../../components/MarginContainer';
 import PostModal from './PostModal';
 import BgImage from '../../components/BgImage';
 import MetaData from '../../Meta/MetaPosts';
-import { useErrorHandler } from 'react-error-boundary';
 
 function Feeds() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -50,9 +50,8 @@ function Feeds() {
         title={`
         Posts ${TotalPosts}
       `}
-      >
-        asd
-      </MetaData>
+      />
+
       <Box>
         <BgImage
           minH="100vh"
@@ -105,7 +104,11 @@ function Feeds() {
                 <Flex gap={10} flexDir="column">
                   {Posts.map((data) =>
                     data.posts.map((post) => (
-                      <PostContainer post={post} page={data.page} />
+                      <PostContainer
+                        key={post._id}
+                        post={post}
+                        page={data.page}
+                      />
                     )),
                   )}
                 </Flex>

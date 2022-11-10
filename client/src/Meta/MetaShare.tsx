@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 function MetaShare({
-  title = "Share Page",
+  title = 'Share Page',
   description = '',
   children,
 }: {
@@ -19,4 +19,3 @@ function MetaShare({
 }
 
 export default MetaShare;
-

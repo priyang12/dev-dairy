@@ -13,7 +13,7 @@ interface INotFoundProps {
 }
 function NotFound({ data }: INotFoundProps) {
   return (
-    <Container my={space['md']}>
+    <Container my={space.md}>
       <MetaData title="Sorry Not Found" />
       <Heading fontSize={space['3xl']}>
         <Flex>

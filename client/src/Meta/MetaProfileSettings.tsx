@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 function MetaProfileSettings({
-  title = "ProfileSettings Page",
+  title = 'ProfileSettings Page',
   description = '',
   children,
 }: {
@@ -19,4 +19,3 @@ function MetaProfileSettings({
 }
 
 export default MetaProfileSettings;
-

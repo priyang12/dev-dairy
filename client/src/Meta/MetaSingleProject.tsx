@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 function MetaSingleProject({
-  title = "SingleProject Page",
+  title = 'SingleProject Page',
   description = '',
   children,
 }: {
@@ -19,4 +19,3 @@ function MetaSingleProject({
 }
 
 export default MetaSingleProject;
-

@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 function MetaChangePassword({
-  title = "ChangePassword Page",
+  title = 'ChangePassword Page',
   description = '',
   children,
 }: {
@@ -19,4 +19,3 @@ function MetaChangePassword({
 }
 
 export default MetaChangePassword;
-

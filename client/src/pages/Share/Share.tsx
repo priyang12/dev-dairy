@@ -19,6 +19,7 @@ import Container from '../../components/Container';
 import Spinner from '../../components/spinner';
 import RandomColor from '../../utils/RandomColor';
 import MetaData from '../../Meta/MetaShare';
+
 function WrappedText({
   TextValue,
   ...props

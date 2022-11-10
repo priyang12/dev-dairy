@@ -8,21 +8,22 @@ import { CheckError } from '../../utils/helpers';
 const GetErrorFont = (message: string): string => {
   if (message.length < 50) {
     return space['2xl'];
-  } else if (message.length < 70) {
-    return space.xl;
-  } else if (message.length < 150) {
-    return space.xl;
-  } else {
-    return space.lg;
   }
+  if (message.length < 70) {
+    return space.xl;
+  }
+  if (message.length < 150) {
+    return space.xl;
+  }
+  return space.lg;
 };
 
-const FallbackUI = ({ error, componentStack }: any) => {
+function FallbackUI({ error, componentStack }: any) {
   const resetErrorBoundary = () => {
     window.location.reload();
   };
 
-  const message = CheckError({ error: error });
+  const message = CheckError({ error });
 
   return (
     <Flex
@@ -67,19 +68,19 @@ const FallbackUI = ({ error, componentStack }: any) => {
       </Flex>
     </Flex>
   );
-};
+}
 
-const ErrorBoundaryUI = ({
+function ErrorBoundaryUI({
   CustomComponent = FallbackUI,
   children,
 }: {
   CustomComponent?: any;
-} & React.ComponentPropsWithoutRef<'div'>) => {
+} & React.ComponentPropsWithoutRef<'div'>) {
   return (
     <ErrorBoundary FallbackComponent={CustomComponent}>
       {children}
     </ErrorBoundary>
   );
-};
+}
 
 export default ErrorBoundaryUI;

@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 function MetaMailToken({
-  title = "MailToken Page",
+  title = 'MailToken Page',
   description = '',
   children,
 }: {
@@ -19,4 +19,3 @@ function MetaMailToken({
 }
 
 export default MetaMailToken;
-

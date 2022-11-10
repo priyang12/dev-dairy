@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 function MetaNotFound({
-  title = "NotFound Page",
+  title = 'NotFound Page',
   description = '',
   children,
 }: {
@@ -19,4 +19,3 @@ function MetaNotFound({
 }
 
 export default MetaNotFound;
-

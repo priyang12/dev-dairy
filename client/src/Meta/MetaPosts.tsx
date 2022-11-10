@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 function MetaPosts({
-  title = "Posts Page",
+  title = 'Posts Page',
   description = '',
   children,
 }: {
@@ -19,4 +19,3 @@ function MetaPosts({
 }
 
 export default MetaPosts;
-

@@ -3,10 +3,10 @@ import type { RenderOptions, RenderResult } from '@testing-library/react';
 import type { ReactElement, ReactNode } from 'react';
 import { render as rtlRender } from '@testing-library/react';
 import { Provider } from 'react-redux';
+import { HelmetProvider } from 'react-helmet-async';
 import { createStoreWithMiddleware } from '../store';
 import type { RootState } from '../store';
 import CustomToaster from '../components/CustomToaster';
-import { HelmetProvider } from 'react-helmet-async';
 
 type ReduxRenderOptions = {
   preloadedState?: RootState;

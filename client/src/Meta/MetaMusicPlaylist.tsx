@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 function MetaMusicPlaylist({
-  title = "MusicPlaylist Page",
+  title = 'MusicPlaylist Page',
   description = '',
   children,
 }: {
@@ -19,4 +19,3 @@ function MetaMusicPlaylist({
 }
 
 export default MetaMusicPlaylist;
-

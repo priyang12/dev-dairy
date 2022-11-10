@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 function MetaProjects({
-  title = "Projects Page",
+  title = 'Projects Page',
   description = '',
   children,
 }: {
@@ -19,4 +19,3 @@ function MetaProjects({
 }
 
 export default MetaProjects;
-

@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 function Metaregister({
-  title = "register Page",
+  title = 'register Page',
   description = '',
   children,
 }: {
@@ -19,4 +19,3 @@ function Metaregister({
 }
 
 export default Metaregister;
-

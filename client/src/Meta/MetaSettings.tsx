@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 function MetaSettings({
-  title = "Settings Page",
+  title = 'Settings Page',
   description = '',
   children,
 }: {
@@ -19,4 +19,3 @@ function MetaSettings({
 }
 
 export default MetaSettings;
-

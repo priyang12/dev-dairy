@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 function MetaShareProject({
-  title = "ShareProject Page",
+  title = 'ShareProject Page',
   description = '',
   children,
 }: {
@@ -19,4 +19,3 @@ function MetaShareProject({
 }
 
 export default MetaShareProject;
-

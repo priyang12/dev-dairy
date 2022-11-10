@@ -14,7 +14,6 @@ import Spinner from '../../components/spinner';
 import MarginContainer from '../../components/MarginContainer';
 import BgImage from '../../components/BgImage';
 import FilterMenu from './FilterMenu';
-import MetaData from '../../Meta/MetaFilterPosts';
 import MetaFilterPosts from '../../Meta/MetaFilterPosts';
 
 function Feeds() {

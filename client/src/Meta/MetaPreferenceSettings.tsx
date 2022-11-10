@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 function MetaPreferenceSettings({
-  title = "PreferenceSettings Page",
+  title = 'PreferenceSettings Page',
   description = '',
   children,
 }: {
@@ -19,4 +19,3 @@ function MetaPreferenceSettings({
 }
 
 export default MetaPreferenceSettings;
-

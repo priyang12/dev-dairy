@@ -1,6 +1,5 @@
 import { Alert, AlertIcon, Flex, Button } from '@chakra-ui/react';
 import { FormControl, Input, Label } from '@priyang/react-component-lib';
-import { Helmet } from 'react-helmet-async';
 import { useSelector } from 'react-redux';
 import { useSendToken } from '../../API/AuthAPI';
 import Container from '../../components/Container';

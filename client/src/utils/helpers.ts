@@ -13,7 +13,7 @@ export const CheckError = (
 
     errorMessage = errMsg;
   }
-  if (error instanceof Error || 'message' in error) {
+  if (error instanceof Error) {
     errorMessage = error.message;
   }
   return errorMessage;

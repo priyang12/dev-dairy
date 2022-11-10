@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 function MetaRoadMap({
-  title = "RoadMap Page",
+  title = 'RoadMap Page',
   description = '',
   children,
 }: {
@@ -19,4 +19,3 @@ function MetaRoadMap({
 }
 
 export default MetaRoadMap;
-

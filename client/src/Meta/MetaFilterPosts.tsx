@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 function MetaFilterPosts({
-  title = "FilterPosts Page",
+  title = 'FilterPosts Page',
   description = '',
   children,
 }: {
@@ -19,4 +19,3 @@ function MetaFilterPosts({
 }
 
 export default MetaFilterPosts;
-

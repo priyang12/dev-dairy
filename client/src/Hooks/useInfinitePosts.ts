@@ -44,7 +44,6 @@ export const useInfinitePosts = () => {
       setTotalPosts(result.data.length);
       shouldReset.current = false;
     } else if (result.data && result.data?.length > 0) {
-      console.log('here');
       const NewPosts = [
         {
           page: result.originalArgs.page,
@@ -60,7 +59,6 @@ export const useInfinitePosts = () => {
         // Replace Old Page with New Page
         const oldTotal = newPosts[index].posts.length;
         const NewTotal = NewPosts[0].posts.length;
-        console.log(oldTotal - NewTotal);
 
         newPosts[index] = NewPosts[0];
 
