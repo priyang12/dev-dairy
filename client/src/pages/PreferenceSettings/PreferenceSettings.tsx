@@ -12,6 +12,7 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import MetaData from '../../Meta/MetaPreferenceSettings';
 
 function PreferenceSettings() {
   const [Loading, setLoading] = useState(false);

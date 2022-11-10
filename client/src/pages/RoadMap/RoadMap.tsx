@@ -28,6 +28,7 @@ import Spinner from '../../components/spinner';
 import RandomColor from '../../utils/RandomColor';
 import EditRoadMap from './EditRoadMap';
 import { assert } from '../../Theme';
+import MetaData from '../../Meta/MetaRoadMap';
 
 function RoadMap() {
   const { id } = useParams<{ id: string }>();
@@ -50,6 +51,7 @@ function RoadMap() {
 
   return (
     <Container maxW="1200px" mt={20}>
+      <MetaData title={`${ProjectData?.title} RoadMap`} />
       {ProjectData && !ProjectLoading && (
         <Box m={5}>
           <Heading as="h1" size="lg">

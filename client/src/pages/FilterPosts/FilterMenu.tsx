@@ -11,6 +11,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useGetProjects } from '../../API/ProjectAPI';
 import useForm from '../../Hooks/useForm';
 import { IProject } from '../../interface';
+import MetaFilterPosts from '../../Meta/MetaFilterPosts';
 
 type FilterTypes = {
   title: string;
@@ -55,6 +56,15 @@ function FilterMenu({ onClose }: { onClose: () => void }) {
       rounded="xl"
       bg="primary.700"
     >
+      <MetaFilterPosts
+        description={`Posts after Filter applied 
+        ${search?.get('filter')?.split(',')}`}
+      >
+        <meta
+          name="keywords"
+          content={`${search?.get('filter')?.split(',')}`}
+        />
+      </MetaFilterPosts>
       <form onSubmit={SubmitFilter}>
         <FormControl>
           <FormLabel htmlFor="title" spellCheck>

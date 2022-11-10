@@ -6,6 +6,7 @@ import EditProject from './pages/EditProject';
 import FilterPosts from './pages/FilterPosts';
 import MusicPlaylist from './pages/MusicPlaylist';
 import NewProject from './pages/NewProject';
+import NotFound from './pages/NotFound';
 import Posts from './pages/Posts';
 import PreferenceSettings from './pages/PreferenceSettings';
 import ProfileSettings from './pages/ProfileSettings';
@@ -64,6 +65,7 @@ function AuthRoutes() {
           <Route path="Preference" element={<PreferenceSettings />} />
           <Route path="Profile" element={<ProfileSettings />} />
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </AuthContainer>
   );

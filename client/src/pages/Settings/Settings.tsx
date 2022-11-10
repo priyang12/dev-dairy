@@ -5,6 +5,7 @@ import { CgProfile } from 'react-icons/cg';
 import { Link, Outlet } from 'react-router-dom';
 import { space as ThemeSpace } from '../../Theme';
 import Container from '../../components/Container';
+import MetaData from '../../Meta/MetaSettings';
 
 function SideBarButton({
   icon,
@@ -39,6 +40,7 @@ function SideBarButton({
 function Settings() {
   return (
     <Box m={['0', ThemeSpace.xl]}>
+      <MetaData />
       <Flex
         justifyContent="flex-start"
         alignItems="flex-start"

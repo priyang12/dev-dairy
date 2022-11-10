@@ -14,6 +14,7 @@ import Container from '../../components/Container';
 import Project from './Project';
 import ShareModal from './ShareModal';
 import { useApiToast } from '../../Hooks/useApiToast';
+import MetaData from '../../Meta/MetaShareProject';
 
 function ShareLinkComponent({
   token,
@@ -101,6 +102,7 @@ function ShareProject() {
 
   return (
     <Container my="lg">
+      <MetaData />
       <Heading fontSize="4xl">Share Project</Heading>
       <Project />
       <ShareLinkLoading isLoading={isLoading} TokenResponse={TokenResponse} />

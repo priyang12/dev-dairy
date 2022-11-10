@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import { createStoreWithMiddleware } from '../store';
 import type { RootState } from '../store';
 import CustomToaster from '../components/CustomToaster';
+import { HelmetProvider } from 'react-helmet-async';
 
 type ReduxRenderOptions = {
   preloadedState?: RootState;
@@ -29,10 +30,10 @@ function render(
   }): ReactElement {
     return (
       <Provider store={store}>
-        <div>
+        <HelmetProvider>
           <CustomToaster />
           {children}
-        </div>
+        </HelmetProvider>
       </Provider>
     );
   }

@@ -18,6 +18,7 @@ import { useGetUserQuery, useUpdateUser } from '../../API/UserAPI';
 import Container from '../../components/Container';
 import Spinner from '../../components/spinner';
 import { space } from '../../Theme';
+import MetaData from '../../Meta/MetaChangePassword';
 
 interface FormType {
   password: { value: string };
@@ -76,6 +77,7 @@ function ChangePassword() {
 
   return (
     <Container>
+      <MetaData />
       {isSuccess && (
         <Box my={space.xl}>
           <Heading textAlign="center">Change Password</Heading>

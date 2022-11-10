@@ -35,6 +35,7 @@ import useForm from '../../Hooks/useForm';
 import type { IProject } from '../../interface';
 import { useApiToast } from '../../Hooks/useApiToast';
 import { CheckError } from '../../utils/helpers';
+import MetaData from '../../Meta/MetaEditProject';
 
 type EditProjectFrom = Omit<IProject, 'roadMap' | '_id' | 'user'>;
 
@@ -146,155 +147,158 @@ function EditProject() {
   }
 
   return (
-    <Container maxW="800px" mb={10} mt={10}>
-      <Flex justifyContent="space-between">
-        <Heading as="h1" size="lg" mb={4}>
-          Edit Project
-        </Heading>
-        <Button
-          colorScheme="green"
-          variant="outline"
-          _hover={{
-            bg: 'green',
-            color: 'white',
-          }}
-        >
-          <Link as={RouterLink} to={`/RoadMap/${id}`}>
-            Edit RoadMap
-          </Link>
-        </Button>
-      </Flex>
-      <Flex
-        w="100%"
-        as="form"
-        direction="column"
-        gap={5}
-        onSubmit={UpdateProject}
-      >
-        <FormControl isInvalid={!!ErrorsState.title} isRequired>
-          {ErrorsState.title ? (
-            <FormLabel color="red">{ErrorsState.title}</FormLabel>
-          ) : (
-            <FormLabel htmlFor="title">Title : </FormLabel>
-          )}
-
-          <Input
-            id="title"
-            name="title"
-            placeholder="Pick Good Project Title"
-            value={FormValues.title}
-            onChange={HandleChange}
-            required
-          />
-        </FormControl>
-        <FormControl isInvalid={!!ErrorsState.description} isRequired>
-          {ErrorsState.description ? (
-            <FormLabel color="red">{ErrorsState.description}</FormLabel>
-          ) : (
-            <FormLabel htmlFor="description">Description : </FormLabel>
-          )}
-
-          <Textarea
-            id="description"
-            name="description"
-            placeholder="Project Description"
-            rows={10}
-            value={FormValues.description}
-            onChange={HandleChange}
-            required
-          />
-          <FormHelperText>
-            Write a thoroughly Description for your project
-          </FormHelperText>
-        </FormControl>
-
-        <FormControl isRequired gap={5}>
-          <FormLabel htmlFor="process">Process</FormLabel>
-          <NumberInput
-            maxW="100px"
-            mr="2rem"
-            id="process"
-            name="process"
-            value={FormValues.process}
-            onChange={ProcessChange}
-            min={0}
-            max={100}
-          >
-            <NumberInputField />
-            <NumberInputStepper>
-              <NumberIncrementStepper />
-              <NumberDecrementStepper />
-            </NumberInputStepper>
-          </NumberInput>
-          <Slider
-            aria-label="slider-ex-3"
-            defaultValue={30}
-            flex="1"
-            focusThumbOnChange={false}
-            value={FormValues.process}
-            onChange={ProcessChange}
-          >
-            <SliderTrack>
-              <SliderFilledTrack />
-            </SliderTrack>
-            <SliderThumb boxSize={6}>
-              <Box color="tomato" as={ArrowForwardIcon} />
-            </SliderThumb>
-          </Slider>
-        </FormControl>
-        <FormControl>
-          {ErrorsState.github ? (
-            <FormLabel color="red">{ErrorsState.github}</FormLabel>
-          ) : (
-            <FormLabel htmlFor="github">Github : </FormLabel>
-          )}
-
-          <Input
-            name="github"
-            id="github"
-            type="url"
-            placeholder="Github Link"
-            value={FormValues.github}
-            onChange={HandleChange}
-          />
-        </FormControl>
-        <FormControl>
-          {ErrorsState.website ? (
-            <FormLabel color="red">{ErrorsState.website}</FormLabel>
-          ) : (
-            <FormLabel htmlFor="website">Website : </FormLabel>
-          )}
-
-          <Input
-            name="website"
-            id="website"
-            disabled={!FormValues.live}
-            placeholder="Website Link"
-            value={FormValues.website}
-            onChange={HandleChange}
-          />
-        </FormControl>
-        <FormControl display="flex" alignItems="center">
-          <FormLabel htmlFor="live" mb="0">
-            Is Live?
-          </FormLabel>
-          <Switch
-            id="live"
-            value={FormValues.live ? 1 : 0}
-            onChange={(e) => {
-              setFormValues({
-                ...FormValues,
-                live: e.target.checked,
-              });
+    <>
+      <MetaData />
+      <Container maxW="800px" mb={10} mt={10}>
+        <Flex justifyContent="space-between">
+          <Heading as="h1" size="lg" mb={4}>
+            Edit Project
+          </Heading>
+          <Button
+            colorScheme="green"
+            variant="outline"
+            _hover={{
+              bg: 'green',
+              color: 'white',
             }}
-          />
-        </FormControl>
+          >
+            <Link as={RouterLink} to={`/RoadMap/${id}`}>
+              Edit RoadMap
+            </Link>
+          </Button>
+        </Flex>
+        <Flex
+          w="100%"
+          as="form"
+          direction="column"
+          gap={5}
+          onSubmit={UpdateProject}
+        >
+          <FormControl isInvalid={!!ErrorsState.title} isRequired>
+            {ErrorsState.title ? (
+              <FormLabel color="red">{ErrorsState.title}</FormLabel>
+            ) : (
+              <FormLabel htmlFor="title">Title : </FormLabel>
+            )}
 
-        <Button type="submit" colorScheme="blue" variant="outline">
-          Update Project
-        </Button>
-      </Flex>
-    </Container>
+            <Input
+              id="title"
+              name="title"
+              placeholder="Pick Good Project Title"
+              value={FormValues.title}
+              onChange={HandleChange}
+              required
+            />
+          </FormControl>
+          <FormControl isInvalid={!!ErrorsState.description} isRequired>
+            {ErrorsState.description ? (
+              <FormLabel color="red">{ErrorsState.description}</FormLabel>
+            ) : (
+              <FormLabel htmlFor="description">Description : </FormLabel>
+            )}
+
+            <Textarea
+              id="description"
+              name="description"
+              placeholder="Project Description"
+              rows={10}
+              value={FormValues.description}
+              onChange={HandleChange}
+              required
+            />
+            <FormHelperText>
+              Write a thoroughly Description for your project
+            </FormHelperText>
+          </FormControl>
+
+          <FormControl isRequired gap={5}>
+            <FormLabel htmlFor="process">Process</FormLabel>
+            <NumberInput
+              maxW="100px"
+              mr="2rem"
+              id="process"
+              name="process"
+              value={FormValues.process}
+              onChange={ProcessChange}
+              min={0}
+              max={100}
+            >
+              <NumberInputField />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
+            <Slider
+              aria-label="slider-ex-3"
+              defaultValue={30}
+              flex="1"
+              focusThumbOnChange={false}
+              value={FormValues.process}
+              onChange={ProcessChange}
+            >
+              <SliderTrack>
+                <SliderFilledTrack />
+              </SliderTrack>
+              <SliderThumb boxSize={6}>
+                <Box color="tomato" as={ArrowForwardIcon} />
+              </SliderThumb>
+            </Slider>
+          </FormControl>
+          <FormControl>
+            {ErrorsState.github ? (
+              <FormLabel color="red">{ErrorsState.github}</FormLabel>
+            ) : (
+              <FormLabel htmlFor="github">Github : </FormLabel>
+            )}
+
+            <Input
+              name="github"
+              id="github"
+              type="url"
+              placeholder="Github Link"
+              value={FormValues.github}
+              onChange={HandleChange}
+            />
+          </FormControl>
+          <FormControl>
+            {ErrorsState.website ? (
+              <FormLabel color="red">{ErrorsState.website}</FormLabel>
+            ) : (
+              <FormLabel htmlFor="website">Website : </FormLabel>
+            )}
+
+            <Input
+              name="website"
+              id="website"
+              disabled={!FormValues.live}
+              placeholder="Website Link"
+              value={FormValues.website}
+              onChange={HandleChange}
+            />
+          </FormControl>
+          <FormControl display="flex" alignItems="center">
+            <FormLabel htmlFor="live" mb="0">
+              Is Live?
+            </FormLabel>
+            <Switch
+              id="live"
+              value={FormValues.live ? 1 : 0}
+              onChange={(e) => {
+                setFormValues({
+                  ...FormValues,
+                  live: e.target.checked,
+                });
+              }}
+            />
+          </FormControl>
+
+          <Button type="submit" colorScheme="blue" variant="outline">
+            Update Project
+          </Button>
+        </Flex>
+      </Container>
+    </>
   );
 }
 

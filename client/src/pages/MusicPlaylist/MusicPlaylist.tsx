@@ -16,6 +16,7 @@ import {
   setPlayList,
 } from '../../features/MusicSlice';
 import type { MusicState } from '../../features/MusicSlice';
+import MetaData from '../../Meta/MetaMusicPlaylist';
 
 const reorder = (lists: any[], startIndex: number, endIndex: number) => {
   const result = Array.from(lists);
@@ -33,7 +34,9 @@ function MusicPlaylist() {
   const { SongsDB } = useSongsdb();
   const [songs, setSongs] = useState<any>([]);
   const [AddingNewSongs, setAddingNewSongs] = useState(false);
-  const { isLoading }: MusicState = useSelector((state: any) => state.Music);
+  const { isLoading, CurrentMusic, PlayList }: MusicState = useSelector(
+    (state: any) => state.Music,
+  );
 
   useEffect(() => {
     SongsDB?.getAllKeys('Songs').then((dbsongs: any) => {
@@ -137,6 +140,11 @@ function MusicPlaylist() {
         ImageFile: MusicSymbol,
       }}
     >
+      <MetaData
+        title={`Music Playlist ${
+          CurrentMusic > 0 ? `Playing ${PlayList[CurrentMusic]}` : ''
+        }`}
+      />
       <Box mx="auto" w="70vw" minW="350px">
         {(isLoading || AddingNewSongs) && <Spinner />}
         <Flex
