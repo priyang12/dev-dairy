@@ -1,4 +1,4 @@
-import { Box, Collapse, IconButton, Tooltip } from '@chakra-ui/react';
+import { Box, IconButton } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { HiChevronDoubleDown, HiChevronDoubleUp } from 'react-icons/hi';

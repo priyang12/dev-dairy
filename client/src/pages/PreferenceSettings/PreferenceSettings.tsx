@@ -12,7 +12,6 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import Spinner from '../../components/spinner';
 
 function PreferenceSettings() {
   const [Loading, setLoading] = useState(false);

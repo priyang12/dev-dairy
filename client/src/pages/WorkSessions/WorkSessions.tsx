@@ -20,6 +20,7 @@ import Container from '../../components/Container';
 import Spinner from '../../components/spinner';
 import DeleteWorkSessionModal from './DeleteWorkSessionModal';
 import { toDaysMinutesSeconds } from '../../utils/SecondsToFormate';
+import MetaData from '../../Meta/MetaWorkSessions';
 
 function WorkSessions() {
   const { data, isLoading } = useGetSessions();
@@ -29,6 +30,7 @@ function WorkSessions() {
   if (!data || data.length === 0) {
     return (
       <Container mt={5}>
+        <MetaData title="No WorkSessions" />
         <Flex justifyContent="space-between" alignItems="center" p={5}>
           <Heading> No Work Sessions</Heading>
         </Flex>
@@ -38,6 +40,7 @@ function WorkSessions() {
 
   return (
     <Container mt={5}>
+      <MetaData title={`WorkSessions * ${data.length}`} />
       <Flex justifyContent="space-between" alignItems="center" p={5}>
         <Heading>Work Sessions</Heading>
         <DeleteWorkSessionModal />

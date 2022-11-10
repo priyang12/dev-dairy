@@ -5,6 +5,7 @@ import { IPost } from '../interface';
 export const useInfinitePosts = () => {
   const shouldReset = useRef(true);
   const [page, setpage] = useState(1);
+  const [TotalPosts, setTotalPosts] = useState(0);
   const [trigger, result] = useLazyGetPosts();
 
   const [posts, setPosts] = useState<
@@ -40,6 +41,7 @@ export const useInfinitePosts = () => {
           posts: result.data,
         },
       ]);
+      setTotalPosts(result.data.length);
       shouldReset.current = false;
     } else if (result.data && result.data?.length > 0) {
       const NewPosts = [
@@ -52,10 +54,19 @@ export const useInfinitePosts = () => {
         const index = posts.findIndex(
           (p) => p.page === result.originalArgs.page,
         );
+
         const newPosts = [...posts];
+        // Replace Old Page with New Page
+        const oldTotal = newPosts[index].posts.length;
+        const NewTotal = NewPosts[0].posts.length;
+
         newPosts[index] = NewPosts[0];
+
+        setTotalPosts((CurrentTotal) => CurrentTotal - (oldTotal - NewTotal));
+
         setPosts(newPosts);
       } else {
+        setTotalPosts((currentTotal) => currentTotal + result.data.length);
         setPosts([...posts, ...NewPosts]);
       }
     }
@@ -66,6 +77,7 @@ export const useInfinitePosts = () => {
     data: posts,
     CurrentPage: page,
     isLastPage: End,
+    TotalPosts,
     fetchNextPage() {
       if (!End) {
         trigger({ page: page + 1, limit: 10 });

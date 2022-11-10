@@ -11,14 +11,14 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { ResetPasswordSchema, ZodError } from '@dev-dairy/zodvalidation';
 import { useGetUserQuery, useUpdateUser } from '../../API/UserAPI';
 import Container from '../../components/Container';
 import Spinner from '../../components/spinner';
-import { ResetPasswordSchema, z, ZodError } from '@dev-dairy/zodvalidation';
 import { space } from '../../Theme';
-import { Link } from 'react-router-dom';
+import MetaData from '../../Meta/MetaChangePassword';
 
 interface FormType {
   password: { value: string };
@@ -77,8 +77,9 @@ function ChangePassword() {
 
   return (
     <Container>
+      <MetaData />
       {isSuccess && (
-        <Box my={space['xl']}>
+        <Box my={space.xl}>
           <Heading textAlign="center">Change Password</Heading>
           {UpdateResult.isSuccess && (
             <Button as={Link} to="/posts">
@@ -90,26 +91,26 @@ function ChangePassword() {
             as="form"
             onSubmit={onSubmit}
             gap={space.lg}
-            p={space['xl']}
+            p={space.xl}
           >
             <FormControl isInvalid={!!InputError.password}>
               <FormLabel htmlFor="password">password</FormLabel>
               <Input name="password" id="password" type="password" />
-              {!InputError['password'] ? (
+              {!InputError.password ? (
                 <FormHelperText>
                   Please choose a strong password to keep it safe
                 </FormHelperText>
               ) : (
-                <FormErrorMessage>{InputError['password']}</FormErrorMessage>
+                <FormErrorMessage>{InputError.password}</FormErrorMessage>
               )}
             </FormControl>
             <FormControl isInvalid={!!InputError.password2}>
               <FormLabel htmlFor="password2">Confirm Password</FormLabel>
               <Input name="password2" id="password2" type="password" />
-              {!InputError['password2'] ? (
+              {!InputError.password2 ? (
                 <FormHelperText>Passwords must be match</FormHelperText>
               ) : (
-                <FormErrorMessage>{InputError['password2']}</FormErrorMessage>
+                <FormErrorMessage>{InputError.password2}</FormErrorMessage>
               )}
             </FormControl>
             <Button

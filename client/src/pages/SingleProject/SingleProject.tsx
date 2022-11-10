@@ -22,10 +22,10 @@ import { parseISO, format } from 'date-fns';
 import invert from 'invert-color';
 import { toast } from 'react-toastify';
 import { useDeleteProject, useGetProjectId } from '../../API/ProjectAPI';
-import type { IRoadMap } from '../../interface';
 import Spinner from '../../components/spinner';
 import RandomColor from '../../utils/RandomColor';
 import ConfirmationModal from '../../components/ConfirmationModal';
+import MetaData from '../../Meta/MetaSingleProject';
 
 function SingleProject() {
   const { id } = useParams<{ id: string }>();
@@ -63,6 +63,7 @@ function SingleProject() {
 
   return (
     <Container maxW="900px" mb={10}>
+      <MetaData title={`${project.title}`} description={project.description} />
       <Flex alignItems="flex-end" justifyContent="flex-end" gap={5}>
         <Button mt={5} as={RouterLink} to={`/Project/Sessions/${project._id}`}>
           Work Sessions

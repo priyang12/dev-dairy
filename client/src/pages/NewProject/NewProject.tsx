@@ -31,6 +31,7 @@ import useForm from '../../Hooks/useForm';
 import Spinner from '../../components/spinner';
 import { CheckURL } from '../../utils/Validation';
 import type { IRoadMap } from '../../interface';
+import MetaData from '../../Meta/MetaNewProject';
 
 const init = {
   Title: '',
@@ -144,6 +145,7 @@ function NewProject() {
 
   return (
     <Container MW="900px">
+      <MetaData />
       <Box py={10}>
         <Heading size="lg">New Project</Heading>
         <Flex

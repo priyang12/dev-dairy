@@ -3,6 +3,7 @@ import type { RenderOptions, RenderResult } from '@testing-library/react';
 import type { ReactElement, ReactNode } from 'react';
 import { render as rtlRender } from '@testing-library/react';
 import { Provider } from 'react-redux';
+import { HelmetProvider } from 'react-helmet-async';
 import { createStoreWithMiddleware } from '../store';
 import type { RootState } from '../store';
 import CustomToaster from '../components/CustomToaster';
@@ -29,10 +30,10 @@ function render(
   }): ReactElement {
     return (
       <Provider store={store}>
-        <div>
+        <HelmetProvider>
           <CustomToaster />
           {children}
-        </div>
+        </HelmetProvider>
       </Provider>
     );
   }

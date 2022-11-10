@@ -1,7 +1,6 @@
 import { rest } from 'msw';
 import { createMemoryHistory } from 'history';
 import { format, parseISO } from 'date-fns';
-import userEvent from '@testing-library/user-event';
 import { Router } from 'react-router-dom';
 import { render, screen, waitForElementToBeRemoved } from '../../test-utils';
 import { ProjectsResponse } from '../../mock/MockedData';

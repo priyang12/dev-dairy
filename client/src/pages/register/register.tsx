@@ -18,6 +18,7 @@ import { StoreState } from '../../store';
 import { useRegister } from '../../API/AuthAPI';
 import CustomForm from '../../components/CustomForm';
 import { space } from '../../Theme';
+import MetaData from '../../Meta/Metaregister';
 
 function Register() {
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
@@ -94,74 +95,77 @@ function Register() {
   }, [cookies.token]);
 
   return (
-    <Box
-      p={space.lg}
-      backgroundImage={`url(${'https://source.unsplash.com/npwjNTG_SQA'})`}
-      backgroundPosition="center"
-      backgroundSize="cover"
-      backgroundRepeat="no-repeat"
-    >
+    <>
+      <MetaData />
       <Box
-        fontFamily="arial"
-        fontSize="4xl"
-        textAlign="center"
-        className="glass"
-        p={space.md}
+        p={space.lg}
+        backgroundImage={`url(${'https://source.unsplash.com/npwjNTG_SQA'})`}
+        backgroundPosition="center"
+        backgroundSize="cover"
+        backgroundRepeat="no-repeat"
       >
-        <Heading>Register Page</Heading>
-        <Text>Sign up for your DevConnector account</Text>
-        <Flex
-          justifyContent="center"
-          alignItems="center"
-          gap={space.lg}
-          direction={['column', 'row']}
+        <Box
+          fontFamily="arial"
+          fontSize="4xl"
+          textAlign="center"
+          className="glass"
+          p={space.md}
         >
-          <Text>Already have an account?</Text>
-          <Button
-            as={RouterLink}
-            to="/login"
-            colorScheme="assert"
-            variant="outline"
-            backdropFilter="auto"
-            backdropBlur="10px"
-            fontSize={space.md}
+          <Heading>Register Page</Heading>
+          <Text>Sign up for your DevConnector account</Text>
+          <Flex
+            justifyContent="center"
+            alignItems="center"
+            gap={space.lg}
+            direction={['column', 'row']}
           >
-            Login
-          </Button>
-        </Flex>
+            <Text>Already have an account?</Text>
+            <Button
+              as={RouterLink}
+              to="/login"
+              colorScheme="assert"
+              variant="outline"
+              backdropFilter="auto"
+              backdropBlur="10px"
+              fontSize={space.md}
+            >
+              Login
+            </Button>
+          </Flex>
+        </Box>
+        <>
+          {error && (
+            <Alert status="error" bg="red.500" borderRadius={10} my={space.md}>
+              <AlertIcon />
+              {error}
+            </Alert>
+          )}
+          <CustomForm
+            display={['block', 'grid']}
+            gridTemplateColumns={['1fr', '1fr 1fr']}
+            p={['', '', space.xl]}
+            mt={space.md}
+            gap={space.md}
+            FormFields={RegisterFields}
+            SubmitForm={RegisterUser}
+          >
+            <Button
+              p={space.lg}
+              backdropFilter="auto"
+              backdropBlur="10px"
+              isLoading={result.isLoading}
+              type="submit"
+              loadingText="Just a moment ..."
+              colorScheme="assert"
+              variant="outline"
+              gridColumn="1 / 3"
+            >
+              Register Now
+            </Button>
+          </CustomForm>
+        </>
       </Box>
-      <>
-        {error && (
-          <Alert status="error" bg="red.500" borderRadius={10} my={space.md}>
-            <AlertIcon />
-            {error}
-          </Alert>
-        )}
-        <CustomForm
-          display={['block', 'grid']}
-          gridTemplateColumns={['1fr', '1fr 1fr']}
-          p={['', '', space.xl]}
-          mt={space.md}
-          gap={space.md}
-          FormFields={RegisterFields}
-          SubmitForm={RegisterUser}
-        >
-          <Button
-            p={space.lg}
-            backdropFilter="auto"
-            backdropBlur="10px"
-            isLoading={result.isLoading}
-            type="submit"
-            loadingText="Just a moment ..."
-            colorScheme="assert"
-            variant="outline"
-            gridColumn="1 / 3"
-          >
-            Register Now
-          </Button>
-        </CustomForm>
-      </>
-    </Box>
+    </>
   );
 }
 

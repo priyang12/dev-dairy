@@ -18,6 +18,7 @@ import {
   usePullSessions,
 } from '../../API/WorkSessionsAPI';
 import { useApiToast } from '../../Hooks/useApiToast';
+import MetaData from '../../Meta/MetaProjectSessions';
 
 function ProjectSessions() {
   const { id } = useParams<{
@@ -83,6 +84,7 @@ function ProjectSessions() {
 
   return (
     <Container my={5}>
+      <MetaData />
       <Box className="glass" p={5}>
         <Flex
           justifyContent="space-between"

@@ -18,6 +18,7 @@ import { useGetSharedProject } from '../../API/ShareProjectAPI';
 import Container from '../../components/Container';
 import Spinner from '../../components/spinner';
 import RandomColor from '../../utils/RandomColor';
+import MetaData from '../../Meta/MetaShare';
 
 function WrappedText({
   TextValue,
@@ -107,6 +108,7 @@ function Share() {
 
   return (
     <Container my="lg">
+      <MetaData />
       <Heading fontSize="4xl">Project Title : {project.title}</Heading>
       <Text as="p" fontSize="3xl">
         Project Description : {project.description}

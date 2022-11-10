@@ -13,6 +13,7 @@ import CustomToaster from './components/CustomToaster';
 import Spinner from './components/spinner';
 import MailToken from './pages/MailToken';
 import ChangePassword from './pages/ChangePassword';
+import ErrorBoundaryUI from './components/ErrorBoundaryUI';
 
 function App() {
   // eslint-disable-next-line no-unused-vars
@@ -35,14 +36,16 @@ function App() {
   return (
     <BrowserRouter>
       <CustomToaster />
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/Register" element={<Register />} />
-        <Route path="/ForgotPassword" element={<MailToken />} />
-        <Route path="/ChangePassword/:id" element={<ChangePassword />} />
-        <Route path="*" element={<PrivateOutlet />} />
-      </Routes>
+      <ErrorBoundaryUI>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/Register" element={<Register />} />
+          <Route path="/ForgotPassword" element={<MailToken />} />
+          <Route path="/ChangePassword/:id" element={<ChangePassword />} />
+          <Route path="*" element={<PrivateOutlet />} />
+        </Routes>
+      </ErrorBoundaryUI>
     </BrowserRouter>
   );
 }

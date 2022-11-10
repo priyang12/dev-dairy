@@ -157,7 +157,6 @@ export default class WorkSessionService {
     })
       .lean()
       .exec();
-    console.log(deletedWorkSessions.deletedCount);
 
     if (!deletedWorkSessions.deletedCount) {
       this.logger.error("CRUD Error: WorkSessions Not Deleted");

@@ -77,8 +77,9 @@ const handlers = [
     const project = req.url.searchParams.get('project');
 
     if (page === '1' || !page) {
-      return res(ctx.json(PostsResponse));
-    } else if (status || title || project) {
+      return res(ctx.status(201), ctx.json(PostsResponse));
+    }
+    if (status || title || project) {
       const FilteredPosts = PostsResponse.filter(
         (post) =>
           (status && post.status === status) ||
@@ -87,7 +88,7 @@ const handlers = [
       );
       return res(ctx.json(FilteredPosts));
     }
-    return res(ctx.json(Page2PostsResponse));
+    return res(ctx.status(201), ctx.json(Page2PostsResponse));
   }),
 
   rest.post(`${API}/posts`, (req, res, ctx) => res(ctx.json(NewPostResponse))),

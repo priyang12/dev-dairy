@@ -3,12 +3,14 @@ import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
+import { HelmetProvider } from 'react-helmet-async';
 import { store as Store, Persister } from './store';
 import { ThemeColors, space, config } from './Theme';
 import '@priyang/react-component-lib/dist/index.css';
 import 'react-toastify/dist/ReactToastify.css';
 import './Styles/Global.css';
 import App from './App';
+import ErrorBoundaryUI from './components/ErrorBoundaryUI';
 
 const theme = extendTheme({
   config,
@@ -21,12 +23,16 @@ const root = createRoot(container!);
 
 root.render(
   <React.StrictMode>
-    <Provider store={Store}>
-      <PersistGate loading={null} persistor={Persister}>
-        <ChakraProvider theme={theme}>
-          <App />
-        </ChakraProvider>
-      </PersistGate>
-    </Provider>
+    <ErrorBoundaryUI>
+      <Provider store={Store}>
+        <PersistGate loading={null} persistor={Persister}>
+          <ChakraProvider theme={theme}>
+            <HelmetProvider>
+              <App />
+            </HelmetProvider>
+          </ChakraProvider>
+        </PersistGate>
+      </Provider>
+    </ErrorBoundaryUI>
   </React.StrictMode>,
 );
