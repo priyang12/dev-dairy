@@ -11,6 +11,7 @@ import '@priyang/react-component-lib/dist/index.css';
 import 'react-toastify/dist/ReactToastify.css';
 import './Styles/Global.css';
 import App from './App';
+import ErrorBoundaryUI from './components/ErrorBoundaryUI';
 
 if (process.env.REACT_APP_ENVIRONMENT === 'test') {
   worker.start();
@@ -27,14 +28,16 @@ const root = createRoot(container!);
 
 root.render(
   <React.StrictMode>
-    <Provider store={Store}>
-      <PersistGate loading={null} persistor={Persister}>
-        <ChakraProvider theme={theme}>
-          <HelmetProvider>
-            <App />
-          </HelmetProvider>
-        </ChakraProvider>
-      </PersistGate>
-    </Provider>
+    <ErrorBoundaryUI>
+      <Provider store={Store}>
+        <PersistGate loading={null} persistor={Persister}>
+          <ChakraProvider theme={theme}>
+            <HelmetProvider>
+              <App />
+            </HelmetProvider>
+          </ChakraProvider>
+        </PersistGate>
+      </Provider>
+    </ErrorBoundaryUI>
   </React.StrictMode>,
 );

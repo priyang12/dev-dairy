@@ -15,7 +15,7 @@ function NotFound({ data }: INotFoundProps) {
   return (
     <Container my={space['md']}>
       <MetaData title="Sorry Not Found" />
-      <Heading fontSize={space['2xl']}>
+      <Heading fontSize={space['3xl']}>
         <Flex>
           {data?.heading}
           <FaExclamationTriangle />

@@ -17,19 +17,24 @@ import MarginContainer from '../../components/MarginContainer';
 import PostModal from './PostModal';
 import BgImage from '../../components/BgImage';
 import MetaData from '../../Meta/MetaPosts';
+import { useErrorHandler } from 'react-error-boundary';
 
 function Feeds() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   const {
     isLoading: LoadingPosts,
     isFetching,
     data: Posts,
     isLastPage,
     TotalPosts,
+    error,
     fetchNextPage,
   } = useInfinitePosts();
 
   const [AddNewPost, Result] = useNewPost();
+
+  useErrorHandler(error);
 
   useApiToast({
     Result,
@@ -62,7 +67,12 @@ function Feeds() {
           }}
         >
           <MarginContainer display="flex" flexDir="column" py={5}>
-            <Button onClick={onOpen} fontSize="3xl" p={10}>
+            <Button
+              onClick={onOpen}
+              fontSize="3xl"
+              p={10}
+              borderRadius={['3xl']}
+            >
               Create New Entry
             </Button>
 
@@ -95,26 +105,23 @@ function Feeds() {
                 <Flex gap={10} flexDir="column">
                   {Posts.map((data) =>
                     data.posts.map((post) => (
-                      <PostContainer
-                        key={post._id}
-                        post={post}
-                        page={data.page}
-                      />
+                      <PostContainer post={post} page={data.page} />
                     )),
                   )}
                 </Flex>
-                {!isLastPage && (
-                  <Button
-                    loadingText="Loading..."
-                    isLoading={isFetching}
-                    m={5}
-                    onClick={() => {
-                      fetchNextPage();
-                    }}
-                  >
-                    Load More
-                  </Button>
-                )}
+                {!isLastPage ||
+                  (Posts[0].posts.length === 0 && (
+                    <Button
+                      loadingText="Loading..."
+                      isLoading={isFetching}
+                      m={5}
+                      onClick={() => {
+                        fetchNextPage();
+                      }}
+                    >
+                      Load More
+                    </Button>
+                  ))}
               </>
             )}
             {(Posts[0].posts.length === 0 || isLastPage) && (

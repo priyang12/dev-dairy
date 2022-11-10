@@ -1,6 +1,7 @@
 import { Flex } from '@chakra-ui/react';
 import React, { lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import ErrorBoundaryUI from './components/ErrorBoundaryUI';
 import FallBackSuspenseWrapper from './components/FallBackSuspenseWrapper';
 import EditProject from './pages/EditProject';
 import FilterPosts from './pages/FilterPosts';
@@ -30,15 +31,21 @@ function AuthContainer({ children }: { children: React.ReactNode }) {
     <>
       <Navbar />
       <Flex w="100%" gap="xl">
-        <FallBackSuspenseWrapper fallback={false}>
-          <MusicPlayer />
-        </FallBackSuspenseWrapper>
-        <FallBackSuspenseWrapper fallback={false}>
-          <SessionWidget />
-        </FallBackSuspenseWrapper>
-        <FallBackSuspenseWrapper fallback={false}>
-          <YoutubePlayer />
-        </FallBackSuspenseWrapper>
+        <ErrorBoundaryUI>
+          <FallBackSuspenseWrapper fallback={false}>
+            <MusicPlayer />
+          </FallBackSuspenseWrapper>
+        </ErrorBoundaryUI>
+        <ErrorBoundaryUI>
+          <FallBackSuspenseWrapper fallback={false}>
+            <SessionWidget />
+          </FallBackSuspenseWrapper>
+        </ErrorBoundaryUI>
+        <ErrorBoundaryUI>
+          <FallBackSuspenseWrapper fallback={false}>
+            <YoutubePlayer />
+          </FallBackSuspenseWrapper>
+        </ErrorBoundaryUI>
       </Flex>
       {children}
     </>
@@ -48,25 +55,27 @@ function AuthContainer({ children }: { children: React.ReactNode }) {
 function AuthRoutes() {
   return (
     <AuthContainer>
-      <Routes>
-        <Route path="Posts" element={<Posts />} />
-        <Route path="Posts/filter" element={<FilterPosts />} />
-        <Route path="Projects" element={<Projects />} />
-        <Route path="NewProject" element={<NewProject />} />
-        <Route path="Projects/:id" element={<SingleProject />} />
-        <Route path="EditProject/:id" element={<EditProject />} />
-        <Route path="RoadMap/:id" element={<RoadMap />} />
-        <Route path="ShareProject/:id" element={<ShareProject />} />
-        <Route path="Share/:token" element={<Share />} />
-        <Route path="Project/Sessions/:id" element={<ProjectSessions />} />
-        <Route path="Sessions" element={<WorkSessions />} />
-        <Route path="MusicPlaylist" element={<MusicPlaylist />} />
-        <Route path="Settings" element={<Settings />}>
-          <Route path="Preference" element={<PreferenceSettings />} />
-          <Route path="Profile" element={<ProfileSettings />} />
-        </Route>
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <ErrorBoundaryUI>
+        <Routes>
+          <Route path="Posts" element={<Posts />} />
+          <Route path="Posts/filter" element={<FilterPosts />} />
+          <Route path="Projects" element={<Projects />} />
+          <Route path="NewProject" element={<NewProject />} />
+          <Route path="Projects/:id" element={<SingleProject />} />
+          <Route path="EditProject/:id" element={<EditProject />} />
+          <Route path="RoadMap/:id" element={<RoadMap />} />
+          <Route path="ShareProject/:id" element={<ShareProject />} />
+          <Route path="Share/:token" element={<Share />} />
+          <Route path="Project/Sessions/:id" element={<ProjectSessions />} />
+          <Route path="Sessions" element={<WorkSessions />} />
+          <Route path="MusicPlaylist" element={<MusicPlaylist />} />
+          <Route path="Settings" element={<Settings />}>
+            <Route path="Preference" element={<PreferenceSettings />} />
+            <Route path="Profile" element={<ProfileSettings />} />
+          </Route>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </ErrorBoundaryUI>
     </AuthContainer>
   );
 }

@@ -50,6 +50,8 @@ function Form({
           mb={mb}
           isInvalid={ErrorsState[field.fieldName]}
           isRequired={field.isRequired}
+          borderColor={'secondary.500'}
+          borderWidth="2px"
           key={field.fieldName}
           backdropFilter="auto"
           backdropBlur="10px"

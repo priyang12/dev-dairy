@@ -21,9 +21,8 @@ type PropTypes = {
 
 function PostContainer({ post, page }: PropTypes) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [mutation, { isSuccess, isLoading }] = useDeletePost();
+  const [mutation, { isLoading }] = useDeletePost();
   const [UpdateMutate] = useUpdatePostMutation();
-
   return (
     <Box
       color="#fff"

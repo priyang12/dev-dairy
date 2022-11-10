@@ -7,9 +7,9 @@ export const space = {
   sm: '0.5rem',
   md: '1rem',
   lg: '2rem',
-  xl: '4rem',
-  '2xl': '8rem',
-  '3xl': '12rem',
+  xl: '3rem',
+  '2xl': '4rem',
+  '3xl': '8rem',
   '4xl': '16rem',
   '5xl': '24rem',
 };
