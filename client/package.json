@@ -49,7 +49,7 @@
     "prebuild:ci": "yarn msw:cleanup",
     "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
     "build:remove": "rm -rf build",
-    "test": "react-scripts test --watchAll=false  --forceExit",
+    "test": "react-scripts test --watchAll=false --detectOpenHandles",
     "test:debug": "DEBUG_PRINT_LIMIT=10000 react-scripts test",
     "coverage": "react-scripts test --watchAll --coverage",
     "testAll": "react-scripts test --watchAll",
