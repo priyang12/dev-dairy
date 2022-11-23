@@ -115,7 +115,6 @@ it('Delete Post', async () => {
 
   await userEvent.click(deleteButton);
 
-  expect(post).not.toBeInTheDocument();
   await waitFor(() => screen.getByText(/Post Deleted Successfully/), {
     timeout: 2100,
   });

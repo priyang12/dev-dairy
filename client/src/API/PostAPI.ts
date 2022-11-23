@@ -79,27 +79,6 @@ const PostApi = createApi({
         };
       },
       onQueryStarted({ UpdatedPost, page }, { dispatch, queryFulfilled }) {
-        // need to look at
-        // it is causing api call to send wrong data
-        // const UpdateResult = dispatch(
-        //   PostApi.util.updateQueryData(
-        //     'GetPosts',
-        //     {
-        //       page,
-        //       limit: 10,
-        //     },
-        //     (posts) =>
-        //       posts.map((post) => {
-        //         if (post._id === UpdatedPost._id) {
-        //           UpdatedPost.project = post.project;
-        //           UpdatedPost.date = post.date;
-        //           return UpdatedPost as IPost;
-        //         }
-        //         return post;
-        //       }),
-        //   ),
-        // );
-
         queryFulfilled
           .then(({ data: UpdatePost }) => {
             toast.success(`${UpdatePost.message} Updated Successfully`);
@@ -182,22 +161,12 @@ const PostApi = createApi({
         };
       },
       onQueryStarted({ UpdatedPost, filter }, { dispatch, queryFulfilled }) {
+        console.log(filter);
+
         queryFulfilled
           .then(({ data: UpdatePost }) => {
             dispatch(PostApi.util.invalidateTags(['Posts']));
             toast.success(`${UpdatePost.message} Updated Successfully`);
-            dispatch(
-              PostApi.util.updateQueryData('GetPosts', filter, (posts) =>
-                posts.map((post) => {
-                  if (post._id === UpdatedPost._id) {
-                    UpdatedPost.project = post.project;
-                    UpdatedPost.date = post.date;
-                    return UpdatedPost as IPost;
-                  }
-                  return post;
-                }),
-              ),
-            );
           })
           .catch((error: any) => {
             const errorMessage = CheckError(error);
@@ -220,12 +189,6 @@ const PostApi = createApi({
       },
 
       onQueryStarted({ id, filter }, { dispatch, queryFulfilled }) {
-        const deleteResult = dispatch(
-          PostApi.util.updateQueryData('GetPosts', filter, (data: IPost[]) => {
-            const newData = data.filter((item: IPost) => item._id !== id);
-            return newData;
-          }),
-        );
         queryFulfilled
           .then(({ data: DeleteRes }) => {
             dispatch(PostApi.util.invalidateTags(['Posts']));
@@ -234,7 +197,6 @@ const PostApi = createApi({
           .catch((error: any) => {
             const errorMessage = CheckError(error);
             toast.error(errorMessage);
-            deleteResult.undo();
           });
       },
     }),
