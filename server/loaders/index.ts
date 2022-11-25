@@ -30,6 +30,11 @@ export default async ({ expressApp }: any) => {
     model: require("../models/ShareProject").default,
   };
 
+  const TestUserModel = {
+    name: "testUserModel",
+    model: require("../models/TestUsers").default,
+  };
+
   const { agenda } = await dependencyInjectorLoader({
     mongoConnection,
     models: [
@@ -38,6 +43,7 @@ export default async ({ expressApp }: any) => {
       postModel,
       workSessionsModel,
       sharedProjectModel,
+      TestUserModel,
     ],
   });
 
