@@ -1,6 +1,8 @@
 import { rest } from 'msw';
 import API from '../API';
+import { SeedHandler } from './Handlers/SeedHandler';
 import { MockedSharedProject } from './Handlers/SharedProjectHandler';
+import { WorkSessions } from './Handlers/WorkSessionHandler';
 import {
   AuthResponse,
   MockedRoadMap,
@@ -10,44 +12,8 @@ import {
   PostsResponse,
   ProjectsResponse,
   SingleProjectResponse,
-  MockedAllWorkSessions,
-  MockedProjectWorkSessions,
-  MockPushWorkSession,
-  MockPullWorkSession,
   Page2PostsResponse,
 } from './MockedData';
-
-const WorkSessions = [
-  rest.get(`${API}/workSession`, (req, res, ctx) =>
-    res(ctx.json(MockedAllWorkSessions)),
-  ),
-  rest.get(`${API}/workSession/project/:id`, (req, res, ctx) =>
-    res(ctx.json(MockedProjectWorkSessions)),
-  ),
-  rest.patch(`${API}/workSession/:id/push`, (req, res, ctx) =>
-    res(ctx.json(MockPushWorkSession)),
-  ),
-  rest.patch(`${API}/workSession/:id/pull`, (req, res, ctx) =>
-    res(ctx.json(MockPullWorkSession)),
-  ),
-
-  rest.delete(`${API}/workSession/project/:id`, (req, res, ctx) =>
-    res(
-      ctx.json({
-        result: true,
-        message: 'Work Session Deleted Successfully',
-      }),
-    ),
-  ),
-  rest.delete(`${API}/workSession`, (req, res, ctx) =>
-    res(
-      ctx.json({
-        result: true,
-        message: 'Work Session Deleted Successfully',
-      }),
-    ),
-  ),
-];
 
 const handlers = [
   rest.post(`${API}/login`, (req, res, ctx) => res(ctx.json(AuthResponse))),
@@ -172,6 +138,7 @@ const handlers = [
   // WorkSessions
   ...WorkSessions,
   ...MockedSharedProject,
+  ...SeedHandler,
 ];
 
 export default handlers;

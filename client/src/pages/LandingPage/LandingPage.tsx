@@ -139,7 +139,7 @@ function LandingPage() {
               <IconButton
                 aria-label="UnMute"
                 onClick={() => {
-                  play();
+                  pause();
                   setMute(false);
                 }}
                 color={secondary[400]}
@@ -149,7 +149,7 @@ function LandingPage() {
               <IconButton
                 aria-label="Mute"
                 onClick={() => {
-                  pause();
+                  play();
                   setMute(true);
                 }}
                 color={assert[400]}

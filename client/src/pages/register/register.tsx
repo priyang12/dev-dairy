@@ -9,6 +9,7 @@ import {
   Button,
   Flex,
   Heading,
+  Link,
   Text,
 } from '@chakra-ui/react';
 import { RegisterSchema, ZodError } from '@dev-dairy/zodvalidation';
@@ -17,7 +18,7 @@ import type { AuthState } from '../../interface';
 import { StoreState } from '../../store';
 import { useRegister } from '../../API/AuthAPI';
 import CustomForm from '../../components/CustomForm';
-import { space } from '../../Theme';
+import { primary, secondary, space } from '../../Theme';
 import MetaData from '../../Meta/Metaregister';
 
 function Register() {
@@ -131,6 +132,16 @@ function Register() {
             >
               Login
             </Button>
+            <Link
+              as={RouterLink}
+              to="/CreateTest"
+              fontSize={space.lg}
+              color={secondary[400]}
+              _hover={{ color: primary[400], textDecoration: 'underline' }}
+            >
+              <span>&nbsp;</span>
+              Create Test User
+            </Link>
           </Flex>
         </Box>
         <>
