@@ -12,6 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import './Styles/Global.css';
 import App from './App';
 import ErrorBoundaryUI from './components/ErrorBoundaryUI';
+import { serviceWorkerRegister } from './serviceWokerRegister';
 
 if (process.env.REACT_APP_ENVIRONMENT === 'test') {
   worker.start();
@@ -41,3 +42,4 @@ root.render(
     </ErrorBoundaryUI>
   </React.StrictMode>,
 );
+serviceWorkerRegister();
