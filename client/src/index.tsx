@@ -11,6 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import './Styles/Global.css';
 import App from './App';
 import ErrorBoundaryUI from './components/ErrorBoundaryUI';
+import { serviceWorkerRegister } from './serviceWokerRegister';
 
 const theme = extendTheme({
   config,
@@ -36,3 +37,4 @@ root.render(
     </ErrorBoundaryUI>
   </React.StrictMode>,
 );
+serviceWorkerRegister();

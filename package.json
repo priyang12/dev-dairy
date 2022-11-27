@@ -8,8 +8,10 @@
     "server": "npm run server --prefix Server",
     "build": "yarn turbo run build",
     "build:remove": "npm run build:remove --prefix client && npm run build:remove --prefix Server",
-    "test": "yarn turbo run test",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "test": "yarn turbo test",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "data:import": "ts-node server/seeder",
+    "data:destroy": "ts-node server/seeder -d"
   },
   "workspaces": [
     "packages/*",

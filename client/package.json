@@ -35,8 +35,17 @@
     "react-toastify": "^9.0.7",
     "redux-persist": "^6.0.0",
     "typescript": "^4.6.3",
+    "use-sound": "^4.0.1",
     "uuid": "^8.3.2",
-    "web-vitals": "^0.2.4"
+    "web-vitals": "^0.2.4",
+    "workbox-core": "^6.5.1",
+    "workbox-expiration": "^6.5.1",
+    "workbox-precaching": "^6.5.1",
+    "workbox-recipes": "^6.5.3",
+    "workbox-routing": "^6.5.1",
+    "workbox-strategies": "^6.5.1",
+    "workbox-sw": "^6.5.1",
+    "workbox-window": "^6.5.3"
   },
   "resolutions": {
     "redux-persist/@types/react": "17.0.43",
@@ -50,7 +59,7 @@
     "prebuild:ci": "yarn msw:cleanup",
     "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
     "build:remove": "rm -rf build",
-    "test": "react-scripts test --watchAll=false  --forceExit",
+    "test": "react-scripts test --watchAll=false --detectOpenHandles",
     "test:debug": "DEBUG_PRINT_LIMIT=10000 react-scripts test",
     "coverage": "react-scripts test --watchAll --coverage",
     "testAll": "react-scripts test --watchAll",

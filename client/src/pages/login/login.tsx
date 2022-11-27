@@ -17,7 +17,7 @@ import type { AuthState } from '../../interface';
 import { useLogin } from '../../API/AuthAPI';
 import CustomForm from '../../components/CustomForm';
 import BgImage from '../../components/BgImage';
-import { assert, primary, space } from '../../Theme';
+import { assert, primary, secondary, space } from '../../Theme';
 import MetaData from '../../Meta/Metalogin';
 
 function Login() {
@@ -111,6 +111,16 @@ function Login() {
                 Sign up
               </Link>
             </Text>
+            <Link
+              as={RouterLink}
+              to="/CreateTest"
+              fontSize={space.lg}
+              color={secondary[400]}
+              _hover={{ color: primary[400], textDecoration: 'underline' }}
+            >
+              <span>&nbsp;</span>
+              Create Test User
+            </Link>
           </Flex>
 
           <Flex

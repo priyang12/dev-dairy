@@ -14,6 +14,7 @@ import Spinner from './components/spinner';
 import MailToken from './pages/MailToken';
 import ChangePassword from './pages/ChangePassword';
 import ErrorBoundaryUI from './components/ErrorBoundaryUI';
+import CreateTest from './pages/CreateTest';
 
 function App() {
   // eslint-disable-next-line no-unused-vars
@@ -43,6 +44,7 @@ function App() {
           <Route path="/Register" element={<Register />} />
           <Route path="/ForgotPassword" element={<MailToken />} />
           <Route path="/ChangePassword/:id" element={<ChangePassword />} />
+          <Route path="/CreateTest" element={<CreateTest />} />
           <Route path="*" element={<PrivateOutlet />} />
         </Routes>
       </ErrorBoundaryUI>

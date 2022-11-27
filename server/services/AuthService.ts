@@ -12,7 +12,7 @@ export default class AuthService {
     @Inject("logger") private logger: Logger
   ) {}
 
-  public async SignUp(userInputDTO: any) {
+  public async SignUp(userInputDTO: { email: string; password: string }) {
     // Check if user exists
     const emailExists = await this.userModel.findOne({
       email: userInputDTO.email,

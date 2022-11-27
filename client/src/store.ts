@@ -13,6 +13,7 @@ import {
 
 import storage from 'redux-persist/lib/storage';
 import AuthApi from './API/AuthAPI';
+import TestUserAPI from './API/TestUserAPI';
 import PostApi from './API/PostAPI';
 import UserApi from './API/UserAPI';
 import ProjectApi from './API/ProjectAPI';
@@ -31,6 +32,7 @@ const persistConfig = {
 
 const RootReducers = combineReducers({
   [AuthApi.reducerPath]: AuthApi.reducer,
+  [TestUserAPI.reducerPath]: TestUserAPI.reducer,
   [UserApi.reducerPath]: UserApi.reducer,
   [PostApi.reducerPath]: PostApi.reducer,
   [ProjectApi.reducerPath]: ProjectApi.reducer,
@@ -58,6 +60,7 @@ export const createStoreWithMiddleware = (initialState = {}): Store =>
         },
       })
         .concat(AuthApi.middleware)
+        .concat(TestUserAPI.middleware)
         .concat(UserApi.middleware)
         .concat(PostApi.middleware)
         .concat(ProjectApi.middleware)

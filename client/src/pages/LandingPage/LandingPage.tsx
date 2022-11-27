@@ -8,14 +8,19 @@ import {
   Icon,
   Stack,
   Link,
+  IconButton,
 } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
+import { useSound } from 'use-sound';
 import { Navigate, Link as ReactLink } from 'react-router-dom';
 import type { AuthState } from '../../interface';
 import { StoreState } from '../../store';
-import { space } from '../../Theme';
+import { assert, secondary, space } from '../../Theme';
 import MetaData from '../../Meta/MetaLandingPage';
+import Music from '../../Assets/Music/birds.mp3';
 import Data from './Data.json';
+import { GoMute, GoUnmute } from 'react-icons/go';
+import { useState } from 'react';
 
 const Arrow = createIcon({
   displayName: 'Arrow',
@@ -34,6 +39,11 @@ function LandingPage() {
   const { authenticated }: AuthState = useSelector(
     (state: StoreState) => state.Auth,
   );
+  const [Mute, setMute] = useState(false);
+  const [play, { pause }] = useSound(Music, {
+    volume: 0.5,
+    soundEnabled: Mute,
+  });
 
   if (authenticated) return <Navigate to="/Posts" />;
 
@@ -108,7 +118,7 @@ function LandingPage() {
             textAlign="center"
             spacing={{ base: 8, md: 14 }}
             py={{ base: 20, md: 200 }}
-            height="150vh"
+            height={'100%'}
             backgroundColor="#fafafa"
           >
             <Heading
@@ -122,9 +132,31 @@ function LandingPage() {
                 {Data.subheading}
               </Text>
             </Heading>
-            <Text color="gray.500" p={5}>
+            <Text color="gray.500" fontSize={[space.md, space.lg]} p={5}>
               {Data.paragraph}
             </Text>
+            {Mute ? (
+              <IconButton
+                aria-label="UnMute"
+                onClick={() => {
+                  pause();
+                  setMute(false);
+                }}
+                color={secondary[400]}
+                icon={<GoUnmute />}
+              ></IconButton>
+            ) : (
+              <IconButton
+                aria-label="Mute"
+                onClick={() => {
+                  play();
+                  setMute(true);
+                }}
+                color={assert[400]}
+                icon={<GoMute />}
+              ></IconButton>
+            )}
+
             <Stack
               direction="column"
               spacing={3}
