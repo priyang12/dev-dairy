@@ -41,22 +41,20 @@ export default ({ app }: { app: express.Application }) => {
   // Load API routes
   app.use(config.api.prefix, routes());
 
-  //static for Browser
-  let staticPath = "/client/build";
-
-  if (process.env.NODE_ENV === "development") {
-    staticPath = "../client/build";
-  }
-  if (
-    process.env.NODE_ENV === "production" ||
-    process.env.NODE_ENV === "development"
-  ) {
+  if (process.env.NODE_ENV === "production") {
     const _dirname = path.resolve();
-    app.use(express.static(path.join(_dirname, staticPath)));
-
-    app.get("*", (req, res) =>
-      res.sendFile(path.resolve(_dirname, "client", "build", "index.html"))
-    );
+    const root = path.join(_dirname, "client", "build");
+    app.use(express.static(root));
+    app.get("*", (req, res) => {
+      res.sendFile("index.html", { root });
+    });
+  } else if (process.env.NODE_ENV === "development") {
+    const _dirname = path.resolve();
+    const root = path.join(_dirname, "..", "client", "build");
+    app.use(express.static(root));
+    app.get("*", (req, res) => {
+      res.sendFile("index.html", { root });
+    });
   } else {
     app.get("/", (req, res) => {
       res.send("API is running....");
