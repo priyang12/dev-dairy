@@ -1,0 +1,22 @@
+{
+  "name": "dev-dairy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Server/build/index.js",
+  "scripts": {
+    "server": "npm run server --prefix Server",
+    "build": "yarn turbo run build",
+    "test": "yarn turbo test"
+  },
+  "workspaces": [
+    "packages/*",
+    "Server"
+  ],
+  "author": "priyang",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^6.2.0",
+    "dotenv": "^16.0.1",
+    "turbo": "^1.4.2"
+  }
+}
