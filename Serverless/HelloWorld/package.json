@@ -1,0 +1,15 @@
+{
+  "name": "helloworld",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx tsc"
+  },
+  "devDependencies": {
+    "tsconfig": "*"
+  },
+  "keywords": [],
+  "author": "Priyang",
+  "license": "ISC"
+}

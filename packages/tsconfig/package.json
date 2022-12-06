@@ -1,0 +1,10 @@
+{
+  "name": "tsconfig",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "Priyang",
+  "files": [
+    "DefaultTsconfig.json"
+  ]
+}
