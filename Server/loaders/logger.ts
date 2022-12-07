@@ -1,9 +1,12 @@
 import winston from "winston";
 import keys from "../config/keys";
+import { LoggingWinston } from "@google-cloud/logging-winston";
+
+const loggingWinston = new LoggingWinston();
 
 const transports = [];
 if (process.env.NODE_ENV !== "development") {
-  transports.push(new winston.transports.Console());
+  transports.push(new winston.transports.Console(), loggingWinston);
 } else {
   transports.push(
     new winston.transports.Console({

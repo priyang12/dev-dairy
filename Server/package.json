@@ -12,9 +12,8 @@
   "dependencies": {
     "@dev-dairy/zodvalidation": "*",
     "@faker-js/faker": "^7.6.0",
+    "@google-cloud/logging-winston": "^5.2.3",
     "@sendgrid/mail": "^7.7.0",
-    "agenda": "^4.3.0",
-    "agendash": "^3.1.0",
     "argon2": "^0.28.5",
     "bcryptjs": "^2.4.3",
     "concurrently": "^7.0.0",
@@ -26,6 +25,7 @@
     "express-async-handler": "^1.2.0",
     "express-basic-auth": "^1.2.1",
     "express-validator": "^6.8.0",
+    "google-auth-library": "^8.7.0",
     "jsonwebtoken": "^8.5.1",
     "method-override": "^3.0.0",
     "mongodb": "4.9",
