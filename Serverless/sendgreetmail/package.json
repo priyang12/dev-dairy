@@ -1,0 +1,17 @@
+{
+  "name": "sendgreetmail",
+  "version": "1.0.0",
+  "description": "sending mail serverless",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx tsc",
+    "deploy": "npx tsc && gcloud functions deploy sendgreetmail --runtime nodejs16 --trigger-http"
+  },
+  "author": "Priyang",
+  "license": "MIT",
+  "tsconfig": "*",
+  "dependencies": {
+    "@sendgrid/mail": "^7.7.0",
+    "dotenv": "^16.0.3"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "extends": "tsconfig/DefaultTsconfig.json",
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "outDir": "build"
+  }
+}
