@@ -1,22 +1,24 @@
 {
   "name": "dev-dairy",
   "version": "1.0.0",
-  "description": "",
-  "main": "Server/build/index.js",
   "scripts": {
+    "client": "npm run start --prefix Client",
     "server": "npm run server --prefix Server",
     "build": "yarn turbo run build",
+    "build:remove": "npm run build:remove --prefix Client && npm run build:remove --prefix Server",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "test": "yarn turbo test"
   },
   "workspaces": [
     "packages/*",
     "Serverless/*",
-    "Server"
+    "Server",
+    "Client"
   ],
   "author": "priyang",
   "license": "MIT",
   "devDependencies": {
-    "concurrently": "^6.2.0",
+    "concurrently": "^6.5.1",
     "dotenv": "^16.0.3",
     "turbo": "^1.4.2"
   },

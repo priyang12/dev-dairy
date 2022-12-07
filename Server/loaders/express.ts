@@ -43,14 +43,14 @@ export default ({ app }: { app: express.Application }) => {
 
   if (process.env.NODE_ENV === "production") {
     const _dirname = path.resolve();
-    const root = path.join(_dirname, "client", "build");
+    const root = path.join(_dirname, "Client", "build");
     app.use(express.static(root));
     app.get("*", (req, res) => {
       res.sendFile("index.html", { root });
     });
   } else if (process.env.NODE_ENV === "development") {
     const _dirname = path.resolve();
-    const root = path.join(_dirname, "..", "client", "build");
+    const root = path.join(_dirname, "..", "Client", "build");
     app.use(express.static(root));
     app.get("*", (req, res) => {
       res.sendFile("index.html", { root });

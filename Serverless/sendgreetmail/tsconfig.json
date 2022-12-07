@@ -1,3 +1,6 @@
 {
-  "extends": "tsconfig/DefaultTsconfig.json"
+  "extends": "tsconfig/DefaultTsconfig.json",
+  "compilerOptions": {
+    "outDir": "build"
+  }
 }
