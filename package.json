@@ -17,7 +17,7 @@
   "license": "MIT",
   "devDependencies": {
     "concurrently": "^6.2.0",
-    "dotenv": "^16.0.1",
+    "dotenv": "^16.0.3",
     "turbo": "^1.4.2"
   },
   "dependencies": {

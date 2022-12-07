@@ -2,10 +2,10 @@ import expressLoader from "./express";
 import dependencyInjectorLoader from "./dependencyInjector";
 import mongooseLoader from "./mongoose";
 import Logger from "./logger";
-import jobsLoader from "./jobs";
+import Tasks from "./Tasks";
 
 export default async ({ expressApp }: any) => {
-  const { Db: mongoConnection } = await mongooseLoader();
+  await mongooseLoader();
 
   Logger.info("✌️ DB loaded and connected!");
 
@@ -35,8 +35,7 @@ export default async ({ expressApp }: any) => {
     model: require("../models/TestUsers").default,
   };
 
-  const { agenda } = await dependencyInjectorLoader({
-    mongoConnection,
+  await dependencyInjectorLoader({
     models: [
       userModel,
       projectModel,
@@ -47,7 +46,7 @@ export default async ({ expressApp }: any) => {
     ],
   });
 
-  await jobsLoader({ agenda });
+  await Tasks();
 
   Logger.info("✌️ Dependency Injector loaded");
 

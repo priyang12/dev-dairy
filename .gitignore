@@ -4,3 +4,6 @@ default.json
 build
 .vscode
 .turbo
+.gcloudignore
+GoogleAuth.ts
+PrivateKeys.json

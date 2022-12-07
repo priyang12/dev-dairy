@@ -2,6 +2,7 @@ import { Service, Inject } from "typedi";
 import { Model } from "mongoose";
 import { Logger } from "winston";
 import { IPost } from "../models/Post";
+import { IRoadMap } from "../models/Project";
 
 @Service()
 export default class PostService {
@@ -96,7 +97,7 @@ export default class PostService {
       .sort(Sort)
       .populate({
         path: "project",
-        select: ProjectSelect || "title process",
+        select: ProjectSelect || "title process roadMap",
       });
 
     if (!Posts) {
@@ -104,7 +105,20 @@ export default class PostService {
       throw new Error("Posts Not Found");
     }
     this.logger.info("Posts Found");
-    return Posts;
+
+    const NewPosts = Posts.map((item) => {
+      if (typeof item.project !== "string" && item.project.roadMap) {
+        const RoadMap = item.project.roadMap.find(
+          (roadItem) => roadItem._id?.toString() === item.roadMap.toString()
+        ) as IRoadMap;
+        return {
+          ...item,
+          roadMap: RoadMap,
+        };
+      }
+      return item;
+    });
+    return NewPosts;
   }
 
   public async GetPost(UserId: string, PostId: string): Promise<IPost> {

@@ -12,12 +12,12 @@ const keys = {
   logs: {
     level: process.env.LOG_LEVEL || "silly",
   },
-  agenda: {
-    dbCollection: process.env.AGENDA_DB_COLLECTION,
-    pooltime: process.env.AGENDA_POOLTIME,
-    concurrency: process.env.AGENDA_CONCURRENCY
-      ? parseInt(process.env.AGENDA_CONCURRENCY)
-      : 0,
+  GoogleTask: {
+    projectId: process.env.GoogleProjectId,
+    location: process.env.location,
+    APIKey: process.env.GoogleAPIKey,
+    ResetPasswordURL: process.env.ResetPasswordURL,
+    GreetingURL: process.env.GreetingURL,
   },
   api: {
     prefix: "/api",

@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import type { Request, Response } from "express";
 import AuthService from "../../services/AuthService";
+import MailTasks from "../../Tasks/MailTasks";
 import Container from "typedi";
 import UserService from "../../services/UserService";
 import NodeCache from "node-cache";
@@ -24,10 +25,15 @@ export const GetUser = asyncHandler(
 export const registerUser = asyncHandler(
   async (req, res, next): Promise<any> => {
     const authServiceInstance = Container.get(AuthService);
-    const { user, token } = await authServiceInstance.SignUp(req.body);
-    const agenda = Container.get("agendaInstance") as any;
-    await agenda.schedule(new Date(Date.now() + 1000), "greet", user._id);
-    return res.status(201).json({ user, token });
+    // const { user, token } = await authServiceInstance.SignUp(req.body);
+
+    const MailTaskInstance = Container.get(MailTasks);
+    await MailTaskInstance.SendGreetingMail({
+      username: "Check",
+      password: "213213",
+      email: "patelpriyang95@gmail.com",
+    });
+    return res.status(201).json({ sd: "Done" });
   }
 );
 
@@ -77,12 +83,11 @@ export const ResetPassword = asyncHandler(
     const data = await authServiceInstance.SendResetPasswordToken(
       req.body.email
     );
-    const agenda = Container.get("agendaInstance") as any;
-    await agenda.schedule(new Date(Date.now() + 1000), "reset-password", {
+    const MailTaskInstance = Container.get(MailTasks);
+    await MailTaskInstance.ResetPassword({
       ...data,
       host: req.hostname,
     });
-
     return res.status(200).json({
       message:
         "Reset Link has been send to your email address. PS: Look into spam.",

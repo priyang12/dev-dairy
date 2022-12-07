@@ -13,6 +13,7 @@
     "@dev-dairy/zodvalidation": "*",
     "@faker-js/faker": "^7.6.0",
     "@google-cloud/logging-winston": "^5.2.3",
+    "@google-cloud/tasks": "^3.0.5",
     "@sendgrid/mail": "^7.7.0",
     "argon2": "^0.28.5",
     "bcryptjs": "^2.4.3",
