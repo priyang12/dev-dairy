@@ -6,4 +6,6 @@ build
 .turbo
 .gcloudignore
 GoogleAuth.ts
-PrivateKeys.json
+TaskQueues
+.vercel
+Keys.json

@@ -118,7 +118,7 @@ export default class PostService {
       }
       return item;
     });
-    return NewPosts;
+    return Posts;
   }
 
   public async GetPost(UserId: string, PostId: string): Promise<IPost> {

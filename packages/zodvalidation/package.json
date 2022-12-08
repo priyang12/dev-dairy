@@ -2,8 +2,10 @@
   "name": "@dev-dairy/zodvalidation",
   "version": "1.0.0",
   "description": "validation schema for front end and backend",
-  "main": "index.ts",
-  "scripts": {},
+  "main": "build/index.js",
+  "scripts": {
+    "build": "npx tsc"
+  },
   "author": "Priyang",
   "license": "ISC",
   "dependencies": {

@@ -25,15 +25,11 @@ export const GetUser = asyncHandler(
 export const registerUser = asyncHandler(
   async (req, res, next): Promise<any> => {
     const authServiceInstance = Container.get(AuthService);
-    // const { user, token } = await authServiceInstance.SignUp(req.body);
+    const { user, token } = await authServiceInstance.SignUp(req.body);
 
     const MailTaskInstance = Container.get(MailTasks);
-    await MailTaskInstance.SendGreetingMail({
-      username: "Check",
-      password: "213213",
-      email: "patelpriyang95@gmail.com",
-    });
-    return res.status(201).json({ sd: "Done" });
+    await MailTaskInstance.SendGreetingMail(user);
+    return res.status(201).json({ user, token });
   }
 );
 

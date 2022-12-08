@@ -41,25 +41,10 @@ export default ({ app }: { app: express.Application }) => {
   // Load API routes
   app.use(config.api.prefix, routes());
 
-  if (process.env.NODE_ENV === "production") {
-    const _dirname = path.resolve();
-    const root = path.join(_dirname, "Client", "build");
-    app.use(express.static(root));
-    app.get("*", (req, res) => {
-      res.sendFile("index.html", { root });
-    });
-  } else if (process.env.NODE_ENV === "development") {
-    const _dirname = path.resolve();
-    const root = path.join(_dirname, "..", "Client", "build");
-    app.use(express.static(root));
-    app.get("*", (req, res) => {
-      res.sendFile("index.html", { root });
-    });
-  } else {
-    app.get("/", (req, res) => {
-      res.send("API is running....");
-    });
-  }
+  app.get("/", (req, res) => {
+    res.send("API is running....");
+  });
+
   /// error handlers
   app.use(errorHandler);
   app.use(notFound);

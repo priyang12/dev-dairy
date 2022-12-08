@@ -1,10 +1,13 @@
 {
   "name": "dev-dairy",
   "version": "1.0.0",
+  "main": "Server/build/index.js",
   "scripts": {
+    "start": "npm run start:build --prefix Server",
     "client": "npm run start --prefix Client",
     "server": "npm run server --prefix Server",
     "build": "yarn turbo run build",
+    "build:dev": "turbo run build --filter=./apps/Server --filter=./apps/Client",
     "build:remove": "npm run build:remove --prefix Client && npm run build:remove --prefix Server",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "test": "yarn turbo test"
