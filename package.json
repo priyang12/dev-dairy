@@ -6,7 +6,7 @@
     "start": "npm run start:build --prefix Server",
     "client": "npm run start --prefix Client",
     "server": "npm run server --prefix Server",
-    "build": "yarn turbo run build",
+    "build": "turbo run build",
     "build:dev": "turbo run build --filter=./apps/Server --filter=./apps/Client",
     "build:remove": "npm run build:remove --prefix Client && npm run build:remove --prefix Server",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
@@ -28,8 +28,5 @@
   },
   "dependencies": {
     "@google-cloud/functions-framework": "^3.1.2"
-  },
-  "msw": {
-    "workerDirectory": "public"
   }
 }
