@@ -1,4 +1,4 @@
-import { Schema, model, ObjectId } from "mongoose";
+import { Schema, model } from "mongoose";
 import type { Model, InferSchemaType } from "mongoose";
 
 // Create Schema
@@ -17,6 +17,9 @@ const UserSchema = new Schema({
     required: true,
   },
   ImageUrl: {
+    type: String,
+  },
+  GlobalAlert: {
     type: String,
   },
   date: {

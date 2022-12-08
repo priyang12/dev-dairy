@@ -23,9 +23,13 @@
   "devDependencies": {
     "concurrently": "^6.5.1",
     "dotenv": "^16.0.3",
+    "ts-node": "^10.9.1",
     "turbo": "^1.4.2"
   },
   "dependencies": {
     "@google-cloud/functions-framework": "^3.1.2"
+  },
+  "msw": {
+    "workerDirectory": "public"
   }
 }
