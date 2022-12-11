@@ -33,7 +33,6 @@ const PostSchema = new Schema<IPost>({
   roadMap: {
     type: Schema.Types.ObjectId,
     required: true,
-    ref: "roadMap",
   },
   date: {
     type: Date,

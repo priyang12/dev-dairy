@@ -7,7 +7,7 @@
     "client": "npm run start --prefix Client",
     "server": "npm run server --prefix Server",
     "build": "yarn turbo run build",
-    "build:dev": "turbo run build --filter=./apps/Server --filter=./apps/Client",
+    "build:dev": "turbo run build --filter=./Server --filter=./Client",
     "build:remove": "npm run build:remove --prefix Client && npm run build:remove --prefix Server",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "test": "yarn turbo test"

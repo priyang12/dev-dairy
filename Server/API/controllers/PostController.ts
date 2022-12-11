@@ -26,8 +26,8 @@ export const GetPostsWithPagination = asyncHandler(
     if (PostCache.get(CacheKey)) {
       return res.status(200).json(PostCache.get(CacheKey));
     } else {
-      const projectServiceInstance = Container.get(PostService);
-      const projects = await projectServiceInstance.GetPostsWithPagination(
+      const PostServiceInstance = Container.get(PostService);
+      const Posts = await PostServiceInstance.GetPostsWithPagination(
         req.user._id,
         page,
         limit,
@@ -36,8 +36,8 @@ export const GetPostsWithPagination = asyncHandler(
         sort,
         filter
       );
-      PostCache.set(CacheKey, projects, 3600 / 2);
-      return res.status(200).json(projects);
+      PostCache.set(CacheKey, Posts, 3600 / 2);
+      return res.status(200).json(Posts);
     }
   }
 );
@@ -47,11 +47,9 @@ export const GetPostsWithPagination = asyncHandler(
 // @access Private
 export const GetProjectPosts = asyncHandler(
   async (req: Request, res: Response) => {
-    const projectServiceInstance = Container.get(PostService);
-    const project = await projectServiceInstance.GetAllPostByProject(
-      req.params.id
-    );
-    res.status(200).json(project);
+    const PostServiceInstance = Container.get(PostService);
+    const Res = await PostServiceInstance.GetAllPostByProject(req.params.id);
+    res.status(200).json(Res);
   }
 );
 
@@ -59,23 +57,17 @@ export const GetProjectPosts = asyncHandler(
 // @desc Get project posts
 // @access Private
 export const GetPost = asyncHandler(async (req: Request, res: Response) => {
-  const projectServiceInstance = Container.get(PostService);
-  const project = await projectServiceInstance.GetPost(
-    req.user._id,
-    req.params.id
-  );
-  res.status(200).json(project);
+  const PostServiceInstance = Container.get(PostService);
+  const Res = await PostServiceInstance.GetPost(req.user._id, req.params.id);
+  res.status(200).json(Res);
 });
 
 // @router POST api/posts
 // @desc Create Post
 // @access Private
 export const CreatePost = asyncHandler(async (req: Request, res: Response) => {
-  const projectServiceInstance = Container.get(PostService);
-  const message = await projectServiceInstance.CreatePost(
-    req.user._id,
-    req.body
-  );
+  const PostServiceInstance = Container.get(PostService);
+  const message = await PostServiceInstance.CreatePost(req.user._id, req.body);
   PostCache.flushAll();
   res.status(201).json(message);
 });
@@ -84,8 +76,8 @@ export const CreatePost = asyncHandler(async (req: Request, res: Response) => {
 // @desc Update Post
 // @access Private
 export const UpdatePost = asyncHandler(async (req: Request, res: Response) => {
-  const projectServiceInstance = Container.get(PostService);
-  const message = await projectServiceInstance.UpdatePost(
+  const PostServiceInstance = Container.get(PostService);
+  const message = await PostServiceInstance.UpdatePost(
     req.user._id,
     req.params.id,
     req.body
@@ -98,8 +90,8 @@ export const UpdatePost = asyncHandler(async (req: Request, res: Response) => {
 // @desc Delete Post
 // @access Private
 export const DeletePost = asyncHandler(async (req: Request, res: Response) => {
-  const projectServiceInstance = Container.get(PostService);
-  const message = await projectServiceInstance.DeletePost(
+  const PostServiceInstance = Container.get(PostService);
+  const message = await PostServiceInstance.DeletePost(
     req.user._id,
     req.params.id
   );
