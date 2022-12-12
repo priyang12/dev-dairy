@@ -1,8 +1,10 @@
 import expressLoader from "./express";
+import corsLoader from "./corsLoader";
 import dependencyInjectorLoader from "./dependencyInjector";
 import mongooseLoader from "./mongoose";
 import Logger from "./logger";
 import Tasks from "./Tasks";
+import keys from "../config/keys";
 
 export default async ({ expressApp }: any) => {
   await mongooseLoader();
@@ -50,6 +52,11 @@ export default async ({ expressApp }: any) => {
 
   Logger.info("✌️ Dependency Injector loaded");
 
-  await expressLoader({ app: expressApp });
+  const CorsApp = corsLoader({
+    app: expressApp,
+    whiteList: keys.clientURLs,
+  });
+
+  await expressLoader({ app: CorsApp });
   Logger.info("✌️ Express loaded");
 };

@@ -97,7 +97,7 @@ export default class PostService {
       .sort(Sort)
       .populate({
         path: "project",
-        select: ProjectSelect || "title process roadMap",
+        select: ProjectSelect || "title process",
       });
 
     if (!Posts) {
@@ -106,18 +106,18 @@ export default class PostService {
     }
     this.logger.info("Posts Found");
 
-    const NewPosts = Posts.map((item) => {
-      if (typeof item.project !== "string" && item.project.roadMap) {
-        const RoadMap = item.project.roadMap.find(
-          (roadItem) => roadItem._id?.toString() === item.roadMap.toString()
-        ) as IRoadMap;
-        return {
-          ...item,
-          roadMap: RoadMap,
-        };
-      }
-      return item;
-    });
+    // const NewPosts = Posts.map((item) => {
+    //   if (typeof item.project !== "string" && item.project.roadMap) {
+    //     const RoadMap = item.project.roadMap.find(
+    //       (roadItem) => roadItem._id?.toString() === item.roadMap.toString()
+    //     ) as IRoadMap;
+    //     return {
+    //       ...item,
+    //       roadMap: RoadMap,
+    //     };
+    //   }
+    //   return item;
+    // });
     return Posts;
   }
 

@@ -1,11 +1,8 @@
 import express from "express";
-import cors from "cors";
 import { errorHandler, notFound } from "../API/middleware/Error";
 import routes from "../API/";
 import config from "../config/keys";
-import path from "path";
 import cookieParser from "cookie-parser";
-import keys from "../config/keys";
 
 export default ({ app }: { app: express.Application }) => {
   /**
@@ -22,14 +19,6 @@ export default ({ app }: { app: express.Application }) => {
   // Useful if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
   // It shows the real origin IP in the heroku or Cloudwatch logs
   app.enable("trust proxy");
-
-  app.use(
-    cors({
-      origin: keys.clientURL,
-      credentials: true,
-      allowedHeaders: ["Origin, X-Requested-With, Content-Type, Accept"],
-    })
-  );
 
   app.use(require("method-override")());
 

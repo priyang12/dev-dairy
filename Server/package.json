@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "main": "build/index.js",
   "scripts": {
-    "start:build": "node build/index.js",
     "server": "nodemon  --transpile-only index.ts",
     "start:prod": "node build/index.js",
     "build": "tsc -p ./",
