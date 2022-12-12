@@ -1,4 +1,5 @@
 import express from "express";
+import LoggerInstance from "./logger";
 import cors, { CorsOptions } from "cors";
 
 export default ({
@@ -16,6 +17,7 @@ export default ({
         callback(new Error("Not allowed by CORS"));
       }
     },
+
     credentials: true,
     allowedHeaders: [
       "Origin",
@@ -28,6 +30,8 @@ export default ({
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     exposedHeaders: ["Content-Range", "X-Content-Range"],
   };
+
+  LoggerInstance.info("Cors Init" + whiteList.join(","));
   app.use(cors(corsOptions));
   return app;
 };
