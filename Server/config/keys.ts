@@ -5,8 +5,8 @@ const keys = {
   Port: process.env.PORT || 5000,
   mongoURL: process.env.URI,
   mongoDevURI: process.env.Test_URI,
-  clientURLs: process.env.ClientURL
-    ? process.env.ClientURL.split(",")
+  clientURLs: process.env.ClientURLS
+    ? process.env.ClientURLS.split(",")
     : ["http://localhost:3000"],
 
   jwtSecret: process.env.jwtSecret,

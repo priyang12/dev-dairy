@@ -57,7 +57,11 @@ function Login() {
 
   useEffect(() => {
     if (result.isSuccess) {
-      setCookie('token', result.data.token, { path: '/' });
+      setCookie('token', result.data.token, {
+        path: '/',
+        domain: process.env.REACT_APP_BackEndAPI,
+        sameSite: 'none',
+      });
       Navigate('/posts');
     }
   }, [result]);
