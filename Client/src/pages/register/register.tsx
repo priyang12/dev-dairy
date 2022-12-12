@@ -90,6 +90,7 @@ function Register() {
         path: '/',
         domain: process.env.REACT_APP_BackEndAPI,
         sameSite: 'none',
+        secure: true,
       });
       Navigate('/projects');
     }
