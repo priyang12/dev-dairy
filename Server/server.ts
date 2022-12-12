@@ -10,7 +10,7 @@ async function startServer() {
   const app = express();
   await require("./loaders").default({ expressApp: app });
   app
-    .listen(keys.Port, () => {
+    .listen(5001, () => {
       Logger.info(`Server listening on port: ${keys.Port}`);
     })
     .on("error", (err) => {
