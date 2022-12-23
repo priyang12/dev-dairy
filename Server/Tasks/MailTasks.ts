@@ -34,15 +34,15 @@ export default class MailTasks {
       throw Error("Server Error");
     }
 
-    // const accessToken = this.GetPrivateToken();
-
     const [response] = await this.client.createTask({
-      parent: this.client.queuePath(ProjectId, Location, "reset-password"),
+      parent: this.client.queuePath(ProjectId, Location, "reset"),
       task: {
         httpRequest: {
           headers: {
             "Content-Type": "application/json",
-            // Authorization: `Bearer ${accessToken}`,
+          },
+          oidcToken: {
+            serviceAccountEmail: keys.serviceAccount,
           },
           httpMethod: "POST",
           url: keys.GoogleTask.ResetPasswordURL,

@@ -5,8 +5,6 @@ build
 .vscode
 .turbo
 .gcloudignore
-GoogleAuth.ts
-TaskQueues
 .vercel
 Keys.json
 Dockerfile

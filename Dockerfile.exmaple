@@ -1,0 +1,44 @@
+# Use Node 16 alpine as parent image
+FROM node:16
+
+# Change the working directory on the Docker image to /app
+WORKDIR /app
+
+# Copy package.json and package-lock.json to the /app directory
+# Copy root package.json and lockfile
+COPY package.json ./
+COPY package-lock.json ./
+
+ENV NODE_ENV=
+ENV URI=
+ENV Test_URI=
+ENV jwtSecret=
+ENV PORT =
+ENV AGENDA_DB_COLLECTION =
+ENV pooltime =
+ENV maxConcurrency =
+ENV ResetPasswordURL =
+ENV GreetingURL =
+ENV GoogleProjectId =
+ENV location =
+ENV ServerLessMongo =
+ENV ServerLessMongoTest =
+ENV GOOGLE_APPLICATION_CREDENTIALS =
+ENV ClientURLS =
+
+# Copy the Sever package.json
+COPY Server/package.json ./Server/package.json
+
+# # Install dependencies
+RUN npm install
+
+# # Copy the rest of project files into this image
+COPY . .
+
+# Expose application port
+EXPOSE 5001
+
+# Start the application
+ENTRYPOINT npm start
+
+

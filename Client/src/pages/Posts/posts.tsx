@@ -112,24 +112,21 @@ function Feeds() {
                     )),
                   )}
                 </Flex>
-                {!isLastPage ||
-                  (Posts[0].posts.length === 0 && (
-                    <Button
-                      loadingText="Loading..."
-                      isLoading={isFetching}
-                      m={5}
-                      onClick={() => {
-                        fetchNextPage();
-                      }}
-                    >
-                      Load More
-                    </Button>
-                  ))}
+                {!isLastPage ? (
+                  <Button
+                    loadingText="Loading..."
+                    isLoading={isFetching}
+                    m={5}
+                    onClick={() => {
+                      fetchNextPage();
+                    }}
+                  >
+                    Load More
+                  </Button>
+                ) : null}
               </>
             )}
-            {(Posts[0].posts.length === 0 || isLastPage) && (
-              <Heading textAlign="center">No posts yet</Heading>
-            )}
+            {isLastPage && <Heading textAlign="center">No posts yet</Heading>}
           </MarginContainer>
         </BgImage>
       </Box>

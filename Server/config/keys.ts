@@ -8,7 +8,7 @@ const keys = {
   clientURLs: process.env.ClientURLS
     ? process.env.ClientURLS.split(",")
     : ["http://localhost:3000"],
-
+  serviceAccount: process.env.serviceAccount,
   jwtSecret: process.env.jwtSecret,
   Email: process.env.Email,
   Password: process.env.Password,

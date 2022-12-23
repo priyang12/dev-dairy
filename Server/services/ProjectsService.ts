@@ -101,7 +101,7 @@ export default class UserService {
       this.logger.info("Project created with RoadMaps");
       return {
         result: true,
-        project: newProject,
+        project: newProject[0],
         message: `Project ${newProject[0].title} created`,
       };
     });

@@ -18,6 +18,7 @@ function LinkItem({
 }) {
   return (
     <MenuItem
+      bg="transparent"
       _hover={{
         borderTop: '2px solid',
         borderBottom: '2px solid',
@@ -37,9 +38,7 @@ function LinkItem({
 function DropDownContainer() {
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
   const dispatch = useDispatch();
-
   const isDark = true;
-
   const onLogout = () => {
     localStorage.clear();
     removeCookie('token');

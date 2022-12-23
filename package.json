@@ -12,6 +12,7 @@
     "build:server": "turbo run build --filter=./Server",
     "build:dev": "turbo run build --filter=./Server --filter=./Client",
     "build:remove": "npm run build:remove --prefix Client && npm run build:remove --prefix Server",
+    "deploy": "npm run build:dev && docker build . --platform linux/amd64 -t dairy",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "test": "yarn turbo test"
   },

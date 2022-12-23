@@ -64,7 +64,7 @@ function NewProject() {
 
   useEffect(() => {
     if (CreateProjectResult.isSuccess) {
-      navigate(`/project/${CreateProjectResult.data.project._id}`);
+      navigate(`/Projects/${CreateProjectResult.data.project._id}`);
     }
   }, [CreateProjectResult.isSuccess]);
 
@@ -98,29 +98,23 @@ function NewProject() {
     const newRoadMaps = [...RoadMaps];
     const newTechs = [...Technologies];
 
-    let GithubError = null;
-    let WebsiteError = null;
-    if (Github && !CheckURL(Github)) {
-      GithubError = setError('Github', 'Enter Valid Github Link');
-    }
-    if (Website && !CheckURL(Website)) {
-      WebsiteError = setError('Website', 'Enter Valid URL for Website');
-    }
+    const Project = {
+      title: Title,
+      description: Description,
+      process,
+      live: Live,
+      roadMap: newRoadMaps,
+      technologies: newTechs,
+    } as any;
+
+    if (Github) Project.github = Github;
+    if (Website) Project.website = Website;
 
     try {
       CreateProject(
         ProjectSchema.omit({
           date: true,
-        }).parse({
-          title: Title,
-          description: Description,
-          process,
-          github: Github,
-          live: Live,
-          website: Website,
-          roadMap: newRoadMaps,
-          technologies: newTechs,
-        }),
+        }).parse(Project),
       );
     } catch (error) {
       if (error instanceof ZodError) {
@@ -135,9 +129,6 @@ function NewProject() {
           NewTech: Errors.technologies,
         });
       }
-      //  else {
-      //   throw error;
-      // }
     }
   };
 

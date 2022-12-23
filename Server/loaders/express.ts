@@ -3,6 +3,7 @@ import { errorHandler, notFound } from "../API/middleware/Error";
 import routes from "../API/";
 import config from "../config/keys";
 import cookieParser from "cookie-parser";
+import path from "path";
 
 export default ({ app }: { app: express.Application }) => {
   /**
@@ -30,9 +31,25 @@ export default ({ app }: { app: express.Application }) => {
   // Load API routes
   app.use(config.api.prefix, routes());
 
-  app.get("/", (req, res) => {
-    res.send("API is running....");
-  });
+  if (process.env.NODE_ENV === "production") {
+    const _dirname = path.resolve();
+    const root = path.join(_dirname, "..", "Client", "build");
+    app.use(express.static(root));
+    app.get("*", (req, res) => {
+      res.sendFile("index.html", { root });
+    });
+  } else if (process.env.NODE_ENV === "development") {
+    const _dirname = path.resolve();
+    const root = path.join(_dirname, "..", "Client", "build");
+    app.use(express.static(root));
+    app.get("*", (req, res) => {
+      res.sendFile("index.html", { root });
+    });
+  } else {
+    app.get("/", (req, res) => {
+      res.send("API is running....");
+    });
+  }
 
   /// error handlers
   app.use(errorHandler);
