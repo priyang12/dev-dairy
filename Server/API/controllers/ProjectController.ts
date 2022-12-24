@@ -14,7 +14,7 @@ const ProjectCache = new NodeCache({ stdTTL: 600 });
 export const GetProjects = asyncHandler(
   async (req: Request, res: Response): Promise<any> => {
     const { select } = GetParams(req.query, {});
-    const CacheKey = `projects + ${select}`;
+    const CacheKey = `projects + ${select}` + req.user._id;
     if (!ProjectCache.get(CacheKey)) {
       const projectServiceInstance = Container.get(ProjectService);
       const projects = await projectServiceInstance.GetUserProjects(

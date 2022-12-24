@@ -41,7 +41,7 @@ export const GetSharedProject = asyncHandler(
     if (!SharedToken) {
       return res.status(401).json({ msg: "no token, authorization denied" });
     }
-    const CacheKey = `Token + ${SharedToken}`;
+    const CacheKey = `Token + ${SharedToken}` + req.user._id;
     if (ShareProjectCache.get(CacheKey)) {
       const CacheResponse = ShareProjectCache.get(CacheKey) as string;
       return res.status(201).json(JSON.parse(CacheResponse));

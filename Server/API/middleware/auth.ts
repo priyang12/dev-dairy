@@ -17,14 +17,19 @@ export default async (req: any, res: Response, next: NextFunction) => {
   }
   try {
     const decoded = (await jwt.verify(token, "abc123")) as token;
-    if (UserCache.get("User")) {
-      req.user = UserCache.get("User");
+    if (!decoded) {
+      throw Error("token is not valid ");
+    }
+    const CacheKey = "User" + decoded._id;
+    if (UserCache.has(CacheKey)) {
+      req.user = UserCache.get(CacheKey);
     } else {
       const user = await User.findById(decoded._id).select("-password");
       if (!user) {
         return res.status(401).json({ msg: "user not found" });
       }
-      UserCache.set("User", user, 3600 / 2);
+
+      UserCache.set(CacheKey, user, 3600 / 2);
       req.user = user;
     }
 

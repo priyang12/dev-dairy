@@ -19,11 +19,15 @@ export const GetPostsWithPagination = asyncHandler(
       page: 1,
       limit: 10,
     });
-    const CacheKey = `${page} + ${limit} + ${select} + ${JSON.stringify(
+    const CacheKey = `${
+      req.user._id
+    } + ${page} + ${limit} + ${select} + ${JSON.stringify(
       sort
     )} + ${JSON.stringify(filter)}`;
 
     if (PostCache.get(CacheKey)) {
+      console.log("from cache");
+
       return res.status(200).json(PostCache.get(CacheKey));
     } else {
       const PostServiceInstance = Container.get(PostService);
