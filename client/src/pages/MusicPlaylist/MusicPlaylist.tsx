@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import type { DropResult } from 'react-beautiful-dnd';
 import { toast } from 'react-toastify';
-import jsmediatags from '@priyang/jsmediatags';
+// @ts-ignore place this with music-metadata.
+import jsmediatags from 'jsmediatags/dist/jsmediatags.min';
 import DropZone from 'react-dropzone';
 import useSongsdb from '../../Hooks/useSongsdb';
 import BgImage from '../../components/BgImage';
@@ -67,7 +68,7 @@ function MusicPlaylist() {
         reader.readAsArrayBuffer(file);
         setSongs([...songs, file.name]);
         jsmediatags.read(file, {
-          onSuccess: async (tag) => {
+          onSuccess: async (tag: any) => {
             const { tags } = tag;
             const { title, artist, album, year, picture } = tags;
             if (picture) {

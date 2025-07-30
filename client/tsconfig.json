@@ -17,7 +17,8 @@
     "noEmit": true,
     "paths": {
       "@priyang/jsmediatags": ["../node_modules/@types/jsmediatags"]
-    }
+    },
+    "types": ["vite/client"]
   },
   "include": ["src", "./react-app-env.d.ts"],
   "exclude": ["node_modules", "./jest.config.ts"]
