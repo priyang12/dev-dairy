@@ -5,7 +5,7 @@
   "scripts": {
     "start": "ts-node --transpile-only index.ts",
     "server": "nodemon  --transpile-only index.ts",
-    "start:prod": "node build/index.js",
+    "start:prod": "node --inspect --max-old-space-size=2048 build/index.js",
     "build": "tsc -p ./",
     "build:remove": "rm -rf build"
   },
@@ -26,6 +26,7 @@
     "express-async-handler": "^1.2.0",
     "express-basic-auth": "^1.2.1",
     "express-validator": "^6.8.0",
+    "heapdump": "^0.3.15",
     "jsonwebtoken": "^8.5.1",
     "method-override": "^3.0.0",
     "mongodb": "4.9",

@@ -2,7 +2,6 @@ import expressLoader from "./express";
 import dependencyInjectorLoader from "./dependencyInjector";
 import mongooseLoader from "./mongoose";
 import Logger from "./logger";
-import jobsLoader from "./jobs";
 
 export default async ({ expressApp }: any) => {
   const { Db: mongoConnection } = await mongooseLoader();
@@ -47,7 +46,9 @@ export default async ({ expressApp }: any) => {
     ],
   });
 
-  await jobsLoader({ agenda });
+  // this is causing memory leak with incremention.
+  // need to restructe how event's are fired.
+  // await jobsLoader({ agenda });
 
   Logger.info("✌️ Dependency Injector loaded");
 

@@ -7,3 +7,4 @@ build
 .vscode
 .turbo
 .env.production
+*heapsnapshot
