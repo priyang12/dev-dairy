@@ -20,9 +20,9 @@ const handlers = [
 
   rest.post(`${API}/register`, () =>
     HttpResponse.json(
-      {},
-      // AuthResponse
-      { status: 401 },
+      // {},
+      AuthResponse,
+      // { status: 401 },
     ),
   ),
 

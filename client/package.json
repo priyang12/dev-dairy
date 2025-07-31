@@ -60,7 +60,7 @@
     "msw:cleanup": "rm public/mockServiceWorker.js",
     "prebuild:ci": "yarn msw:cleanup",
     "test": "vitest",
-    "test:debug": "DEBUG_PRINT_LIMIT=10000 vitest",
+    "test:debug": "DEBUG_PRINT_LIMIT=100 vitest",
     "coverage": "vitest run --coverage",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "Page": "sh Page.sh",

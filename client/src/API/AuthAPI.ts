@@ -4,7 +4,7 @@ import { setError } from '../features/AuthSlice';
 import { setUser } from '../features/UserSlice';
 import type { IUser } from '../interface';
 import type { AuthUserResponse } from './interface';
-import API from '.';
+import API from './index';
 import { CheckError } from '../utils/helpers';
 
 const AuthApi = createApi({
