@@ -13,6 +13,13 @@ import App from './App';
 import ErrorBoundaryUI from './components/ErrorBoundaryUI';
 import { serviceWorkerRegister } from './serviceWokerRegister';
 
+if (import.meta.env.DEV) {
+  (async () => {
+    const { default: worker } = await import('./mock/browser');
+    worker.start();
+  })();
+}
+
 const theme = extendTheme({
   config,
   colors: ThemeColors,

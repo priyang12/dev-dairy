@@ -1,4 +1,4 @@
-import { rest } from 'msw';
+import { HttpResponse, http as rest } from 'msw';
 import API from '../../API';
 import {
   MockedAllWorkSessions,
@@ -8,33 +8,29 @@ import {
 } from '../MockedData';
 
 export const WorkSessions = [
-  rest.get(`${API}/workSession`, (req, res, ctx) =>
-    res(ctx.json(MockedAllWorkSessions)),
+  rest.get(`${API}/workSession`, ({}) =>
+    HttpResponse.json(MockedAllWorkSessions),
   ),
-  rest.get(`${API}/workSession/project/:id`, (req, res, ctx) =>
-    res(ctx.json(MockedProjectWorkSessions)),
+  rest.get(`${API}/workSession/project/:id`, ({}) =>
+    HttpResponse.json(MockedProjectWorkSessions),
   ),
-  rest.patch(`${API}/workSession/:id/push`, (req, res, ctx) =>
-    res(ctx.json(MockPushWorkSession)),
+  rest.patch(`${API}/workSession/:id/push`, ({}) =>
+    HttpResponse.json(MockPushWorkSession),
   ),
-  rest.patch(`${API}/workSession/:id/pull`, (req, res, ctx) =>
-    res(ctx.json(MockPullWorkSession)),
+  rest.patch(`${API}/workSession/:id/pull`, ({}) =>
+    HttpResponse.json(MockPullWorkSession),
   ),
 
-  rest.delete(`${API}/workSession/project/:id`, (req, res, ctx) =>
-    res(
-      ctx.json({
-        result: true,
-        message: 'Work Session Deleted Successfully',
-      }),
-    ),
+  rest.delete(`${API}/workSession/project/:id`, ({}) =>
+    HttpResponse.json({
+      result: true,
+      message: 'Work Session Deleted Successfully',
+    }),
   ),
-  rest.delete(`${API}/workSession`, (req, res, ctx) =>
-    res(
-      ctx.json({
-        result: true,
-        message: 'Work Session Deleted Successfully',
-      }),
-    ),
+  rest.delete(`${API}/workSession`, ({}) =>
+    HttpResponse.json({
+      result: true,
+      message: 'Work Session Deleted Successfully',
+    }),
   ),
 ];

@@ -1,4 +1,4 @@
-import { rest } from 'msw';
+import { HttpResponse, http as rest } from 'msw';
 import API from '../API';
 import { SeedHandler } from './Handlers/SeedHandler';
 import { MockedSharedProject } from './Handlers/SharedProjectHandler';
@@ -16,35 +16,34 @@ import {
 } from './MockedData';
 
 const handlers = [
-  rest.post(`${API}/login`, (req, res, ctx) => res(ctx.json(AuthResponse))),
-  rest.post(`${API}/register`, (req, res, ctx) =>
-    res(
-      ctx.status(401),
-      ctx.json({}),
-      // ctx.json(AuthResponse);
+  rest.post(`${API}/login`, ({}) => HttpResponse.json(AuthResponse)),
+
+  rest.post(`${API}/register`, () =>
+    HttpResponse.json(
+      {},
+      // AuthResponse
+      { status: 401 },
     ),
   ),
-  rest.post(`${API}/reset`, (req, res, ctx) =>
-    res(
-      ctx.json({
-        message: 'Token is Send',
-      }),
-    ),
+
+  rest.post(`${API}/reset`, () =>
+    HttpResponse.json({ message: 'Token is Send' }),
   ),
-  rest.get(`${API}/user/me`, (req, res, ctx) =>
-    res(ctx.json(AuthResponse.user)),
-  ),
+
+  rest.get(`${API}/user/me`, () => HttpResponse.json(AuthResponse.user)),
 
   // Posts
-  rest.get(`${API}/posts`, (req, res, ctx) => {
-    const page = req.url.searchParams.get('page');
-    const status = req.url.searchParams.get('status');
-    const title = req.url.searchParams.get('title');
-    const project = req.url.searchParams.get('project');
+  rest.get(`${API}/posts`, ({ request }) => {
+    const url = new URL(request.url);
+    const page = url.searchParams.get('page');
+    const status = url.searchParams.get('status');
+    const title = url.searchParams.get('title');
+    const project = url.searchParams.get('project');
 
     if (page === '1' || !page) {
-      return res(ctx.status(201), ctx.json(PostsResponse));
+      return HttpResponse.json(PostsResponse, { status: 201 });
     }
+
     if (status || title || project) {
       const FilteredPosts = PostsResponse.filter(
         (post) =>
@@ -52,90 +51,75 @@ const handlers = [
           (title && post.title.includes(title)) ||
           (project && post.project._id === project),
       );
-      return res(ctx.json(FilteredPosts));
+      return HttpResponse.json(FilteredPosts);
     }
-    return res(ctx.status(201), ctx.json(Page2PostsResponse));
+
+    return HttpResponse.json(Page2PostsResponse, { status: 201 });
   }),
 
-  rest.post(`${API}/posts`, (req, res, ctx) => res(ctx.json(NewPostResponse))),
+  rest.post(`${API}/posts`, () => HttpResponse.json(NewPostResponse)),
 
-  rest.get(`${API}/posts/:id`, (req, res, ctx) =>
-    res(ctx.json(PostsResponse[0])),
+  rest.get(`${API}/posts/:id`, () => HttpResponse.json(PostsResponse[0])),
+
+  rest.put(`${API}/posts/:id`, () =>
+    HttpResponse.json({
+      result: true,
+      message: 'Post Updated Successfully',
+    }),
   ),
 
-  rest.put(`${API}/posts/:id`, (req, res, ctx) =>
-    res(
-      ctx.json({
-        result: true,
-        message: 'Post Updated Successfully',
-      }),
-    ),
+  rest.delete(`${API}/posts/:id`, () =>
+    HttpResponse.json({
+      result: true,
+      message: 'Post Deleted Successfully',
+    }),
   ),
-  rest.delete(`${API}/posts/:id`, (req, res, ctx) =>
-    res(
-      ctx.json({
-        result: true,
-        message: 'Post Deleted Successfully',
-      }),
-    ),
+
+  rest.get(`${API}/projects`, () => HttpResponse.json(ProjectsResponse)),
+
+  rest.get(`${API}/projects/:id`, () =>
+    HttpResponse.json(SingleProjectResponse),
   ),
-  // Projects
-  rest.get(`${API}/projects`, (req, res, ctx) =>
-    res(ctx.json(ProjectsResponse)),
+
+  rest.post(`${API}/projects`, () => HttpResponse.json(NewProjectResponse)),
+
+  rest.put(`${API}/projects/:id`, () =>
+    HttpResponse.json({
+      result: true,
+      message: 'Project Updated Successfully',
+    }),
   ),
-  rest.get(`${API}/projects/:id`, (req, res, ctx) =>
-    res(ctx.json(SingleProjectResponse)),
+
+  rest.delete(`${API}/projects/:id`, () =>
+    HttpResponse.json({
+      result: true,
+      message: 'Project Deleted Successfully',
+    }),
   ),
-  rest.post(
-    `${API}/projects`,
-    (req, res, ctx) => res(ctx.json(NewProjectResponse)),
-    // Error: "Project already exists"
-    // res(ctx.status(402), ctx.json({ message: 'Project already exists' })),
+
+  rest.get(`${API}/projects/:id/roadMap`, () =>
+    HttpResponse.json(MockedRoadMap),
   ),
-  rest.put(`${API}/projects/:id`, (req, res, ctx) =>
-    res(
-      // ctx.status(403),
-      // ctx.json({
-      //   result: false,
-      //   message: 'Server Error',
-      // }),
-      ctx.json({
-        result: true,
-        message: 'Project Updated Successfully',
-      }),
-    ),
+
+  rest.put(`${API}/projects/:id/roadMap`, () =>
+    HttpResponse.json(MockedRoadMapResponse),
   ),
-  rest.delete(`${API}/projects/:id`, (req, res, ctx) =>
-    res(
-      ctx.json({
-        result: true,
-        message: 'Project Deleted Successfully',
-      }),
-    ),
+
+  rest.patch(`${API}/projects/:id/roadMap`, () =>
+    HttpResponse.json({
+      result: true,
+      message: 'RoadMap Updated',
+    }),
   ),
-  rest.get(`${API}/projects/:id/roadMap`, (req, res, ctx) =>
-    res(ctx.json(MockedRoadMap)),
+
+  rest.delete(`${API}/projects/:id/roadMap`, () =>
+    HttpResponse.json({
+      result: true,
+      message: 'Roadmap from New Project is deleted',
+    }),
   ),
-  rest.put(`${API}/projects/:id/roadMap`, (req, res, ctx) =>
-    res(ctx.json(MockedRoadMapResponse)),
-  ),
-  rest.patch(`${API}/projects/:id/roadMap`, (req, res, ctx) =>
-    res(
-      ctx.json({
-        result: true,
-        message: 'RoadMap Updated',
-      }),
-    ),
-  ),
-  rest.delete(`${API}/projects/:id/roadMap`, (req, res, ctx) =>
-    res(
-      ctx.json({
-        result: true,
-        message: 'Roadmap from New Projectg is deleted',
-      }),
-    ),
-  ),
-  // WorkSessions
+
+  // Add modular handlers
   ...WorkSessions,
   ...MockedSharedProject,
   ...SeedHandler,

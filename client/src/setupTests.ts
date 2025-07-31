@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-// import server from './mock/server';
+import server from './mock/server';
 
 const noop = () => {};
 Object.defineProperty(window, 'scrollTo', {
@@ -7,19 +7,21 @@ Object.defineProperty(window, 'scrollTo', {
   writable: true,
 });
 
-(global as any).ResizeObserver = class ResizeObserver {
-  constructor() {
-    // listener = ls;
-  }
+// ignore for not sure what it is.
+// (global as any).ResizeObserver = class ResizeObserver {
 
-  observe() {}
+//   constructor() {
+//     // listener = ls;
+//   }
 
-  unobserve() {}
+//   observe() {}
 
-  disconnect() {}
-};
+//   unobserve() {}
+
+//   disconnect() {}
+// };
 
 // need to fix mock setup for vite
-// beforeAll(() => server.listen());
-// afterEach(() => server.resetHandlers());
-// afterAll(() => server.close());
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
