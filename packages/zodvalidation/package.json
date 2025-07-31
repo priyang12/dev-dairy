@@ -1,12 +1,22 @@
 {
   "name": "@dev-dairy/zodvalidation",
   "version": "1.0.0",
-  "description": "validation schema for front end and backend",
-  "main": "index.ts",
-  "scripts": {},
-  "author": "Priyang",
-  "license": "ISC",
+  "main": "build/cjs/index.js",
+  "module": "build/esm/index.js",
+  "types": "build/esm/index.d.ts",
+  "exports": {
+    "require": "./build/cjs/index.js",
+    "import": "./build/esm/index.js"
+  },
+  "scripts": {
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build": "npm run build:cjs && npm run build:esm"
+  },
   "dependencies": {
     "zod": "^3.19.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
   }
 }
