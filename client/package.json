@@ -51,6 +51,7 @@
     "redux-persist/@types/react-dom": "17.0.2"
   },
   "scripts": {
+    "start": "vite",
     "dev": "vite",
     "dev:test": "env-cmd -f .env.test vite",
     "build": "vite build",
