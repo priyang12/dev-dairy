@@ -1,6 +1,6 @@
 import { ProjectErrorMessage } from '@dev-dairy/zodvalidation';
 import userEvent from '@testing-library/user-event';
-import { rest } from 'msw';
+import { HttpResponse, http as rest } from 'msw';
 import { BrowserRouter } from 'react-router-dom';
 import API from '../../API';
 import server from '../../mock/server';
@@ -174,10 +174,12 @@ it('Valid Input With Api Call', async () => {
 
 it('Server Error Api Repose', async () => {
   server.use(
-    rest.post(`${API}/projects`, (req, res, ctx) =>
-      res(
-        ctx.status(401),
-        ctx.json({ message: 'Server Error Project Can not Created' }),
+    rest.post(`${API}/projects`, ({ request: req }) =>
+      HttpResponse.json(
+        {
+          message: 'Server Error Project Can not Created',
+        },
+        { status: 401 },
       ),
     ),
   );

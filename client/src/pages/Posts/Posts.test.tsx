@@ -1,4 +1,4 @@
-import { rest } from 'msw';
+import { delay, HttpResponse, http as rest } from 'msw';
 import { format, parseISO } from 'date-fns';
 import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
@@ -72,9 +72,10 @@ it('Delete Post', async () => {
 
 it('render with no Posts', async () => {
   server.use(
-    rest.get(`${API}/posts`, (req, res, ctx) =>
-      res(ctx.delay(2000), ctx.json([])),
-    ),
+    rest.get(`${API}/posts`, async ({ request: req }) => {
+      await delay(2000);
+      return HttpResponse.json([], {});
+    }),
   );
   await setup();
   expect(screen.getByAltText('loading...')).toBeInTheDocument();

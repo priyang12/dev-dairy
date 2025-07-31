@@ -1,5 +1,5 @@
 import userEvent from '@testing-library/user-event';
-import { rest } from 'msw';
+import { HttpResponse, http as rest } from 'msw';
 import { BrowserRouter } from 'react-router-dom';
 import { AuthErrorMessages } from '@dev-dairy/zodvalidation';
 import API from '../../API';
@@ -48,8 +48,13 @@ it('Valid input', async () => {
 it('Error message', async () => {
   const { email, password, submit } = setup();
   server.use(
-    rest.post(`${API}/login`, (req, res, ctx) =>
-      res(ctx.status(401), ctx.json({ message: 'Invalid credentials' })),
+    rest.post(`${API}/login`, ({ request: req }) =>
+      HttpResponse.json(
+        { message: 'Invalid credentials' },
+        {
+          status: 401,
+        },
+      ),
     ),
   );
 

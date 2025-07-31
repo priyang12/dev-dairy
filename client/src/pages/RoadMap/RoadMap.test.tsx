@@ -11,7 +11,7 @@ import '@testing-library/jest-dom/extend-expect';
 import RoadMap from './RoadMap';
 import { MockedRoadMap } from '../../mock/MockedData';
 import server from '../../mock/server';
-import { rest } from 'msw';
+import { HttpResponse, http as rest } from 'msw';
 import API from '../../API';
 
 const ProjectId = '132';
@@ -79,10 +79,14 @@ it('should render without crashing and create roadMap', async () => {
 
 it('Server Error while creating RoadMap', async () => {
   server.use(
-    rest.put(`${API}/projects/${ProjectId}/roadMap`, (req, res, ctx) =>
-      res(
-        ctx.status(500),
-        ctx.json({ message: 'Server Error While Creating RoadMap' }),
+    rest.put(`${API}/projects/${ProjectId}/roadMap`, ({ request: req }) =>
+      HttpResponse.json(
+        {
+          message: 'Server Error While Creating RoadMap',
+        },
+        {
+          status: 500,
+        },
       ),
     ),
   );
@@ -128,10 +132,14 @@ it('Delete RoadMap', async () => {
 
 it('Delete RoadMap Server Error', async () => {
   server.use(
-    rest.delete(`${API}/projects/${ProjectId}/roadMap`, (req, res, ctx) =>
-      res(
-        ctx.status(500),
-        ctx.json({ message: 'Delete RoadMap Server Error' }),
+    rest.delete(`${API}/projects/${ProjectId}/roadMap`, ({ request: req }) =>
+      HttpResponse.json(
+        {
+          message: 'Delete RoadMap Server Error',
+        },
+        {
+          status: 500,
+        },
       ),
     ),
   );
@@ -201,8 +209,15 @@ it('Edit RoadMap', async () => {
 
 it('Edit RoadMap Server Error', async () => {
   server.use(
-    rest.patch(`${API}/projects/${ProjectId}/roadMap`, (req, res, ctx) =>
-      res(ctx.status(500), ctx.json({ message: 'Edit RoadMap Server Error' })),
+    rest.patch(`${API}/projects/${ProjectId}/roadMap`, ({ request: req }) =>
+      HttpResponse.json(
+        {
+          message: 'Edit RoadMap Server Error',
+        },
+        {
+          status: 500,
+        },
+      ),
     ),
   );
 

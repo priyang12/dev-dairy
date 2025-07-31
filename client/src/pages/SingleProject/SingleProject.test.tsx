@@ -1,5 +1,5 @@
 import userEvent from '@testing-library/user-event';
-import { rest } from 'msw';
+import { HttpResponse, http as rest } from 'msw';
 import { format, parseISO } from 'date-fns';
 import { Route, Router, Routes } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
@@ -52,8 +52,8 @@ it('render Single Project', async () => {
 });
 it('render Empty Project', async () => {
   server.use(
-    rest.get(`${API}/projects/:id`, (req, res, ctx) =>
-      res(ctx.status(404), ctx.json({ message: 'No Project Found' })),
+    rest.get(`${API}/projects/:id`, ({ request: req }) =>
+      HttpResponse.json({ message: 'No Project Found' }, { status: 404 }),
     ),
   );
   setup();
@@ -64,14 +64,16 @@ it('render Empty Project', async () => {
 
 it('Render Different Values', async () => {
   server.use(
-    rest.get(`${API}/projects/:id`, (req, res, ctx) =>
-      res(
-        ctx.status(200),
-        ctx.json({
+    rest.get(`${API}/projects/:id`, ({ request: req }) =>
+      HttpResponse.json(
+        {
           ...SingleProjectResponse,
           live: false,
           website: '',
-        }),
+        },
+        {
+          status: 200,
+        },
       ),
     ),
   );
@@ -133,8 +135,8 @@ it('Delete Project', async () => {
 
 it('Server Error on Delete Project', async () => {
   server.use(
-    rest.delete(`${API}/projects/:id`, (req, res, ctx) =>
-      res(ctx.status(401), ctx.json({ message: 'Server Error' })),
+    rest.delete(`${API}/projects/:id`, ({ request: req }) =>
+      HttpResponse.json({ message: 'Server Error' }, { status: 401 }),
     ),
   );
 

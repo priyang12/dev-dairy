@@ -1,7 +1,7 @@
 import { ProjectErrorMessage } from '@dev-dairy/zodvalidation';
 import userEvent from '@testing-library/user-event';
 import { createMemoryHistory } from 'history';
-import { rest } from 'msw';
+import { HttpResponse, http as rest } from 'msw';
 import { Route, Router, Routes } from 'react-router-dom';
 import API from '../../API';
 import { SingleProjectResponse } from '../../mock/MockedData';
@@ -111,13 +111,13 @@ it('Update Edit Project', async () => {
 
 it('Test Edit Project Put Request', async () => {
   server.use(
-    rest.put(`${API}/projects/:id`, (req, res, ctx) =>
-      res(
-        ctx.status(403),
-        ctx.json({
+    rest.put(`${API}/projects/:id`, ({ request: req }) =>
+      HttpResponse.json(
+        {
           result: false,
           message: 'Server Error While Updating Project',
-        }),
+        },
+        { status: 403 },
       ),
     ),
   );
@@ -130,13 +130,13 @@ it('Test Edit Project Put Request', async () => {
 
 it('Test Edit Project Get Error', async () => {
   server.use(
-    rest.get(`${API}/projects/:id`, (req, res, ctx) =>
-      res(
-        ctx.status(403),
-        ctx.json({
+    rest.get(`${API}/projects/:id`, ({ request: req }) =>
+      HttpResponse.json(
+        {
           result: false,
           message: 'Server Error',
-        }),
+        },
+        { status: 403 },
       ),
     ),
   );

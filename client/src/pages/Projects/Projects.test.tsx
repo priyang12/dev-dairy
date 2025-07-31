@@ -1,4 +1,4 @@
-import { rest } from 'msw';
+import { HttpResponse, http as rest } from 'msw';
 import { createMemoryHistory } from 'history';
 import { format, parseISO } from 'date-fns';
 import { Router } from 'react-router-dom';
@@ -46,7 +46,7 @@ it('render Projects', async () => {
 it('render Projects with no projects', async () => {
   server.use(
     // Projects
-    rest.get(`${API}/projects`, (req, res, ctx) => res(ctx.json([]))),
+    rest.get(`${API}/projects`, ({ request: req }) => HttpResponse.json([])),
   );
   setup();
   await waitForElementToBeRemoved(screen.getByAltText('loading...'));

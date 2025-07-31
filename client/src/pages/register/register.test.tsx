@@ -1,6 +1,6 @@
 import { AuthErrorMessages } from '@dev-dairy/zodvalidation';
 import userEvent from '@testing-library/user-event';
-import { rest } from 'msw';
+import { HttpResponse, http as rest } from 'msw';
 import { BrowserRouter } from 'react-router-dom';
 import API from '../../API';
 import server from '../../mock/server';
@@ -59,10 +59,12 @@ it('Valid input', async () => {
 it('Error message', async () => {
   const { email, password, name, password2, submit } = setup();
   server.use(
-    rest.post(`${API}/register`, (req, res, ctx) =>
-      res(
-        ctx.status(501),
-        ctx.json({ message: 'Server Error Please try again later' }),
+    rest.post(`${API}/register`, ({ request: req }) =>
+      HttpResponse.json(
+        { message: 'Server Error Please try again later' },
+        {
+          status: 501,
+        },
       ),
     ),
   );
