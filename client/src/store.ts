@@ -52,7 +52,7 @@ export const createStoreWithMiddleware = (initialState = {}): Store =>
   configureStore({
     reducer: persistedReducer,
     preloadedState: initialState,
-    devTools: process.env.NODE_ENV !== 'production',
+    devTools: import.meta.env.MODE !== 'production',
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         serializableCheck: {

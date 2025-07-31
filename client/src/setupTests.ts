@@ -1,7 +1,5 @@
-// learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
-
-import server from './mock/server';
+// import server from './mock/server';
 
 const noop = () => {};
 Object.defineProperty(window, 'scrollTo', {
@@ -21,6 +19,7 @@ Object.defineProperty(window, 'scrollTo', {
   disconnect() {}
 };
 
-beforeAll(() => server.listen());
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
+// need to fix mock setup for vite
+// beforeAll(() => server.listen());
+// afterEach(() => server.resetHandlers());
+// afterAll(() => server.close());
